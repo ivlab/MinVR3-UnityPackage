@@ -7,7 +7,6 @@ using System.Linq;
 using System;
 using UnityEngine.InputSystem;
 
-
 namespace IVLab.Minteract
 {
     [CustomEditor(typeof(StateMachine))]
