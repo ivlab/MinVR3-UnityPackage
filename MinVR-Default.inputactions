@@ -1,0 +1,254 @@
+{
+    "name": "PaintingActions",
+    "maps": [
+        {
+            "name": "IVLAB Inputs",
+            "id": "9af9b6d6-f8c6-49a1-b99a-4e2af4c2ac04",
+            "actions": [
+                {
+                    "name": "NDH Primary Btn Press",
+                    "type": "Button",
+                    "id": "a5e4e93e-9b2c-41b5-8cbd-2b8579686729",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "DH Primary Btn Press",
+                    "type": "Button",
+                    "id": "84af8bb8-f812-4047-bcdf-27ffbfb3608e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "NDH Tracker Move",
+                    "type": "Value",
+                    "id": "c69fe11d-331b-46df-995c-4ed715218e4d",
+                    "expectedControlType": "Vector3",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "DH Tracker Move",
+                    "type": "Value",
+                    "id": "25c116cd-881f-4a25-9c82-eb5dbe50b811",
+                    "expectedControlType": "Vector3",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "NDH Tracker Rotate",
+                    "type": "Value",
+                    "id": "12f1a8c3-f58e-4ea7-8e5c-16d1c15a0546",
+                    "expectedControlType": "Quaternion",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "DH Tracker Rotate",
+                    "type": "Value",
+                    "id": "7917bc5d-5962-4a4a-ad93-cacd4a2db990",
+                    "expectedControlType": "Quaternion",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "DH Cursor Move",
+                    "type": "Value",
+                    "id": "5daa9ec6-1247-459c-8e85-b6ec163012bc",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "NDH Cursor Move",
+                    "type": "Value",
+                    "id": "46183b95-05b5-4df3-b46b-05dd48fb2c3f",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "741f34f9-0b59-44f7-ad55-e33c7d0e889d",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Desktop",
+                    "action": "NDH Primary Btn Press",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6c3515c8-982b-499c-831e-254f1e334df1",
+                    "path": "<Touchscreen>/touch1/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Desktop",
+                    "action": "NDH Primary Btn Press",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "241d8d71-4409-4e5a-bd56-2c00f06adca8",
+                    "path": "<XRController>{LeftHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "VR",
+                    "action": "NDH Primary Btn Press",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "114e93df-033f-4463-bf45-3c6c41162661",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Desktop",
+                    "action": "DH Primary Btn Press",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f6877c70-7dfb-49c4-9271-8b5a0e91a61a",
+                    "path": "<Touchscreen>/primaryTouch/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Desktop",
+                    "action": "DH Primary Btn Press",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0918c847-838a-4ddf-a0d0-a434a6854c7f",
+                    "path": "<XRController>{RightHand}/primaryButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "VR",
+                    "action": "DH Primary Btn Press",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "40ff1b58-6077-4e4f-b425-d7904fda3bdc",
+                    "path": "<XRController>{LeftHand}/devicePosition",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "VR",
+                    "action": "NDH Tracker Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cdf7b47c-4ba1-46c6-87be-0bb93099245a",
+                    "path": "<XRController>{RightHand}/devicePosition",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "VR",
+                    "action": "DH Tracker Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "54ddf425-3369-461a-9f9f-da5b862e3e6b",
+                    "path": "<XRController>{LeftHand}/deviceRotation",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "VR",
+                    "action": "NDH Tracker Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4a7b10b9-f063-447e-9b37-d31bc3004772",
+                    "path": "<XRController>{RightHand}/deviceRotation",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "VR",
+                    "action": "DH Tracker Rotate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f3d76bdc-d42c-430c-aad3-2f9efbe01dfe",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Desktop",
+                    "action": "DH Cursor Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fe2a805d-37c4-4d9d-95f0-129ee28bfd16",
+                    "path": "<Touchscreen>/primaryTouch/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Desktop",
+                    "action": "DH Cursor Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "98d9cc9d-aa85-4f29-af28-e1841f9492db",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Desktop",
+                    "action": "NDH Cursor Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "77f2cee4-f02c-4be3-b731-76b1528d9080",
+                    "path": "<Touchscreen>/touch1/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Desktop",
+                    "action": "NDH Cursor Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": [
+        {
+            "name": "Desktop",
+            "bindingGroup": "Desktop",
+            "devices": [
+                {
+                    "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Mouse>",
+                    "isOptional": false,
+                    "isOR": false
+                }
+            ]
+        },
+        {
+            "name": "VR",
+            "bindingGroup": "VR",
+            "devices": []
+        }
+    ]
+}

@@ -1,0 +1,14 @@
+{
+    "name": "edu.umn.cs.ivlab.minvr3",
+    "displayName": "MinVR3",
+    "version": "0.0.1",
+    "unity": "2020.1",
+    "description": "The 3rd incarnation of the MinVR library, this time centered  on Unity.",
+    "samples": [
+        {
+            "displayName": "CavePainting-Lite",
+            "description": "Simple 3D painting application.",
+            "path": "Samples/CavePainting-Lite"
+        }
+    ]
+}
