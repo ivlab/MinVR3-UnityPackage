@@ -7,21 +7,18 @@ using System.Linq;
 using System;
 using UnityEngine.InputSystem;
 
-namespace IVLab.Minteract
+namespace IVLab.MinVR3
 {
-    [CustomEditor(typeof(StateMachine))]
-    public class StateMachineEditor : Editor
+    [CustomEditor(typeof(FSM))]
+    public class FSMEditor : Editor
     {
 
         public void OnEnable()
         {
-            m_StateMachine = (StateMachine)target;
-
-            m_InputActionsProp = serializedObject.FindProperty("m_InputActionAsset");
-            m_DebugProp = serializedObject.FindProperty("m_Debug");
-            m_VerboseDebugProp = serializedObject.FindProperty("m_VerboseDebug");
+            m_StateMachine = (FSM)target;
 
             m_StartStateProp = serializedObject.FindProperty("m_StartState");
+            m_DebugProp = serializedObject.FindProperty("m_Debug");
 
             m_StateNamesProp = serializedObject.FindProperty("m_StateNames");
             m_StateEnterCBsProp = serializedObject.FindProperty("m_StateEnterCBs");
@@ -30,11 +27,8 @@ namespace IVLab.Minteract
 
             m_ArcFromIDsProp = serializedObject.FindProperty("m_ArcFromIDs");
             m_ArcToIDsProp = serializedObject.FindProperty("m_ArcToIDs");
-            m_ArcTriggerActionsProp = serializedObject.FindProperty("m_ArcTriggerActions");
-            m_ArcTriggerActionPhasesProp = serializedObject.FindProperty("m_ArcTriggerActionPhases");
+            m_ArcTriggersProp = serializedObject.FindProperty("m_ArcTriggers");
             m_ArcTriggerCBsProp = serializedObject.FindProperty("m_ArcTriggerCBs");
-
-            RefreshActionNames();
         }
 
 
@@ -42,18 +36,22 @@ namespace IVLab.Minteract
         {
             serializedObject.Update();
 
-            GUIContent[] stateNames = m_StateMachine.stateNames.Select(n => new GUIContent(n)).ToArray();
+            GUIContent[] stateDisplayNames = m_StateMachine.stateNames.Select(n => new GUIContent(n)).ToArray();
             int[] stateIDs = new int[m_StateMachine.stateNames.Count];
             for (int i = 0; i < stateIDs.Length; i++) stateIDs[i] = i;
+
+
+            // GENERAL 
+
+            m_StartStateProp.intValue = EditorGUILayout.IntPopup(new GUIContent("Start State", "One state must be identified as the default/initial state"), m_StartStateProp.intValue, stateDisplayNames, stateIDs);
+
+            EditorGUILayout.PropertyField(m_DebugProp, new GUIContent("Debug Log", "Logs state transitions and OnEnter(), OnTrigger(), and OnExit() functions called"));
 
 
             // STATES
 
             EditorGUILayout.LabelField("States", EditorStyles.boldLabel);
 
-            EditorGUI.indentLevel++;
-            m_StartStateProp.intValue = EditorGUILayout.IntPopup(new GUIContent("Start State", "One state must be identified as the default/initial state"), m_StartStateProp.intValue, stateNames, stateIDs);
-            EditorGUI.indentLevel--;
 
             EditorGUILayout.Space(1.5f * EditorGUIUtility.standardVerticalSpacing);
 
@@ -72,11 +70,9 @@ namespace IVLab.Minteract
                 }
                 EditorGUILayout.EndHorizontal();
 
-                if (m_StateExpanded[i]) {
+                if ((i < m_StateExpanded.Count) && (m_StateExpanded[i])) {
                     EditorGUILayout.PropertyField(nameProp, new GUIContent("Name", "There must be at least one state, and each state must have a unique name"));
                     
-                    //EditorGUILayout.BeginVertical(EditorStyles.inspectorDefaultMargins);
-
                     SerializedProperty enterCBProp = m_StateEnterCBsProp.GetArrayElementAtIndex(i);
                     EditorGUILayout.PropertyField(enterCBProp, new GUIContent("On Enter", "Add GameObject function(s) to call whenever the FSM enters this state from another state"));
 
@@ -85,10 +81,8 @@ namespace IVLab.Minteract
 
                     SerializedProperty exitCBProp = m_StateExitCBsProp.GetArrayElementAtIndex(i);
                     EditorGUILayout.PropertyField(exitCBProp, new GUIContent("On Exit", "Add GameObject function(s) to call whenever the FSM leaves this state to enter another one"));
-                    //EditorGUILayout.EndVertical();
                 }
                 EditorGUILayout.EndFoldoutHeaderGroup();
-
             }
 
             if (GUILayout.Button(new GUIContent("Add State (+)", "Add a new state to the state machine"))) {
@@ -116,12 +110,12 @@ namespace IVLab.Minteract
                 SerializedProperty toIDProp = m_ArcToIDsProp.GetArrayElementAtIndex(i);
 
                 string from = "(null)";
-                if ((fromIDProp.intValue >= 0) && (fromIDProp.intValue < stateNames.Length)) {
-                    from = stateNames[fromIDProp.intValue].text;
+                if ((fromIDProp.intValue >= 0) && (fromIDProp.intValue < stateDisplayNames.Length)) {
+                    from = stateDisplayNames[fromIDProp.intValue].text;
                 }
                 string to = "(null)";
-                if ((toIDProp.intValue >= 0) && (toIDProp.intValue < stateNames.Length)) {
-                    to = stateNames[toIDProp.intValue].text;
+                if ((toIDProp.intValue >= 0) && (toIDProp.intValue < stateDisplayNames.Length)) {
+                    to = stateDisplayNames[toIDProp.intValue].text;
                 }
                 string arcName = "Arc #" + i + ":  " + from + " --> " + to;
 
@@ -133,67 +127,30 @@ namespace IVLab.Minteract
                 }
                 EditorGUILayout.EndHorizontal();
 
-                if (m_ArcExpanded[i]) {
-                    fromIDProp.intValue = EditorGUILayout.IntPopup(new GUIContent("From State", "The arc starts at the FROM state and goes to the TO state"), fromIDProp.intValue, stateNames, stateIDs);
-                    toIDProp.intValue = EditorGUILayout.IntPopup(new GUIContent("To State", "The arc ends at this TO state, which can be the same as the FROM state if the arc should not cause a state transition"), toIDProp.intValue, stateNames, stateIDs);
+                if ((i < m_ArcExpanded.Count) && (m_ArcExpanded[i])) {
+                    fromIDProp.intValue = EditorGUILayout.IntPopup(new GUIContent("From State", "The arc starts at the FROM state and goes to the TO state"), fromIDProp.intValue, stateDisplayNames, stateIDs);
+                    toIDProp.intValue = EditorGUILayout.IntPopup(new GUIContent("To State", "The arc ends at this TO state, which can be the same as the FROM state if the arc should not cause a state transition"), toIDProp.intValue, stateDisplayNames, stateIDs);
 
-                    EditorGUILayout.Space(1.5f * EditorGUIUtility.standardVerticalSpacing);
-
-                    SerializedProperty triggerActionProp = m_ArcTriggerActionsProp.GetArrayElementAtIndex(i);
-                    EditorGUILayout.PropertyField(triggerActionProp, new GUIContent("Trigger Action", "In Unity's Input System, each action (e.g., 'draw') has multiple phases (e.g., 'started, performed, cancelled'). To define a trigger, specify both the action AND the particular phase of that action that should trigger the arc"));
-                    SerializedProperty triggerActionPhaseProp = m_ArcTriggerActionPhasesProp.GetArrayElementAtIndex(i);
-                    triggerActionPhaseProp.enumValueIndex = EditorGUILayout.Popup(new GUIContent("Trigger Phase", "The specific phase of the action to use for the trigger; corresponds to Unity's InputActionPhase"), triggerActionPhaseProp.enumValueIndex, triggerActionPhaseProp.enumDisplayNames);
-
-                    EditorGUILayout.Space(1.5f * EditorGUIUtility.standardVerticalSpacing);
+                    SerializedProperty triggerProp = m_ArcTriggersProp.GetArrayElementAtIndex(i);
+                    EditorGUILayout.PropertyField(triggerProp, new GUIContent("Trigger", "In Unity's Input System, each action (e.g., 'draw') has multiple phases (e.g., 'started, performed, cancelled'). To define a trigger, specify both the action AND the particular phase of that action that should trigger the arc"));
 
                     SerializedProperty triggerCBProp = m_ArcTriggerCBsProp.GetArrayElementAtIndex(i);
                     EditorGUILayout.PropertyField(triggerCBProp, new GUIContent("On Trigger", "Add GameObject function(s) to call whenever this arc is triggered"));
                 }
+                EditorGUILayout.EndFoldoutHeaderGroup();
             }
 
             if (GUILayout.Button("Add Arc (+)")) {
                 m_StateMachine.AddArc();
             }
             
-            EditorGUILayout.EndFoldoutHeaderGroup();
             EditorGUILayout.EndVertical();
-
-
-
-            // DEBUG
-
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField("Debug", EditorStyles.boldLabel);
-            EditorGUI.indentLevel++;
-
-            EditorGUILayout.PropertyField(m_DebugProp, new GUIContent("Log Transitions", "Logs state transitions and OnEnter(), OnTrigger(), and OnExit() functions called"));
-            EditorGUILayout.PropertyField(m_VerboseDebugProp, new GUIContent("Log Input", "Logs all input recieved (even if it does not match a trigger)"));
-
-            EditorGUI.indentLevel--;
-
-
+ 
             serializedObject.ApplyModifiedProperties();
         }
-
-        // Call this whenever the attached InputActionsAsset is changed
-        public void RefreshActionNames()
-        {
-            m_AllActionNames = new List<string>();
-            if (m_StateMachine.inputActionAsset != null) {
-                foreach (var actionMap in m_StateMachine.inputActionAsset.actionMaps) {
-                    foreach (var action in actionMap.actions) {
-                        m_AllActionNames.Add(action.name);
-                    }
-                }
-            }
-            m_AllActionNamesArray = m_AllActionNames.ToArray();
-        }
-
-        public List<string> m_AllActionNames;
-        public string[] m_AllActionNamesArray;
  
-        private StateMachine m_StateMachine;
-        private SerializedProperty m_InputActionsProp;
+        private FSM m_StateMachine;
+        private SerializedProperty m_InputManagerProp;
 
         private SerializedProperty m_StartStateProp;
 
@@ -204,15 +161,13 @@ namespace IVLab.Minteract
 
         private SerializedProperty m_ArcFromIDsProp;
         private SerializedProperty m_ArcToIDsProp;
-        private SerializedProperty m_ArcTriggerActionsProp;
-        private SerializedProperty m_ArcTriggerActionPhasesProp;
+        private SerializedProperty m_ArcTriggersProp;
         private SerializedProperty m_ArcTriggerCBsProp;
 
         private SerializedProperty m_DebugProp;
-        private SerializedProperty m_VerboseDebugProp;
 
         private List<bool> m_StateExpanded = new List<bool>();
         private List<bool> m_ArcExpanded = new List<bool>();
     }
 
-}
+} // namespace

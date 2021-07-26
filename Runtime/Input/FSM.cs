@@ -7,12 +7,12 @@ using System;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 
-namespace IVLab.Minteract
+namespace IVLab.MinVR3
 {
-
-    public class StateMachine : MonoBehaviour
+    [AddComponentMenu("MinVR/Finite State Machine (FSM)")]
+    public class FSM : MonoBehaviour
     {
-        public StateMachine()
+        public FSM()
         {
             AddState("START");
             m_StartState = 0;
@@ -21,9 +21,9 @@ namespace IVLab.Minteract
         public int AddState(string name)
         {
             m_StateNames.Add(name);
-            m_StateEnterCBs.Add(new FSMCallback());
-            m_StateUpdateCBs.Add(new FSMCallback());
-            m_StateExitCBs.Add(new FSMCallback());
+            m_StateEnterCBs.Add(new FSMStateCallback());
+            m_StateUpdateCBs.Add(new FSMStateCallback());
+            m_StateExitCBs.Add(new FSMStateCallback());
             if (m_Debug) {
                 IsValid();
             }
@@ -85,9 +85,8 @@ namespace IVLab.Minteract
         {
             m_ArcFromIDs.Add(-1);
             m_ArcToIDs.Add(-1);
-            m_ArcTriggerActions.Add(new InputActionReference());
-            m_ArcTriggerActionPhases.Add(InputActionPhase.Performed);
-            m_ArcTriggerCBs.Add(new FSMDataCallback());
+            m_ArcTriggers.Add(new VRActionReference());
+            m_ArcTriggerCBs.Add(new FSMArcCallback());
             if (m_Debug) {
                 IsValid();
             }
@@ -98,8 +97,7 @@ namespace IVLab.Minteract
         {
             m_ArcFromIDs.RemoveAt(id);
             m_ArcToIDs.RemoveAt(id);
-            m_ArcTriggerActions.RemoveAt(id);
-            m_ArcTriggerActionPhases.RemoveAt(id);
+            m_ArcTriggers.RemoveAt(id);
             m_ArcTriggerCBs.RemoveAt(id);
             if (m_Debug) {
                 IsValid();
@@ -125,45 +123,30 @@ namespace IVLab.Minteract
                 }
             }
         }
-
-        public InputActionAsset inputActionAsset {
-            get => m_InputActionAsset;
-            set {
-                m_InputActionAsset = value;
-                if (m_Debug) {
-                    IsValid();
-                }
-            }
-        }
-
+        
 
         void Start()
         {
             m_CurrentState = startState;
+            MinVR.mainInput.actionTriggered.AddListener(OnInputAction);
         }
 
         void Update()
         {
-            if (m_VerboseDebug) {
-                //Log("Calling " + StateToString(m_CurrentState) + ".Update()", false);
-            }
             m_StateUpdateCBs[m_CurrentState].Invoke();
         }
 
         void OnInputAction(InputAction.CallbackContext context)
         {
-            if (m_VerboseDebug) {
-                Log("Received input: " + context.action.name + "-" + context.phase, false);
-            }
+            string fullname = VRInput.ActionToString(context.action, false);
+
             for (int i = 0; i < NumArcs(); i++) {
                 // if the arc originates in the current state, check to see if the action+phase pair sent to this
                 // function is a match with the arc's trigger.
-                if ((m_ArcFromIDs[i] == m_CurrentState) &&
-                    (m_ArcTriggerActions[i].action.name == context.action.name) &&
-                    (m_ArcTriggerActionPhases[i] == context.action.phase))
+                if ((m_ArcFromIDs[i] == m_CurrentState) && (m_ArcTriggers[i].Matches(context)))
                 {
                     if (m_Debug) {
-                        Log("Input " + context.action.name + "-" + context.phase + " matches trigger for arc: " + ArcToString(i), false);
+                        Log("Input " + fullname + "-" + context.phase + " matches trigger for arc: " + ArcToString(i), false);
                     }
                     if (m_ArcFromIDs[i] == m_ArcToIDs[i]) {
                         // this arc stays within the same state, only call the arc's callback
@@ -181,7 +164,7 @@ namespace IVLab.Minteract
                             Log("Calling OnTrigger callback(s): " + m_ArcTriggerCBs[i].ToString(), false);
                         }
                         m_ArcTriggerCBs[i].Invoke(context);
-                        m_CurrentState = m_ArcToIDs[m_CurrentState];
+                        m_CurrentState = m_ArcToIDs[i];
                         if (m_Debug) {
                             Log("Calling OnEnter callback(s): " + m_StateEnterCBs[m_CurrentState].ToString(), false);
                         }
@@ -192,42 +175,7 @@ namespace IVLab.Minteract
         }
 
 
-        void OnEnable()
-        {
-            if (m_InputActionAsset) {
-                if (m_Debug) {
-                    Log("Starting to listen for InputActions...", false);
-                }
-                // start listening for actions and make OnInputAction the single callback func to use for all actions
-                // in the InputActions asset.
-                // TODO?: we could enable/disable actionmaps based on the current state, that would give the ActionMap
-                // functionality a purpose, but not sure it is needed -- right now, just listen for everything
-                m_InputActionAsset.Enable();
-                foreach (var actionMap in m_InputActionAsset.actionMaps) {
-                    actionMap.actionTriggered += OnInputAction;
-                }
-            } else {
-                if (m_Debug) {
-                    Log("No connected InputActionsAsset", Application.isPlaying);
-                }
-            }
-        }
-
-        void OnDisable()
-        {
-            if (m_InputActionAsset) {
-                if (m_Debug) {
-                    Log("Stopping listening for InputActions", false);
-                }
-                foreach (var actionMap in m_InputActionAsset.actionMaps) {
-                    actionMap.actionTriggered -= OnInputAction;
-                }
-                m_InputActionAsset.Disable();
-            }
-        }
-
-        
-        bool IsValid() {
+        public bool IsValid() {
             bool valid = true;
             if (NumStates() < 1) {
                 Log("Must contain at least one state.", Application.isPlaying);
@@ -262,24 +210,20 @@ namespace IVLab.Minteract
                     Log("Arc #" + i + " has an invalid TO state: " + m_ArcToIDs[i], Application.isPlaying);
                     valid = false;
                 }
-                if (m_InputActionAsset != null) {
-                    bool found = false;
-                    foreach (var actionMap in m_InputActionAsset.actionMaps) {
-                        foreach (var action in actionMap.actions) {
-                            if (action.name == m_ArcTriggerActions[i].action.name) {
-                                found = true;
-                                break;
-                            }
-                        }
-                        if (found) {
-                            break;
-                        }
-                    }
-                    if (!found) {
-                        Log("The attached InputActionAsset does not contain an action for Arc #" + i + "'s trigger: " + m_ArcTriggerActions[i].action.name, Application.isPlaying);
-                        valid = false;
+                /*
+                bool found = false;
+                List<string> actionNames = MinVR.mainInput.GetAllActionNames();
+                foreach (string actionName in actionNames) {
+                    if (actionName == m_ArcTriggerActionNames[i]) {
+                        found = true;
+                        break;
                     }
                 }
+                if (!found) {
+                    Log("MinVR.mainInput does not contain an action for Arc #" + i + "'s trigger: " + m_ArcTriggerActionNames[i], Application.isPlaying);
+                    valid = false;
+                }
+                */
             }
             return valid;
         }
@@ -299,37 +243,30 @@ namespace IVLab.Minteract
             if (error) {
                 Debug.LogError("[FSM:" + StateToString(m_CurrentState) + "] ERROR: " + message);
             } else {
-                Debug.LogWarning("[FSM:" + StateToString(m_CurrentState) + "] " + message);
+                Debug.Log("[FSM:" + StateToString(m_CurrentState) + "] " + message);
             }
         }
-
-        // where the input events (technically input actions and phases)
-        [SerializeField] private InputActionAsset m_InputActionAsset;
-
+        
         // id of the state to start in
         [SerializeField] private int m_StartState;
 
         // state data table
         [SerializeField] private List<string> m_StateNames = new List<string>();
-        [SerializeField] private List<FSMCallback> m_StateEnterCBs = new List<FSMCallback>();
-        [SerializeField] private List<FSMCallback> m_StateUpdateCBs = new List<FSMCallback>();
-        [SerializeField] private List<FSMCallback> m_StateExitCBs = new List<FSMCallback>();
+        [SerializeField] private List<FSMStateCallback> m_StateEnterCBs = new List<FSMStateCallback>();
+        [SerializeField] private List<FSMStateCallback> m_StateUpdateCBs = new List<FSMStateCallback>();
+        [SerializeField] private List<FSMStateCallback> m_StateExitCBs = new List<FSMStateCallback>();
 
         // arc data table
         [SerializeField] private List<int> m_ArcFromIDs = new List<int>();
         [SerializeField] private List<int> m_ArcToIDs = new List<int>();
-        [SerializeField] private List<InputActionReference> m_ArcTriggerActions = new List<InputActionReference>();
-        [SerializeField] private List<InputActionPhase> m_ArcTriggerActionPhases = new List<InputActionPhase>();
-        [SerializeField] private List<FSMDataCallback> m_ArcTriggerCBs = new List<FSMDataCallback>();
+        [SerializeField] private List<VRActionReference> m_ArcTriggers = new List<VRActionReference>();
+        [SerializeField] private List<FSMArcCallback> m_ArcTriggerCBs = new List<FSMArcCallback>();
 
         // runtime only, change only through the API
         private int m_CurrentState;
 
         // logs OnEnter(), OnTrigger(), and OnExit() calls 
         public bool m_Debug = false;
-
-        // logs all input events received and all OnUpdate() calls, which happen once per frame
-        public bool m_VerboseDebug = false;
     }
 
 }
