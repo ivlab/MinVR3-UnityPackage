@@ -77,6 +77,7 @@ namespace IVLab.MinVR3
         {
             if (vrEvent.name == m_PositionEvent.name) {
                 VREventInstance<Vector3> posUpdateEvent = vrEvent as VREventInstance<Vector3>;
+                Debug.Log(posUpdateEvent.data);
                 m_CurrentPosition = posUpdateEvent.data;
             }
             if (vrEvent.name == m_RotationEvent.name) {

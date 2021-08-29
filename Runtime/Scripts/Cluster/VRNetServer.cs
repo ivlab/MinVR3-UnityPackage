@@ -127,7 +127,6 @@ namespace IVLab.MinVR3 {
 
         }
 
-
     }
 
-}
+} // namespace

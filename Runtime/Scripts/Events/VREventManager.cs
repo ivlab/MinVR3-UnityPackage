@@ -12,6 +12,10 @@ namespace IVLab.MinVR3
     [AddComponentMenu("MinVR/Engine/VREvent Manager")]
     public class VREventManager : MonoBehaviour, IVREventDistributor
     {
+        [Tooltip("Logs events to the console as they are processed")]
+        public bool m_ShowDebuggingOutput = false;
+
+        
         public void AddEventProducer(IVREventProducer eventProducer)
         {
             if (!m_EventProducers.Contains(eventProducer)) {
@@ -54,6 +58,9 @@ namespace IVLab.MinVR3
         public void Update()
         {
             foreach (VREventInstance e in m_Queue) {
+                if (m_ShowDebuggingOutput) {
+                    Debug.Log("Processing event " + e.name);
+                }
                 foreach (IVREventReceiver r in m_EventReceivers) {
                     r.OnVREvent(e);
                 }

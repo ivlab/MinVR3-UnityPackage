@@ -5,8 +5,8 @@ using UnityEngine.InputSystem;
 
 namespace IVLab.MinVR3
 {
-    [RequireComponent(typeof(FSM))]
-    public class PaintingTool : VRTool
+
+    public class PaintingTool : MonoBehaviour
     {
         // PAINTING STATE CALLBACKS
 
@@ -42,22 +42,6 @@ namespace IVLab.MinVR3
             m_LastHandRot = handCursor.transform.rotation;
         }
 
-
-        private void Start()
-        {
-            m_FSM = GetComponent<FSM>();
-        }
-
-        public override void OnInputAction(InputAction.CallbackContext context)
-        {
-            m_FSM.OnInputAction(context);
-        }
-
-        public override bool CanReleaseFocus()
-        {
-            return m_FSM.currentStateID == m_FSM.GetStateID("START");
-        }
-
         [Tooltip("Parent GameObject for any 3D geometry produced by painting")]
         public GameObject artworkParent;
 
@@ -66,8 +50,6 @@ namespace IVLab.MinVR3
 
         private Vector3 m_LastHandPos;
         private Quaternion m_LastHandRot;
-
-        private FSM m_FSM;
     }
 
 } // namespace

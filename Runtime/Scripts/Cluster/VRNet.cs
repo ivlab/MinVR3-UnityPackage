@@ -6,6 +6,8 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using UnityEngine;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace IVLab.MinVR3 {
 
@@ -96,8 +98,7 @@ namespace IVLab.MinVR3 {
             }
             try {
                 client.GetStream().Write(VRNet.INPUT_EVENTS_MSG, 0, 1);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 Console.WriteLine("Exception: {0}", e);
                 BrokenConnectionError();
             }
@@ -109,48 +110,17 @@ namespace IVLab.MinVR3 {
                 return;
             }
             try {
+                BinaryFormatter bf = new BinaryFormatter();
                 using (MemoryStream ms = new MemoryStream()) {
-                    using (BinaryWriter bw = new BinaryWriter(ms)) {
-                        bw.Write(inputEvents.Count);
-                        foreach (VREventInstance inputEvent in inputEvents) {
-                            inputEvent.ToBinary(bw);
-                        }
-                        byte[] bytes = ms.ToArray();
-                        WriteInt32(ref client, bytes.Length);
-                        client.GetStream().Write(bytes, 0, bytes.Length);
-                    }
+                    bf.Serialize(ms, inputEvents);
+                    byte[] bytes = ms.ToArray();
+                    WriteInt32(ref client, bytes.Length);
+                    client.GetStream().Write(bytes, 0, bytes.Length);
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 Console.WriteLine("Exception: {0}", e);
                 BrokenConnectionError();
             }
-            
-            /**
-            // 2. create an XML-formatted string to hold all the inputEvents
-            string xmlEvents = "<VRDataQueue num=\"" + inputEvents.Count + "\">";
-            foreach (VREvent inputEvent in inputEvents) {
-                xmlEvents += "<VRDataQueueItem timeStamp=\"0.0\">" + inputEvent.ToXML() + "</VRDataQueueItem>";
-            }
-            xmlEvents += "</VRDataQueue>";
-
-            // 3. send the size of the message data so receive will know how many bytes to expect
-            WriteInt32(ref client, xmlEvents.Length);
-
-            // 4. send the chars that make up xmlEvents string
-            byte[] bytes = Encoding.ASCII.GetBytes(xmlEvents);
-            if (!client.Connected) {
-                BrokenConnectionError();
-                return;
-            }
-            try {
-                client.GetStream().Write(bytes, 0, bytes.Length);
-            }
-            catch (Exception e) {
-                Console.WriteLine("Exception: {0}", e);
-                BrokenConnectionError();
-            }
-            **/
         }
 
 
@@ -169,14 +139,10 @@ namespace IVLab.MinVR3 {
                     Console.WriteLine("ReceiveEventData error reading data");
                     return;
                 }
-
-                using (MemoryStream ms = new MemoryStream(bytes)) {
-                    using (BinaryReader br = new BinaryReader(ms)) {
-                        int nEvents = br.ReadInt32();
-                        for (int i = 0; i < nEvents; i++) {
-                            inputEvents.Add(VREventInstance.FromBinary(br));
-                        }
-                    }
+                BinaryFormatter bf = new BinaryFormatter();
+                using (MemoryStream ms = new MemoryStream()) {
+                    List<VREventInstance> events = (List<VREventInstance>)bf.Deserialize(ms);
+                    inputEvents.AddRange(events);
                 }
             }
             catch (Exception e) {
@@ -184,60 +150,6 @@ namespace IVLab.MinVR3 {
                 Console.WriteLine("Exception: {0}", e);
                 BrokenConnectionError();
             }
-            
-
-            /**
-            // 2. receive int that tells us the size of the data portion of the message in bytes
-            Int32 dataSize = ReadInt32(ref client);
-
-            // 3. receive dataSize bytes, then decode these as InputEvents
-            byte[] buf2 = new byte[dataSize + 1];
-            int status = ReceiveAll(ref client, ref buf2, dataSize);
-            if (status == -1) {
-                Console.WriteLine("ReceiveEventData error reading data");
-                return;
-            }
-            buf2[dataSize] = 0;
-
-            // buf2 is the XML string that contains all the events.
-            string serializedQueue = System.Text.Encoding.UTF8.GetString(buf2);
-            //Debug.Log("Queue = " + serializedQueue);
-
-            // Extract the VRDataQueue object
-            Dictionary<string, string> queueProps = new Dictionary<string, string>();
-            string queueContent = string.Empty;
-            string queueLeftover = string.Empty;
-            bool queueSuccess = XMLUtils.GetXMLField(serializedQueue, "VRDataQueue", ref queueProps, ref queueContent, ref queueLeftover);
-            if (!queueSuccess) {
-                Debug.Log("Error decoding VRDataQueue");
-                return;
-            }
-
-            // The queue contents are VRDataItems, extract each one
-            int nItems = Convert.ToInt32(queueProps["num"]);
-
-            //Debug.Log("Num = " + nItems);
-            //Debug.Log(queueContent);
-
-            for (int i = 0; i < nItems; i++) {
-                Dictionary<string, string> itemProps = new Dictionary<string, string>();
-                string itemContent = string.Empty;
-                string itemLeftover = string.Empty;
-                bool itemSuccess = XMLUtils.GetXMLField(queueContent, "VRDataQueueItem", ref itemProps, ref itemContent, ref itemLeftover);
-                if (!itemSuccess) {
-                    Debug.Log("Error decoding VRDataQueueItem #" + i);
-                    return;
-                }
-
-                // Create a new VREvent from the content of this item
-                //Debug.Log("Item Content = " + itemContent);
-                VREvent e = new VREvent(ref itemContent);
-                inputEvents.Add(e);
-
-                // Update the content to point to the next item if there is one
-                queueContent = itemLeftover;
-            }
-            **/
         }
 
 
@@ -321,7 +233,6 @@ namespace IVLab.MinVR3 {
             #endif
         }
 
+    }
 
-    } // end class
-
-} // end namespace
+} // namespace

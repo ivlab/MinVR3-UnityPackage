@@ -119,6 +119,7 @@ namespace IVLab.MinVR3 {
             } else if (expectedDataType == typeof(Vector2).Name) {
                 VREngine.main.eventManager.QueueEvent(eventName, context.ReadValue<Vector2>());
             } else if (expectedDataType == typeof(Vector3).Name) {
+                Debug.Log(context.action.name + " " + context.action.phase + " " + context.ReadValue<Vector3>());
                 VREngine.main.eventManager.QueueEvent(eventName, context.ReadValue<Vector3>());
             } else if (expectedDataType == typeof(Quaternion).Name) {
                 VREngine.main.eventManager.QueueEvent(eventName, context.ReadValue<Quaternion>());
