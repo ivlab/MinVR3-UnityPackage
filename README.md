@@ -19,3 +19,18 @@ To switch to a new version or branch, just repeat the above steps.
 ### Development use in a non git-managed project
 1. Navigate your terminal or Git tool into your non version-controlled Unity project's main folder.
 2. Clone this repository into the Assets folder: ```git clone https://github.umn.edu/ivlab-cs/MinVR3-UnityPackage Assets/IVLab-MinVR3```
+
+
+
+# TODO
+
+- look into serialization for network
+- possible to make some kind of event factory?  that may help
+- in general, networking might require some design changes
+
+- reincorporate VRDevice and move appropriate VRMain stuff over to the VREngine
+- add a ClipboardVR display, maybe it's a prefab
+
+- implement CavePainting-Lite sample
+- implement a "looking out" sample that works well for ClipboardVR
+
