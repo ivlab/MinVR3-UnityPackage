@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -48,8 +48,8 @@ namespace IVLab.MinVR3 {
 
         protected void OnEnable()
         {
-            VREngine.main.eventManager.AddEventProducer(this);
             if (Application.IsPlaying(this)) {
+                VREngine.instance.eventManager.AddEventProducer(this);
                 EnableUnityInput();
             }
         }
@@ -75,8 +75,8 @@ namespace IVLab.MinVR3 {
 
         protected void OnDisable()
         {
-            VREngine.main.eventManager.RemoveEventProducer(this);
             if (Application.IsPlaying(this)) {
+                VREngine.instance?.eventManager?.RemoveEventProducer(this);
                 DisableUnityInput();
             }
         }
@@ -111,20 +111,19 @@ namespace IVLab.MinVR3 {
 
             string expectedDataType = context.action.expectedControlType;
             if ((expectedDataType == "") || (expectedDataType == "Button")) {
-                VREngine.main.eventManager.QueueEvent(eventName);
+                VREngine.instance.eventManager.QueueEvent(eventName);
             } else if (expectedDataType == typeof(int).Name) {
-                VREngine.main.eventManager.QueueEvent(eventName, context.ReadValue<int>());
+                VREngine.instance.eventManager.QueueEvent(eventName, context.ReadValue<int>());
             } else if (expectedDataType == typeof(float).Name) {
-                VREngine.main.eventManager.QueueEvent(eventName, context.ReadValue<float>());
+                VREngine.instance.eventManager.QueueEvent(eventName, context.ReadValue<float>());
             } else if (expectedDataType == typeof(Vector2).Name) {
-                VREngine.main.eventManager.QueueEvent(eventName, context.ReadValue<Vector2>());
+                VREngine.instance.eventManager.QueueEvent(eventName, context.ReadValue<Vector2>());
             } else if (expectedDataType == typeof(Vector3).Name) {
-                Debug.Log(context.action.name + " " + context.action.phase + " " + context.ReadValue<Vector3>());
-                VREngine.main.eventManager.QueueEvent(eventName, context.ReadValue<Vector3>());
+                VREngine.instance.eventManager.QueueEvent(eventName, context.ReadValue<Vector3>());
             } else if (expectedDataType == typeof(Quaternion).Name) {
-                VREngine.main.eventManager.QueueEvent(eventName, context.ReadValue<Quaternion>());
+                VREngine.instance.eventManager.QueueEvent(eventName, context.ReadValue<Quaternion>());
             } else if (expectedDataType == typeof(Touch).Name) {
-                VREngine.main.eventManager.QueueEvent(eventName, context.ReadValue<Touch>());
+                VREngine.instance.eventManager.QueueEvent(eventName, context.ReadValue<Touch>());
             } else {
                 Debug.Log($"Not queueing event '{eventName}', which has an unrecognized expected data type = '" + expectedDataType + "'");
             }            

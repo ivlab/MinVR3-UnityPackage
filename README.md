@@ -24,13 +24,12 @@ To switch to a new version or branch, just repeat the above steps.
 
 # TODO
 
-- look into serialization for network
-- possible to make some kind of event factory?  that may help
-- in general, networking might require some design changes
+- implement CavePainting-Lite sample
+  - color changing bubble paint
 
 - reincorporate VRDevice and move appropriate VRMain stuff over to the VREngine
 - add a ClipboardVR display, maybe it's a prefab
+- figure out how best to work with UnityXR, maybe it is simply one type of VRDevice
 
-- implement CavePainting-Lite sample
 - implement a "looking out" sample that works well for ClipboardVR
 

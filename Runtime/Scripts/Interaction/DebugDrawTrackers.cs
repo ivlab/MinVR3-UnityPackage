@@ -33,12 +33,12 @@ namespace IVLab.MinVR3 {
         
         private void OnEnable()
         {
-            VREngine.main.eventManager.AddEventReceiver(this);
+            VREngine.instance.eventManager.AddEventReceiver(this);
         }
 
         private void OnDisable()
         {
-            VREngine.main.eventManager.RemoveEventReceiver(this);
+            VREngine.instance.eventManager.RemoveEventReceiver(this);
         }
 
         public void OnVREvent(VREventInstance vrEvent)

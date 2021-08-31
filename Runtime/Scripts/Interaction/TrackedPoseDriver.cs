@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
@@ -77,7 +77,6 @@ namespace IVLab.MinVR3
         {
             if (vrEvent.name == m_PositionEvent.name) {
                 VREventInstance<Vector3> posUpdateEvent = vrEvent as VREventInstance<Vector3>;
-                Debug.Log(posUpdateEvent.data);
                 m_CurrentPosition = posUpdateEvent.data;
             }
             if (vrEvent.name == m_RotationEvent.name) {
@@ -106,13 +105,13 @@ namespace IVLab.MinVR3
         protected void OnEnable()
         {
             InputSystem.onAfterUpdate += UpdateCallback;
-            VREngine.main.eventManager.AddEventReceiver(this);
+            VREngine.instance.eventManager.AddEventReceiver(this);
         }
 
         void OnDisable()
         {
             InputSystem.onAfterUpdate -= UpdateCallback;
-            VREngine.main.eventManager.RemoveEventReceiver(this);
+            VREngine.instance?.eventManager?.RemoveEventReceiver(this);
         }
 
         protected virtual void OnDestroy()

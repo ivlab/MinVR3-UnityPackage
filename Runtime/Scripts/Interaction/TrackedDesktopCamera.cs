@@ -24,12 +24,12 @@ namespace IVLab.MinVR3 {
             if (m_Camera == null) {
                 m_Camera = Camera.main;
             }
-            VREngine.main.eventManager.AddEventReceiver(this);
+            VREngine.instance.eventManager.AddEventReceiver(this);
         }
 
         void OnDisable()
         {
-            VREngine.main.eventManager.RemoveEventReceiver(this);
+            VREngine.instance.eventManager.RemoveEventReceiver(this);
         }
 
         public void OnVREvent(VREventInstance vrEvent)

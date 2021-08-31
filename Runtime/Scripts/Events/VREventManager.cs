@@ -83,7 +83,7 @@ namespace IVLab.MinVR3
         /// </summary>
         /// <returns>A map of all events produced by all sources, where the key is the event name and
         /// the value is a string representation of the event datatype or "" if the event has no data.</returns>
-        public Dictionary<string, string> GetAllEventNamesAndTypes()
+        static public Dictionary<string, string> GetAllEventNamesAndTypes()
         {
             var expectedEvents = new Dictionary<string, string>();
 
@@ -91,13 +91,19 @@ namespace IVLab.MinVR3
             foreach (var producer in eventProducers) {
                 var expectedFromThisSource = producer.GetEventNamesAndTypes();
                 foreach (string e in expectedFromThisSource.Keys) {
-                    expectedEvents.Add(e, expectedFromThisSource[e]);
+                    if (expectedEvents.ContainsKey(e)) {
+                        if (expectedEvents[e] != expectedFromThisSource[e]) {
+                            throw new Exception($"Two IVREventProducers expect to produce an event {e} but the expected data types differ: '{expectedEvents[e]}' and '{expectedFromThisSource[e]}'");
+                        }
+                    } else {
+                        expectedEvents.Add(e, expectedFromThisSource[e]);
+                    }
                 }
             }
             return expectedEvents;
         }
 
-        public string GetEventDataType(string eventName)
+        static public string GetEventDataType(string eventName)
         {
             var expectedEvents = GetAllEventNamesAndTypes();
             if (expectedEvents.ContainsKey(eventName)) {

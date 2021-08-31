@@ -8,12 +8,19 @@ using System;
 namespace IVLab.MinVR3
 {
 
+    /// <summary>
+    /// Simple 3D menu that floats in space and is activated by placing a tracked cursor
+    /// inside the titlebar or box that holds each menu item and then clicking.
+    /// </summary>
+    [ExecuteAlways]
     [AddComponentMenu("MinVR/Interaction/Floating Menu")]
     public class FloatingMenu : MonoBehaviour, IVREventReceiver
     {
+        [Header("Menu Items")]
         public string title = "My Menu";
         public List<string> menuItems = new List<string>() { "Item 1", "Item 2" };
 
+        [Header("Input")]
         [Tooltip("[Optional] If set, the menu will only respond to input when the token is available (i.e., not already held by someone else).")]
         public Token inputFocusToken;
 
@@ -29,9 +36,14 @@ namespace IVLab.MinVR3
         [Tooltip("The cursor selection deactivate event (i.e., primary button up).")]
         public VREventReference buttonUpEvent = new VREventReference("", "", true);
 
+        [Header("OnSelectionMade")]
         [Tooltip("Register a function with this event to receive a callback when a selection is made, the int argument is the index of the menu item that was selected.")]
         public UnityEvent<int> onMenuItemSelected = new UnityEvent<int>();
 
+
+        [Header("Appearance")]
+        public Font font;
+        public Material fontMaterial;
 
         public Color titleColor = new Color(1.0f, 1.0f, 1.0f);
         public Color titleBGColor = new Color(85.0f / 255.0f, 83.0f / 255.0f, 83.0f / 255.0f);
@@ -43,7 +55,6 @@ namespace IVLab.MinVR3
 
         public Color pressColor = new Color(226.0f / 255.0f, 0.0f / 255.0f, 23.0f / 255.0f);
 
-
         public float textSizeInWorldUnits = 0.2f;
         public float itemSep = 0.08f;
         public Vector2 padding = new Vector2(0.05f, 0.05f);
@@ -51,22 +62,7 @@ namespace IVLab.MinVR3
         public float zEpsilon = 0.001f;
 
 
-        private Font font;
-        private Material fontMaterial;
 
-        private List<TextMesh> labelMeshes = new List<TextMesh>();
-        private List<GameObject> labelBoxes = new List<GameObject>();
-        private GameObject titleBoxObj;
-        private GameObject bgBox;
-        private Matrix4x4 lastTrackerMat;
-        private Vector3 m_TrackerPos;
-        private Quaternion m_TrackerRot = Quaternion.identity;
-
-        // -1 = nothing, 0 = titlebar, 1..items.Count = menu items
-        private int selected = -1;
-        private bool buttonPressed = false;
-
-        private FSM m_FSM;
 
         Vector2 TextExtents(TextMesh textMesh)
         {
@@ -99,18 +95,34 @@ namespace IVLab.MinVR3
         // Start is called before the first frame update
         void Start()
         {
-            font = Resources.Load<Font>("Fonts/Futura_Medium_BT");
-            fontMaterial = Resources.Load<Material>("Material/Futura_Medium_BT_WithOcclusion");
+            RebuildMenu();
+        }
+
+        void OnValidate()
+        {
+            dirty = true;
+        }
+
+        void RebuildMenu()
+        {
+            Material tmpMat;
+
+            // Remove any menu geometry previously created
+            labelMeshes = new List<TextMesh>();
+            labelBoxes = new List<GameObject>();
+            titleBoxObj = null;
+            bgBox = null;
+            for (int i = this.transform.childCount; i > 0; --i) {
+                DestroyImmediate(this.transform.GetChild(0).gameObject);
+            }
+
 
             // Create a title box and label
-            GameObject titleObj = new GameObject(title);
-            titleObj.transform.parent = this.transform;
-
             GameObject titleTextObj = new GameObject(title + " Label");
-            titleTextObj.transform.SetParent(titleObj.transform);
+            titleTextObj.transform.SetParent(this.transform);
             TextMesh titleTextMesh = titleTextObj.AddComponent<TextMesh>();
             titleTextMesh.font = font;
-            titleTextMesh.GetComponent<MeshRenderer>().material = fontMaterial;
+            titleTextMesh.GetComponent<MeshRenderer>().sharedMaterial = new Material(fontMaterial);
             titleTextMesh.text = title.ToUpper();
             titleTextMesh.color = titleColor;
             titleTextMesh.anchor = TextAnchor.MiddleLeft;
@@ -120,31 +132,31 @@ namespace IVLab.MinVR3
 
             titleBoxObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
             titleBoxObj.name = title + " Box";
-            titleBoxObj.transform.SetParent(titleObj.transform);
-            titleBoxObj.GetComponent<Renderer>().material.color = titleBGColor;
+            titleBoxObj.transform.SetParent(this.transform);
+            tmpMat = new Material(titleBoxObj.GetComponent<Renderer>().sharedMaterial);
+            tmpMat.color = titleBGColor;
+            titleBoxObj.GetComponent<Renderer>().sharedMaterial = tmpMat;
 
 
             // Create a box and label for each item
             for (int i = 0; i < menuItems.Count; i++) {
-                GameObject itemObj = new GameObject(menuItems[i]);
-                itemObj.transform.parent = this.transform;
-
                 GameObject textObj = new GameObject(menuItems[i] + " Label");
-                textObj.transform.SetParent(itemObj.transform);
+                textObj.transform.SetParent(this.transform);
                 TextMesh textMesh = textObj.AddComponent<TextMesh>();
                 textMesh.font = font;
-                textMesh.GetComponent<MeshRenderer>().material = fontMaterial;
+                textMesh.GetComponent<MeshRenderer>().sharedMaterial = new Material(fontMaterial);
                 textMesh.text = menuItems[i];
                 textMesh.color = itemColor;
                 textMesh.anchor = TextAnchor.MiddleLeft;
                 textMesh.fontSize = 100;
                 textMesh.characterSize = textSizeInWorldUnits * 10.0f / textMesh.fontSize;
 
-
                 GameObject boxObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 boxObj.name = menuItems[i] + " Box";
-                boxObj.transform.SetParent(itemObj.transform);
-                boxObj.GetComponent<Renderer>().material.color = itemBGColor;
+                boxObj.transform.SetParent(this.transform);
+                tmpMat = new Material(boxObj.GetComponent<Renderer>().sharedMaterial);
+                tmpMat.color = itemBGColor;
+                boxObj.GetComponent<Renderer>().sharedMaterial = tmpMat;
 
                 labelMeshes.Add(textMesh);
                 labelBoxes.Add(boxObj);
@@ -174,33 +186,38 @@ namespace IVLab.MinVR3
 
             // set transforms to use for drawing boxes and labels
 
-            titleBoxObj.transform.position = new Vector3(-0.5f * menu_box_dims[0] - 0.5f * menu_box_dims[1], 0f, 0f);
+            titleBoxObj.transform.localPosition = new Vector3(-0.5f * menu_box_dims[0] - 0.5f * menu_box_dims[1], 0f, 0f);
             titleBoxObj.transform.localScale = new Vector3(menu_box_dims[1], height, depth);
 
-            titleTextMesh.transform.position = new Vector3(-0.5f * menu_box_dims[0] - 0.5f * menu_box_dims[1],
+            titleTextMesh.transform.localPosition = new Vector3(-0.5f * menu_box_dims[0] - 0.5f * menu_box_dims[1],
                                                            -0.5f * height + padding[0],
                                                            -0.5f * depth - zEpsilon);
-            titleTextMesh.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 90.0f));
+            titleTextMesh.transform.localRotation = Quaternion.Euler(new Vector3(0f, 0f, 90.0f));
 
             float y = 0.5f * height - 0.5f * menu_box_dims[1];
             for (int i = 0; i < menuItems.Count; i++) {
-                labelBoxes[i].transform.position = new Vector3(0.0f, y, 0.0f);
+                labelBoxes[i].transform.localPosition = new Vector3(0.0f, y, 0.0f);
                 labelBoxes[i].transform.localScale = menu_box_dims;
-                labelMeshes[i].transform.position = new Vector3(-0.5f * menu_box_dims[0] + padding[0], y, -0.5f * depth - zEpsilon);
+                labelMeshes[i].transform.localPosition = new Vector3(-0.5f * menu_box_dims[0] + padding[0], y, -0.5f * depth - zEpsilon);
                 y -= menu_box_dims[1] + itemSep;
             }
 
             bgBox = GameObject.CreatePrimitive(PrimitiveType.Cube);
             bgBox.name = "Background Box";
             bgBox.transform.SetParent(this.transform);
-            bgBox.GetComponent<Renderer>().material.color = itemBGColor;
-            bgBox.transform.position = new Vector3(zEpsilon, 0f, 0.5f * itemSep + zEpsilon);
+            bgBox.GetComponent<Renderer>().sharedMaterial.color = itemBGColor;
+            bgBox.transform.localPosition = new Vector3(zEpsilon, 0f, 0.5f * itemSep + zEpsilon);
             bgBox.transform.localScale = new Vector3(menu_box_dims[0] - zEpsilon, height - 2.0f * zEpsilon, menu_box_dims[2] - itemSep);
+            dirty = false;
         }
 
 
         public void Update()
         {
+            if (dirty) {
+                RebuildMenu();
+            }
+
             // Convert the tracker's position and rotation to a Matrix4x4 format.
             Matrix4x4 trackerMat = Matrix4x4.TRS(m_TrackerPos, m_TrackerRot, Vector3.one);
 
@@ -226,23 +243,31 @@ namespace IVLab.MinVR3
                     inputFocusToken.ReleaseToken(this);
                 }
                 selected = -1;
-                titleBoxObj.GetComponent<Renderer>().material.color = titleBGColor;
+                Material tmpMat = titleBoxObj.GetComponent<Renderer>().sharedMaterial;
+                tmpMat.color = titleBGColor;
+                titleBoxObj.GetComponent<Renderer>().sharedMaterial = tmpMat;
                 for (int i = 0; i < labelBoxes.Count; i++) {
-                    labelBoxes[i].GetComponent<Renderer>().material.color = itemBGColor;
+                    tmpMat = labelBoxes[i].GetComponent<Renderer>().sharedMaterial;
+                    tmpMat.color = itemBGColor;
+                    labelBoxes[i].GetComponent<Renderer>().sharedMaterial = tmpMat;
                 }
 
                 // Update selection
                 if (InsideTransformedCube(m_TrackerPos, titleBoxObj)) {
                     if ((inputFocusToken == null) || (inputFocusToken.RequestToken(this))) {
                         selected = 0;
-                        titleBoxObj.GetComponent<Renderer>().material.color = titleHighColor;
+                        tmpMat = titleBoxObj.GetComponent<Renderer>().sharedMaterial;
+                        tmpMat.color = titleHighColor;
+                        titleBoxObj.GetComponent<Renderer>().sharedMaterial = tmpMat;
                     }
                 } else {
                     for (int i = 0; i < labelBoxes.Count; i++) {
                         if (InsideTransformedCube(m_TrackerPos, labelBoxes[i])) {
                             if ((inputFocusToken == null) || (inputFocusToken.RequestToken(this))) {
                                 selected = i + 1;
-                                labelBoxes[i].GetComponent<Renderer>().material.color = itemHighColor;
+                                tmpMat = labelBoxes[i].GetComponent<Renderer>().sharedMaterial;
+                                tmpMat.color = itemHighColor;
+                                labelBoxes[i].GetComponent<Renderer>().sharedMaterial = tmpMat;
                             }
                         }
                     }
@@ -254,12 +279,23 @@ namespace IVLab.MinVR3
 
         private void OnEnable()
         {
-            VREngine.main.eventManager.AddEventReceiver(this);
+            if (font == null) {
+                font = Resources.Load<Font>("Fonts/Futura_Medium_BT");
+            }
+            if (fontMaterial == null) {
+                fontMaterial = Resources.Load<Material>("Material/Futura_Medium_BT_WithOcclusion");
+            }
+            if (Application.isPlaying) {
+                selected = -1;
+                VREngine.instance.eventManager.AddEventReceiver(this);
+            }
         }
 
         private void OnDisable()
         {
-            VREngine.main.eventManager.RemoveEventReceiver(this);
+            if (Application.isPlaying) {
+                VREngine.instance?.eventManager?.RemoveEventReceiver(this);
+            }
         }
 
         public void OnTrackerMove(Vector3 pos)
@@ -276,11 +312,11 @@ namespace IVLab.MinVR3
         {
             buttonPressed = true;
             if (selected == 0) {
-                titleBoxObj.GetComponent<Renderer>().material.color = pressColor;
+                titleBoxObj.GetComponent<Renderer>().sharedMaterial.color = pressColor;
             } else if (selected > 0) {
-                labelBoxes[selected - 1].GetComponent<Renderer>().material.color = pressColor;
+                labelBoxes[selected - 1].GetComponent<Renderer>().sharedMaterial.color = pressColor;
 
-                Debug.Log("Selected menu item " + (selected -1));
+                Debug.Log("Selected menu item " + (selected - 1));
                 onMenuItemSelected.Invoke(selected - 1);
             }
         }
@@ -305,6 +341,21 @@ namespace IVLab.MinVR3
                 }
             }
         }
+
+        // refs to dynamically created geometry
+        private bool dirty = true;
+        private List<TextMesh> labelMeshes = new List<TextMesh>();
+        private List<GameObject> labelBoxes = new List<GameObject>();
+        private GameObject titleBoxObj;
+        private GameObject bgBox;
+
+        // runtime UI management
+        private Matrix4x4 lastTrackerMat;
+        private Vector3 m_TrackerPos;
+        private Quaternion m_TrackerRot = Quaternion.identity;
+        // -1 = nothing, 0 = titlebar, 1..items.Count = menu items
+        private int selected = -1;
+        private bool buttonPressed = false;
     }
 
 } // namespace

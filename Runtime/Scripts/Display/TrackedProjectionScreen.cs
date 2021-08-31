@@ -59,14 +59,14 @@ namespace IVLab.MinVR3 {
                 cam = Camera.main;
             }
             if (Application.IsPlaying(gameObject)) { // play mode
-                VREngine.main.eventManager.AddEventReceiver(this);
+                VREngine.instance.eventManager.AddEventReceiver(this);
             }
         }
 
         void OnDisable()
         {
             if (Application.IsPlaying(gameObject)) { // play mode
-                VREngine.main.eventManager.RemoveEventReceiver(this);
+                VREngine.instance.eventManager.RemoveEventReceiver(this);
             }
         }
 

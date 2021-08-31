@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using System;
@@ -20,7 +20,7 @@ namespace IVLab.MinVR3
 
 
             // Get all possible events from all IVREventProducers in the scene
-            Dictionary<string, string> expectedEvents = VREngine.main.eventManager.GetAllEventNamesAndTypes();
+            Dictionary<string, string> expectedEvents = VREventManager.GetAllEventNamesAndTypes();
             string[] eventNames = new string[expectedEvents.Count];
             string[] dataTypes = new string[expectedEvents.Count];
             GUIContent[] displayNames = new GUIContent[expectedEvents.Count];

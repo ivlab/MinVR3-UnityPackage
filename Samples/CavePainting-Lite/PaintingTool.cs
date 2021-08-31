@@ -12,11 +12,15 @@ namespace IVLab.MinVR3
 
         public void Painting_OnUpdate()
         {
-            GameObject paintSplat = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            paintSplat.transform.parent = artworkParent.transform;
-            paintSplat.transform.position = brushCursor.transform.position;
-            paintSplat.transform.rotation = brushCursor.transform.rotation;
-            paintSplat.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+            GameObject paintBlob;
+            if (paintBlobPrefab != null) {
+                paintBlob = Instantiate(paintBlobPrefab);
+            } else {
+                paintBlob = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            }
+            paintBlob.transform.parent = artworkParent.transform;
+            paintBlob.transform.position = brushCursor.transform.position;
+            paintBlob.transform.rotation = brushCursor.transform.rotation;
         }
 
 
@@ -44,6 +48,9 @@ namespace IVLab.MinVR3
 
         [Tooltip("Parent GameObject for any 3D geometry produced by painting")]
         public GameObject artworkParent;
+
+        [Tooltip("Prefab for a single `paint blob' deposited as the brush moves around")]
+        public GameObject paintBlobPrefab;
 
         public GameObject brushCursor;
         public GameObject handCursor;

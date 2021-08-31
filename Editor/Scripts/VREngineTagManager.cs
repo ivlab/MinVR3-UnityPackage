@@ -3,6 +3,7 @@ using UnityEditor;
 
 namespace IVLab.MinVR3
 {
+    /*
     [CustomEditor(typeof(VREngine))]
     public class VREngineTagManager
     {
@@ -28,5 +29,6 @@ namespace IVLab.MinVR3
             }
         }
     }
+    */
 
 } // namespace
