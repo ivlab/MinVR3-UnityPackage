@@ -52,8 +52,8 @@ namespace IVLab.MinVR3
         }
 
         [SerializeField]
-        VREventReference m_PositionEvent;
-        public VREventReference positionEvent {
+        VREventPrototype<Vector3> m_PositionEvent;
+        public VREventPrototype<Vector3> positionEvent {
             get { return m_PositionEvent; }
             set {
                 m_PositionEvent = value;
@@ -61,8 +61,8 @@ namespace IVLab.MinVR3
         }
 
         [SerializeField]
-        VREventReference m_RotationEvent;
-        public VREventReference rotationEvent {
+        VREventPrototype<Quaternion> m_RotationEvent;
+        public VREventPrototype<Quaternion> rotationEvent {
             get { return m_RotationEvent; }
             set {
                 m_RotationEvent = value;
@@ -73,14 +73,14 @@ namespace IVLab.MinVR3
         Quaternion m_CurrentRotation = Quaternion.identity;
 
 
-        public void OnVREvent(VREventInstance vrEvent)
+        public void OnVREvent(VREvent vrEvent)
         {
-            if (vrEvent.name == m_PositionEvent.name) {
-                VREventInstance<Vector3> posUpdateEvent = vrEvent as VREventInstance<Vector3>;
+            if (vrEvent.Matches(m_PositionEvent)) {
+                VREvent<Vector3> posUpdateEvent = vrEvent as VREvent<Vector3>;
                 m_CurrentPosition = posUpdateEvent.data;
             }
-            if (vrEvent.name == m_RotationEvent.name) {
-                VREventInstance<Quaternion> rotUpdateEvent = vrEvent as VREventInstance<Quaternion>;
+            if (vrEvent.Matches(m_RotationEvent)) {
+                VREvent<Quaternion> rotUpdateEvent = vrEvent as VREvent<Quaternion>;
                 m_CurrentRotation = rotUpdateEvent.data;
             }
         }
@@ -88,8 +88,8 @@ namespace IVLab.MinVR3
 
         private void Reset()
         {
-            m_PositionEvent = new VREventReference("", "Vector3", true);
-            m_RotationEvent = new VREventReference("", "Quaternion", true);
+            m_PositionEvent = new VREventPrototype<Vector3>();
+            m_RotationEvent = new VREventPrototype<Quaternion>();
         }
 
         protected virtual void Awake()

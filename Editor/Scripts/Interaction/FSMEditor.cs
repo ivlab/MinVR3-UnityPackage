@@ -27,7 +27,7 @@ namespace IVLab.MinVR3
 
             m_ArcFromIDsProp = serializedObject.FindProperty("m_ArcFromIDs");
             m_ArcToIDsProp = serializedObject.FindProperty("m_ArcToIDs");
-            m_ArcTriggerCBsProp = serializedObject.FindProperty("m_ArcTriggerCBs");
+            m_ArcListenersProp = serializedObject.FindProperty("m_ArcListeners");
             m_ArcRequireTokensProp = serializedObject.FindProperty("m_ArcRequireTokens");
             m_ArcReleaseTokensProp = serializedObject.FindProperty("m_ArcReleaseTokens");
         }
@@ -132,8 +132,8 @@ namespace IVLab.MinVR3
                     fromIDProp.intValue = EditorGUILayout.IntPopup(new GUIContent("From State", "The arc starts at the FROM state and goes to the TO state"), fromIDProp.intValue, stateDisplayNames, stateIDs);
                     toIDProp.intValue = EditorGUILayout.IntPopup(new GUIContent("To State", "The arc ends at this TO state, which can be the same as the FROM state if the arc should not cause a state transition"), toIDProp.intValue, stateDisplayNames, stateIDs);
 
-                    SerializedProperty triggerCBProp = m_ArcTriggerCBsProp.GetArrayElementAtIndex(i);
-                    EditorGUILayout.PropertyField(triggerCBProp, new GUIContent("Trigger", "The VREvent that triggers this arc transition and optionally a callback to receive when the arc is traversed."));
+                    SerializedProperty listenerProp = m_ArcListenersProp.GetArrayElementAtIndex(i);
+                    EditorGUILayout.PropertyField(listenerProp, new GUIContent("Event Listener", "The VREvent that triggers this arc transition and optionally a callback to receive when the arc is traversed."));
 
                     SerializedProperty requireTokenProp = m_ArcRequireTokensProp.GetArrayElementAtIndex(i);
                     EditorGUILayout.PropertyField(requireTokenProp, new GUIContent("Require", "[Optional] Add a token to place a conditional guard on this arc; the transition will only occur if the token can be successfully acquired."));
@@ -164,7 +164,7 @@ namespace IVLab.MinVR3
 
         private SerializedProperty m_ArcFromIDsProp;
         private SerializedProperty m_ArcToIDsProp;
-        private SerializedProperty m_ArcTriggerCBsProp;
+        private SerializedProperty m_ArcListenersProp;
         private SerializedProperty m_ArcRequireTokensProp;
         private SerializedProperty m_ArcReleaseTokensProp;
 

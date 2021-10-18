@@ -24,12 +24,60 @@ To switch to a new version or branch, just repeat the above steps.
 
 # TODO
 
-- implement CavePainting-Lite sample
-  - color changing bubble paint
+- deploy to Android tablet
+  - detect/test multi-touch input
+  - add a ClipboardVR display, maybe it's just a prefab that has two ProjectionScreen components
+  - implement a "looking out" terrain model or other scene that works well for ClipboardVR
 
-- reincorporate VRDevice and move appropriate VRMain stuff over to the VREngine
-- add a ClipboardVR display, maybe it's a prefab
-- figure out how best to work with UnityXR, maybe it is simply one type of VRDevice
+- deploy to Cave
+  - test cluster framework
 
-- implement a "looking out" sample that works well for ClipboardVR
+
+
+What are u trying to accomplish?
+- want to be able to create FSMs in code, requries adding callbacks that are UnityAction<T>
+- learning more about how to deal with System.Type, might be able to use templates for eventrefs rather than strings -- more robust, efficient
+- vreventcallback is pretty messy...
+  - looks like you can't avoid having a nodata version and a templated version, but maybe can
+    avoid needing to predefine all the possible templates, or use a factory for this.
+
+
+
+
+
+
+Notifier
+
+NotifierWithData<T>
+  UnityEvent<T>
+
+NotifierWithoutData
+
+
+eventsource
+
+
+VREventSignature -- decl
+  - Declaration
+  - Spec
+  - Prototype
+  - Pattern
+  - Type
+VREventInstance -- actual data
+VREventNotifier -- UnityEvent<>
+  - caller
+  - broadcaster
+  - transmitter
+  - propogator
+  - dispatcher
+  - 
+
+
+VREventFactory
+VREventPrototype (VREventSignature)
+VREvent (VREventInstance)
+VREventCallbackList (VREventNotifier)
+
+
+VREventListener (higher-level, inside Interactions)
 

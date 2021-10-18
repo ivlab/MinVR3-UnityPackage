@@ -1,10 +1,13 @@
 {
     "name": "IVLab.MinVR3.Editor",
+    "rootNamespace": "",
     "references": [
         "IVLab.MinVR3.Runtime",
         "Unity.InputSystem"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

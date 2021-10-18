@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,11 +9,10 @@ namespace IVLab.MinVR3
 {
 
     [DisallowMultipleComponent]
-    [AddComponentMenu("MinVR/Engine/VREvent Manager")]
     public class VREventManager : MonoBehaviour, IVREventDistributor
     {
         [Tooltip("Logs events to the console as they are processed")]
-        public bool m_ShowDebuggingOutput = false;
+        public bool m_ShowDebuggingOutput = true;
 
         
         public void AddEventProducer(IVREventProducer eventProducer)
@@ -46,18 +45,28 @@ namespace IVLab.MinVR3
 
         public void QueueEvent(string eventName)
         {
-            m_Queue.Add(new VREventInstance(eventName));
+            m_Queue.Add(new VREvent(eventName));
         }
 
         public void QueueEvent<T>(string eventName, T eventData)
         {
-            m_Queue.Add(new VREventInstance<T>(eventName, eventData));
+            m_Queue.Add(new VREvent<T>(eventName, eventData));
         }
 
 
+        public List<VREvent> GetEventQueue()
+        {
+            return m_Queue;
+        }
+
+        public void SetEventQueue(List<VREvent> newQueue)
+        {
+            m_Queue = newQueue;
+        }
+
         public void Update()
         {
-            foreach (VREventInstance e in m_Queue) {
+            foreach (VREvent e in m_Queue) {
                 if (m_ShowDebuggingOutput) {
                     Debug.Log("Processing event " + e.name);
                 }
@@ -73,7 +82,7 @@ namespace IVLab.MinVR3
         [NonSerialized] private List<IVREventProducer> m_EventProducers = new List<IVREventProducer>();
         [NonSerialized] private List<IVREventReceiver> m_EventReceivers = new List<IVREventReceiver>();
 
-        [NonSerialized] private List<VREventInstance> m_Queue = new List<VREventInstance>();
+        [NonSerialized] private List<VREvent> m_Queue = new List<VREvent>();
 
 
 
@@ -81,47 +90,41 @@ namespace IVLab.MinVR3
         /// <summary>
         /// Not fast; intended only for populating dropdown lists in the Unity Editor
         /// </summary>
-        /// <returns>A map of all events produced by all sources, where the key is the event name and
-        /// the value is a string representation of the event datatype or "" if the event has no data.</returns>
-        static public Dictionary<string, string> GetAllEventNamesAndTypes()
+        /// <returns>A list of all events produced by all sources
+        static public List<IVREventPrototype> GetAllEventPrototypes()
         {
-            var expectedEvents = new Dictionary<string, string>();
+            return GetMatchingEventPrototypes("*");
+        }
+
+
+        /// <summary>
+        /// Not fast; intended only for populating dropdown lists in the Unity Editor.
+        /// For a given data type, the dataTypeString should be equal to the value returned by
+        /// typeof(T).Name. The string "" will match events that do not have a data payload, and
+        /// the wildcard character * will match events of any datatype.
+        /// </summary>
+        /// <returns>A list of all events with the specified datatype produced by all sources
+        static public List<IVREventPrototype> GetMatchingEventPrototypes(string dataTypeName)
+        {
+            var expectedEvents = new List<IVREventPrototype>();
 
             var eventProducers = FindObjectsOfType<MonoBehaviour>().OfType<IVREventProducer>();
             foreach (var producer in eventProducers) {
-                var expectedFromThisSource = producer.GetEventNamesAndTypes();
-                foreach (string e in expectedFromThisSource.Keys) {
-                    if (expectedEvents.ContainsKey(e)) {
-                        if (expectedEvents[e] != expectedFromThisSource[e]) {
-                            throw new Exception($"Two IVREventProducers expect to produce an event {e} but the expected data types differ: '{expectedEvents[e]}' and '{expectedFromThisSource[e]}'");
+                var expectedFromThisSource = producer.GetEventPrototypes();
+                foreach (IVREventPrototype e in expectedFromThisSource) {
+                    if ((e.GetDataTypeName() == dataTypeName) || (dataTypeName == "*")) {
+                        foreach (IVREventPrototype e2 in expectedEvents) {
+                            if ((e.GetEventName() == e2.GetEventName()) && (e.GetDataTypeName() != e2.GetDataTypeName())) {
+                                throw new Exception($"Two IVREventProducers expect to produce an event named {e.GetEventName()} but the expected data types differ: '{e.GetDataTypeName()}' and '{e2.GetDataTypeName()}'");
+                            }
                         }
-                    } else {
-                        expectedEvents.Add(e, expectedFromThisSource[e]);
+                        expectedEvents.Add(e);
                     }
                 }
             }
             return expectedEvents;
         }
 
-        static public string GetEventDataType(string eventName)
-        {
-            var expectedEvents = GetAllEventNamesAndTypes();
-            if (expectedEvents.ContainsKey(eventName)) {
-                return expectedEvents[eventName];
-            } else {
-                return "";
-            }
-        }
-
-
-        static public string EventDisplayName(string eventName, string dataType)
-        {
-            if (dataType == "") {
-                return eventName;
-            } else {
-                return eventName + " (" + dataType + ")";
-            }
-        }
     }
 
 } // namespace

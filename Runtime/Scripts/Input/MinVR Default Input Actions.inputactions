@@ -335,17 +335,6 @@
                 },
                 {
                     "name": "",
-                    "id": "f1d4744a-e53e-4bb2-aba4-f343791c526c",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Activate",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "99cb7ad1-51ec-4611-af68-92a85f2c17d6",
                     "path": "<XRController>{LeftHand}/Primary2DAxis",
                     "interactions": "Sector(directions=12,sweepBehavior=1)",
@@ -617,17 +606,6 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Generic XR Controller",
-                    "action": "Activate",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "0e4bff83-3d60-43f8-9596-59b463ae4af2",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
                     "action": "Activate",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -939,6 +917,353 @@
                     "action": "Translate Anchor",
                     "isComposite": false,
                     "isPartOfComposite": true
+                }
+            ]
+        },
+        {
+            "name": "Touch",
+            "id": "e370b2ac-278e-4be8-81c1-8d28662ac2c3",
+            "actions": [
+                {
+                    "name": "Touch 0",
+                    "type": "PassThrough",
+                    "id": "299fa05d-fe2b-4926-9312-7dfdc28a5d29",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Touch 1",
+                    "type": "PassThrough",
+                    "id": "68b50a37-e25d-4603-9510-23118084a657",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Touch 2",
+                    "type": "PassThrough",
+                    "id": "d325b64f-9f67-4d2b-a327-bd07dffd4e07",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Touch 3",
+                    "type": "PassThrough",
+                    "id": "4a424854-0e58-412e-8b3c-dce7e84a8bb7",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Touch 4",
+                    "type": "PassThrough",
+                    "id": "b761c8cc-68d4-4ec3-8c89-f211a7a11efe",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Touch 5",
+                    "type": "PassThrough",
+                    "id": "87c71fbf-9c36-45f2-8456-73739cd0e592",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Touch 6",
+                    "type": "PassThrough",
+                    "id": "ead664cf-bd36-4b73-ae86-6ca634a4a268",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Touch 7",
+                    "type": "PassThrough",
+                    "id": "ade37906-080f-4480-a2ac-b980bc70f402",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Touch 8",
+                    "type": "PassThrough",
+                    "id": "3502bff3-bc31-48ee-bf2f-f3e1c641cfbb",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Touch 9",
+                    "type": "PassThrough",
+                    "id": "d393857c-cbe2-4792-9f83-57ed81ef2d4d",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "126c753e-ba33-49b0-95d9-0716e5a9537b",
+                    "path": "<Touchscreen>/touch0",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch 0",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "54ac2551-7449-46fe-b848-b371984e66ad",
+                    "path": "<Touchscreen>/touch1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch 1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "30e24570-da29-42a0-bc1e-242cc8cf56ba",
+                    "path": "<Touchscreen>/touch2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch 2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c5a87e9b-40ae-4339-89b7-078588cc7126",
+                    "path": "<Touchscreen>/touch3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch 3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "5cf6dce5-5c74-467b-8537-02199400d32f",
+                    "path": "<Touchscreen>/touch4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch 4",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "240a3c2c-3c67-455b-98a0-157655caee79",
+                    "path": "<Touchscreen>/touch5",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch 5",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "91235161-74cb-4255-b418-19c3fe5472b2",
+                    "path": "<Touchscreen>/touch6",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch 6",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1e2836f1-784b-48a2-b8d2-6a7e3c4a21df",
+                    "path": "<Touchscreen>/touch7",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch 7",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f301c960-edba-4fad-a1a6-caab1cd3943c",
+                    "path": "<Touchscreen>/touch8",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch 8",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "58a67d2f-d1bc-4625-84df-ba1c1901797d",
+                    "path": "<Touchscreen>/touch9",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch 9",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Pen",
+            "id": "de4e18da-ffac-4f38-b1e5-ce543d20895b",
+            "actions": [
+                {
+                    "name": "Position",
+                    "type": "PassThrough",
+                    "id": "7107ec19-1b1a-45eb-b9fa-2e4e2f18acc5",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Tilt",
+                    "type": "PassThrough",
+                    "id": "e8fece7e-5591-41b1-93d0-33654ac99849",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "InRange",
+                    "type": "Button",
+                    "id": "a90d8712-cbbc-4fab-8fe6-b07111028b2b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Tip",
+                    "type": "Button",
+                    "id": "7323e390-0758-4fc5-8ec0-c7e2a34f4bbb",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Eraser",
+                    "type": "Button",
+                    "id": "2a1467ab-a2a5-467f-bd17-81e7784e259b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "BarrelButton",
+                    "type": "Button",
+                    "id": "ed8a1fcb-89d1-4a7d-87c9-d4c87d0b4be5",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "4eb99bae-60e1-4ef2-aefd-ae4f57ae08d3",
+                    "path": "<Pen>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Position",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0f426be2-badb-42f6-8e03-36b9b08a6bd7",
+                    "path": "<Pen>/tilt",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Tilt",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3c5ddf43-4d64-4ebc-a68f-b0adc9abe78b",
+                    "path": "<Pen>/inRange",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "InRange",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fc74c6b8-498c-45c3-95dd-ef30cf882b7d",
+                    "path": "<Pen>/tip",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Tip",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a6c1ac37-3a24-4282-a57f-46dc98f165d4",
+                    "path": "<Pen>/eraser",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Eraser",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "67c4fec9-20dc-41b6-9c5e-930bf94edd43",
+                    "path": "<Pen>/barrel1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "BarrelButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Tablet",
+            "id": "2df724eb-7037-495f-8ad2-ab672657a9fb",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "PassThrough",
+                    "id": "40d539c4-d2c6-4eb4-bfda-72253133a921",
+                    "expectedControlType": "Vector3",
+                    "processors": "",
+                    "interactions": ""
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a43a93d9-3484-435f-8820-7c3d3db1460a",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

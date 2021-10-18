@@ -25,16 +25,16 @@ namespace IVLab.MinVR3
         public Token inputFocusToken;
 
         [Tooltip("The cursor position event.")]
-        public VREventReference cursorPositionEvent = new VREventReference("", "Vector3", true);
+        public VREventPrototype<Vector3> cursorPositionEvent = new VREventPrototype<Vector3>();
 
         [Tooltip("[Optional] The cursor rotation event if you want to be able to grab the menu bar and rotate the menu.")]
-        public VREventReference cursorRotationEvent = new VREventReference("", "Quaternion", true);
+        public VREventPrototype<Quaternion> cursorRotationEvent = new VREventPrototype<Quaternion>();
 
         [Tooltip("The cursor selection activate event (i.e., primary button down).")]
-        public VREventReference buttonDownEvent = new VREventReference("", "", true);
+        public VREventPrototype buttonDownEvent = new VREventPrototype();
 
         [Tooltip("The cursor selection deactivate event (i.e., primary button up).")]
-        public VREventReference buttonUpEvent = new VREventReference("", "", true);
+        public VREventPrototype buttonUpEvent = new VREventPrototype();
 
         [Header("OnSelectionMade")]
         [Tooltip("Register a function with this event to receive a callback when a selection is made, the int argument is the index of the menu item that was selected.")]
@@ -218,63 +218,65 @@ namespace IVLab.MinVR3
                 RebuildMenu();
             }
 
-            // Convert the tracker's position and rotation to a Matrix4x4 format.
-            Matrix4x4 trackerMat = Matrix4x4.TRS(m_TrackerPos, m_TrackerRot, Vector3.one);
+            if (Application.isPlaying) {
+                // Convert the tracker's position and rotation to a Matrix4x4 format.
+                Matrix4x4 trackerMat = Matrix4x4.TRS(m_TrackerPos, m_TrackerRot, Vector3.one);
 
-            if ((buttonPressed) && (selected == 0)) {
-                // Dragging while holding onto the menu title bar, 
-                // move the menu based on motion of the tracker
+                if ((buttonPressed) && (selected == 0)) {
+                    // Dragging while holding onto the menu title bar, 
+                    // move the menu based on motion of the tracker
 
-                // Get the menu's Transform in Matrix4x4 format            
-                Matrix4x4 origMenuMat = transform.localToWorldMatrix;
+                    // Get the menu's Transform in Matrix4x4 format            
+                    Matrix4x4 origMenuMat = transform.localToWorldMatrix;
 
-                // Calc change in tracker pos and rot from the last frame until now
-                Matrix4x4 deltaTracker = trackerMat * lastTrackerMat.inverse;
+                    // Calc change in tracker pos and rot from the last frame until now
+                    Matrix4x4 deltaTracker = trackerMat * lastTrackerMat.inverse;
 
-                // Apply this change to the menu's current transformation to find its new transform
-                Matrix4x4 newMenuMat = deltaTracker * origMenuMat;
+                    // Apply this change to the menu's current transformation to find its new transform
+                    Matrix4x4 newMenuMat = deltaTracker * origMenuMat;
 
-                // Save the result, converting from Matrix4x4 back to unity's Transform class.
-                transform.position = Matrix4x4Extensions.GetTranslation(newMenuMat);
-                transform.rotation = Matrix4x4Extensions.GetRotation(newMenuMat);
-            } else if (!buttonPressed) {
-                // Clear selection and highlighting
-                if ((inputFocusToken != null) && (selected >= 0)) {
-                    inputFocusToken.ReleaseToken(this);
-                }
-                selected = -1;
-                Material tmpMat = titleBoxObj.GetComponent<Renderer>().sharedMaterial;
-                tmpMat.color = titleBGColor;
-                titleBoxObj.GetComponent<Renderer>().sharedMaterial = tmpMat;
-                for (int i = 0; i < labelBoxes.Count; i++) {
-                    tmpMat = labelBoxes[i].GetComponent<Renderer>().sharedMaterial;
-                    tmpMat.color = itemBGColor;
-                    labelBoxes[i].GetComponent<Renderer>().sharedMaterial = tmpMat;
-                }
-
-                // Update selection
-                if (InsideTransformedCube(m_TrackerPos, titleBoxObj)) {
-                    if ((inputFocusToken == null) || (inputFocusToken.RequestToken(this))) {
-                        selected = 0;
-                        tmpMat = titleBoxObj.GetComponent<Renderer>().sharedMaterial;
-                        tmpMat.color = titleHighColor;
-                        titleBoxObj.GetComponent<Renderer>().sharedMaterial = tmpMat;
+                    // Save the result, converting from Matrix4x4 back to unity's Transform class.
+                    transform.position = Matrix4x4Extensions.GetTranslation(newMenuMat);
+                    transform.rotation = Matrix4x4Extensions.GetRotation(newMenuMat);
+                } else if (!buttonPressed) {
+                    // Clear selection and highlighting
+                    if ((inputFocusToken != null) && (selected >= 0)) {
+                        inputFocusToken.ReleaseToken(this);
                     }
-                } else {
+                    selected = -1;
+                    Material tmpMat = titleBoxObj.GetComponent<Renderer>().sharedMaterial;
+                    tmpMat.color = titleBGColor;
+                    titleBoxObj.GetComponent<Renderer>().sharedMaterial = tmpMat;
                     for (int i = 0; i < labelBoxes.Count; i++) {
-                        if (InsideTransformedCube(m_TrackerPos, labelBoxes[i])) {
-                            if ((inputFocusToken == null) || (inputFocusToken.RequestToken(this))) {
-                                selected = i + 1;
-                                tmpMat = labelBoxes[i].GetComponent<Renderer>().sharedMaterial;
-                                tmpMat.color = itemHighColor;
-                                labelBoxes[i].GetComponent<Renderer>().sharedMaterial = tmpMat;
+                        tmpMat = labelBoxes[i].GetComponent<Renderer>().sharedMaterial;
+                        tmpMat.color = itemBGColor;
+                        labelBoxes[i].GetComponent<Renderer>().sharedMaterial = tmpMat;
+                    }
+
+                    // Update selection
+                    if (InsideTransformedCube(m_TrackerPos, titleBoxObj)) {
+                        if ((inputFocusToken == null) || (inputFocusToken.RequestToken(this))) {
+                            selected = 0;
+                            tmpMat = titleBoxObj.GetComponent<Renderer>().sharedMaterial;
+                            tmpMat.color = titleHighColor;
+                            titleBoxObj.GetComponent<Renderer>().sharedMaterial = tmpMat;
+                        }
+                    } else {
+                        for (int i = 0; i < labelBoxes.Count; i++) {
+                            if (InsideTransformedCube(m_TrackerPos, labelBoxes[i])) {
+                                if ((inputFocusToken == null) || (inputFocusToken.RequestToken(this))) {
+                                    selected = i + 1;
+                                    tmpMat = labelBoxes[i].GetComponent<Renderer>().sharedMaterial;
+                                    tmpMat.color = itemHighColor;
+                                    labelBoxes[i].GetComponent<Renderer>().sharedMaterial = tmpMat;
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            lastTrackerMat = trackerMat;
+                lastTrackerMat = trackerMat;
+            }
         }
 
         private void OnEnable()
@@ -327,17 +329,17 @@ namespace IVLab.MinVR3
         }
 
 
-        public void OnVREvent(VREventInstance vrEvent)
+        public void OnVREvent(VREvent vrEvent)
         {
             if (enabled) {
-                if (buttonDownEvent.name == vrEvent.name) {
+                if (buttonDownEvent.Matches(vrEvent)) {
                     OnButtonDown();
-                } else if (buttonUpEvent.name == vrEvent.name) {
+                } else if (buttonUpEvent.Matches(vrEvent)) {
                     OnButtonUp();
-                } else if (cursorPositionEvent.name == vrEvent.name) {
-                    OnTrackerMove((vrEvent as VREventInstance<Vector3>).data);
-                } else if (cursorRotationEvent.name == vrEvent.name) {
-                    OnTrackerRotate((vrEvent as VREventInstance<Quaternion>).data);
+                } else if (cursorPositionEvent.Matches(vrEvent)) {
+                    OnTrackerMove((vrEvent as VREvent<Vector3>).data);
+                } else if (cursorRotationEvent.Matches(vrEvent)) {
+                    OnTrackerRotate((vrEvent as VREvent<Quaternion>).data);
                 }
             }
         }

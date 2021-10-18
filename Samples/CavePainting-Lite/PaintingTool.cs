@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,12 @@ namespace IVLab.MinVR3
             GameObject paintBlob;
             if (paintBlobPrefab != null) {
                 paintBlob = Instantiate(paintBlobPrefab);
+                Material tmpMat = new Material(paintBlob.GetComponent<Renderer>().sharedMaterial);
+                float r = (float)(brushCursor.transform.position.x - Math.Truncate(brushCursor.transform.position.x));
+                float g = (float)(brushCursor.transform.position.y - Math.Truncate(brushCursor.transform.position.y));
+                float b = (float)(brushCursor.transform.position.z - Math.Truncate(brushCursor.transform.position.z));
+                tmpMat.color = new Color(r,g,b);
+                paintBlob.GetComponent<Renderer>().sharedMaterial = tmpMat;
             } else {
                 paintBlob = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             }

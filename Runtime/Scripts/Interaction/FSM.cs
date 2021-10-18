@@ -16,14 +16,14 @@ namespace IVLab.MinVR3
         {
             // state data table
             m_StateNames = new List<string>();
-            m_StateEnterCBs = new List<UnityEvent>();
-            m_StateUpdateCBs = new List<UnityEvent>();
-            m_StateExitCBs = new List<UnityEvent>();
+            m_StateEnterCBs = new List<VRCallback>();
+            m_StateUpdateCBs = new List<VRCallback>();
+            m_StateExitCBs = new List<VRCallback>();
 
             // arc data table
             m_ArcFromIDs = new List<int>();
             m_ArcToIDs = new List<int>();
-            m_ArcTriggerCBs = new List<VREventCallback>();
+            m_ArcListeners = new List<VREventListenerAny>();
             m_ArcRequireTokens = new List<Token>();
             m_ArcReleaseTokens = new List<Token>();
 
@@ -36,21 +36,21 @@ namespace IVLab.MinVR3
             return AddState(name, null, null, null);
         }
 
-        public int AddState(string name, UnityEvent onEnterCallback, UnityEvent onUpdateCallback, UnityEvent onExitCallback)
+        public int AddState(string name, VRCallback onEnterCallback, VRCallback onUpdateCallback, VRCallback onExitCallback)
         {
             m_StateNames.Add(name);
             if (onEnterCallback == null) {
-                m_StateEnterCBs.Add(new UnityEvent());
+                m_StateEnterCBs.Add(new VRCallback());
             } else {
                 m_StateEnterCBs.Add(onEnterCallback);
             }
             if (onUpdateCallback == null) {
-                m_StateUpdateCBs.Add(new UnityEvent());
+                m_StateUpdateCBs.Add(new VRCallback());
             } else {
                 m_StateUpdateCBs.Add(onUpdateCallback);
             }
             if (onExitCallback == null) {
-                m_StateExitCBs.Add(new UnityEvent());
+                m_StateExitCBs.Add(new VRCallback());
             } else {
                 m_StateExitCBs.Add(onExitCallback);
             }
@@ -102,23 +102,47 @@ namespace IVLab.MinVR3
 
         public int AddArc()
         {
-            return AddArc(-1, -1, null, null, null);
+            return AddArc(-1, -1, new VREventListenerAny(), null, null);
         }
 
-        public int AddArc(string fromState, string toState, VREventCallback triggerCallback, Token requireToTransition, Token releaseOnTransition)
+
+        public int AddArc(string fromState, string toState, VREventPrototype listenForEvent, UnityAction callbackFunction = null, Token requireToTransition = null, Token releaseOnTransition = null)
         {
-            return AddArc(GetStateID(fromState), GetStateID(toState), triggerCallback, requireToTransition, releaseOnTransition);
+            return AddArc(GetStateID(fromState), GetStateID(toState), listenForEvent, callbackFunction, requireToTransition, releaseOnTransition);
         }
 
-        public int AddArc(int fromStateID, int toStateID, VREventCallback triggerCallback, Token requireToTransition, Token releaseOnTransition)
+        public int AddArc(int fromStateID, int toStateID, VREventPrototype listenForEvent, UnityAction callbackFunction = null, Token requireToTransition = null, Token releaseOnTransition = null)
+        {
+            VREventListenerAny listener = VREventListenerAny.Create(listenForEvent, callbackFunction);
+            return AddArc(fromStateID, toStateID, listener, requireToTransition, releaseOnTransition);
+        }
+
+
+        public int AddArc<T>(string fromState, string toState, VREventPrototype<T> listenForEvent, UnityAction<T> callbackFunction = null, Token requireToTransition = null, Token releaseOnTransition = null)
+        {
+            return AddArc(GetStateID(fromState), GetStateID(toState), listenForEvent, callbackFunction, requireToTransition, releaseOnTransition);
+        }
+
+        public int AddArc<T>(int fromStateID, int toStateID, VREventPrototype<T> listenForEvent, UnityAction<T> callbackFunction = null, Token requireToTransition = null, Token releaseOnTransition = null)
+        {
+            VREventListenerAny listener = VREventListenerAny.Create(listenForEvent, callbackFunction);
+            return AddArc(fromStateID, toStateID, listener, requireToTransition, releaseOnTransition);
+        }
+
+
+        public int AddArc(string fromState, string toState, VREventListenerAny listener, Token requireToTransition = null, Token releaseOnTransition = null)
+        {
+            return AddArc(GetStateID(fromState), GetStateID(toState), listener, requireToTransition, releaseOnTransition);
+        }
+
+        public int AddArc(int fromStateID, int toStateID, VREventListenerAny listener, Token requireToTransition = null, Token releaseOnTransition = null)
         {
             m_ArcFromIDs.Add(fromStateID);
             m_ArcToIDs.Add(toStateID);
-            if (triggerCallback == null) {
-                m_ArcTriggerCBs.Add(new VREventCallback());
-            } else {
-                m_ArcTriggerCBs.Add(triggerCallback);
+            if (listener == null) {
+                listener = new VREventListenerAny();
             }
+            m_ArcListeners.Add(listener);            
             m_ArcRequireTokens.Add(requireToTransition);
             m_ArcReleaseTokens.Add(releaseOnTransition);
             return m_ArcFromIDs.Count - 1;
@@ -128,7 +152,7 @@ namespace IVLab.MinVR3
         {
             m_ArcFromIDs.RemoveAt(id);
             m_ArcToIDs.RemoveAt(id);
-            m_ArcTriggerCBs.RemoveAt(id);
+            m_ArcListeners.RemoveAt(id);
             m_ArcRequireTokens.RemoveAt(id);
             m_ArcReleaseTokens.RemoveAt(id);
         }
@@ -169,13 +193,13 @@ namespace IVLab.MinVR3
             m_StateUpdateCBs[m_CurrentState].Invoke();
         }
 
-        public void OnVREvent(VREventInstance vrEvent)
+        public void OnVREvent(VREvent vrEvent)
         {
             if (enabled) {
 
                 for (int i = 0; i < NumArcs(); i++) {
                     // if the arc originates in the current state and the event matches the arcs trigger
-                    if ((m_ArcFromIDs[i] == m_CurrentState) && (m_ArcTriggerCBs[i].listeningFor.name == vrEvent.name)) {
+                    if ((m_ArcFromIDs[i] == m_CurrentState) && (vrEvent.Matches(m_ArcListeners[i].vrEventToListenFor))) {
                         if (m_Debug) {
                             Debug.Log("Input " + vrEvent.name + " matches trigger for arc: " + ArcToString(i));
                         }
@@ -204,9 +228,9 @@ namespace IVLab.MinVR3
                             // case 1: this arc stays within the same state, only call the arc's callback
                             if (m_ArcFromIDs[i] == m_ArcToIDs[i]) {
                                 if (m_Debug) {
-                                    Debug.Log("Calling OnTrigger callback(s): " + m_ArcTriggerCBs[i].ToString());
+                                    Debug.Log("Calling OnTrigger callback(s): " + m_ArcListeners[i].onVREventCallback.ToString());
                                 }
-                                m_ArcTriggerCBs[i].Invoke(vrEvent);
+                                m_ArcListeners[i].onVREventCallback.Invoke(vrEvent);
                             }
 
                             // case 2: this arc causes the FSM to change states, call state exit/enter callbacks as well
@@ -217,9 +241,9 @@ namespace IVLab.MinVR3
                                 m_StateExitCBs[m_CurrentState].Invoke();
 
                                 if (m_Debug) {
-                                    Debug.Log("Calling OnTrigger callback(s): " + m_ArcTriggerCBs[i].ToString());
+                                    Debug.Log("Calling OnTrigger callback(s): " + m_ArcListeners[i].onVREventCallback.ToString());
                                 }
-                                m_ArcTriggerCBs[i].Invoke(vrEvent);
+                                m_ArcListeners[i].onVREventCallback.Invoke(vrEvent);
                                 m_CurrentState = m_ArcToIDs[i];
 
                                 if (m_Debug) {
@@ -247,14 +271,14 @@ namespace IVLab.MinVR3
 
         // state data table
         [SerializeField] private List<string> m_StateNames = new List<string>();
-        [SerializeField] private List<UnityEvent> m_StateEnterCBs = new List<UnityEvent>();
-        [SerializeField] private List<UnityEvent> m_StateUpdateCBs = new List<UnityEvent>();
-        [SerializeField] private List<UnityEvent> m_StateExitCBs = new List<UnityEvent>();
+        [SerializeField] private List<VRCallback> m_StateEnterCBs = new List<VRCallback>();
+        [SerializeField] private List<VRCallback> m_StateUpdateCBs = new List<VRCallback>();
+        [SerializeField] private List<VRCallback> m_StateExitCBs = new List<VRCallback>();
         
         // arc data table
         [SerializeField] private List<int> m_ArcFromIDs = new List<int>();
         [SerializeField] private List<int> m_ArcToIDs = new List<int>();
-        [SerializeField] private List<VREventCallback> m_ArcTriggerCBs = new List<VREventCallback>();
+        [SerializeField] private List<VREventListenerAny> m_ArcListeners = new List<VREventListenerAny>();
         [SerializeField] private List<Token> m_ArcRequireTokens = new List<Token>();
         [SerializeField] private List<Token> m_ArcReleaseTokens = new List<Token>();
 

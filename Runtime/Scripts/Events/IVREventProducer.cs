@@ -8,6 +8,11 @@ namespace IVLab.MinVR3
 {
     public interface IVREventProducer
     {
-        public Dictionary<string, string> GetEventNamesAndTypes();
+        /// <summary>
+        /// All event producers must implement this function to tell MinVR the names and
+        /// data types for each possible event that can be produced.
+        /// </summary>
+        /// <returns>List of prototypes of events that can be produced at runtime.</returns>
+        public List<IVREventPrototype> GetEventPrototypes();
     }
 }

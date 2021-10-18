@@ -6,7 +6,7 @@ namespace IVLab.MinVR3
 {
     public interface IVREventReceiver
     {
-        public void OnVREvent(VREventInstance vrEvent);
+        public void OnVREvent(VREvent vrEvent);
     }
 
 } // namespace

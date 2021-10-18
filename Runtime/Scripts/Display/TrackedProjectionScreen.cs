@@ -42,10 +42,10 @@ namespace IVLab.MinVR3 {
         public Camera cam;
 
         [Tooltip("The VREvent that provides head tracking position updates.")]
-        public VREventReference headTrackingPosEvent = new VREventReference("", "Vector3", true);
+        public VREventPrototype<Vector3> headTrackingPosEvent = new VREventPrototype<Vector3>("");
 
         [Tooltip("The VREvent that provides head tracking rotation updates.")]
-        public VREventReference headTrackingRotEvent = new VREventReference("", "Quaternion", true);
+        public VREventPrototype<Quaternion> headTrackingRotEvent = new VREventPrototype<Quaternion>("");
 
         public enum ProjectionType { Perspective, Parallel }; 
         [Tooltip("Perspective projection is typically (always?) used for head tracked displays.")]
@@ -348,12 +348,12 @@ namespace IVLab.MinVR3 {
             return true;
         }
 
-        public void OnVREvent(VREventInstance vrEvent)
+        public void OnVREvent(VREvent vrEvent)
         {
-            if (vrEvent.name == headTrackingPosEvent.name) {
-                cam.transform.position = (vrEvent as VREventInstance<Vector3>).data;
-            } else if (vrEvent.name == headTrackingRotEvent.name) {
-                cam.transform.rotation = (vrEvent as VREventInstance<Quaternion>).data;
+            if (headTrackingPosEvent.Matches(vrEvent)) {
+                cam.transform.position = (vrEvent as VREvent<Vector3>).data;
+            } else if (headTrackingRotEvent.Matches(vrEvent)) {
+                cam.transform.rotation = (vrEvent as VREvent<Quaternion>).data;
             }
         }
     }
