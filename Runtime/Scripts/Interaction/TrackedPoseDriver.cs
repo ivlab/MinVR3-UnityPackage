@@ -8,13 +8,16 @@ namespace IVLab.MinVR3
 {
     /// <summary>
     /// Note: This version of the TrackedPoseDriver is modified from the original provided with Unity's XR Interaction
-    /// Toolkit.  The modified version uses listens for VREvents.
+    /// Toolkit.  The modified version adds:
+    /// 1. It listens for VREvents rather than Unity Actions
+    /// 2. It includes base rotation and translation amounts that can be used, for example, to calibrate a tracker
+    ///    attached to a physical prop.
     /// 
     /// The TrackedPoseDriver component applies the current Pose value of a tracked device to the transform of the GameObject.
     /// TrackedPoseDriver can track multiple types of devices including XR HMDs, controllers, and remotes.
     /// </summary>
     [AddComponentMenu("MinVR/Interaction/Tracked Pose Driver")]
-    public class TrackedPoseDriver : MonoBehaviour, IVREventReceiver
+    public class TrackedPoseDriver : MonoBehaviour, IVREventListener
     {
         public enum TrackingType
         {
@@ -64,24 +67,36 @@ namespace IVLab.MinVR3
         VREventPrototype<Quaternion> m_RotationEvent;
         public VREventPrototype<Quaternion> rotationEvent {
             get { return m_RotationEvent; }
-            set {
-                m_RotationEvent = value;
-            }
+            set { m_RotationEvent = value; }
         }
 
         Vector3 m_CurrentPosition = Vector3.zero;
         Quaternion m_CurrentRotation = Quaternion.identity;
 
 
+        [SerializeField]
+        Quaternion m_CalibrationRotation;
+        public Quaternion calibrationRotation {
+            get { return m_CalibrationRotation; }
+            set { m_CalibrationRotation = value; }
+        }
+
+        [SerializeField]
+        Vector3 m_CalibrationTranslation;
+        public Vector3 calibrationTranslation {
+            get { return m_CalibrationTranslation; }
+            set { m_CalibrationTranslation = value; }
+        }
+
         public void OnVREvent(VREvent vrEvent)
         {
             if (vrEvent.Matches(m_PositionEvent)) {
                 VREvent<Vector3> posUpdateEvent = vrEvent as VREvent<Vector3>;
-                m_CurrentPosition = posUpdateEvent.data;
+                m_CurrentPosition = posUpdateEvent.data;// + m_CalibrationTranslation;
             }
             if (vrEvent.Matches(m_RotationEvent)) {
                 VREvent<Quaternion> rotUpdateEvent = vrEvent as VREvent<Quaternion>;
-                m_CurrentRotation = rotUpdateEvent.data;
+                m_CurrentRotation = rotUpdateEvent.data;// * m_CalibrationRotation;
             }
         }
 
@@ -100,18 +115,19 @@ namespace IVLab.MinVR3
                 UnityEngine.XR.XRDevice.DisableAutoXRCameraTracking(GetComponent<Camera>(), true);
             }
 #endif
+            m_Listening = false;
         }
 
         protected void OnEnable()
         {
             InputSystem.onAfterUpdate += UpdateCallback;
-            VREngine.instance.eventManager.AddEventReceiver(this);
+            StartListening();
         }
 
         void OnDisable()
         {
             InputSystem.onAfterUpdate -= UpdateCallback;
-            VREngine.instance?.eventManager?.RemoveEventReceiver(this);
+            StopListening();
         }
 
         protected virtual void OnDestroy()
@@ -172,7 +188,24 @@ namespace IVLab.MinVR3
             SetLocalTransform(m_CurrentPosition, m_CurrentRotation);
         }
 
+        public bool IsListening()
+        {
+            return m_Listening;
+        }
 
+        public void StartListening()
+        {
+            VREngine.instance.eventManager.AddEventReceiver(this);
+            m_Listening = true;
+        }
+
+        public void StopListening()
+        {
+            VREngine.instance?.eventManager?.RemoveEventReceiver(this);
+            m_Listening = false;
+        }
+
+        private bool m_Listening;
     }
 }
 

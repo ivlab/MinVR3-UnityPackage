@@ -24,7 +24,7 @@ namespace IVLab.MinVR3 {
 	 */
     [ExecuteAlways]
     [AddComponentMenu("MinVR/Display/Tracked Projection Screen")]
-    public class TrackedProjectionScreen : MonoBehaviour, IVREventReceiver {
+    public class TrackedProjectionScreen : MonoBehaviour, IVREventListener {
 
         [System.Serializable]
         public class ScreenCorners {
@@ -42,11 +42,11 @@ namespace IVLab.MinVR3 {
         public Camera cam;
 
         [Tooltip("The VREvent that provides head tracking position updates.")]
-        public VREventPrototype<Vector3> headTrackingPosEvent = new VREventPrototype<Vector3>("");
+        public VREventPrototype<Vector3> headTrackingPosEvent;
 
         [Tooltip("The VREvent that provides head tracking rotation updates.")]
-        public VREventPrototype<Quaternion> headTrackingRotEvent = new VREventPrototype<Quaternion>("");
-
+        public VREventPrototype<Quaternion> headTrackingRotEvent;
+        
         public enum ProjectionType { Perspective, Parallel }; 
         [Tooltip("Perspective projection is typically (always?) used for head tracked displays.")]
         public ProjectionType projectionType = ProjectionType.Perspective;
@@ -350,11 +350,30 @@ namespace IVLab.MinVR3 {
 
         public void OnVREvent(VREvent vrEvent)
         {
-            if (headTrackingPosEvent.Matches(vrEvent)) {
+            if (vrEvent.Matches(headTrackingPosEvent)) {
                 cam.transform.position = (vrEvent as VREvent<Vector3>).data;
-            } else if (headTrackingRotEvent.Matches(vrEvent)) {
+            } else if (vrEvent.Matches(headTrackingRotEvent)) {
                 cam.transform.rotation = (vrEvent as VREvent<Quaternion>).data;
             }
         }
+
+        public bool IsListening()
+        {
+            return m_Listening;
+        }
+
+        public void StartListening()
+        {
+            VREngine.instance.eventManager.AddEventReceiver(this);
+            m_Listening = true;
+        }
+
+        public void StopListening()
+        {
+            VREngine.instance?.eventManager?.RemoveEventReceiver(this);
+            m_Listening = false;
+        }
+
+        private bool m_Listening = false;
     }
 }

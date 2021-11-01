@@ -23,8 +23,16 @@ namespace IVLab.MinVR3
         private void Reset()
         {
             m_BaseEventNames = new[] {
-                "Mobile/Finger 0",
-                "Mobile/Finger 1",
+                "Touch/Finger 0",
+                "Touch/Finger 1",
+                "Touch/Finger 2",
+                "Touch/Finger 3",
+                "Touch/Finger 4",
+                "Touch/Finger 5",
+                "Touch/Finger 6",
+                "Touch/Finger 7",
+                "Touch/Finger 8",
+                "Touch/Finger 9"
             };
 
             m_GyroscopeAttitudeEventName = "Mobile/Rotation";
@@ -143,28 +151,28 @@ namespace IVLab.MinVR3
         {
             List<IVREventPrototype> eventsProduced = new List<IVREventPrototype>();
             for (int i = 0; i < m_BaseEventNames.Length; i++) {
-                eventsProduced.Add(new VREventPrototype<Vector2>(m_BaseEventNames[i] + " DOWN"));
-                eventsProduced.Add(new VREventPrototype<Vector2>(m_BaseEventNames[i] + "/Position"));
+                eventsProduced.Add(VREventPrototypeVector2.Create(m_BaseEventNames[i] + " DOWN"));
+                eventsProduced.Add(VREventPrototypeVector2.Create(m_BaseEventNames[i] + "/Position"));
                 if (m_IncludePressureEvents) {
-                    eventsProduced.Add(new VREventPrototype<float>(m_BaseEventNames[i] + "/Pressure"));
+                    eventsProduced.Add(VREventPrototypeFloat.Create(m_BaseEventNames[i] + "/Pressure"));
                 }
-                eventsProduced.Add(new VREventPrototype<Vector2>(m_BaseEventNames[i] + " UP"));
+                eventsProduced.Add(VREventPrototypeVector2.Create(m_BaseEventNames[i] + " UP"));
             }
 
             if (m_GyroscopeAttitudeEventName != "") {
-                eventsProduced.Add(new VREventPrototype<Quaternion>(m_GyroscopeAttitudeEventName));
+                eventsProduced.Add(VREventPrototypeQuaternion.Create(m_GyroscopeAttitudeEventName));
             }
 
-            if (m_DeviceOrientationChangedEventName != "") {
-                eventsProduced.Add(new VREventPrototype<DeviceOrientation>(m_DeviceOrientationChangedEventName));
-            }
+            //if (m_DeviceOrientationChangedEventName != "") {
+            //    eventsProduced.Add(VREventPrototype<DeviceOrientation>.Create(m_DeviceOrientationChangedEventName));
+            //}
 
             if (m_CompassHeadingEventName != "") {
-                eventsProduced.Add(new VREventPrototype<float>(m_CompassHeadingEventName));
+                eventsProduced.Add(VREventPrototypeFloat.Create(m_CompassHeadingEventName));
             }
 
             if (m_AccelerationEventName != "") {
-                eventsProduced.Add(new VREventPrototype<Vector3>(m_AccelerationEventName));
+                eventsProduced.Add(VREventPrototypeVector3.Create(m_AccelerationEventName));
             }
 
             return eventsProduced;

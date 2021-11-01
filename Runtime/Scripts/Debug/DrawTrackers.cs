@@ -7,7 +7,7 @@ using System;
 namespace IVLab.MinVR3 {
 
     [AddComponentMenu("MinVR/Debug/Draw Trackers")]
-    public class DrawTrackers : MonoBehaviour, IVREventReceiver {
+    public class DrawTrackers : MonoBehaviour, IVREventListener {
         
         [Tooltip("Prefab of axes geometry to use as a cursor.  If the GameObject has a TextMesh component, the text will be set to the tracker name.")]
         public GameObject cursorPrefab;
@@ -18,8 +18,8 @@ namespace IVLab.MinVR3 {
             {
                 displayName = "Unknown Tracker (" + counter + ")";
                 counter++;
-                positionEvent = new VREventPrototype<Vector3>("");
-                rotationEvent = new VREventPrototype<Quaternion>("");
+                positionEvent = new VREventPrototype<Vector3>();
+                rotationEvent = new VREventPrototype<Quaternion>();
             }
             public string displayName;
             public VREventPrototype<Vector3> positionEvent;
@@ -33,18 +33,16 @@ namespace IVLab.MinVR3 {
         
         private void OnEnable()
         {
-            VREngine.instance.eventManager.AddEventReceiver(this);
         }
 
         private void OnDisable()
         {
-            VREngine.instance?.eventManager?.RemoveEventReceiver(this);
         }
 
         public void OnVREvent(VREvent vrEvent)
         {
             foreach (TrackerDescription t in trackers) {
-                if ((t.positionEvent.Matches(vrEvent)) || (t.rotationEvent.Matches(vrEvent))) {
+                if ((vrEvent.Matches(t.positionEvent)) || (vrEvent.Matches(t.rotationEvent))) {
                     if (!cursors.ContainsKey(t.displayName)) {
                         GameObject newCursorObj = Instantiate(cursorPrefab);
                         TextMesh label = newCursorObj.GetComponentInChildren<TextMesh>();
@@ -54,18 +52,36 @@ namespace IVLab.MinVR3 {
                         cursors[t.displayName] = newCursorObj;
                     }
                     GameObject cursorObj = cursors[t.displayName];
-                    if (t.positionEvent.Matches(vrEvent)) {
+                    if (vrEvent.Matches(t.positionEvent)) {
                         cursorObj.transform.position = (vrEvent as VREvent<Vector3>).data;
-                    } else if (t.rotationEvent.Matches(vrEvent)) {
+                    } else if (vrEvent.Matches(t.rotationEvent)) {
                         cursorObj.transform.rotation = (vrEvent as VREvent<Quaternion>).data;
                     }
                 }
             }
         }
 
+        public bool IsListening()
+        {
+            return m_Listening;
+        }
+
+        public void StartListening()
+        {
+            VREngine.instance.eventManager.AddEventReceiver(this);
+            m_Listening = true;
+        }
+
+        public void StopListening()
+        {
+            VREngine.instance?.eventManager?.RemoveEventReceiver(this);
+            m_Listening = false;
+        }
+
 
         // map tracker names to game objects
-        private Dictionary<string, GameObject> cursors = new Dictionary<string, GameObject>();
+        [NonSerialized] private Dictionary<string, GameObject> cursors = new Dictionary<string, GameObject>();
+        [NonSerialized] private bool m_Listening = false;
     }
 
 } // namespace

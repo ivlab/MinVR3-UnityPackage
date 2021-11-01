@@ -9,10 +9,10 @@ namespace IVLab.MinVR3
 {
 
     [DisallowMultipleComponent]
-    public class VREventManager : MonoBehaviour, IVREventDistributor
+    public class VREventManager : MonoBehaviour
     {
         [Tooltip("Logs events to the console as they are processed")]
-        public bool m_ShowDebuggingOutput = true;
+        public bool m_ShowDebuggingOutput = false;
 
         
         public void AddEventProducer(IVREventProducer eventProducer)
@@ -28,31 +28,33 @@ namespace IVLab.MinVR3
         }
 
 
-        public void AddEventReceiver(IVREventReceiver eventReceiver)
+        public void AddEventReceiver(IVREventListener eventReceiver)
         {
             if (!m_EventReceivers.Contains(eventReceiver)) {
                 m_EventReceivers.Add(eventReceiver);
             }
         }
 
-        public void RemoveEventReceiver(IVREventReceiver eventReceiver)
+        public void RemoveEventReceiver(IVREventListener eventReceiver)
         {
             m_EventReceivers.Remove(eventReceiver);
         }
 
 
 
-
         public void QueueEvent(string eventName)
         {
-            m_Queue.Add(new VREvent(eventName));
+            lock (m_Queue) {
+                m_Queue.Add(new VREvent(eventName));
+            }
         }
 
         public void QueueEvent<T>(string eventName, T eventData)
         {
-            m_Queue.Add(new VREvent<T>(eventName, eventData));
+            lock (m_Queue) {
+                m_Queue.Add(new VREvent<T>(eventName, eventData));
+            }
         }
-
 
         public List<VREvent> GetEventQueue()
         {
@@ -61,31 +63,25 @@ namespace IVLab.MinVR3
 
         public void SetEventQueue(List<VREvent> newQueue)
         {
-            m_Queue = newQueue;
+            lock (m_Queue) {
+                m_Queue = newQueue;
+            }
         }
 
         public void Update()
         {
-            foreach (VREvent e in m_Queue) {
-                if (m_ShowDebuggingOutput) {
-                    Debug.Log("Processing event " + e.name);
+            lock (m_Queue) {
+                foreach (VREvent e in m_Queue) {
+                    if (m_ShowDebuggingOutput) {
+                        Debug.Log("Processing event " + e.name);
+                    }
+                    foreach (IVREventListener r in m_EventReceivers) {
+                        r.OnVREvent(e);
+                    }
                 }
-                foreach (IVREventReceiver r in m_EventReceivers) {
-                    r.OnVREvent(e);
-                }
+                m_Queue.Clear();
             }
-            m_Queue.Clear();
         }
-
-
-        // These lists are populated at runtime as other objects register with the manager
-        [NonSerialized] private List<IVREventProducer> m_EventProducers = new List<IVREventProducer>();
-        [NonSerialized] private List<IVREventReceiver> m_EventReceivers = new List<IVREventReceiver>();
-
-        [NonSerialized] private List<VREvent> m_Queue = new List<VREvent>();
-
-
-
         
         /// <summary>
         /// Not fast; intended only for populating dropdown lists in the Unity Editor
@@ -112,10 +108,10 @@ namespace IVLab.MinVR3
             foreach (var producer in eventProducers) {
                 var expectedFromThisSource = producer.GetEventPrototypes();
                 foreach (IVREventPrototype e in expectedFromThisSource) {
-                    if ((e.GetDataTypeName() == dataTypeName) || (dataTypeName == "*")) {
+                    if ((e.GetEventDataTypeName() == dataTypeName) || (dataTypeName == "*")) {
                         foreach (IVREventPrototype e2 in expectedEvents) {
-                            if ((e.GetEventName() == e2.GetEventName()) && (e.GetDataTypeName() != e2.GetDataTypeName())) {
-                                throw new Exception($"Two IVREventProducers expect to produce an event named {e.GetEventName()} but the expected data types differ: '{e.GetDataTypeName()}' and '{e2.GetDataTypeName()}'");
+                            if ((e.GetEventName() == e2.GetEventName()) && (e.GetEventDataTypeName() != e2.GetEventDataTypeName())) {
+                                throw new Exception($"Two IVRInputDevices expect to produce an event named {e.GetEventName()} but the expected data types differ: '{e.GetEventDataTypeName()}' and '{e2.GetEventDataTypeName()}'");
                             }
                         }
                         expectedEvents.Add(e);
@@ -125,6 +121,12 @@ namespace IVLab.MinVR3
             return expectedEvents;
         }
 
+        // These lists are populated at runtime as other objects register with the manager
+        [NonSerialized] private List<IVREventProducer> m_EventProducers = new List<IVREventProducer>();
+        [NonSerialized] private List<IVREventListener> m_EventReceivers = new List<IVREventListener>();
+
+        [NonSerialized] private List<VREvent> m_Queue = new List<VREvent>();
     }
+
 
 } // namespace

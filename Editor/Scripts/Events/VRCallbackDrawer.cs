@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
 using UnityEditor;
 using System.Collections.Generic;
@@ -8,48 +8,9 @@ using UnityEditorInternal;
 namespace IVLab.MinVR3
 {
 
-    [CustomPropertyDrawer(typeof(VRCallback))]
-    public class VRCallbackDrawer : PropertyDrawer
-    {
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-        {
-            EditorGUI.BeginProperty(position, label, property);
-
-            // label
-            Rect propRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
-            EditorGUI.LabelField(propRect, label);
-
-            // notifyList
-            SerializedProperty notifyListProp = property.FindPropertyRelative("m_NotifyList");
-            propRect.x += 15;
-            propRect.width -= 15;
-            propRect.y += propRect.height + EditorGUIUtility.standardVerticalSpacing;
-            propRect.height = position.height - 2 * propRect.height;
-            EditorGUI.PropertyField(propRect, notifyListProp);
-            
-            EditorGUI.EndProperty();
-        }
-
-
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-        {
-            // label
-            float height = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
-
-            // notifyList
-            SerializedProperty notifyListProp = property.FindPropertyRelative("m_NotifyList");
-            height += EditorGUI.GetPropertyHeight(notifyListProp, true) + EditorGUIUtility.standardVerticalSpacing;
-
-            return height;
-        }
-    }
-
-
-    [CustomPropertyDrawer(typeof(VRCallback<>))]
-    public class VRCallbackTemplatedDrawer : VRCallbackDrawer
-    {
-    }
-
+    // VRCallback does not need a custom drawer since it inherits from UnityEvent and displays correctly.
+    
+    // Same for VRCallback<>, looks good as it is.
 
 
     [CustomPropertyDrawer(typeof(VRCallbackAny))]
@@ -59,20 +20,17 @@ namespace IVLab.MinVR3
         {
             EditorGUI.BeginProperty(position, label, property);
 
-            // label
-            Rect propRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
-            EditorGUI.LabelField(propRect, label);
+            string labelText = label.text;
 
-            // indent
-            propRect.x += 15;
-            propRect.width -= 15;
+            Rect propRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing);
 
-
+            // Pick just one of the internal VRCallback* types to display based on the current value of the datatype
+            // Each callback is stored in a member var of the form "m_Callback" + dataTypeName
             SerializedProperty dataTypeNameProp = property.FindPropertyRelative("m_DataTypeName");
 
             // data type dropdown
-            SerializedProperty showDropdownProp = property.FindPropertyRelative("m_ShowDataTypeDropdown");
-            if (showDropdownProp.boolValue) {
+            SerializedProperty showDataTypeProp = property.FindPropertyRelative("m_ShowDataTypeInEditor");
+            if (showDataTypeProp.boolValue) {
                 List<string> dataTypeNamesList = new List<string>();
                 SerializedProperty iteratorProp = property.serializedObject.GetIterator();
                 while (iteratorProp.NextVisible(true)) {
@@ -94,25 +52,22 @@ namespace IVLab.MinVR3
                         selected = i;
                     }
                 }
-
                 EditorGUI.BeginChangeCheck();
-                propRect.y += propRect.height + EditorGUIUtility.standardVerticalSpacing;
-                selected = EditorGUI.Popup(propRect, new GUIContent("Expected Data Type"), selected, displayNames);
+                selected = EditorGUI.Popup(propRect, new GUIContent(labelText + " Data Type"), selected, displayNames);
                 if (EditorGUI.EndChangeCheck()) {
                     if (selected >= 0) {
                         dataTypeNameProp.stringValue = dataTypeNames[selected];
                     }
                 }
+                propRect.y += propRect.height;
             }
 
-            // notifyList
-            string callbackVarName = "m_Callback" + dataTypeNameProp.stringValue;
-            SerializedProperty callbackProp = property.FindPropertyRelative(callbackVarName);
-            SerializedProperty notifyListProp = callbackProp.FindPropertyRelative("m_NotifyList");
 
-            propRect.y += propRect.height + EditorGUIUtility.standardVerticalSpacing;
-            propRect.height = EditorGUI.GetPropertyHeight(callbackProp);
-            EditorGUI.PropertyField(propRect, notifyListProp);
+            string callbackPropName = "m_Callback" + dataTypeNameProp.stringValue;
+            SerializedProperty callbackProp = property.FindPropertyRelative(callbackPropName);
+
+            propRect.height = EditorGUI.GetPropertyHeight(callbackProp, true) + EditorGUIUtility.standardVerticalSpacing;
+            EditorGUI.PropertyField(propRect, callbackProp, new GUIContent(labelText));
 
             EditorGUI.EndProperty();
         }
@@ -120,25 +75,22 @@ namespace IVLab.MinVR3
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            // label
-            float height = EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
-
+            float height = 0;
+            
             // data type dropdown
-            SerializedProperty showDropdownProp = property.FindPropertyRelative("m_ShowDataTypeDropdown");
-            if (showDropdownProp.boolValue) {
+            SerializedProperty showDataTypeProp = property.FindPropertyRelative("m_ShowDataTypeInEditor");
+            if (showDataTypeProp.boolValue) {
                 height += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
             }
 
-            // notifyList
+            // callback
             SerializedProperty dataTypeNameProp = property.FindPropertyRelative("m_DataTypeName");
             string callbackVarName = "m_Callback" + dataTypeNameProp.stringValue;
             SerializedProperty callbackProp = property.FindPropertyRelative(callbackVarName);
-            SerializedProperty notifyListProp = callbackProp.FindPropertyRelative("m_NotifyList");
-            height += EditorGUI.GetPropertyHeight(notifyListProp, true) + EditorGUIUtility.standardVerticalSpacing;
+            height += EditorGUI.GetPropertyHeight(callbackProp, true) + EditorGUIUtility.standardVerticalSpacing;
 
             return height;
         }
     }
-
 
 } // namespace

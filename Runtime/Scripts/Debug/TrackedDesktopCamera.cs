@@ -9,13 +9,13 @@ namespace IVLab.MinVR3 {
     /// from a HMD simulator.
     /// </summary>
     [AddComponentMenu("MinVR/Debug/Tracked Desktop Camera")]
-    public class TrackedDesktopCamera : MonoBehaviour, IVREventReceiver {
+    public class TrackedDesktopCamera : MonoBehaviour, IVREventListener {
 
         [Tooltip("Name of the VREvent that provides positional updates.")]
-        public VREventPrototype<Vector3> m_PositionEvent = new VREventPrototype<Vector3>("");
+        public VREventPrototype<Vector3> m_PositionEvent;
 
         [Tooltip("Name of the VREvent that provides rotational updates.")]
-        public VREventPrototype<Quaternion> m_RotationEvent = new VREventPrototype<Quaternion>("");
+        public VREventPrototype<Quaternion> m_RotationEvent;
         
         [Tooltip("The camera to apply the tracking updates to.  Defaults to Main Camera.")]
         public Camera m_Camera;
@@ -34,11 +34,30 @@ namespace IVLab.MinVR3 {
 
         public void OnVREvent(VREvent vrEvent)
         {
-            if (m_PositionEvent.Matches(vrEvent)) {
+            if (vrEvent.Matches(m_PositionEvent)) {
                 m_Camera.transform.position = (vrEvent as VREvent<Vector3>).data;
-            } else if (m_RotationEvent.Matches(vrEvent)) {
+            } else if (vrEvent.Matches(m_RotationEvent)) {
                 m_Camera.transform.rotation = (vrEvent as VREvent<Quaternion>).data;
             }
         }
+
+        public bool IsListening()
+        {
+            return m_Listening;
+        }
+
+        public void StartListening()
+        {
+            VREngine.instance.eventManager.AddEventReceiver(this);
+            m_Listening = true;
+        }
+
+        public void StopListening()
+        {
+            VREngine.instance?.eventManager?.RemoveEventReceiver(this);
+            m_Listening = false;
+        }
+
+        private bool m_Listening = false;
     }
 }

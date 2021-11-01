@@ -192,16 +192,25 @@ namespace IVLab.MinVR3 {
         public List<IVREventPrototype> GetEventPrototypes()
         {
             List<IVREventPrototype> allEvents = new List<IVREventPrototype>();
-            allEvents.Add(new VREventPrototype<Vector3>(headTrackerBaseName + "/Position"));
-            allEvents.Add(new VREventPrototype<Quaternion>(headTrackerBaseName + "/Rotation"));
+            allEvents.Add(VREventPrototypeVector3.Create(headTrackerBaseName + "/Position"));
+            allEvents.Add(VREventPrototypeQuaternion.Create(headTrackerBaseName + "/Rotation"));
 
-            allEvents.Add(new VREventPrototype<Vector3>(tracker1BaseName + "/Position"));
-            allEvents.Add(new VREventPrototype<Quaternion>(tracker1BaseName + "/Rotation"));
+            allEvents.Add(VREventPrototypeVector3.Create(tracker1BaseName + "/Position"));
+            allEvents.Add(VREventPrototypeQuaternion.Create(tracker1BaseName + "/Rotation"));
 
-            allEvents.Add(new VREventPrototype<Vector3>(tracker2BaseName + "/Position"));
-            allEvents.Add(new VREventPrototype<Quaternion>(tracker2BaseName + "/Rotation"));
+            allEvents.Add(VREventPrototypeVector3.Create(tracker2BaseName + "/Position"));
+            allEvents.Add(VREventPrototypeQuaternion.Create(tracker2BaseName + "/Rotation"));
 
             return allEvents;
+        }
+
+        public bool RequiresPoll()
+        {
+            return false;
+        }
+
+        public void AddEventsToQueue(ref List<VREvent> eventQueue)
+        {
         }
     }
 

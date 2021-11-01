@@ -14,7 +14,7 @@ namespace IVLab.MinVR3
     /// </summary>
     [ExecuteAlways]
     [AddComponentMenu("MinVR/Interaction/Floating Menu")]
-    public class FloatingMenu : MonoBehaviour, IVREventReceiver
+    public class FloatingMenu : MonoBehaviour, IVREventListener
     {
         [Header("Menu Items")]
         public string title = "My Menu";
@@ -95,6 +95,7 @@ namespace IVLab.MinVR3
         // Start is called before the first frame update
         void Start()
         {
+            m_Listening = false;
             RebuildMenu();
         }
 
@@ -289,14 +290,14 @@ namespace IVLab.MinVR3
             }
             if (Application.isPlaying) {
                 selected = -1;
-                VREngine.instance.eventManager.AddEventReceiver(this);
+                StartListening();
             }
         }
 
         private void OnDisable()
         {
             if (Application.isPlaying) {
-                VREngine.instance?.eventManager?.RemoveEventReceiver(this);
+                StopListening();
             }
         }
 
@@ -332,16 +333,33 @@ namespace IVLab.MinVR3
         public void OnVREvent(VREvent vrEvent)
         {
             if (enabled) {
-                if (buttonDownEvent.Matches(vrEvent)) {
+                if (vrEvent.Matches(buttonDownEvent)) {
                     OnButtonDown();
-                } else if (buttonUpEvent.Matches(vrEvent)) {
+                } else if (vrEvent.Matches(buttonUpEvent)) {
                     OnButtonUp();
-                } else if (cursorPositionEvent.Matches(vrEvent)) {
+                } else if (vrEvent.Matches(cursorPositionEvent)) {
                     OnTrackerMove((vrEvent as VREvent<Vector3>).data);
-                } else if (cursorRotationEvent.Matches(vrEvent)) {
+                } else if (vrEvent.Matches(cursorRotationEvent)) {
                     OnTrackerRotate((vrEvent as VREvent<Quaternion>).data);
                 }
             }
+        }
+
+        public bool IsListening()
+        {
+            return m_Listening;
+        }
+
+        public void StartListening()
+        {
+            VREngine.instance.eventManager.AddEventReceiver(this);
+            m_Listening = true;
+        }
+
+        public void StopListening()
+        {
+            VREngine.instance?.eventManager?.RemoveEventReceiver(this);
+            m_Listening = false;
         }
 
         // refs to dynamically created geometry
@@ -358,6 +376,7 @@ namespace IVLab.MinVR3
         // -1 = nothing, 0 = titlebar, 1..items.Count = menu items
         private int selected = -1;
         private bool buttonPressed = false;
+        private bool m_Listening;
     }
 
 } // namespace

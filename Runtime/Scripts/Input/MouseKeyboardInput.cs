@@ -40,24 +40,24 @@ namespace IVLab.MinVR3
             List<IVREventPrototype> allEvents = new List<IVREventPrototype>();
 
             if (m_PointerEventName != "") {
-                allEvents.Add(new VREventPrototype<Vector2>(m_PointerEventName));
+                allEvents.Add(VREventPrototypeVector2.Create(m_PointerEventName));
             }
             if (m_LeftBtnEventName != "") {
-                allEvents.Add(new VREventPrototype(m_LeftBtnEventName + " DOWN"));
-                allEvents.Add(new VREventPrototype(m_LeftBtnEventName + " UP"));
+                allEvents.Add(VREventPrototype.Create(m_LeftBtnEventName + " DOWN"));
+                allEvents.Add(VREventPrototype.Create(m_LeftBtnEventName + " UP"));
             }
             if (m_MiddleBtnEventName != "") {
-                allEvents.Add(new VREventPrototype(m_MiddleBtnEventName + " DOWN"));
-                allEvents.Add(new VREventPrototype(m_MiddleBtnEventName + " UP"));
+                allEvents.Add(VREventPrototype.Create(m_MiddleBtnEventName + " DOWN"));
+                allEvents.Add(VREventPrototype.Create(m_MiddleBtnEventName + " UP"));
             }
             if (m_RightBtnEventName != "") {
-                allEvents.Add(new VREventPrototype(m_RightBtnEventName + " DOWN"));
-                allEvents.Add(new VREventPrototype(m_RightBtnEventName + " UP"));
+                allEvents.Add(VREventPrototype.Create(m_RightBtnEventName + " DOWN"));
+                allEvents.Add(VREventPrototype.Create(m_RightBtnEventName + " UP"));
             }
 
             foreach (KeyToVREventName k in m_KeysToVREventNames) {
-                allEvents.Add(new VREventPrototype(k.name + " DOWN"));
-                allEvents.Add(new VREventPrototype(k.name + " UP"));
+                allEvents.Add(VREventPrototype.Create(k.name + " DOWN"));
+                allEvents.Add(VREventPrototype.Create(k.name + " UP"));
             }
 
             return allEvents;
@@ -111,7 +111,6 @@ namespace IVLab.MinVR3
                 }
             }
         }
-
 
 
         [Header("Mouse")]

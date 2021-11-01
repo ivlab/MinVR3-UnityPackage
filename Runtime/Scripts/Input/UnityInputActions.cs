@@ -133,8 +133,6 @@ namespace IVLab.MinVR3 {
                     eventName = context.action.actionMap.name + "/" + eventName;
                 }
 
-                Debug.Log(eventName);
-
                 // The easiest thing to do here is just to send out the raw touch event
                 if (m_SendRawTouchEvents) {
                     // BUG: This looks like a bug in Unity -- the expectedDataType is "Touch" but the
@@ -221,30 +219,34 @@ namespace IVLab.MinVR3 {
                     foreach (var actionMap in actionAsset.actionMaps) {
                         foreach (var action in actionMap) {
                             if (action.type == InputActionType.Button) {
-                                eventsProduced.Add(new VREventPrototype(GetEventName(action, InputActionPhase.Started)));
-                                eventsProduced.Add(new VREventPrototype(GetEventName(action, InputActionPhase.Canceled)));
+                                eventsProduced.Add(VREventPrototype.Create(GetEventName(action, InputActionPhase.Started)));
+                                eventsProduced.Add(VREventPrototype.Create(GetEventName(action, InputActionPhase.Canceled)));
                             } else {
                                 if (action.expectedControlType == "") {
-                                    eventsProduced.Add(new VREventPrototype(GetEventName(action, InputActionPhase.Performed)));
+                                    eventsProduced.Add(VREventPrototype.Create(GetEventName(action, InputActionPhase.Performed)));
                                 } else if (action.expectedControlType == "Integer") {
-                                    eventsProduced.Add(new VREventPrototype<int>(GetEventName(action, InputActionPhase.Performed)));
+                                    eventsProduced.Add(VREventPrototypeInt.Create(GetEventName(action, InputActionPhase.Performed)));
                                 } else if ((action.expectedControlType == "Analog") || (action.expectedControlType == "Axis")) {
-                                    eventsProduced.Add(new VREventPrototype<float>(GetEventName(action, InputActionPhase.Performed)));
+                                    eventsProduced.Add(VREventPrototypeFloat.Create(GetEventName(action, InputActionPhase.Performed)));
                                 } else if ((action.expectedControlType == "Vector2") || (action.expectedControlType == "Stick") || (action.expectedControlType == "Dpad")) {
-                                    eventsProduced.Add(new VREventPrototype<Vector2>(GetEventName(action, InputActionPhase.Performed)));
+                                    eventsProduced.Add(VREventPrototypeVector2.Create(GetEventName(action, InputActionPhase.Performed)));
                                 } else if (action.expectedControlType == "Vector3") {
-                                    eventsProduced.Add(new VREventPrototype<Vector3>(GetEventName(action, InputActionPhase.Performed)));
+                                    eventsProduced.Add(VREventPrototypeVector3.Create(GetEventName(action, InputActionPhase.Performed)));
                                 } else if (action.expectedControlType == "Quaternion") {
-                                    eventsProduced.Add(new VREventPrototype<Quaternion>(GetEventName(action, InputActionPhase.Performed)));
-                                } else if (action.expectedControlType == "Touch") {
+                                    eventsProduced.Add(VREventPrototypeQuaternion.Create(GetEventName(action, InputActionPhase.Performed)));
+                                }
+
+                                /*else if (action.expectedControlType == "Touch") {
                                     expectingTouchEvents = true;
                                     if (m_SendRawTouchEvents) {
                                         // BUG: This looks like a bug in Unity -- the expectedDataType is "Touch" but the
                                         // actual data carried with the event is of type "TouchStruct".  Our code works, but
                                         // if they ever fix this, it will break our code ;(
-                                        eventsProduced.Add(new VREventPrototype<TouchState>(GetEventName(action, InputActionPhase.Performed)));
+                                        eventsProduced.Add(VREventPrototype<TouchState>.Create(GetEventName(action, InputActionPhase.Performed)));
                                     }
-                                } else {
+                                }*/
+
+                                else {
                                     Debug.Log($"Unity Action '{action.name}' has an unrecognized expected control type of '" + action.expectedControlType + "'");
                                 }
                             }
@@ -258,17 +260,19 @@ namespace IVLab.MinVR3 {
             // 
             if ((expectingTouchEvents) && (m_SendPerFingerTouchEvents)) {
                 for (int i = 0; i < m_BaseEventNames.Length; i++) {
-                    eventsProduced.Add(new VREventPrototype(m_BaseEventNames[i] + " DOWN"));
-                    eventsProduced.Add(new VREventPrototype<Vector2>(m_BaseEventNames[i] + "/Position"));
+                    eventsProduced.Add(VREventPrototype.Create(m_BaseEventNames[i] + " DOWN"));
+                    eventsProduced.Add(VREventPrototypeVector2.Create(m_BaseEventNames[i] + "/Position"));
                     if (m_IncludePressureEvents) {
-                        eventsProduced.Add(new VREventPrototype<float>(m_BaseEventNames[i] + "/Pressure"));
+                        eventsProduced.Add(VREventPrototypeFloat.Create(m_BaseEventNames[i] + "/Pressure"));
                     }
-                    eventsProduced.Add(new VREventPrototype(m_BaseEventNames[i] + " UP"));
+                    eventsProduced.Add(VREventPrototype.Create(m_BaseEventNames[i] + " UP"));
                 }
             }
 
             return eventsProduced;
         }
+
+
 
         [Tooltip("One or more Unity InputActionAssets that provide user input to the MinVRInput system")]
         [SerializeField] private List<InputActionAsset> m_InputActionAssets;
