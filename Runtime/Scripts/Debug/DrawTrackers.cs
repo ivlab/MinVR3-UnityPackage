@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using System;
 
 namespace IVLab.MinVR3 {
@@ -18,12 +17,12 @@ namespace IVLab.MinVR3 {
             {
                 displayName = "Unknown Tracker (" + counter + ")";
                 counter++;
-                positionEvent = new VREventPrototype<Vector3>();
-                rotationEvent = new VREventPrototype<Quaternion>();
+                positionEvent = new VREventPrototypeVector3();
+                rotationEvent = new VREventPrototypeQuaternion();
             }
             public string displayName;
-            public VREventPrototype<Vector3> positionEvent;
-            public VREventPrototype<Quaternion> rotationEvent;
+            public VREventPrototypeVector3 positionEvent;
+            public VREventPrototypeQuaternion rotationEvent;
             static int counter = 1;
         }
 

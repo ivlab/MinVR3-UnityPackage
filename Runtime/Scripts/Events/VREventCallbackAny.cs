@@ -58,7 +58,7 @@ namespace IVLab.MinVR3
             return cb;
         }
 
-        public static VREventCallbackAny CreateRuntime<T>(VREventPrototype<T> listenForEvent, UnityAction<T> callbackFunc = null)
+        public static VREventCallbackAny CreateRuntime<T>(VREventPrototypeT<T> listenForEvent, UnityAction<T> callbackFunc = null)
         {
             return CreateRuntime(listenForEvent.GetEventName(), callbackFunc);
         }
@@ -77,7 +77,7 @@ namespace IVLab.MinVR3
             return cb;
         }
 
-        public static VREventCallbackAny CreateInEditor<T>(VREventPrototype<T> listenForEvent, UnityAction<T> callbackFunc = null)
+        public static VREventCallbackAny CreateInEditor<T>(VREventPrototypeT<T> listenForEvent, UnityAction<T> callbackFunc = null)
         {
             return CreateRuntime(listenForEvent.GetEventName(), callbackFunc);
         }
@@ -180,9 +180,9 @@ namespace IVLab.MinVR3
             m_VRCallback.RemovePersistentListener(listener);
         }
 
-        public void Invoke(VREvent vrEvent)
+        public void InvokeWithVREvent(VREvent vrEvent)
         {
-            m_VRCallback.Invoke(vrEvent);
+            m_VRCallback.InvokeWithVREvent(vrEvent);
         }
 
 
@@ -198,7 +198,7 @@ namespace IVLab.MinVR3
         public void OnVREvent(VREvent vrEvent)
         {
             if (vrEvent.Matches(m_EventPrototype)) {
-                Invoke(vrEvent);
+                InvokeWithVREvent(vrEvent);
             }
         }
 

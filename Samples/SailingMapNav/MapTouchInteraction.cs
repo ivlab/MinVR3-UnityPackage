@@ -217,13 +217,13 @@ public class MapTouchInteraction : MonoBehaviour
 		"feels as though they are manipulating the map, rather than the camera viewing the map.")]
 	[SerializeField] private Camera m_MapCamera;
 
-	[SerializeField] private VREventPrototype<Vector2> m_Finger0DownEvent;
-	[SerializeField] private VREventPrototype<Vector2> m_Finger0MoveEvent;
-	[SerializeField] private VREventPrototype<Vector2> m_Finger0UpEvent;
+	[SerializeField] private VREventPrototypeVector2 m_Finger0DownEvent;
+	[SerializeField] private VREventPrototypeVector2 m_Finger0MoveEvent;
+	[SerializeField] private VREventPrototypeVector2 m_Finger0UpEvent;
 
-	[SerializeField] private VREventPrototype<Vector2> m_Finger1DownEvent;
-	[SerializeField] private VREventPrototype<Vector2> m_Finger1MoveEvent;
-	[SerializeField] private VREventPrototype<Vector2> m_Finger1UpEvent;
+	[SerializeField] private VREventPrototypeVector2 m_Finger1DownEvent;
+	[SerializeField] private VREventPrototypeVector2 m_Finger1MoveEvent;
+	[SerializeField] private VREventPrototypeVector2 m_Finger1UpEvent;
 
 
 	// runtime only

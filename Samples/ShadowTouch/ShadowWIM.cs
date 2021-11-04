@@ -304,17 +304,17 @@ public class ShadowWIM : MonoBehaviour
 	[SerializeField] private float VERTICAL_TRANSLATION_SCALE = 1.5f;
 
 
-	[SerializeField] private VREventPrototype<Vector2> m_Finger0DownEvent;
-	[SerializeField] private VREventPrototype<Vector2> m_Finger0MoveEvent;
-	[SerializeField] private VREventPrototype<Vector2> m_Finger0UpEvent;
+	[SerializeField] private VREventPrototypeVector2 m_Finger0DownEvent;
+	[SerializeField] private VREventPrototypeVector2 m_Finger0MoveEvent;
+	[SerializeField] private VREventPrototypeVector2 m_Finger0UpEvent;
 
-	[SerializeField] private VREventPrototype<Vector2> m_Finger1DownEvent;
-	[SerializeField] private VREventPrototype<Vector2> m_Finger1MoveEvent;
-	[SerializeField] private VREventPrototype<Vector2> m_Finger1UpEvent;
+	[SerializeField] private VREventPrototypeVector2 m_Finger1DownEvent;
+	[SerializeField] private VREventPrototypeVector2 m_Finger1MoveEvent;
+	[SerializeField] private VREventPrototypeVector2 m_Finger1UpEvent;
 
-	[SerializeField] private VREventPrototype<Vector2> m_Finger2DownEvent;
-	[SerializeField] private VREventPrototype<Vector2> m_Finger2MoveEvent;
-	[SerializeField] private VREventPrototype<Vector2> m_Finger2UpEvent;
+	[SerializeField] private VREventPrototypeVector2 m_Finger2DownEvent;
+	[SerializeField] private VREventPrototypeVector2 m_Finger2MoveEvent;
+	[SerializeField] private VREventPrototypeVector2 m_Finger2UpEvent;
 
 	// runtime only
 	private FSM m_FSM;

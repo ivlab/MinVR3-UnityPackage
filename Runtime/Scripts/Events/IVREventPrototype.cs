@@ -8,11 +8,11 @@ namespace IVLab.MinVR3
 
     public interface IVREventPrototype
     {
-        public void SetEventName(string eventName);
+        void SetEventName(string eventName);
 
-        public string GetEventName();
-        public string GetEventDataTypeName();
-        public string GetEventDisplayName();
+        string GetEventName();
+        string GetEventDataTypeName();
+        string GetEventDisplayName();
     }
 
 } // namespace

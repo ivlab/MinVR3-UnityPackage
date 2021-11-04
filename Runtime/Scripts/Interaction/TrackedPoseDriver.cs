@@ -1,8 +1,10 @@
-﻿using System;
+﻿
 using UnityEngine;
+
+#if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
-using UnityEngine.Events;
+#endif
 
 namespace IVLab.MinVR3
 {
@@ -12,6 +14,7 @@ namespace IVLab.MinVR3
     /// 1. It listens for VREvents rather than Unity Actions
     /// 2. It includes base rotation and translation amounts that can be used, for example, to calibrate a tracker
     ///    attached to a physical prop.
+    /// 3. It works with both the new input system and the old input system
     /// 
     /// The TrackedPoseDriver component applies the current Pose value of a tracked device to the transform of the GameObject.
     /// TrackedPoseDriver can track multiple types of devices including XR HMDs, controllers, and remotes.
@@ -55,8 +58,8 @@ namespace IVLab.MinVR3
         }
 
         [SerializeField]
-        VREventPrototype<Vector3> m_PositionEvent;
-        public VREventPrototype<Vector3> positionEvent {
+        VREventPrototypeVector3 m_PositionEvent;
+        public VREventPrototypeVector3 positionEvent {
             get { return m_PositionEvent; }
             set {
                 m_PositionEvent = value;
@@ -64,8 +67,8 @@ namespace IVLab.MinVR3
         }
 
         [SerializeField]
-        VREventPrototype<Quaternion> m_RotationEvent;
-        public VREventPrototype<Quaternion> rotationEvent {
+        VREventPrototypeQuaternion m_RotationEvent;
+        public VREventPrototypeQuaternion rotationEvent {
             get { return m_RotationEvent; }
             set { m_RotationEvent = value; }
         }
@@ -103,8 +106,8 @@ namespace IVLab.MinVR3
 
         private void Reset()
         {
-            m_PositionEvent = new VREventPrototype<Vector3>();
-            m_RotationEvent = new VREventPrototype<Quaternion>();
+            m_PositionEvent = new VREventPrototypeVector3();
+            m_RotationEvent = new VREventPrototypeQuaternion();
         }
 
         protected virtual void Awake()
@@ -115,18 +118,21 @@ namespace IVLab.MinVR3
                 UnityEngine.XR.XRDevice.DisableAutoXRCameraTracking(GetComponent<Camera>(), true);
             }
 #endif
-            m_Listening = false;
         }
 
         protected void OnEnable()
         {
+#if ENABLE_INPUT_SYSTEM
             InputSystem.onAfterUpdate += UpdateCallback;
+#endif
             StartListening();
         }
 
         void OnDisable()
         {
+#if ENABLE_INPUT_SYSTEM
             InputSystem.onAfterUpdate -= UpdateCallback;
+#endif
             StopListening();
         }
 
@@ -140,6 +146,7 @@ namespace IVLab.MinVR3
 #endif
         }
 
+#if ENABLE_INPUT_SYSTEM
         protected void UpdateCallback()
         {
             if (InputState.currentUpdateType == InputUpdateType.BeforeRender)
@@ -147,6 +154,17 @@ namespace IVLab.MinVR3
             else
                 OnUpdate();
         }
+#else
+        protected void Update()
+        {
+            OnUpdate();
+        }
+
+        protected void LateUpdate()
+        {
+            OnBeforeRender();
+        }
+#endif
 
         protected virtual void OnUpdate()
         {
@@ -188,24 +206,15 @@ namespace IVLab.MinVR3
             SetLocalTransform(m_CurrentPosition, m_CurrentRotation);
         }
 
-        public bool IsListening()
-        {
-            return m_Listening;
-        }
-
         public void StartListening()
         {
             VREngine.instance.eventManager.AddEventReceiver(this);
-            m_Listening = true;
         }
 
         public void StopListening()
         {
             VREngine.instance?.eventManager?.RemoveEventReceiver(this);
-            m_Listening = false;
         }
-
-        private bool m_Listening;
     }
-}
 
+} // end namespace

@@ -61,7 +61,7 @@ namespace IVLab.MinVR3
             if (EditorGUI.EndChangeCheck()) {
                 if (selected >= 0) {
                     eventNameProp.stringValue = eventNames[selected];
-                    SetDataType(dataTypeNameProp, dataTypeNames[selected]);
+                    SetDataType(property, dataTypeNames[selected]);
                 }
             }
             EditorGUI.EndProperty();
@@ -93,7 +93,7 @@ namespace IVLab.MinVR3
 
 
     // VREventPrototype<> can be dispalyed using the exact same property drawer
-    [CustomPropertyDrawer(typeof(VREventPrototype<>), true)]
+    [CustomPropertyDrawer(typeof(VREventPrototypeT<>), true)]
     public class VREventPrototypeTemplatedDrawer : VREventPrototypeDrawer
     {
     }

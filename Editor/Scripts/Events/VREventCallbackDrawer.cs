@@ -61,8 +61,8 @@ namespace IVLab.MinVR3
 
 
 
-    [CustomPropertyDrawer(typeof(VREventCallback<>), true)]
-    public class VREventCallbackTemplateDrawer : VREventCallbackDrawer
+    [CustomPropertyDrawer(typeof(VREventCallbackT<>), true)]
+    public class VREventCallbackTDrawer : VREventCallbackDrawer
     {
     }
 

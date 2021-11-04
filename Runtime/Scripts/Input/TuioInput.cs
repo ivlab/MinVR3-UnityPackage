@@ -5,17 +5,7 @@ using TUIO;
 
 namespace IVLab.MinVR3
 {
-    /// <summary>
-    /// This script uses the legacy Unity Input Module rather than the "New Input System" because the Unity Remote App
-    /// (used for iOS and Android development) does not yet support the New Input System.  It seems that the New Input
-    /// System works fine if you actually fully deploy the app, but not with Unity Remote, which is super useful for
-    /// developing mobile apps.  So, for now, this uses the Legacy InputModule.  When Unity Remote is updated, we should
-    /// update this script as well so we are consistent with all of MinVR using the New Input System.
-    ///
-    /// Note: You can switch which input system you want to use for your app in Player Settings, and it is possible to
-    /// select "Both".  That works well if you want to use the New Input System's better support for XR and the Remote's
-    /// better support for touch, for example.
-    /// </summary>
+
     [AddComponentMenu("MinVR/Input/Tuio Input")]
     [DefaultExecutionOrder(-998)] // make sure this script runs right before VREngine.cs
     public class TuioInput : MonoBehaviour, IVREventProducer, TuioListener

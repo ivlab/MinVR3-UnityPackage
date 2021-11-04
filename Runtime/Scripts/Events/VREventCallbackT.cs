@@ -10,17 +10,17 @@ namespace IVLab.MinVR3
 {
 
     [Serializable]
-    public class VREventCallback<T> : IVREventPrototype, IVRCallback, IVREventListener
+    public class VREventCallbackT<T> : IVREventPrototype, IVRCallback, IVREventListener
     {
         // Type-Specific Static Constructors should be implemented in VREvent_<DataTypeName>.cs files.
         // It is recommended to use the type-specific subclasses (i.e., use VRCallbackInt rather than
         // the generic version VRCallback<int>) in your code because Unity's serializer has difficulty
         // correctly serializing and deserializing generic types in some instances.
 
-        public VREventCallback()
+        public VREventCallbackT()
         {
-            m_EventPrototype = new VREventPrototype<T>();
-            m_VRCallback = new VRCallback<T>();
+            m_EventPrototype = new VREventPrototypeT<T>();
+            m_VRCallback = new VRCallbackT<T>();
         }
 
 
@@ -69,9 +69,9 @@ namespace IVLab.MinVR3
             m_VRCallback.RemovePersistentListener(listener);
         }
 
-        public void Invoke(VREvent vrEvent)
+        public void InvokeWithVREvent(VREvent vrEvent)
         {
-            m_VRCallback.Invoke(vrEvent);
+            m_VRCallback.InvokeWithVREvent(vrEvent);
         }
 
 
@@ -87,7 +87,7 @@ namespace IVLab.MinVR3
         public void OnVREvent(VREvent vrEvent)
         {
             if (vrEvent.Matches(m_EventPrototype)) {
-                Invoke(vrEvent);
+                InvokeWithVREvent(vrEvent);
             }
         }
 
@@ -98,8 +98,8 @@ namespace IVLab.MinVR3
             }
         }
 
-        [SerializeField] private VRCallback<T> m_VRCallback;
-        [SerializeField] private VREventPrototype<T> m_EventPrototype;
+        [SerializeField] private VRCallbackT<T> m_VRCallback;
+        [SerializeField] private VREventPrototypeT<T> m_EventPrototype;
     }
 
 } // end namespace

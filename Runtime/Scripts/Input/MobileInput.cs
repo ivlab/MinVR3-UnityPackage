@@ -15,7 +15,7 @@ namespace IVLab.MinVR3
     /// select "Both".  That works well if you want to use the New Input System's better support for XR and the Remote's
     /// better support for touch, for example.
     /// </summary>
-    [AddComponentMenu("MinVR/Input/Mobile Input (Legacy InputModule)")]
+    [AddComponentMenu("MinVR/Input/Mobile Input (Legacy InputModule Only)")]
     [DefaultExecutionOrder(-998)] // make sure this script runs right before VREngine.cs
     public class MobileInput : MonoBehaviour, IVREventProducer
     {

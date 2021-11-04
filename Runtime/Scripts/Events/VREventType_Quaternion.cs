@@ -6,7 +6,7 @@ namespace IVLab.MinVR3
 {
 
     [Serializable]
-    public class VREventPrototypeQuaternion : VREventPrototype<Quaternion>
+    public class VREventPrototypeQuaternion : VREventPrototypeT<Quaternion>
     {
         static public VREventPrototypeQuaternion Create(string eventName)
         {
@@ -17,7 +17,7 @@ namespace IVLab.MinVR3
     }
 
     [Serializable]
-    public class VRCallbackQuaternion : VRCallback<Quaternion>
+    public class VRCallbackQuaternion : VRCallbackT<Quaternion>
     {
         public static VRCallbackQuaternion CreateRuntime(UnityAction<Quaternion> callbackFunc)
         {
@@ -35,7 +35,7 @@ namespace IVLab.MinVR3
     }
 
     [Serializable]
-    public class VREventCallbackQuaternion : VREventCallback<Quaternion>
+    public class VREventCallbackQuaternion : VREventCallbackT<Quaternion>
     {
         public static VREventCallbackQuaternion CreateRuntime(string listenForEvent, UnityAction<Quaternion> callbackFunc = null)
         {

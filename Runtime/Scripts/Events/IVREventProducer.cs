@@ -13,7 +13,7 @@ namespace IVLab.MinVR3
         /// data types for each possible event that can be produced.
         /// </summary>
         /// <returns>List of prototypes of events that can be produced at runtime.</returns>
-        public List<IVREventPrototype> GetEventPrototypes();
+        List<IVREventPrototype> GetEventPrototypes();
     }
 
 } // end namespace

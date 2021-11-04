@@ -61,9 +61,9 @@ namespace IVLab.MinVR3
             UnityEventTools.RemovePersistentListener(this, listener);
         }
 
-        public void Invoke(VREvent e)
+        public void InvokeWithVREvent(VREvent e)
         {
-            Invoke();
+            base.Invoke();
         }
     }
 

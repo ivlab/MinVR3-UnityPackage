@@ -1,11 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System.Reflection;
-using System.Linq;
 using System;
-using UnityEngine.InputSystem;
-using UnityEngine.Events;
+
 
 namespace IVLab.MinVR3
 {
@@ -203,7 +199,7 @@ namespace IVLab.MinVR3
                                 if (m_Debug) {
                                     Debug.Log("Calling OnTrigger callback(s)");
                                 }
-                                m_ArcListeners[i].Invoke(vrEvent);
+                                m_ArcListeners[i].InvokeWithVREvent(vrEvent);
                             }
 
                             // case 2: this arc causes the FSM to change states, call state exit/enter callbacks as well
@@ -216,7 +212,7 @@ namespace IVLab.MinVR3
                                 if (m_Debug) {
                                     Debug.Log("Calling OnTrigger callback(s)");
                                 }
-                                m_ArcListeners[i].Invoke(vrEvent);
+                                m_ArcListeners[i].InvokeWithVREvent(vrEvent);
                                 m_CurrentState = m_ArcToIDs[i];
 
                                 if (m_Debug) {

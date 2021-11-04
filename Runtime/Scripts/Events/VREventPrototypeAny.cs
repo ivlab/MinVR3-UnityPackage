@@ -120,30 +120,30 @@ namespace IVLab.MinVR3
             m_EventPrototype = new VREventPrototype();
             m_AllEventPrototypes.Add("", m_EventPrototype);
 
-            m_EventPrototypeInt32 = new VREventPrototype<int>();
+            m_EventPrototypeInt32 = new VREventPrototypeInt();
             m_AllEventPrototypes.Add(typeof(int).Name, m_EventPrototypeInt32);
 
-            m_EventPrototypeSingle = new VREventPrototype<float>();
+            m_EventPrototypeSingle = new VREventPrototypeFloat();
             m_AllEventPrototypes.Add(typeof(float).Name, m_EventPrototypeSingle);
 
-            m_EventPrototypeVector2 = new VREventPrototype<Vector2>();
+            m_EventPrototypeVector2 = new VREventPrototypeVector2();
             m_AllEventPrototypes.Add(typeof(Vector2).Name, m_EventPrototypeVector2);
 
-            m_EventPrototypeVector3 = new VREventPrototype<Vector3>();
+            m_EventPrototypeVector3 = new VREventPrototypeVector3();
             m_AllEventPrototypes.Add(typeof(Vector3).Name, m_EventPrototypeVector3);
 
-            m_EventPrototypeQuaternion = new VREventPrototype<Quaternion>();
+            m_EventPrototypeQuaternion = new VREventPrototypeQuaternion();
             m_AllEventPrototypes.Add(typeof(Quaternion).Name, m_EventPrototypeQuaternion);
 
             // Location 1 of 2 to edit when adding a new event data type.
         }
 
         [SerializeField] private VREventPrototype m_EventPrototype;
-        [SerializeField] private VREventPrototype<int> m_EventPrototypeInt32;
-        [SerializeField] private VREventPrototype<float> m_EventPrototypeSingle;
-        [SerializeField] private VREventPrototype<Vector2> m_EventPrototypeVector2;
-        [SerializeField] private VREventPrototype<Vector3> m_EventPrototypeVector3;
-        [SerializeField] private VREventPrototype<Quaternion> m_EventPrototypeQuaternion;
+        [SerializeField] private VREventPrototypeInt m_EventPrototypeInt32;
+        [SerializeField] private VREventPrototypeFloat m_EventPrototypeSingle;
+        [SerializeField] private VREventPrototypeVector2 m_EventPrototypeVector2;
+        [SerializeField] private VREventPrototypeVector3 m_EventPrototypeVector3;
+        [SerializeField] private VREventPrototypeQuaternion m_EventPrototypeQuaternion;
 
         // Location 2 of 2 to edit when adding a new event data type.
     }

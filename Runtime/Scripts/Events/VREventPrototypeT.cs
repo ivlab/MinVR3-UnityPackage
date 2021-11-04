@@ -7,14 +7,14 @@ namespace IVLab.MinVR3
 {
 
     [Serializable]
-    public class VREventPrototype<T> : IVREventPrototype
+    public class VREventPrototypeT<T> : IVREventPrototype
     {
         // Type-Specific Static Constructors should be implemented in VREvent_<DataTypeName>.cs files.
         // It is recommended to use the type-specific subclasses (i.e., use VRCallbackInt rather than
         // the generic version VRCallback<int>) in your code because Unity's serializer has difficulty
         // correctly serializing and deserializing generic types in some instances.
 
-        public VREventPrototype()
+        public VREventPrototypeT()
         {
             m_DataTypeName = typeof(T).Name;
             m_EventName = "";

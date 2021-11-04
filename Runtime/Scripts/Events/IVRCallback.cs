@@ -8,7 +8,7 @@ namespace IVLab.MinVR3
 
     public interface IVRCallback
     {
-        public void Invoke(VREvent e);
+        void InvokeWithVREvent(VREvent e);
     }
 
 } // namespace

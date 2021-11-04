@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Events;
-using System;
 
 namespace IVLab.MinVR3
 {
@@ -25,10 +22,10 @@ namespace IVLab.MinVR3
         public Token inputFocusToken;
 
         [Tooltip("The cursor position event.")]
-        public VREventPrototype<Vector3> cursorPositionEvent = new VREventPrototype<Vector3>();
+        public VREventPrototypeVector3 cursorPositionEvent = new VREventPrototypeVector3();
 
         [Tooltip("[Optional] The cursor rotation event if you want to be able to grab the menu bar and rotate the menu.")]
-        public VREventPrototype<Quaternion> cursorRotationEvent = new VREventPrototype<Quaternion>();
+        public VREventPrototypeQuaternion cursorRotationEvent = new VREventPrototypeQuaternion();
 
         [Tooltip("The cursor selection activate event (i.e., primary button down).")]
         public VREventPrototype buttonDownEvent = new VREventPrototype();
@@ -38,7 +35,7 @@ namespace IVLab.MinVR3
 
         [Header("OnSelectionMade")]
         [Tooltip("Register a function with this event to receive a callback when a selection is made, the int argument is the index of the menu item that was selected.")]
-        public UnityEvent<int> onMenuItemSelected = new UnityEvent<int>();
+        public VRCallbackInt onMenuItemSelected = new VRCallbackInt();
 
 
         [Header("Appearance")]

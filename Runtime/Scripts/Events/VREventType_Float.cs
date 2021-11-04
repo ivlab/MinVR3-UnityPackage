@@ -5,7 +5,7 @@ namespace IVLab.MinVR3
 {
 
     [Serializable]
-    public class VREventPrototypeFloat : VREventPrototype<float>
+    public class VREventPrototypeFloat : VREventPrototypeT<float>
     {
         static public VREventPrototypeFloat Create(string eventName)
         {
@@ -16,7 +16,7 @@ namespace IVLab.MinVR3
     }
 
     [Serializable]
-    public class VRCallbackFloat : VRCallback<float>
+    public class VRCallbackFloat : VRCallbackT<float>
     {
         public static VRCallbackFloat CreateRuntime(UnityAction<float> callbackFunc)
         {
@@ -34,7 +34,7 @@ namespace IVLab.MinVR3
     }
 
     [Serializable]
-    public class VREventCallbackFloat : VREventCallback<float>
+    public class VREventCallbackFloat : VREventCallbackT<float>
     {
         public static VREventCallbackFloat CreateRuntime(string listenForEvent, UnityAction<float> callbackFunc = null)
         {

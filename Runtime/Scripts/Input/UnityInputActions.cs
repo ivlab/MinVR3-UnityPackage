@@ -1,9 +1,14 @@
-﻿using System;
+﻿
+// This functionality is only available in projects using Unity's New Input System
+#if ENABLE_INPUT_SYSTEM
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Events;
+
+using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 
 namespace IVLab.MinVR3 {
@@ -15,7 +20,7 @@ namespace IVLab.MinVR3 {
     /// using the Unity Remote App.  Use the TouchInput class if you need to do that now while we wait for them to
     /// upgrade Unity Remote.
     /// </summary>
-    [AddComponentMenu("MinVR/Input/UnityInputActions (New Input System)")]
+    [AddComponentMenu("MinVR/Input/UnityInputActions (New Input System Only)")]
     public class UnityInputActions : MonoBehaviour, IVREventProducer
     {
         /// <summary>
@@ -309,3 +314,5 @@ namespace IVLab.MinVR3 {
     }
 
 } // namespace
+
+#endif

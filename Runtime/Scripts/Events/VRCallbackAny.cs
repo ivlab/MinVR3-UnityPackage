@@ -152,9 +152,9 @@ namespace IVLab.MinVR3
             UnityEventTools.RemovePersistentListener(cb, listener);
         }
 
-        public void Invoke(VREvent e)
+        public void InvokeWithVREvent(VREvent e)
         {
-            m_AllCallbacks[m_DataTypeName].Invoke(e);
+            m_AllCallbacks[m_DataTypeName].InvokeWithVREvent(e);
         }
 
         public void SetShowDataTypeInEditor(bool show)
