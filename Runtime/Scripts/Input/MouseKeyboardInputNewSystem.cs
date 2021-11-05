@@ -1,3 +1,6 @@
+// This component is only available in projects using Unity's New Input System
+#if ENABLE_INPUT_SYSTEM
+
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -130,3 +133,5 @@ namespace IVLab.MinVR3
     }
 
 } // namespace
+
+#endif

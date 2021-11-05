@@ -1,7 +1,8 @@
-﻿/*using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using zSpace.Core;
+using zSpace.Core.Input;
 
 namespace IVLab.MinVR3
 {
@@ -20,90 +21,59 @@ namespace IVLab.MinVR3
             m_ButtonEventBaseNames[0] = "Stylus/Primary Button";
             m_ButtonEventBaseNames[1] = "Stylus/Button 2";
             m_ButtonEventBaseNames[2] = "Stylus/Button 3";
-            m_TapEventBaseName = "Stylus/Tap";
+        }
+
+        private void OnEnable()
+        {
+            VREngine.instance.eventManager.AddEventProducer(this);
+        }
+
+        private void OnDisable()
+        {
+            VREngine.instance?.eventManager?.RemoveEventProducer(this);
         }
 
         void Start()
         {
-#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-            // zSpace only runs on Windows.  The scripts compile just fine on other platforms
-            // no zCore plugin library is provided, so an assertion is fired if the zCore
-            // component is included in the scene.  This class provides a wrapper for zSpace
-            // and only adds the zCore component if running on Windows.  The remainder of the
-            // script should always check to make sure m_zCore != null before accessing it.
-
-            m_zCore = FindObjectOfType<ZCore>();
-            if (m_zCore == null) {
-                m_zCore = gameObject.AddComponent<ZCore>();
-            }            
-#endif
-
-            if (m_zCore == null) {
-                Debug.LogError("Unable to find reference to zSpace.Core.Core Monobehaviour.");
-                this.enabled = false;
-                return;
-            } else {
-                // Register event handlers.
-                m_zCore.TargetMove += HandleMove;
-                m_zCore.TargetButtonPress += HandleButtonPress;
-                m_zCore.TargetButtonRelease += HandleButtonRelease;
-                m_zCore.TargetTapPress += HandleTapPress;
-                m_zCore.TargetTapRelease += HandleTapRelease;
-            }
+            m_zCameraRig = GameObject.FindObjectOfType<ZCameraRig>();
+            m_zStylus = GameObject.FindObjectOfType<ZStylus>();
+            Debug.Assert(m_zCameraRig && m_zStylus,
+                "zSpace input requires a ZCameraRig and a ZStylus object to be active in the scene.");
+            m_LastStylusPos = new Vector3();
+            m_LastStylusRot = Quaternion.identity;
+            m_LastHeadPos = new Vector3();
+            m_LastHeadRot = Quaternion.identity;
         }
 
-        void OnDestroy()
+        void Update()
         {
-            if (m_zCore != null) {
-                // Unregister event handlers.
-                m_zCore.TargetMove -= HandleMove;
-                m_zCore.TargetButtonPress -= HandleButtonPress;
-                m_zCore.TargetButtonRelease -= HandleButtonRelease;
-                m_zCore.TargetTapPress -= HandleTapPress;
-                m_zCore.TargetTapRelease -= HandleTapRelease;
+            if (m_zStylus.transform.position != m_LastStylusPos) {
+                VREngine.instance.eventManager.QueueEvent(m_StylusEventBaseName + "/Position", m_zStylus.transform.position);
+                m_LastStylusPos = m_zStylus.transform.position;
+            }
+            if (m_zStylus.transform.rotation != m_LastStylusRot) {
+                VREngine.instance.eventManager.QueueEvent(m_StylusEventBaseName + "/Rotation", m_zStylus.transform.rotation);
+                m_LastStylusRot = m_zStylus.transform.rotation;
+            }
+
+            if (m_zCameraRig.transform.position != m_LastHeadPos) {
+                VREngine.instance.eventManager.QueueEvent(m_HeadEventBaseName + "/Position", m_zCameraRig.transform.position);
+                m_LastHeadPos = m_zCameraRig.transform.position;
+            }
+            if (m_zCameraRig.transform.rotation != m_LastHeadRot) {
+                VREngine.instance.eventManager.QueueEvent(m_HeadEventBaseName + "/Rotation", m_zCameraRig.transform.rotation);
+                m_LastHeadRot = m_zCameraRig.transform.rotation;
+            }
+
+            for (int i = 0; i < 3; i++) {
+                if (m_zStylus.GetButtonDown(i)) {
+                    VREngine.instance.eventManager.QueueEvent(m_ButtonEventBaseNames[i] + " DOWN");
+                }
+                if (m_zStylus.GetButtonUp(i)) {
+                    VREngine.instance.eventManager.QueueEvent(m_ButtonEventBaseNames[i] + " UP");
+                }
             }
         }
-
-
-        private void HandleMove(ZCore sender, ZCore.TrackerEventInfo info)
-        {
-            if (info.TargetType == ZCore.TargetType.Primary) {
-                VREngine.instance.eventManager.QueueEvent(m_StylusEventBaseName + "/Position", info.WorldPose.Position);
-                VREngine.instance.eventManager.QueueEvent(m_StylusEventBaseName + "/Rotation", info.WorldPose.Rotation);
-            } else if (info.TargetType == ZCore.TargetType.Head) {
-                VREngine.instance.eventManager.QueueEvent(m_HeadEventBaseName + "/Position", info.WorldPose.Position);
-                VREngine.instance.eventManager.QueueEvent(m_HeadEventBaseName + "/Rotation", info.WorldPose.Rotation);
-            }
-        }
-
-        private void HandleButtonPress(ZCore sender, ZCore.TrackerButtonEventInfo info)
-        {
-            if (info.TargetType == ZCore.TargetType.Primary) {
-                VREngine.instance.eventManager.QueueEvent(m_ButtonEventBaseNames[info.ButtonId] + " DOWN");
-            }
-        }
-
-        private void HandleButtonRelease(ZCore sender, ZCore.TrackerButtonEventInfo info)
-        {
-            if (info.TargetType == ZCore.TargetType.Primary) {
-                VREngine.instance.eventManager.QueueEvent(m_ButtonEventBaseNames[info.ButtonId] + " UP");
-            }
-        }
-
-        private void HandleTapPress(ZCore sender, ZCore.TrackerEventInfo info)
-        {
-            if (info.TargetType == ZCore.TargetType.Primary) {
-                VREngine.instance.eventManager.QueueEvent(m_TapEventBaseName + " DOWN");
-            }
-        }
-
-        private void HandleTapRelease(ZCore sender, ZCore.TrackerEventInfo info)
-        {
-            if (info.TargetType == ZCore.TargetType.Primary) {
-                VREngine.instance.eventManager.QueueEvent(m_TapEventBaseName + " UP");
-            }
-        }
-
 
         public List<IVREventPrototype> GetEventPrototypes()
         {
@@ -116,8 +86,6 @@ namespace IVLab.MinVR3
                 eventsProduced.Add(VREventPrototype.Create(m_ButtonEventBaseNames[i] + " DOWN"));
                 eventsProduced.Add(VREventPrototype.Create(m_ButtonEventBaseNames[i] + " UP"));
             }
-            eventsProduced.Add(VREventPrototype.Create(m_TapEventBaseName + " DOWN"));
-            eventsProduced.Add(VREventPrototype.Create(m_TapEventBaseName + " UP"));
 
             return eventsProduced;
         }
@@ -126,10 +94,14 @@ namespace IVLab.MinVR3
         [SerializeField] private string m_HeadEventBaseName;
         [SerializeField] private string m_StylusEventBaseName;
         [SerializeField] private string[] m_ButtonEventBaseNames;
-        [SerializeField] private string m_TapEventBaseName;
 
-        private ZCore m_zCore = null;
+
+        private ZCameraRig m_zCameraRig;
+        private ZStylus m_zStylus;
+        private Vector3 m_LastStylusPos;
+        private Quaternion m_LastStylusRot;
+        private Vector3 m_LastHeadPos;
+        private Quaternion m_LastHeadRot;
     }
 
 } // end namespace
-*/
