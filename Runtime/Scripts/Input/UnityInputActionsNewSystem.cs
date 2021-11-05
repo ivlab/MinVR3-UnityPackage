@@ -1,5 +1,4 @@
-﻿
-// This functionality is only available in projects using Unity's New Input System
+﻿// This functionality is only available in projects using Unity's New Input System
 #if ENABLE_INPUT_SYSTEM
 
 using System;
@@ -20,8 +19,8 @@ namespace IVLab.MinVR3 {
     /// using the Unity Remote App.  Use the TouchInput class if you need to do that now while we wait for them to
     /// upgrade Unity Remote.
     /// </summary>
-    [AddComponentMenu("MinVR/Input/UnityInputActions (New Input System Only)")]
-    public class UnityInputActions : MonoBehaviour, IVREventProducer
+    [AddComponentMenu("MinVR/Input/New Input System/UnityInputActions")]
+    public class UnityInputActionsNewSystem : MonoBehaviour, IVREventProducer
     {
         /// <summary>
         /// All ActionMaps in these assets are automatically enabled.  These serve as the input sources for

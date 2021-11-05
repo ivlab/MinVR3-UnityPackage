@@ -115,7 +115,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4676839139779010401}
-  - component: {fileID: 4676839139779010403}
+  - component: {fileID: 4136591727111645277}
   m_Layer: 0
   m_Name: Mobile Inputs
   m_TagString: Untagged
@@ -137,7 +137,7 @@ Transform:
   m_Father: {fileID: 4676839139211416830}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4676839139779010403
+--- !u!114 &4136591727111645277
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -151,8 +151,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_IncludePressureEvents: 1
   m_BaseEventNames:
-  - Mobile/Finger 0
-  - Mobile/Finger 1
+  - Touch/Finger 0
+  - Touch/Finger 1
+  - Touch/Finger 2
+  - Touch/Finger 3
+  - Touch/Finger 4
+  - Touch/Finger 5
+  - Touch/Finger 6
+  - Touch/Finger 7
+  - Touch/Finger 8
+  - Touch/Finger 9
   m_GyroscopeAttitudeEventName: Mobile/Rotation
   m_DeviceOrientationChangedEventName: Mobile/DeviceOrientation
   m_CompassHeadingEventName: Mobile/Heading
