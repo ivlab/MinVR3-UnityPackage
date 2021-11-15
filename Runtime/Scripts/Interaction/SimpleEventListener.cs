@@ -12,6 +12,16 @@ namespace IVLab.MinVR3
             set => m_OnVREvent = value;
         }
 
+        private void OnEnable()
+        {
+            m_OnVREvent.StartListening();
+        }
+
+        private void OnDisable()
+        {
+            m_OnVREvent.StopListening();
+        }
+
         [SerializeField] VREventCallbackAny m_OnVREvent;
     }
 

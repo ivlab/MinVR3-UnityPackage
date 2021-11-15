@@ -16,8 +16,7 @@ namespace IVLab.MinVR3
     /// better support for touch, for example.
     /// </summary>
     [AddComponentMenu("MinVR/Input/Legacy Input Module/Mobile Input")]
-    [DefaultExecutionOrder(-998)] // make sure this script runs right before VREngine.cs
-    public class MobileInputLegacy : MonoBehaviour, IVREventProducer
+    public class MobileInputLegacy : MonoBehaviour, IPolledInputDevice
     {
 
         private void Reset()
@@ -36,10 +35,21 @@ namespace IVLab.MinVR3
             };
 
             m_GyroscopeAttitudeEventName = "Mobile/Rotation";
-            m_DeviceOrientationChangedEventName = "Mobile/DeviceOrientation";
+            //m_DeviceOrientationChangedEventName = "Mobile/DeviceOrientation";
             m_CompassHeadingEventName = "Mobile/Heading";
             m_AccelerationEventName = "Mobile/Acceleration";
         }
+
+        private void OnEnable()
+        {
+            VREngine.instance.eventManager.AddPolledInputDevice(this);
+        }
+
+        private void OnDisable()
+        {
+            VREngine.instance?.eventManager?.RemovePolledInputDevice(this);
+        }
+
 
         void Start()
         {
@@ -54,7 +64,7 @@ namespace IVLab.MinVR3
         }
 
 
-        void Update()
+        public void PollForEvents(ref List<VREvent> eventQueue)
         {
             // TOUCH 
             if (Input.touchCount > 0) {
@@ -81,20 +91,20 @@ namespace IVLab.MinVR3
 
                     switch (touch.phase) {
                         case TouchPhase.Began:
-                            VREngine.instance.eventManager.QueueEvent(baseName + " DOWN", touch.position);
-                            VREngine.instance.eventManager.QueueEvent(baseName + "/Position", touch.position);
+                            eventQueue.Add(new VREventVector2(baseName + " DOWN", touch.position));
+                            eventQueue.Add(new VREventVector2(baseName + "/Position", touch.position));
                             break;
 
                         case TouchPhase.Moved:
-                            VREngine.instance.eventManager.QueueEvent(baseName + "/Position", touch.position);
+                            eventQueue.Add(new VREventVector2(baseName + "/Position", touch.position));
                             if (m_IncludePressureEvents) {
-                                VREngine.instance.eventManager.QueueEvent(baseName + "/Pressure", touch.pressure / touch.maximumPossiblePressure);
+                                eventQueue.Add(new VREventFloat(baseName + "/Pressure", touch.pressure / touch.maximumPossiblePressure));
                             }
                             break;
 
                         // Report that a direction has been chosen when the finger is lifted.
                         case TouchPhase.Ended:
-                            VREngine.instance.eventManager.QueueEvent(baseName + " UP", touch.position);
+                            eventQueue.Add(new VREventVector2(baseName + " UP", touch.position));
                             m_uidToFinger.Remove(uid);
                             break;
                     }
@@ -112,19 +122,19 @@ namespace IVLab.MinVR3
                 q = new Quaternion(q.x, q.y, -q.z, -q.w);
                 // rotate to align with Unity's axes conventions
                 q = Quaternion.Euler(new Vector3(90, 0, 0)) * q;
-                VREngine.instance.eventManager.QueueEvent(m_GyroscopeAttitudeEventName, q);
+                eventQueue.Add(new VREventQuaternion(m_GyroscopeAttitudeEventName, q));
             }
 
-            if (m_DeviceOrientationChangedEventName != "") {
-                if (Input.deviceOrientation != m_LastOrientation) {
-                    VREngine.instance.eventManager.QueueEvent(m_DeviceOrientationChangedEventName, Input.deviceOrientation);
-                    m_LastOrientation = Input.deviceOrientation;
-                }
-            }
+            //if (m_DeviceOrientationChangedEventName != "") {
+            //    if (Input.deviceOrientation != m_LastOrientation) {
+            //        eventQueue.Add(new VREvent<DeviceOrientation>(m_DeviceOrientationChangedEventName, Input.deviceOrientation));
+            //        m_LastOrientation = Input.deviceOrientation;
+            //    }
+            //}
 
             if ((m_CompassHeadingEventName != "") && (Input.compass.enabled)) {
                 if (Input.compass.trueHeading != m_LastHeading) {
-                    VREngine.instance.eventManager.QueueEvent(m_CompassHeadingEventName, Input.compass.magneticHeading);
+                    eventQueue.Add(new VREventFloat(m_CompassHeadingEventName, Input.compass.magneticHeading));
                     m_LastHeading = Input.compass.magneticHeading;
                }
             }
@@ -142,7 +152,7 @@ namespace IVLab.MinVR3
                 // TODO: we probably need to apply a rotation here; can't test right now as my device
                 // is not reporting acceleration!
 
-                VREngine.instance.eventManager.QueueEvent(m_AccelerationEventName, acceleration);
+                eventQueue.Add(new VREventVector3(m_AccelerationEventName, acceleration));
             }
 
         }
@@ -179,6 +189,7 @@ namespace IVLab.MinVR3
         }
 
 
+
         [Header("Touch")]
         [Tooltip("If true, each position update event will be followed immediately by a pressure update event.")]
         public bool m_IncludePressureEvents = true;
@@ -198,9 +209,9 @@ namespace IVLab.MinVR3
         [Tooltip("The name of the VREvent to generate when the gyro attitude changes.")]
         public string m_GyroscopeAttitudeEventName = "";
 
-        [Tooltip("The name of the VREvent to generate when the discrete device orientation changes.  " +
-            "(Unknown, Portrait, PortraitUpsideDown, LandscapeLeft, LandscapeRight, FaceUp, FaceDown)")]
-        public string m_DeviceOrientationChangedEventName = "";
+        //[Tooltip("The name of the VREvent to generate when the discrete device orientation changes.  " +
+        //    "(Unknown, Portrait, PortraitUpsideDown, LandscapeLeft, LandscapeRight, FaceUp, FaceDown)")]
+        //public string m_DeviceOrientationChangedEventName = "";
 
         [Tooltip("The name of the VREvent to generate when the compass heading changes.")]
         public string m_CompassHeadingEventName = "";

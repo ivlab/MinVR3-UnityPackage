@@ -31,10 +31,31 @@ namespace IVLab.MinVR3
             return "";
         }
 
+        public T GetData<T>()
+        {
+            return (this as VREventT<T>).data;
+        }
+
         public bool Matches(IVREventPrototype eventPrototype)
         {
             return (GetName() == eventPrototype.GetEventName()) &&
                 (GetDataTypeName() == eventPrototype.GetEventDataTypeName());
+        }
+
+        /// <summary>
+        /// True for raw VREvents created from input devices, trackers, etc.  These need to be sent
+        /// across the network to synchronize nodes when running in cluster mode so that all nodes
+        /// receive the same input at the same time.  It is also possible to use VREvents for message
+        /// passing within an application, and in that case, the data might reference some local object
+        /// like a GameObject.  These are considered secondary (i.e., application-specific) events,
+        /// and they should not be sent across the network because the reference to a local object
+        /// will not transfer to another cluster node running a separate copy of the application.
+        /// Instead, secondary events should be regenerated from the primary events by running the same
+        /// secondary-event-producing script on each node in the cluster.
+        /// </summary>
+        public virtual bool IsClusterSafe()
+        {
+            return true;
         }
 
         protected VREvent(SerializationInfo info, StreamingContext context)

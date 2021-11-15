@@ -25,6 +25,35 @@ namespace IVLab.MinVR3
 
             AddState("START");
             m_StartState = 0;
+            m_Debug = false;
+        }
+
+        void Awake()
+        {
+            // state data table
+            m_StateNames = new List<string>();
+            m_StateEnterCBs = new List<VRCallback>();
+            m_StateUpdateCBs = new List<VRCallback>();
+            m_StateExitCBs = new List<VRCallback>();
+
+            // arc data table
+            m_ArcFromIDs = new List<int>();
+            m_ArcToIDs = new List<int>();
+            m_ArcListeners = new List<VREventCallbackAny>();
+            m_ArcRequireTokens = new List<Token>();
+            m_ArcReleaseTokens = new List<Token>();
+
+            m_CurrentState = startStateID;
+        }
+
+        private void OnEnable()
+        {
+            StartListening();
+        }
+
+        private void OnDisable()
+        {
+            StopListening();
         }
 
         public int AddState(string name, VRCallback onEnterCallback = null, VRCallback onUpdateCallback = null, VRCallback onExitCallback = null)
@@ -139,29 +168,6 @@ namespace IVLab.MinVR3
         }
 
 
-        private void OnEnable()
-        {
-            StartListening();
-        }
-
-        private void OnDisable()
-        {
-            StopListening();
-        }
-
-        void Start()
-        {
-            m_CurrentState = startStateID;
-            m_Listening = false;
-        }
-
-        void Update()
-        {
-            if (enabled) {
-                m_StateUpdateCBs[m_CurrentState].Invoke();
-            }
-        }
-
         public void OnVREvent(VREvent vrEvent)
         {
             if (enabled) {
@@ -226,6 +232,12 @@ namespace IVLab.MinVR3
             }
         }
 
+        void Update()
+        {
+            if (enabled) {
+                m_StateUpdateCBs[m_CurrentState].Invoke();
+            }
+        }
 
         public string StateToString(int id) {
             return m_StateNames[id];
@@ -235,48 +247,38 @@ namespace IVLab.MinVR3
             return m_StateNames[m_ArcFromIDs[id]] + "-->" + m_StateNames[m_ArcToIDs[id]];
         }
 
-        public bool IsListening()
-        {
-            return m_Listening;
-        }
-
         public void StartListening()
         {
-            VREngine.instance.eventManager.AddEventReceiver(this);
-            m_Listening = true;
+            VREngine.instance.eventManager.AddEventListener(this);
         }
 
         public void StopListening()
         {
-            VREngine.instance?.eventManager?.RemoveEventReceiver(this);
-            m_Listening = false;
+            VREngine.instance?.eventManager?.RemoveEventListener(this);
         }
 
         // id of the state to start in
-        [SerializeField] private int m_StartState = 0;
+        [SerializeField] private int m_StartState;
 
         // state data table
-        [SerializeField] private List<string> m_StateNames = new List<string>();
-        [SerializeField] private List<VRCallback> m_StateEnterCBs = new List<VRCallback>();
-        [SerializeField] private List<VRCallback> m_StateUpdateCBs = new List<VRCallback>();
-        [SerializeField] private List<VRCallback> m_StateExitCBs = new List<VRCallback>();
+        [SerializeField] private List<string> m_StateNames;
+        [SerializeField] private List<VRCallback> m_StateEnterCBs;
+        [SerializeField] private List<VRCallback> m_StateUpdateCBs;
+        [SerializeField] private List<VRCallback> m_StateExitCBs;
         
         // arc data table
-        [SerializeField] private List<int> m_ArcFromIDs = new List<int>();
-        [SerializeField] private List<int> m_ArcToIDs = new List<int>();
-        [SerializeField] private List<VREventCallbackAny> m_ArcListeners = new List<VREventCallbackAny>();
-        [SerializeField] private List<Token> m_ArcRequireTokens = new List<Token>();
-        [SerializeField] private List<Token> m_ArcReleaseTokens = new List<Token>();
-
+        [SerializeField] private List<int> m_ArcFromIDs;
+        [SerializeField] private List<int> m_ArcToIDs;
+        [SerializeField] private List<VREventCallbackAny> m_ArcListeners;
+        [SerializeField] private List<Token> m_ArcRequireTokens;
+        [SerializeField] private List<Token> m_ArcReleaseTokens;
 
         // logs OnEnter(), OnTrigger(), and OnExit() calls 
-        [SerializeField] private bool m_Debug = false;
+        [SerializeField] private bool m_Debug;
 
 
-        // runtime only, change only through the API
-        [NonSerialized] private int m_CurrentState;
-        [NonSerialized] private bool m_Listening;
-
+        // runtime only
+        private int m_CurrentState;
     }
 
-}
+} // end namespace

@@ -7,14 +7,14 @@ using System.Runtime.Serialization;
 namespace IVLab.MinVR3
 {
 
-    public class VREvent<T> : VREvent
+    public class VREventT<T> : VREvent
     {
-        public VREvent(string eventName, T eventData) : base(eventName)
+        protected VREventT(string eventName, T eventData) : base(eventName)
         {
             m_Data = eventData;
         }
 
-        public VREvent() : base()
+        protected VREventT() : base()
         {
         }
 
@@ -32,7 +32,7 @@ namespace IVLab.MinVR3
             return m_Data;
         }
 
-        protected VREvent(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected VREventT(SerializationInfo info, StreamingContext context) : base(info, context)
         {
             m_Data = (T)info.GetValue("data", typeof(T));
         }

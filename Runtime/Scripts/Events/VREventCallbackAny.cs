@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -23,7 +23,7 @@ namespace IVLab.MinVR3
             return cb;
         }
 
-        public static VREventCallbackAny CreateRuntime(VREventPrototypeFloat listenForEvent, UnityAction callbackFunc = null)
+        public static VREventCallbackAny CreateRuntime(VREventPrototype listenForEvent, UnityAction callbackFunc = null)
         {
             return CreateRuntime(listenForEvent.GetEventName(), callbackFunc);
         }
@@ -39,7 +39,7 @@ namespace IVLab.MinVR3
             return cb;
         }
 
-        public static VREventCallbackAny CreateInEditor(VREventPrototypeFloat listenForEvent, UnityAction callbackFunc = null)
+        public static VREventCallbackAny CreateInEditor(VREventPrototype listenForEvent, UnityAction callbackFunc = null)
         {
             return CreateInEditor(listenForEvent.GetEventName(), callbackFunc);
         }
@@ -191,7 +191,7 @@ namespace IVLab.MinVR3
         public void StartListening()
         {
             if (Application.isPlaying) {
-                VREngine.instance.eventManager.AddEventReceiver(this);
+                VREngine.instance.eventManager.AddEventListener(this);
             }
         }
 
@@ -205,7 +205,7 @@ namespace IVLab.MinVR3
         public void StopListening()
         {
             if (Application.isPlaying) {
-                VREngine.instance.eventManager.RemoveEventReceiver(this);
+                VREngine.instance?.eventManager?.RemoveEventListener(this);
             }
         }
 

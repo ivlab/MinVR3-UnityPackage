@@ -335,9 +335,9 @@ namespace IVLab.MinVR3
                 } else if (vrEvent.Matches(buttonUpEvent)) {
                     OnButtonUp();
                 } else if (vrEvent.Matches(cursorPositionEvent)) {
-                    OnTrackerMove((vrEvent as VREvent<Vector3>).data);
+                    OnTrackerMove(vrEvent.GetData<Vector3>());
                 } else if (vrEvent.Matches(cursorRotationEvent)) {
-                    OnTrackerRotate((vrEvent as VREvent<Quaternion>).data);
+                    OnTrackerRotate(vrEvent.GetData<Quaternion>());
                 }
             }
         }
@@ -349,13 +349,13 @@ namespace IVLab.MinVR3
 
         public void StartListening()
         {
-            VREngine.instance.eventManager.AddEventReceiver(this);
+            VREngine.instance.eventManager.AddEventListener(this);
             m_Listening = true;
         }
 
         public void StopListening()
         {
-            VREngine.instance?.eventManager?.RemoveEventReceiver(this);
+            VREngine.instance?.eventManager?.RemoveEventListener(this);
             m_Listening = false;
         }
 

@@ -52,9 +52,9 @@ namespace IVLab.MinVR3 {
                     }
                     GameObject cursorObj = cursors[t.displayName];
                     if (vrEvent.Matches(t.positionEvent)) {
-                        cursorObj.transform.position = (vrEvent as VREvent<Vector3>).data;
+                        cursorObj.transform.position = vrEvent.GetData<Vector3>();
                     } else if (vrEvent.Matches(t.rotationEvent)) {
-                        cursorObj.transform.rotation = (vrEvent as VREvent<Quaternion>).data;
+                        cursorObj.transform.rotation = vrEvent.GetData<Quaternion>();
                     }
                 }
             }
@@ -67,13 +67,13 @@ namespace IVLab.MinVR3 {
 
         public void StartListening()
         {
-            VREngine.instance.eventManager.AddEventReceiver(this);
+            VREngine.instance.eventManager.AddEventListener(this);
             m_Listening = true;
         }
 
         public void StopListening()
         {
-            VREngine.instance?.eventManager?.RemoveEventReceiver(this);
+            VREngine.instance?.eventManager?.RemoveEventListener(this);
             m_Listening = false;
         }
 

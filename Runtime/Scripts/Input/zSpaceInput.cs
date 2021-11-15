@@ -10,8 +10,7 @@ namespace IVLab.MinVR3
     /// Grabs input from the zSpace using the zCore library and converts that input to VREvents
     /// </summary>
     [AddComponentMenu("MinVR/Input/zSpace Input")]
-    [DefaultExecutionOrder(-998)] // make sure this script runs right before VREngine.cs
-    public class zSpaceInput : MonoBehaviour, IVREventProducer
+    public class zSpaceInput : MonoBehaviour, IPolledInputDevice
     {
         void Reset()
         {
@@ -25,12 +24,12 @@ namespace IVLab.MinVR3
 
         private void OnEnable()
         {
-            VREngine.instance.eventManager.AddEventProducer(this);
+            VREngine.instance.eventManager.AddPolledInputDevice(this);
         }
 
         private void OnDisable()
         {
-            VREngine.instance?.eventManager?.RemoveEventProducer(this);
+            VREngine.instance?.eventManager?.RemovePolledInputDevice(this);
         }
 
         void Start()
@@ -45,32 +44,32 @@ namespace IVLab.MinVR3
             m_LastHeadRot = Quaternion.identity;
         }
 
-        void Update()
+        public void PollForEvents(ref List<VREvent> eventQueue)
         {
             if (m_zStylus.transform.position != m_LastStylusPos) {
-                VREngine.instance.eventManager.QueueEvent(m_StylusEventBaseName + "/Position", m_zStylus.transform.position);
+                eventQueue.Add(new VREventVector3(m_StylusEventBaseName + "/Position", m_zStylus.transform.position));
                 m_LastStylusPos = m_zStylus.transform.position;
             }
             if (m_zStylus.transform.rotation != m_LastStylusRot) {
-                VREngine.instance.eventManager.QueueEvent(m_StylusEventBaseName + "/Rotation", m_zStylus.transform.rotation);
+                eventQueue.Add(new VREventQuaternion(m_StylusEventBaseName + "/Rotation", m_zStylus.transform.rotation));
                 m_LastStylusRot = m_zStylus.transform.rotation;
             }
 
             if (m_zCameraRig.transform.position != m_LastHeadPos) {
-                VREngine.instance.eventManager.QueueEvent(m_HeadEventBaseName + "/Position", m_zCameraRig.transform.position);
+                eventQueue.Add(new VREventVector3(m_HeadEventBaseName + "/Position", m_zCameraRig.transform.position));
                 m_LastHeadPos = m_zCameraRig.transform.position;
             }
             if (m_zCameraRig.transform.rotation != m_LastHeadRot) {
-                VREngine.instance.eventManager.QueueEvent(m_HeadEventBaseName + "/Rotation", m_zCameraRig.transform.rotation);
+                eventQueue.Add(new VREventQuaternion(m_HeadEventBaseName + "/Rotation", m_zCameraRig.transform.rotation));
                 m_LastHeadRot = m_zCameraRig.transform.rotation;
             }
 
             for (int i = 0; i < 3; i++) {
                 if (m_zStylus.GetButtonDown(i)) {
-                    VREngine.instance.eventManager.QueueEvent(m_ButtonEventBaseNames[i] + " DOWN");
+                    eventQueue.Add(new VREvent(m_ButtonEventBaseNames[i] + " DOWN"));
                 }
                 if (m_zStylus.GetButtonUp(i)) {
-                    VREngine.instance.eventManager.QueueEvent(m_ButtonEventBaseNames[i] + " UP");
+                    eventQueue.Add(new VREvent(m_ButtonEventBaseNames[i] + " UP"));
                 }
             }
         }
@@ -89,7 +88,6 @@ namespace IVLab.MinVR3
 
             return eventsProduced;
         }
-
 
         [SerializeField] private string m_HeadEventBaseName;
         [SerializeField] private string m_StylusEventBaseName;

@@ -49,7 +49,7 @@ namespace IVLab.MinVR3
 
         public void InvokeWithVREvent(VREvent e)
         {
-            base.Invoke((e as VREvent<T>).data);
+            base.Invoke((e as VREventT<T>).data);
         }
     }
 
