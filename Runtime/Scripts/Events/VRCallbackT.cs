@@ -1,7 +1,10 @@
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEditor.Events;
 using System;
+
+#if UNITY_EDITOR
+using UnityEditor.Events;
+#endif
 
 namespace IVLab.MinVR3
 {
@@ -33,6 +36,7 @@ namespace IVLab.MinVR3
             RemoveListener(listener);
         }
 
+#if UNITY_EDITOR
         /// <summary>
         /// For callbacks created while in editor mode (i.e., from Reset() or custom editors and property drawers).
         /// Callbacks added this way will be displayed in the Inspector.
@@ -46,6 +50,7 @@ namespace IVLab.MinVR3
         {
             UnityEventTools.RemovePersistentListener(this, listener);
         }
+#endif
 
         public void InvokeWithVREvent(VREvent e)
         {

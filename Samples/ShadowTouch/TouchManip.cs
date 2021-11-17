@@ -7,6 +7,7 @@ using IVLab.MinVR3;
 public class TouchManip : MonoBehaviour
 {
 
+#if UNITY_EDITOR
     public void Reset()
     {
         m_Touch0Down = VREventCallbackVector2.CreateInEditor("Touch/Finger 0 DOWN", OnTouch0Down);
@@ -17,6 +18,7 @@ public class TouchManip : MonoBehaviour
         m_Touch1Move = VREventCallbackVector2.CreateInEditor("Touch/Finger 1/Position", OnTouch1Move);
         m_Touch1Up = VREventCallbackVector2.CreateInEditor("Touch/Finger 1 UP", OnTouch1Up);
     }
+#endif
 
 
     void OnTouch0Down(Vector2 pos)

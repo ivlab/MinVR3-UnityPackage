@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEditor.Events;
 using System;
 
 
@@ -29,6 +26,7 @@ namespace IVLab.MinVR3
             return cb;
         }
 
+#if UNITY_EDITOR
         public static VREventCallback CreateInEditor(string listenForEvent, UnityAction callbackFunc = null)
         {
             return CreateInEditor(VREventPrototype.Create(listenForEvent), callbackFunc);
@@ -43,6 +41,7 @@ namespace IVLab.MinVR3
             }
             return cb;
         }
+#endif
 
         // ---
 
@@ -84,20 +83,22 @@ namespace IVLab.MinVR3
             m_VRCallback.AddRuntimeListener(listener);
         }
 
-        public void AddPersistentListener(UnityAction listener)
-        {
-            m_VRCallback.AddPersistentListener(listener);
-        }
-
         public void RemoveRuntimeListener(UnityAction listener)
         {
             m_VRCallback.RemoveRuntimeListener(listener);
+        }
+
+#if UNITY_EDITOR
+        public void AddPersistentListener(UnityAction listener)
+        {
+            m_VRCallback.AddPersistentListener(listener);
         }
 
         public void RemovePersistentListener(UnityAction listener)
         {
             m_VRCallback.RemovePersistentListener(listener);
         }
+#endif
 
         public void InvokeWithVREvent(VREvent vrEvent)
         {

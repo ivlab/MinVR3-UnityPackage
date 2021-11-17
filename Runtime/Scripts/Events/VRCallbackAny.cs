@@ -1,8 +1,11 @@
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEditor.Events;
 using System;
 using System.Collections.Generic;
+
+#if UNITY_EDITOR
+using UnityEditor.Events;
+#endif
 
 namespace IVLab.MinVR3
 {
@@ -19,6 +22,7 @@ namespace IVLab.MinVR3
             return cb;
         }
 
+#if UNITY_EDITOR
         public static VRCallbackAny CreateInEditor(UnityAction callbackFunc)
         {
             var cb = new VRCallbackAny();
@@ -26,6 +30,7 @@ namespace IVLab.MinVR3
             cb.AddPersistentListener(callbackFunc);
             return cb;
         }
+#endif
 
         public static VRCallbackAny CreateRuntime<T>(UnityAction<T> callbackFunc)
         {
@@ -37,6 +42,7 @@ namespace IVLab.MinVR3
             return cb;
         }
 
+#if UNITY_EDITOR
         public static VRCallbackAny CreateInEditor<T>(UnityAction<T> callbackFunc)
         {
             var cb = new VRCallbackAny();
@@ -46,6 +52,7 @@ namespace IVLab.MinVR3
             cb.AddPersistentListener(callbackFunc);
             return cb;
         }
+#endif
 
         // ---
 
@@ -120,6 +127,7 @@ namespace IVLab.MinVR3
             cb.RemoveListener(listener);
         }
 
+#if UNITY_EDITOR
         /// <summary>
         /// For callbacks created while in editor mode (i.e., from Reset() or custom editors and property drawers).
         /// Callbacks added this way will be displayed in the Inspector.
@@ -151,6 +159,8 @@ namespace IVLab.MinVR3
             UnityEvent<T> cb = m_AllCallbacks[m_DataTypeName] as UnityEvent<T>;
             UnityEventTools.RemovePersistentListener(cb, listener);
         }
+#endif
+
 
         public void InvokeWithVREvent(VREvent e)
         {

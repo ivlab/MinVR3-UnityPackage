@@ -26,15 +26,17 @@ namespace IVLab.MinVR3
             return cb;
         }
 
+#if UNITY_EDITOR
         public static VRCallbackVector3 CreateInEditor(UnityAction<Vector3> callbackFunc)
         {
             var cb = new VRCallbackVector3();
             cb.AddPersistentListener(callbackFunc);
             return cb;
         }
+#endif
     }
 
-    [Serializable]
+        [Serializable]
     public class VREventCallbackVector3 : VREventCallbackT<Vector3>
     {
         public static VREventCallbackVector3 CreateRuntime(string listenForEvent, UnityAction<Vector3> callbackFunc = null)
@@ -52,6 +54,7 @@ namespace IVLab.MinVR3
             return cb;
         }
 
+#if UNITY_EDITOR
         public static VREventCallbackVector3 CreateInEditor(string listenForEvent, UnityAction<Vector3> callbackFunc = null)
         {
             return CreateInEditor(VREventPrototypeVector3.Create(listenForEvent), callbackFunc);
@@ -66,6 +69,7 @@ namespace IVLab.MinVR3
             }
             return cb;
         }
+#endif
     }
 
 } // end namespace

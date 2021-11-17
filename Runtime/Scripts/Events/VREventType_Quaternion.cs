@@ -26,12 +26,14 @@ namespace IVLab.MinVR3
             return cb;
         }
 
+#if UNITY_EDITOR
         public static VRCallbackQuaternion CreateInEditor(UnityAction<Quaternion> callbackFunc)
         {
             var cb = new VRCallbackQuaternion();
             cb.AddPersistentListener(callbackFunc);
             return cb;
         }
+#endif
     }
 
     [Serializable]
@@ -52,6 +54,7 @@ namespace IVLab.MinVR3
             return cb;
         }
 
+#if UNITY_EDITOR
         public static VREventCallbackQuaternion CreateInEditor(string listenForEvent, UnityAction<Quaternion> callbackFunc = null)
         {
             return CreateInEditor(VREventPrototypeQuaternion.Create(listenForEvent), callbackFunc);
@@ -66,6 +69,7 @@ namespace IVLab.MinVR3
             }
             return cb;
         }
+#endif
     }
 
 } // end namespace

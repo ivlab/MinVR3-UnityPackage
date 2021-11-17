@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEditor.Events;
 using System;
 
 
@@ -54,20 +51,22 @@ namespace IVLab.MinVR3
             m_VRCallback.AddRuntimeListener(listener);
         }
 
-        public void AddPersistentListener(UnityAction<T> listener)
-        {
-            m_VRCallback.AddPersistentListener(listener);
-        }
-
         public void RemoveRuntimeListener(UnityAction<T> listener)
         {
             m_VRCallback.RemoveRuntimeListener(listener);
+        }
+
+#if UNITY_EDITOR
+        public void AddPersistentListener(UnityAction<T> listener)
+        {
+            m_VRCallback.AddPersistentListener(listener);
         }
 
         public void RemovePersistentListener(UnityAction<T> listener)
         {
             m_VRCallback.RemovePersistentListener(listener);
         }
+#endif
 
         public void InvokeWithVREvent(VREvent vrEvent)
         {

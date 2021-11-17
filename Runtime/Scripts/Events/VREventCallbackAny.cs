@@ -28,6 +28,7 @@ namespace IVLab.MinVR3
             return CreateRuntime(listenForEvent.GetEventName(), callbackFunc);
         }
 
+#if UNITY_EDITOR
         public static VREventCallbackAny CreateInEditor(string listenForEvent, UnityAction callbackFunc = null)
         {
             var cb = new VREventCallbackAny();
@@ -43,6 +44,7 @@ namespace IVLab.MinVR3
         {
             return CreateInEditor(listenForEvent.GetEventName(), callbackFunc);
         }
+#endif
 
 
         public static VREventCallbackAny CreateRuntime<T>(string listenForEvent, UnityAction<T> callbackFunc = null)
@@ -64,6 +66,7 @@ namespace IVLab.MinVR3
         }
 
 
+#if UNITY_EDITOR
         public static VREventCallbackAny CreateInEditor<T>(string listenForEvent, UnityAction<T> callbackFunc = null)
         {
             var cb = new VREventCallbackAny();
@@ -81,6 +84,7 @@ namespace IVLab.MinVR3
         {
             return CreateRuntime(listenForEvent.GetEventName(), callbackFunc);
         }
+#endif
 
         // ---
 
@@ -145,19 +149,9 @@ namespace IVLab.MinVR3
             m_VRCallback.AddRuntimeListener(listener);
         }
 
-        public void AddPersistentListener(UnityAction listener)
-        {
-            m_VRCallback.AddPersistentListener(listener);
-        }
-
         public void RemoveRuntimeListener(UnityAction listener)
         {
             m_VRCallback.RemoveRuntimeListener(listener);
-        }
-
-        public void RemovePersistentListener(UnityAction listener)
-        {
-            m_VRCallback.RemovePersistentListener(listener);
         }
 
         public void AddRuntimeListener<T>(UnityAction<T> listener)
@@ -165,20 +159,33 @@ namespace IVLab.MinVR3
             m_VRCallback.AddRuntimeListener(listener);
         }
 
-        public void AddPersistentListener<T>(UnityAction<T> listener)
+        public void RemoveRuntimeListener<T>(UnityAction<T> listener)
+        {
+            m_VRCallback.RemoveRuntimeListener(listener);
+        }
+
+
+#if UNITY_EDITOR
+        public void AddPersistentListener(UnityAction listener)
         {
             m_VRCallback.AddPersistentListener(listener);
         }
 
-        public void RemoveRuntimeListener<T>(UnityAction<T> listener)
+        public void RemovePersistentListener(UnityAction listener)
         {
-            m_VRCallback.RemoveRuntimeListener(listener);
+            m_VRCallback.RemovePersistentListener(listener);
+        }
+
+        public void AddPersistentListener<T>(UnityAction<T> listener)
+        {
+            m_VRCallback.AddPersistentListener(listener);
         }
 
         public void RemovePersistentListener<T>(UnityAction<T> listener)
         {
             m_VRCallback.RemovePersistentListener(listener);
         }
+#endif
 
         public void InvokeWithVREvent(VREvent vrEvent)
         {

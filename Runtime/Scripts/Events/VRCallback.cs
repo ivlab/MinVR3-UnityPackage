@@ -1,7 +1,10 @@
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEditor.Events;
 using System;
+
+#if UNITY_EDITOR
+using UnityEditor.Events;
+#endif
 
 namespace IVLab.MinVR3
 {
@@ -18,12 +21,14 @@ namespace IVLab.MinVR3
             return cb;
         }
 
+#if UNITY_EDITOR
         public static VRCallback CreateInEditor(UnityAction callbackFunc)
         {
             var cb = new VRCallback();
             cb.AddPersistentListener(callbackFunc);
             return cb;
         }
+#endif
 
         // ---
 
@@ -47,6 +52,12 @@ namespace IVLab.MinVR3
             RemoveListener(listener);
         }
 
+        public void InvokeWithVREvent(VREvent e)
+        {
+            base.Invoke();
+        }
+
+#if UNITY_EDITOR
         /// <summary>
         /// For callbacks created while in editor mode (i.e., from Reset() or custom editors and property drawers).
         /// Callbacks added this way will be displayed in the Inspector.
@@ -60,11 +71,8 @@ namespace IVLab.MinVR3
         {
             UnityEventTools.RemovePersistentListener(this, listener);
         }
+#endif
 
-        public void InvokeWithVREvent(VREvent e)
-        {
-            base.Invoke();
-        }
     }
 
 } // end namespace
