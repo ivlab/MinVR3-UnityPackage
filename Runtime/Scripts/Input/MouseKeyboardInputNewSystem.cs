@@ -1,3 +1,6 @@
+// This component is only available in projects using Unity's New Input System
+#if ENABLE_INPUT_SYSTEM
+
 using System.Collections.Generic;
 using UnityEngine;
 using System;
@@ -12,8 +15,7 @@ namespace IVLab.MinVR3
     /// be a useful way to bind desktop-style input to the same events you expect to recieve when running in VR mode.
     /// </summary>
     [AddComponentMenu("MinVR/Input/New Input System/Mouse & Keyboard Input")]
-    [DefaultExecutionOrder(-998)] // make sure this script runs right before VREngine.cs
-    public class MouseKeyboardInputNewSystem : MonoBehaviour, IVREventProducer
+    public class MouseKeyboardInputNewSystem : MonoBehaviour, IPolledInputDevice
     {
         [Serializable]
         public class KeyToVREventName
@@ -24,6 +26,16 @@ namespace IVLab.MinVR3
             [Tooltip("Base name for the VREvents generated when the key is pressed and released.  The actual event " +
                 "names will also include an ' UP' or ' DOWN' suffix as appropriate.")]
             public string name;
+        }
+
+        private void OnEnable()
+        {
+            VREngine.instance.eventManager.AddPolledInputDevice(this);
+        }
+
+        private void OnDisable()
+        {
+            VREngine.instance?.eventManager?.RemovePolledInputDevice(this);
         }
 
         void Reset()
@@ -64,50 +76,50 @@ namespace IVLab.MinVR3
         }
 
 
-        void Update()
+        public void PollForEvents(ref List<VREvent> eventQueue)
         {
             if (m_PointerEventName != "") {
                 Vector2 mousePos = Mouse.current.position.ReadValue();
                 if (mousePos != m_MouseLastPos) {
-                    VREngine.instance.eventManager.QueueEvent(m_PointerEventName, mousePos);
+                    eventQueue.Add(new VREventVector2(m_PointerEventName, mousePos));
                     m_MouseLastPos = mousePos;
                 }
             }
 
             if (m_LeftBtnEventName != "") {
                 if (Mouse.current.leftButton.wasPressedThisFrame) {
-                    VREngine.instance.eventManager.QueueEvent(m_LeftBtnEventName + " DOWN");
+                    eventQueue.Add(new VREvent(m_LeftBtnEventName + " DOWN"));
                 }
                 if (Mouse.current.leftButton.wasReleasedThisFrame) {
-                    VREngine.instance.eventManager.QueueEvent(m_LeftBtnEventName + " UP");
+                    eventQueue.Add(new VREvent(m_LeftBtnEventName + " UP"));
                 }
             }
 
             if (m_MiddleBtnEventName != "") {
                 if (Mouse.current.middleButton.wasPressedThisFrame) {
-                    VREngine.instance.eventManager.QueueEvent(m_MiddleBtnEventName + " DOWN");
+                    eventQueue.Add(new VREvent(m_MiddleBtnEventName + " DOWN"));
                 }
                 if (Mouse.current.middleButton.wasReleasedThisFrame) {
-                    VREngine.instance.eventManager.QueueEvent(m_MiddleBtnEventName + " DOWN");
+                    eventQueue.Add(new VREvent(m_MiddleBtnEventName + " DOWN"));
                 }
             }
 
             if (m_RightBtnEventName != "") {
                 if (Mouse.current.rightButton.wasPressedThisFrame) {
-                    VREngine.instance.eventManager.QueueEvent(m_RightBtnEventName + " DOWN");
+                    eventQueue.Add(new VREvent(m_RightBtnEventName + " DOWN"));
                 }
                 if (Mouse.current.rightButton.wasReleasedThisFrame) {
-                    VREngine.instance.eventManager.QueueEvent(m_RightBtnEventName + " UP");
+                    eventQueue.Add(new VREvent(m_RightBtnEventName + " UP"));
                 }
             }
 
 
             foreach (KeyToVREventName k in m_KeysToVREventNames) {
                 if (Keyboard.current[k.key].wasPressedThisFrame) {
-                    VREngine.instance.eventManager.QueueEvent(k.name + " DOWN");
+                    eventQueue.Add(new VREvent(k.name + " DOWN"));
                 }
                 if (((KeyControl)Keyboard.current[k.key]).wasReleasedThisFrame) {
-                    VREngine.instance.eventManager.QueueEvent(k.name + " UP");
+                    eventQueue.Add(new VREvent(k.name + " UP"));
                 }
             }
         }
@@ -130,3 +142,5 @@ namespace IVLab.MinVR3
     }
 
 } // namespace
+
+#endif

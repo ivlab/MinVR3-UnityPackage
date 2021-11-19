@@ -26,6 +26,7 @@ namespace IVLab.MinVR3
             m_ArcListenersProp = serializedObject.FindProperty("m_ArcListeners");
             m_ArcRequireTokensProp = serializedObject.FindProperty("m_ArcRequireTokens");
             m_ArcReleaseTokensProp = serializedObject.FindProperty("m_ArcReleaseTokens");
+            m_ArcGuardsProp = serializedObject.FindProperty("m_ArcGuards");
         }
 
 
@@ -53,21 +54,18 @@ namespace IVLab.MinVR3
             EditorGUILayout.Space(1.5f * EditorGUIUtility.standardVerticalSpacing);
 
             EditorGUILayout.BeginVertical(EditorStyles.inspectorDefaultMargins);
-            while (m_StateExpanded.Count < m_StateNamesProp.arraySize) {
-                m_StateExpanded.Add(true);
-            }
             for (int i = 0; i < m_StateNamesProp.arraySize; i++) {
                 SerializedProperty nameProp = m_StateNamesProp.GetArrayElementAtIndex(i);
 
                 EditorGUILayout.BeginHorizontal();
-                m_StateExpanded[i] = EditorGUILayout.BeginFoldoutHeaderGroup(m_StateExpanded[i], "State #" + i + ":  " + nameProp.stringValue);
+                bool expanded = MyBeginFoldoutHeaderGroup("State #" + i + ":  " + nameProp.stringValue, "State" + i);
                 if (GUILayout.Button(new GUIContent("-", "Delete this state"), EditorStyles.miniButton, GUILayout.Width(20f))) {
                     m_StateMachine.RemoveState(i);
                     m_StateExpanded.RemoveAt(i);
                 }
                 EditorGUILayout.EndHorizontal();
 
-                if ((i < m_StateExpanded.Count) && (m_StateExpanded[i])) {
+                if (expanded) {
                     EditorGUILayout.PropertyField(nameProp, new GUIContent("Name", "There must be at least one state, and each state must have a unique name"));
                     
                     SerializedProperty enterCBProp = m_StateEnterCBsProp.GetArrayElementAtIndex(i);
@@ -99,9 +97,6 @@ namespace IVLab.MinVR3
             EditorGUILayout.LabelField("Arcs", EditorStyles.boldLabel);
             EditorGUILayout.BeginVertical(EditorStyles.inspectorDefaultMargins);
 
-            while (m_ArcExpanded.Count < m_ArcFromIDsProp.arraySize) {
-                m_ArcExpanded.Add(true);
-            }
             for (int i = 0; i < m_ArcFromIDsProp.arraySize; i++) {
                 SerializedProperty fromIDProp = m_ArcFromIDsProp.GetArrayElementAtIndex(i);
                 SerializedProperty toIDProp = m_ArcToIDsProp.GetArrayElementAtIndex(i);
@@ -117,25 +112,28 @@ namespace IVLab.MinVR3
                 string arcName = "Arc #" + i + ":  " + from + " --> " + to;
 
                 EditorGUILayout.BeginHorizontal();
-                m_ArcExpanded[i] = EditorGUILayout.BeginFoldoutHeaderGroup(m_ArcExpanded[i], arcName);
+                bool expanded = MyBeginFoldoutHeaderGroup(arcName, "Arc" + i);
                 if (GUILayout.Button(new GUIContent("-", "Delete this arc"), EditorStyles.miniButton, GUILayout.Width(20f))) {
                     m_StateMachine.RemoveArc(i);
                     m_ArcExpanded.RemoveAt(i);
                 }
                 EditorGUILayout.EndHorizontal();
 
-                if ((i < m_ArcExpanded.Count) && (m_ArcExpanded[i])) {
+                if (expanded) {
                     fromIDProp.intValue = EditorGUILayout.IntPopup(new GUIContent("From State", "The arc starts at the FROM state and goes to the TO state"), fromIDProp.intValue, stateDisplayNames, stateIDs);
                     toIDProp.intValue = EditorGUILayout.IntPopup(new GUIContent("To State", "The arc ends at this TO state, which can be the same as the FROM state if the arc should not cause a state transition"), toIDProp.intValue, stateDisplayNames, stateIDs);
 
                     SerializedProperty listenerProp = m_ArcListenersProp.GetArrayElementAtIndex(i);
                     EditorGUILayout.PropertyField(listenerProp, new GUIContent("Event Listener", "The VREvent that triggers this arc transition and optionally a callback to receive when the arc is traversed."));
 
-                    SerializedProperty requireTokenProp = m_ArcRequireTokensProp.GetArrayElementAtIndex(i);
-                    EditorGUILayout.PropertyField(requireTokenProp, new GUIContent("Require", "[Optional] Add a token to place a conditional guard on this arc; the transition will only occur if the token can be successfully acquired."));
+                    SerializedProperty requireSharedTokenProp = m_ArcRequireTokensProp.GetArrayElementAtIndex(i);
+                    EditorGUILayout.PropertyField(requireSharedTokenProp, new GUIContent("Require Token", "[Optional] Add a token to place a conditional guard on this arc; the transition will only occur if the token can be successfully acquired."));
 
-                    SerializedProperty releaseTokenProp = m_ArcReleaseTokensProp.GetArrayElementAtIndex(i);
-                    EditorGUILayout.PropertyField(releaseTokenProp, new GUIContent("Release", "[Optional] Release a token previously acquired by the FSM when the arc transitions."));
+                    SerializedProperty releaseSharedTokenProp = m_ArcReleaseTokensProp.GetArrayElementAtIndex(i);
+                    EditorGUILayout.PropertyField(releaseSharedTokenProp, new GUIContent("Release Token", "[Optional] Release a token previously acquired by the FSM when the arc transitions."));
+
+                    SerializedProperty arcGuardProp = m_ArcGuardsProp.GetArrayElementAtIndex(i);
+                    EditorGUILayout.PropertyField(arcGuardProp, new GUIContent("Guard Condition", "[Optional] Add a Condition object that you set to true or false externally using whatever logic you wish; the arc will only be traversed if the condition is true."));
                 }
                 EditorGUILayout.EndFoldoutHeaderGroup();
             }
@@ -148,7 +146,19 @@ namespace IVLab.MinVR3
  
             serializedObject.ApplyModifiedProperties();
         }
- 
+
+
+        private bool MyBeginFoldoutHeaderGroup(string displayName, string shortName)
+        {
+            // https://answers.unity.com/questions/216395/editorguilayoutfoldout-no-way-to-remember-state.html
+            string prefKey = target.GetInstanceID() + ".Foldout." + shortName;
+            bool foldoutState = EditorPrefs.GetBool(prefKey, false);
+            bool newFoldoutState = EditorGUILayout.BeginFoldoutHeaderGroup(foldoutState, displayName);
+            if (newFoldoutState != foldoutState)
+                EditorPrefs.SetBool(prefKey, newFoldoutState);
+            return newFoldoutState;
+        }
+
         private FSM m_StateMachine;
 
         private SerializedProperty m_StartStateProp;
@@ -163,6 +173,7 @@ namespace IVLab.MinVR3
         private SerializedProperty m_ArcListenersProp;
         private SerializedProperty m_ArcRequireTokensProp;
         private SerializedProperty m_ArcReleaseTokensProp;
+        private SerializedProperty m_ArcGuardsProp;
 
         private SerializedProperty m_DebugProp;
 

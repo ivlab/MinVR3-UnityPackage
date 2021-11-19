@@ -2,58 +2,78 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
+using UnityEditor;
 using System.Linq;
 
 namespace IVLab.MinVR3
 {
 
-    [DisallowMultipleComponent]
+   [DefaultExecutionOrder(VREventManager.ScriptPriority)]
+   [DisallowMultipleComponent]
     public class VREventManager : MonoBehaviour
     {
-        [Tooltip("Logs events to the console as they are processed")]
-        public bool m_ShowDebuggingOutput = false;
+        // This script should run immediately after the VREngine, which is in charage of synchronizing
+        // events across all nodes when running in cluster mode.
+        public const int ScriptPriority = VREngine.ScriptPriority + 1;
 
-        
-        public void AddEventProducer(IVREventProducer eventProducer)
+        public const int DefaultListenerPriority = 10;
+
+
+        private void Reset()
         {
-            if (!m_EventProducers.Contains(eventProducer)) {
-                m_EventProducers.Add(eventProducer);
+            m_ShowDebuggingOutput = false;
+        }
+
+        public void AddPolledInputDevice(IPolledInputDevice device)
+        {
+            if (!m_PolledInputDevices.Contains(device)) {
+                m_PolledInputDevices.Add(device);
             }
         }
 
-        public void RemoveEventProducer(IVREventProducer eventProducer)
+        public void RemovePolledInputDevice(IPolledInputDevice device)
         {
-            m_EventProducers.Remove(eventProducer);
+            m_PolledInputDevices.Remove(device);
         }
 
 
-        public void AddEventReceiver(IVREventListener eventReceiver)
+        public void AddEventListener(IVREventListener listener, int priority = DefaultListenerPriority)
         {
-            if (!m_EventReceivers.Contains(eventReceiver)) {
-                m_EventReceivers.Add(eventReceiver);
+            int index = m_EventListeners.FindIndex(entry => entry.Item2 == listener);
+            if (index == -1) {
+                m_EventListeners.Add(new Tuple<int, IVREventListener>(priority, listener));
+                m_EventListeners.Sort((a, b) => a.Item1.CompareTo(b.Item1));
             }
         }
 
-        public void RemoveEventReceiver(IVREventListener eventReceiver)
+        public void RemoveEventListener(IVREventListener listener)
         {
-            m_EventReceivers.Remove(eventReceiver);
+            int index = m_EventListeners.FindIndex(entry => entry.Item2 == listener);
+            m_EventListeners.RemoveAt(index);
         }
 
+        public void AddEventFilter(IVREventFilter filter)
+        {
+            if (!m_EventFilters.Contains(filter)) {
+                m_EventFilters.Add(filter);
+            }
+        }
 
+        public void RemoveEventFilter(IVREventFilter filter)
+        {
+            m_EventFilters.Remove(filter);
+        }
 
-        public void QueueEvent(string eventName)
+        public void QueueEvent(VREvent e)
         {
             lock (m_Queue) {
-                m_Queue.Add(new VREvent(eventName));
+                m_Queue.Add(e);
             }
         }
 
-        public void QueueEvent<T>(string eventName, T eventData)
+        public void InsertInQueue(VREvent e)
         {
-            lock (m_Queue) {
-                m_Queue.Add(new VREvent<T>(eventName, eventData));
-            }
+            m_DerivedQueue.Add(e);
         }
 
         public List<VREvent> GetEventQueue()
@@ -68,19 +88,73 @@ namespace IVLab.MinVR3
             }
         }
 
-        public void Update()
+
+
+        public void PollInputDevices()
+        {
+            lock (m_Queue) {
+                foreach (IPolledInputDevice device in m_PolledInputDevices) {
+                    device.PollForEvents(ref m_Queue);
+                }
+            }
+        }
+
+        List<VREvent> RunEventFilters(VREvent e)
+        {
+            List<VREvent> resultAll = new List<VREvent>();
+            bool caught = false;
+            foreach (IVREventFilter filter in m_EventFilters) {
+                // if a filter does catch the event, then it decides what to return as a result.
+                // it could return the same event but with a new name, or the same event plus an
+                // additional new event or it could consume the event and return nothing, etc.
+                List<VREvent> result = new List<VREvent>();
+                if (filter.FilterEvent(e, ref result)) {
+                    caught = true;
+                    resultAll.AddRange(result);
+                }
+            }
+            if (!caught) {
+                // if no filters caught the event, then pass it through unmodified
+                resultAll.Add(e);
+            }
+            return resultAll;
+        }
+
+        public void ProcessEvent(VREvent e)
+        {
+            if (m_ShowDebuggingOutput) {
+                Debug.Log("Processing event " + e.name);
+            }
+            foreach (Tuple<int,IVREventListener> listenerTuple in m_EventListeners.ToList()) {
+                listenerTuple.Item2.OnVREvent(e);
+            }
+        }
+
+        public void ProcessEventQueue()
         {
             lock (m_Queue) {
                 foreach (VREvent e in m_Queue) {
-                    if (m_ShowDebuggingOutput) {
-                        Debug.Log("Processing event " + e.name);
-                    }
-                    foreach (IVREventListener r in m_EventReceivers) {
-                        r.OnVREvent(e);
+                    // run each event in the queue through the event filters
+                    List<VREvent> filterResults = RunEventFilters(e);
+                    foreach (VREvent eFiltered in filterResults) {
+                        // process each event to come out of the filters
+                        ProcessEvent(eFiltered);
+
+                        // if processing caused any derived events to be inserted
+                        // in the queue process them right away
+                        foreach (VREvent eDerived in m_DerivedQueue) {
+                            ProcessEvent(eDerived);
+                        }
+                        m_DerivedQueue.Clear();
                     }
                 }
                 m_Queue.Clear();
             }
+        }
+
+        public void Update()
+        {
+            ProcessEventQueue();
         }
         
         /// <summary>
@@ -93,6 +167,7 @@ namespace IVLab.MinVR3
         }
 
 
+#if UNITY_EDITOR
         /// <summary>
         /// Not fast; intended only for populating dropdown lists in the Unity Editor.
         /// For a given data type, the dataTypeString should be equal to the value returned by
@@ -100,11 +175,17 @@ namespace IVLab.MinVR3
         /// the wildcard character * will match events of any datatype.
         /// </summary>
         /// <returns>A list of all events with the specified datatype produced by all sources
-        static public List<IVREventPrototype> GetMatchingEventPrototypes(string dataTypeName)
+        static public List<IVREventPrototype> GetMatchingEventPrototypes(string dataTypeName, bool includeInactive = true)
         {
             var expectedEvents = new List<IVREventPrototype>();
 
-            var eventProducers = FindObjectsOfType<MonoBehaviour>().OfType<IVREventProducer>();
+            IVREventProducer[] eventProducers;
+            if (includeInactive) {
+                eventProducers = Resources.FindObjectsOfTypeAll<MonoBehaviour>().OfType<IVREventProducer>().ToArray();
+            } else {
+                eventProducers = FindObjectsOfType<MonoBehaviour>().OfType<IVREventProducer>().ToArray();
+            }
+
             foreach (var producer in eventProducers) {
                 var expectedFromThisSource = producer.GetEventPrototypes();
                 foreach (IVREventPrototype e in expectedFromThisSource) {
@@ -120,13 +201,19 @@ namespace IVLab.MinVR3
             }
             return expectedEvents;
         }
+#endif
+
+
+        [Tooltip("Logs events to the console as they are processed")]
+        public bool m_ShowDebuggingOutput = false;
 
         // These lists are populated at runtime as other objects register with the manager
-        [NonSerialized] private List<IVREventProducer> m_EventProducers = new List<IVREventProducer>();
-        [NonSerialized] private List<IVREventListener> m_EventReceivers = new List<IVREventListener>();
-
+        [NonSerialized] private List<IPolledInputDevice> m_PolledInputDevices = new List<IPolledInputDevice>();
+        [NonSerialized] private List<Tuple<int, IVREventListener>> m_EventListeners = new List<Tuple<int, IVREventListener>>();
+        [NonSerialized] private List<IVREventFilter> m_EventFilters = new List<IVREventFilter>();
         [NonSerialized] private List<VREvent> m_Queue = new List<VREvent>();
-    }
+        [NonSerialized] private List<VREvent> m_DerivedQueue = new List<VREvent>();
 
+    }
 
 } // namespace

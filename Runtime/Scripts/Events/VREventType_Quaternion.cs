@@ -6,6 +6,15 @@ namespace IVLab.MinVR3
 {
 
     [Serializable]
+    public class VREventQuaternion : VREventT<Quaternion>
+    {
+        public VREventQuaternion(string name, Quaternion data) : base(name, data)
+        {
+        }
+    }
+
+
+    [Serializable]
     public class VREventPrototypeQuaternion : VREventPrototypeT<Quaternion>
     {
         static public VREventPrototypeQuaternion Create(string eventName)

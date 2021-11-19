@@ -3,6 +3,13 @@ using UnityEngine.Events;
 
 namespace IVLab.MinVR3
 {
+    [Serializable]
+    public class VREventFloat : VREventT<float>
+    {
+        public VREventFloat(string name, float data) : base(name, data)
+        {
+        }
+    }
 
     [Serializable]
     public class VREventPrototypeFloat : VREventPrototypeT<float>

@@ -4,7 +4,15 @@ using UnityEngine.Events;
 
 namespace IVLab.MinVR3
 {
-   
+
+    [Serializable]
+    public class VREventVector3 : VREventT<Vector3>
+    {
+        public VREventVector3(string name, Vector3 data) : base(name, data)
+        {
+        }
+    }
+
     [Serializable]
     public class VREventPrototypeVector3 : VREventPrototypeT<Vector3>
     {

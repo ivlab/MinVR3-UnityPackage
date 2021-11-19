@@ -500,10 +500,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_InputActionAssets:
   - {fileID: -944628639613478452, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  m_SendPerFingerTouchEvents: 1
   m_IncludePressureEvents: 1
   m_BaseEventNames: []
-  m_SendRawTouchEvents: 0
 --- !u!1 &3177763010631168919
 GameObject:
   m_ObjectHideFlags: 0

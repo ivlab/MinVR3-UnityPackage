@@ -18,7 +18,7 @@ namespace IVLab.MinVR3 {
 	 * Move the head around with the arrow keys.
 	 */
     [AddComponentMenu("MinVR/Input/Legacy Input Module/Fake Tracking Input")]
-    public class FakeTrackingInputLegacy : MonoBehaviour, IVREventProducer {
+    public class FakeTrackingInputLegacy : MonoBehaviour, IPolledInputDevice {
         [Header("Head Tracker")]
         [SerializeField] private KeyCode moveHeadForwardKey;
         [SerializeField] private KeyCode moveHeadBackKey;
@@ -67,12 +67,12 @@ namespace IVLab.MinVR3 {
 
         private void OnEnable()
         {
-            VREngine.instance.eventManager.AddEventProducer(this);
+            VREngine.instance.eventManager.AddPolledInputDevice(this);
         }
 
         private void OnDisable()
         {
-            VREngine.instance?.eventManager?.RemoveEventProducer(this);
+            VREngine.instance?.eventManager?.RemovePolledInputDevice(this);
         }
 
         void Reset()
@@ -113,12 +113,11 @@ namespace IVLab.MinVR3 {
             tracker2Rot = Quaternion.Euler(initialTracker1Rot);
         }
 
-        void Update()
+        public void PollForEvents(ref List<VREvent> eventQueue)
         {
-            QueueHeadTrackerEvents();
-            QueueRegularTrackerEvents();
+            QueueHeadTrackerEvents(ref eventQueue);
+            QueueRegularTrackerEvents(ref eventQueue);
         }
-
 
 
         private bool IsPressed(KeyCode key)
@@ -131,7 +130,7 @@ namespace IVLab.MinVR3 {
             return Input.GetKeyDown(key);
         }
 
-        private void QueueHeadTrackerEvents() {
+        private void QueueHeadTrackerEvents(ref List<VREvent> eventQueue) {
             bool sendEvent = false;
 
             if (IsPressed(moveHeadForwardKey)) {
@@ -152,13 +151,13 @@ namespace IVLab.MinVR3 {
             }
 
             if (sendEvent) {
-                VREngine.instance.eventManager.QueueEvent(headTrackerBaseName + "/Position", headTrackerPos);
-                VREngine.instance.eventManager.QueueEvent(headTrackerBaseName + "/Rotation", headTrackerRot);
+                eventQueue.Add(new VREventVector3(headTrackerBaseName + "/Position", headTrackerPos));
+                eventQueue.Add(new VREventQuaternion(headTrackerBaseName + "/Rotation", headTrackerRot));
             }
         }
 
 
-        private void QueueRegularTrackerEvents() {
+        private void QueueRegularTrackerEvents(ref List<VREvent> eventQueue) {
             float x = Input.mousePosition.x;
             float y = Input.mousePosition.y;
 
@@ -216,26 +215,29 @@ namespace IVLab.MinVR3 {
                 Plane p = new Plane();
                 float dist = 0.0f;
                 if (curTracker == 0) {
-                    p.SetNormalAndPosition(-Camera.main.transform.forward, tracker1Pos);
+                    Vector3 trackerWorld = transform.TransformPoint(tracker1Pos);
+                    p.SetNormalAndPosition(-Camera.main.transform.forward, trackerWorld);
                     if (p.Raycast(ray, out dist)) {
-                        tracker1Pos = ray.GetPoint(dist);
+                        trackerWorld = ray.GetPoint(dist);
+                        tracker1Pos = transform.InverseTransformPoint(trackerWorld);
                     }
                 } else if (curTracker == 1) {
-                    p.SetNormalAndPosition(-Camera.main.transform.forward, tracker2Pos);
+                    Vector3 trackerWorld = transform.TransformPoint(tracker2Pos);
+                    p.SetNormalAndPosition(-Camera.main.transform.forward, trackerWorld);
                     if (p.Raycast(ray, out dist)) {
-                        tracker2Pos = ray.GetPoint(dist);
+                        trackerWorld = ray.GetPoint(dist);
+                        tracker2Pos = transform.InverseTransformPoint(trackerWorld);
                     }
                 }
-
             }
 
             if (sendEvent) {
                 if (curTracker == 0) {
-                    VREngine.instance.eventManager.QueueEvent(tracker1BaseName + "/Position", tracker1Pos);
-                    VREngine.instance.eventManager.QueueEvent(tracker1BaseName + "/Rotation", tracker1Rot);
+                    eventQueue.Add(new VREventVector3(tracker1BaseName + "/Position", tracker1Pos));
+                    eventQueue.Add(new VREventQuaternion(tracker1BaseName + "/Rotation", tracker1Rot));
                 } else if (curTracker == 1) {
-                    VREngine.instance.eventManager.QueueEvent(tracker2BaseName + "/Position", tracker2Pos);
-                    VREngine.instance.eventManager.QueueEvent(tracker2BaseName + "/Rotation", tracker2Rot);
+                    eventQueue.Add(new VREventVector3(tracker2BaseName + "/Position", tracker2Pos));
+                    eventQueue.Add(new VREventQuaternion(tracker2BaseName + "/Rotation", tracker2Rot));
                 }
             }
 
@@ -257,6 +259,7 @@ namespace IVLab.MinVR3 {
 
             return allEvents;
         }
+
 
     }
 

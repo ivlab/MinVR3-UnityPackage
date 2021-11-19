@@ -7,9 +7,15 @@ namespace IVLab.MinVR3 {
 
     [RequireComponent(typeof(VREventManager))]
     [AddComponentMenu("")] // don't list in the component menu
-    [DefaultExecutionOrder(-998)] // make sure this script runs before (almost all) others
+    [DefaultExecutionOrder(VREngine.ScriptPriority)] 
     public class VREngine : OnDemandMonoBehaviourSingleton<VREngine>
     {
+        // In (almost?) all situations, this script should be the first one to run during each frame's
+        // Update() phase.  This script must be run before all other MinVR scripts to make sure that
+        // VREvents are processed correctly and, if running in a cluster mode, to make sure the events
+        // and swapbuffers actions are synchoronized correctly.
+        public const int ScriptPriority = -900;
+
         public VREventManager eventManager {
             get {
                 if (m_EventManager == null) {
@@ -82,6 +88,9 @@ namespace IVLab.MinVR3 {
         // i.e., called before any other script's Update method.
         public void Update()
         {
+            // GET NEW INPUT EVENTS FROM POLLED INPUT DEVICES
+            eventManager.PollInputDevices();
+
             // SYNCHRONIZE INPUT EVENTS SO EACH NODE WILL PROCESS AN IDENTICAL EVENTQUEUE DURING UPDATE()
             if ((m_ClusterNode != null) && (m_ClusterComState == ClusterCommunicationState.PreUpdateNext)) {
                 List<VREvent> queue = eventManager.GetEventQueue();

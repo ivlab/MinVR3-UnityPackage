@@ -10,8 +10,7 @@ namespace IVLab.MinVR3
     /// be a useful way to bind desktop-style input to the same events you expect to recieve when running in VR mode.
     /// </summary>
     [AddComponentMenu("MinVR/Input/Legacy Input Module/Mouse & Keyboard Input")]
-    [DefaultExecutionOrder(-998)] // make sure this script runs right before VREngine.cs
-    public class MouseKeyboardInputLegacy : MonoBehaviour, IVREventProducer
+    public class MouseKeyboardInputLegacy : MonoBehaviour, IPolledInputDevice
     {
         [Serializable]
         public class KeyToVREventName
@@ -22,6 +21,16 @@ namespace IVLab.MinVR3
             [Tooltip("Base name for the VREvents generated when the key is pressed and released.  The actual event " +
                 "names will also include an ' UP' or ' DOWN' suffix as appropriate.")] 
             public string name;
+        }
+
+        private void OnEnable()
+        {
+            VREngine.instance.eventManager.AddPolledInputDevice(this);
+        }
+
+        private void OnDisable()
+        {
+            VREngine.instance?.eventManager?.RemovePolledInputDevice(this);
         }
 
         void Reset()
@@ -62,50 +71,50 @@ namespace IVLab.MinVR3
         }
 
 
-        void Update()
+        public void PollForEvents(ref List<VREvent> eventQueue)
         {
             if (m_PointerEventName != "") {
                 Vector2 mousePos = Input.mousePosition;
                 if (mousePos != m_MouseLastPos) {
-                    VREngine.instance.eventManager.QueueEvent(m_PointerEventName, mousePos);
+                    eventQueue.Add(new VREventVector2(m_PointerEventName, mousePos));
                     m_MouseLastPos = mousePos;
                 }
             }
 
             if (m_LeftBtnEventName != "") {
                 if (Input.GetMouseButtonDown(0)) {
-                    VREngine.instance.eventManager.QueueEvent(m_LeftBtnEventName + " DOWN");
+                    eventQueue.Add(new VREvent(m_LeftBtnEventName + " DOWN"));
                 }
                 if (Input.GetMouseButtonUp(0)) {
-                    VREngine.instance.eventManager.QueueEvent(m_LeftBtnEventName + " UP");
+                    eventQueue.Add(new VREvent(m_LeftBtnEventName + " UP"));
                 }
             }
 
             if (m_MiddleBtnEventName != "") {
                 if (Input.GetMouseButtonDown(1)) {
-                    VREngine.instance.eventManager.QueueEvent(m_MiddleBtnEventName + " DOWN");
+                    eventQueue.Add(new VREvent(m_MiddleBtnEventName + " DOWN"));
                 }
                 if (Input.GetMouseButtonUp(1)) {
-                    VREngine.instance.eventManager.QueueEvent(m_MiddleBtnEventName + " DOWN");
+                    eventQueue.Add(new VREvent(m_MiddleBtnEventName + " DOWN"));
                 }
             }
 
             if (m_RightBtnEventName != "") {
                 if (Input.GetMouseButtonDown(2)) {
-                    VREngine.instance.eventManager.QueueEvent(m_RightBtnEventName + " DOWN");
+                    eventQueue.Add(new VREvent(m_RightBtnEventName + " DOWN"));
                 }
                 if (Input.GetMouseButtonUp(2)) {
-                    VREngine.instance.eventManager.QueueEvent(m_RightBtnEventName + " UP");
+                    eventQueue.Add(new VREvent(m_RightBtnEventName + " UP"));
                 }
             }
 
 
             foreach (KeyToVREventName k in m_KeysToVREventNames) {
                 if (Input.GetKeyDown(k.key)) {
-                    VREngine.instance.eventManager.QueueEvent(k.name + " DOWN");
+                    eventQueue.Add(new VREvent(k.name + " DOWN"));
                 }
                 if (Input.GetKeyUp(k.key)) {
-                    VREngine.instance.eventManager.QueueEvent(k.name + " UP");
+                    eventQueue.Add(new VREvent(k.name + " UP"));
                 }
             }
         }

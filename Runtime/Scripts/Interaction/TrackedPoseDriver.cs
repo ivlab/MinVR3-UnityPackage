@@ -94,12 +94,10 @@ namespace IVLab.MinVR3
         public void OnVREvent(VREvent vrEvent)
         {
             if (vrEvent.Matches(m_PositionEvent)) {
-                VREvent<Vector3> posUpdateEvent = vrEvent as VREvent<Vector3>;
-                m_CurrentPosition = posUpdateEvent.data;// + m_CalibrationTranslation;
+                m_CurrentPosition = vrEvent.GetData<Vector3>(); // + m_CalibrationTranslation;
             }
             if (vrEvent.Matches(m_RotationEvent)) {
-                VREvent<Quaternion> rotUpdateEvent = vrEvent as VREvent<Quaternion>;
-                m_CurrentRotation = rotUpdateEvent.data;// * m_CalibrationRotation;
+                m_CurrentRotation = vrEvent.GetData<Quaternion>(); // * m_CalibrationRotation;
             }
         }
 
@@ -208,12 +206,12 @@ namespace IVLab.MinVR3
 
         public void StartListening()
         {
-            VREngine.instance.eventManager.AddEventReceiver(this);
+            VREngine.instance.eventManager.AddEventListener(this);
         }
 
         public void StopListening()
         {
-            VREngine.instance?.eventManager?.RemoveEventReceiver(this);
+            VREngine.instance?.eventManager?.RemoveEventListener(this);
         }
     }
 

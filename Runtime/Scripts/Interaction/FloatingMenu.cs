@@ -19,7 +19,7 @@ namespace IVLab.MinVR3
 
         [Header("Input")]
         [Tooltip("[Optional] If set, the menu will only respond to input when the token is available (i.e., not already held by someone else).")]
-        public Token inputFocusToken;
+        public SharedToken inputFocusToken;
 
         [Tooltip("The cursor position event.")]
         public VREventPrototypeVector3 cursorPositionEvent = new VREventPrototypeVector3();
@@ -92,7 +92,6 @@ namespace IVLab.MinVR3
         // Start is called before the first frame update
         void Start()
         {
-            m_Listening = false;
             RebuildMenu();
         }
 
@@ -335,28 +334,21 @@ namespace IVLab.MinVR3
                 } else if (vrEvent.Matches(buttonUpEvent)) {
                     OnButtonUp();
                 } else if (vrEvent.Matches(cursorPositionEvent)) {
-                    OnTrackerMove((vrEvent as VREvent<Vector3>).data);
+                    OnTrackerMove(vrEvent.GetData<Vector3>());
                 } else if (vrEvent.Matches(cursorRotationEvent)) {
-                    OnTrackerRotate((vrEvent as VREvent<Quaternion>).data);
+                    OnTrackerRotate(vrEvent.GetData<Quaternion>());
                 }
             }
         }
 
-        public bool IsListening()
-        {
-            return m_Listening;
-        }
-
         public void StartListening()
         {
-            VREngine.instance.eventManager.AddEventReceiver(this);
-            m_Listening = true;
+            VREngine.instance.eventManager.AddEventListener(this);
         }
 
         public void StopListening()
         {
-            VREngine.instance?.eventManager?.RemoveEventReceiver(this);
-            m_Listening = false;
+            VREngine.instance?.eventManager?.RemoveEventListener(this);
         }
 
         // refs to dynamically created geometry
@@ -373,7 +365,6 @@ namespace IVLab.MinVR3
         // -1 = nothing, 0 = titlebar, 1..items.Count = menu items
         private int selected = -1;
         private bool buttonPressed = false;
-        private bool m_Listening;
     }
 
 } // namespace

@@ -79,7 +79,7 @@ namespace IVLab.MinVR3
         public void StartListening()
         {
             if (Application.isPlaying) {
-                VREngine.instance.eventManager.AddEventReceiver(this);
+                VREngine.instance.eventManager.AddEventListener(this);
             }
         }
 
@@ -93,7 +93,7 @@ namespace IVLab.MinVR3
         public void StopListening()
         {
             if (Application.isPlaying) {
-                VREngine.instance?.eventManager?.RemoveEventReceiver(this);
+                VREngine.instance?.eventManager?.RemoveEventListener(this);
             }
         }
 

@@ -59,14 +59,14 @@ namespace IVLab.MinVR3 {
                 cam = Camera.main;
             }
             if (Application.IsPlaying(gameObject)) { // play mode
-                VREngine.instance.eventManager.AddEventReceiver(this);
+                VREngine.instance.eventManager.AddEventListener(this);
             }
         }
 
         void OnDisable()
         {
             if (Application.IsPlaying(gameObject)) { // play mode
-                VREngine.instance.eventManager.RemoveEventReceiver(this);
+                VREngine.instance.eventManager.RemoveEventListener(this);
             }
         }
 
@@ -351,9 +351,9 @@ namespace IVLab.MinVR3 {
         public void OnVREvent(VREvent vrEvent)
         {
             if (vrEvent.Matches(headTrackingPosEvent)) {
-                cam.transform.position = (vrEvent as VREvent<Vector3>).data;
+                cam.transform.position = vrEvent.GetData<Vector3>();
             } else if (vrEvent.Matches(headTrackingRotEvent)) {
-                cam.transform.rotation = (vrEvent as VREvent<Quaternion>).data;
+                cam.transform.rotation = vrEvent.GetData<Quaternion>();
             }
         }
 
@@ -364,13 +364,13 @@ namespace IVLab.MinVR3 {
 
         public void StartListening()
         {
-            VREngine.instance.eventManager.AddEventReceiver(this);
+            VREngine.instance.eventManager.AddEventListener(this);
             m_Listening = true;
         }
 
         public void StopListening()
         {
-            VREngine.instance?.eventManager?.RemoveEventReceiver(this);
+            VREngine.instance?.eventManager?.RemoveEventListener(this);
             m_Listening = false;
         }
 

@@ -5,6 +5,14 @@ namespace IVLab.MinVR3
 {
 
     [Serializable]
+    public class VREventInt : VREventT<int>
+    {
+        public VREventInt(string name, int data) : base(name, data)
+        {
+        }
+    }
+
+    [Serializable]
     public class VREventPrototypeInt : VREventPrototypeT<int>
     {
         static public VREventPrototypeInt Create(string eventName)

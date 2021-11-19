@@ -7,7 +7,6 @@ namespace IVLab.MinVR3
 {
 
     [AddComponentMenu("MinVR/Input/Tuio Input")]
-    [DefaultExecutionOrder(-998)] // make sure this script runs right before VREngine.cs
     public class TuioInput : MonoBehaviour, IVREventProducer, TuioListener
     {
         private void Reset()
@@ -52,16 +51,6 @@ namespace IVLab.MinVR3
                     Debug.Log("Unable to connect to TUIO on port " + m_TuioPort);
                 }
             }
-        }
-
-        private void OnEnable()
-        {
-            VREngine.instance.eventManager.AddEventProducer(this);
-        }
-
-        private void OnDisable()
-        {
-            VREngine.instance?.eventManager?.RemoveEventProducer(this);
         }
 
         void OnDestroy()
@@ -123,7 +112,7 @@ namespace IVLab.MinVR3
             if (m_FlipYAxis) {
                 pos.y = 1.0f - pos.y;
             }
-            VREngine.instance.eventManager.QueueEvent(baseEventName + " DOWN", pos);
+            VREngine.instance.eventManager.QueueEvent(new VREventVector2(baseEventName + " DOWN", pos));
         }
 
         public void updateTuioCursor(TuioCursor tcur)
@@ -135,7 +124,7 @@ namespace IVLab.MinVR3
             if (m_FlipYAxis) {
                 pos.y = 1.0f - pos.y;
             }
-            VREngine.instance.eventManager.QueueEvent(baseEventName + "/Position", pos);
+            VREngine.instance.eventManager.QueueEvent(new VREventVector2(baseEventName + "/Position", pos));
         }
 
         public void removeTuioCursor(TuioCursor tcur)
@@ -147,7 +136,7 @@ namespace IVLab.MinVR3
             if (m_FlipYAxis) {
                 pos.y = 1.0f - pos.y;
             }
-            VREngine.instance.eventManager.QueueEvent(baseEventName + " UP", pos);
+            VREngine.instance.eventManager.QueueEvent(new VREventVector2(baseEventName + " UP", pos));
         }
 
 
