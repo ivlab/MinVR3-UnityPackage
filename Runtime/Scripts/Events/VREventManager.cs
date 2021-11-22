@@ -156,7 +156,8 @@ namespace IVLab.MinVR3
         {
             ProcessEventQueue();
         }
-        
+
+
         /// <summary>
         /// Not fast; intended only for populating dropdown lists in the Unity Editor
         /// </summary>
@@ -167,7 +168,6 @@ namespace IVLab.MinVR3
         }
 
 
-#if UNITY_EDITOR
         /// <summary>
         /// Not fast; intended only for populating dropdown lists in the Unity Editor.
         /// For a given data type, the dataTypeString should be equal to the value returned by
@@ -177,8 +177,7 @@ namespace IVLab.MinVR3
         /// <returns>A list of all events with the specified datatype produced by all sources
         static public List<IVREventPrototype> GetMatchingEventPrototypes(string dataTypeName, bool includeInactive = true)
         {
-            var expectedEvents = new List<IVREventPrototype>();
-
+#if UNITY_EDITOR
             IVREventProducer[] eventProducers;
             if (includeInactive) {
                 eventProducers = Resources.FindObjectsOfTypeAll<MonoBehaviour>().OfType<IVREventProducer>().ToArray();
@@ -186,6 +185,7 @@ namespace IVLab.MinVR3
                 eventProducers = FindObjectsOfType<MonoBehaviour>().OfType<IVREventProducer>().ToArray();
             }
 
+            var expectedEvents = new List<IVREventPrototype>();
             foreach (var producer in eventProducers) {
                 var expectedFromThisSource = producer.GetEventPrototypes();
                 foreach (IVREventPrototype e in expectedFromThisSource) {
@@ -199,9 +199,12 @@ namespace IVLab.MinVR3
                     }
                 }
             }
+
             return expectedEvents;
-        }
+#else
+            throw new Exception("VREventManager.GetMatchingEventPrototypes() should only be called from within the Unity Editor.");
 #endif
+        }
 
 
         [Tooltip("Logs events to the console as they are processed")]

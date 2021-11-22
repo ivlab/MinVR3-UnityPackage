@@ -915,31 +915,31 @@ MonoBehaviour:
   ROTATION_ANGLE_SCALE: 5
   VERTICAL_TRANSLATION_SCALE: 1.5
   m_Finger0DownEvent:
-    m_EventName: Touch/Finger 0 DOWN
+    m_EventName: Tuio/Touch 0/Down
     m_DataTypeName: Vector2
   m_Finger0MoveEvent:
-    m_EventName: Touch/Finger 0/Position
+    m_EventName: Tuio/Touch 0/Position
     m_DataTypeName: Vector2
   m_Finger0UpEvent:
-    m_EventName: Touch/Finger 0 UP
+    m_EventName: Tuio/Touch 0/Up
     m_DataTypeName: Vector2
   m_Finger1DownEvent:
-    m_EventName: Touch/Finger 1 DOWN
+    m_EventName: Tuio/Touch 1/Down
     m_DataTypeName: Vector2
   m_Finger1MoveEvent:
-    m_EventName: Touch/Finger 1/Position
+    m_EventName: Tuio/Touch 1/Position
     m_DataTypeName: Vector2
   m_Finger1UpEvent:
-    m_EventName: Touch/Finger 1 UP
+    m_EventName: Tuio/Touch 1/Up
     m_DataTypeName: Vector2
   m_Finger2DownEvent:
-    m_EventName: Touch/Finger 2 DOWN
+    m_EventName: Tuio/Touch 2/Down
     m_DataTypeName: Vector2
   m_Finger2MoveEvent:
-    m_EventName: Touch/Finger 2/Position
+    m_EventName: Tuio/Touch 2/Position
     m_DataTypeName: Vector2
   m_Finger2UpEvent:
-    m_EventName: Touch/Finger 2 UP
+    m_EventName: Tuio/Touch 2/Up
     m_DataTypeName: Vector2
 --- !u!4 &2063139280
 Transform:
@@ -1022,6 +1022,50 @@ PrefabInstance:
     - target: {fileID: 8567990180496866295, guid: 66da8955fdaf540b5947b5e9387060b5, type: 3}
       propertyPath: m_LocalPosition.z
       value: -5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8567990180643464337, guid: 66da8955fdaf540b5947b5e9387060b5, type: 3}
+      propertyPath: m_DeviceIdString
+      value: Tuio/
+      objectReference: {fileID: 0}
+    - target: {fileID: 8567990180643464337, guid: 66da8955fdaf540b5947b5e9387060b5, type: 3}
+      propertyPath: m_BaseEventNames.Array.data[0]
+      value: Touch 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8567990180643464337, guid: 66da8955fdaf540b5947b5e9387060b5, type: 3}
+      propertyPath: m_BaseEventNames.Array.data[1]
+      value: Touch 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8567990180643464337, guid: 66da8955fdaf540b5947b5e9387060b5, type: 3}
+      propertyPath: m_BaseEventNames.Array.data[2]
+      value: Touch 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8567990180643464337, guid: 66da8955fdaf540b5947b5e9387060b5, type: 3}
+      propertyPath: m_BaseEventNames.Array.data[3]
+      value: Touch 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8567990180643464337, guid: 66da8955fdaf540b5947b5e9387060b5, type: 3}
+      propertyPath: m_BaseEventNames.Array.data[4]
+      value: Touch 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8567990180643464337, guid: 66da8955fdaf540b5947b5e9387060b5, type: 3}
+      propertyPath: m_BaseEventNames.Array.data[5]
+      value: Touch 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8567990180643464337, guid: 66da8955fdaf540b5947b5e9387060b5, type: 3}
+      propertyPath: m_BaseEventNames.Array.data[6]
+      value: Touch 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8567990180643464337, guid: 66da8955fdaf540b5947b5e9387060b5, type: 3}
+      propertyPath: m_BaseEventNames.Array.data[7]
+      value: Touch 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8567990180643464337, guid: 66da8955fdaf540b5947b5e9387060b5, type: 3}
+      propertyPath: m_BaseEventNames.Array.data[8]
+      value: Touch 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8567990180643464337, guid: 66da8955fdaf540b5947b5e9387060b5, type: 3}
+      propertyPath: m_BaseEventNames.Array.data[9]
+      value: Touch 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66da8955fdaf540b5947b5e9387060b5, type: 3}

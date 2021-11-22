@@ -27,6 +27,12 @@ namespace IVLab.MinVR3
             m_EventName = "";
         }
 
+
+        public virtual IVREventPrototype Clone()
+        {
+            return Create(m_EventName);
+        }
+
         public string GetEventName()
         {
             return m_EventName;
@@ -48,7 +54,7 @@ namespace IVLab.MinVR3
         }
 
 
-        [SerializeField] private string m_EventName;
+        [SerializeField] protected string m_EventName;
         [SerializeField] private string m_DataTypeName;
     }
 

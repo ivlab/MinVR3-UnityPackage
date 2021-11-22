@@ -42,17 +42,17 @@ public class ShadowWIM : MonoBehaviour
 
 	public void Reset()
 	{
-		m_Finger0DownEvent = VREventPrototypeVector2.Create("Touch/Finger 0 DOWN");
-		m_Finger0MoveEvent = VREventPrototypeVector2.Create("Touch/Finger 0/Position");
-		m_Finger0UpEvent = VREventPrototypeVector2.Create("Touch/Finger 0 UP");
+		m_Finger0DownEvent = VREventPrototypeVector2.Create("Tuio/Touch 0/Down");
+		m_Finger0MoveEvent = VREventPrototypeVector2.Create("Tuio/Touch 0/Position");
+		m_Finger0UpEvent = VREventPrototypeVector2.Create("Tuio/Touch 0/Up");
 
-		m_Finger1DownEvent = VREventPrototypeVector2.Create("Touch/Finger 1 DOWN");
-		m_Finger1MoveEvent = VREventPrototypeVector2.Create("Touch/Finger 1/Position");
-		m_Finger1UpEvent = VREventPrototypeVector2.Create("Touch/Finger 1 UP");
+		m_Finger1DownEvent = VREventPrototypeVector2.Create("Tuio/Touch 1/Down");
+		m_Finger1MoveEvent = VREventPrototypeVector2.Create("Tuio/Touch 1/Position");
+		m_Finger1UpEvent = VREventPrototypeVector2.Create("Tuio/Touch 1/Up");
 
-		m_Finger2DownEvent = VREventPrototypeVector2.Create("Touch/Finger 2 DOWN");
-		m_Finger2MoveEvent = VREventPrototypeVector2.Create("Touch/Finger 2/Position");
-		m_Finger2UpEvent = VREventPrototypeVector2.Create("Touch/Finger 2 UP");
+		m_Finger2DownEvent = VREventPrototypeVector2.Create("Tuio/Touch 2/Down");
+		m_Finger2MoveEvent = VREventPrototypeVector2.Create("Tuio/Touch 2/Position");
+		m_Finger2UpEvent = VREventPrototypeVector2.Create("Tuio/Touch 2/Up");
 	}
 
 	public void Start()

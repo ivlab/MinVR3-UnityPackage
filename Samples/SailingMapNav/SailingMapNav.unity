@@ -415,10 +415,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ClipboardVR
       objectReference: {fileID: 0}
-    - target: {fileID: 4676839139211416829, guid: fc26ed4255fce490c8c3f577ec68c462, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4676839139211416830, guid: fc26ed4255fce490c8c3f577ec68c462, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -2118,22 +2114,22 @@ MonoBehaviour:
   m_RoomSpaceRoot: {fileID: 382665746}
   m_MapCamera: {fileID: 1776929796}
   m_Finger0DownEvent:
-    m_EventName: Touch/Finger 0 DOWN
+    m_EventName: Mobile/Touch 0/Down
     m_DataTypeName: Vector2
   m_Finger0MoveEvent:
-    m_EventName: Touch/Finger 0/Position
+    m_EventName: Mobile/Touch 0/Position
     m_DataTypeName: Vector2
   m_Finger0UpEvent:
-    m_EventName: Touch/Finger 0 UP
+    m_EventName: Mobile/Touch 0/Up
     m_DataTypeName: Vector2
   m_Finger1DownEvent:
-    m_EventName: Touch/Finger 1 DOWN
+    m_EventName: Mobile/Touch 1/Down
     m_DataTypeName: Vector2
   m_Finger1MoveEvent:
-    m_EventName: Touch/Finger 1/Position
+    m_EventName: Mobile/Touch 1/Position
     m_DataTypeName: Vector2
   m_Finger1UpEvent:
-    m_EventName: Touch/Finger 1 UP
+    m_EventName: Mobile/Touch 1/Up
     m_DataTypeName: Vector2
 --- !u!1 &1978940712
 GameObject:

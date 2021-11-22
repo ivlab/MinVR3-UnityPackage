@@ -19,6 +19,7 @@ namespace IVLab.MinVR3
 
         public string name {
             get => m_Name;
+            set => m_Name = value;
         }
 
         public string GetName()
@@ -40,6 +41,15 @@ namespace IVLab.MinVR3
         {
             return (GetName() == eventPrototype.GetEventName()) &&
                 (GetDataTypeName() == eventPrototype.GetEventDataTypeName());
+        }
+
+        /// <summary>
+        /// Does a deep copy of the VREvent, subclasses override this to preserve the correct type of event.
+        /// </summary>
+        /// <returns></returns>
+        public virtual VREvent Clone()
+        {
+            return new VREvent(m_Name);
         }
 
         /// <summary>
@@ -68,7 +78,7 @@ namespace IVLab.MinVR3
             info.AddValue("name", m_Name);
         }
 
-        private string m_Name;
+        protected string m_Name;
     }
 
 } // namespace

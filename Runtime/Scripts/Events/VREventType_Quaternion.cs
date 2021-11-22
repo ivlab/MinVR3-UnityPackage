@@ -11,6 +11,11 @@ namespace IVLab.MinVR3
         public VREventQuaternion(string name, Quaternion data) : base(name, data)
         {
         }
+
+        public override VREvent Clone()
+        {
+            return new VREventQuaternion(m_Name, m_Data);
+        }
     }
 
 
@@ -22,6 +27,11 @@ namespace IVLab.MinVR3
             var ep = new VREventPrototypeQuaternion();
             ep.SetEventName(eventName);
             return ep;
+        }
+
+        public override IVREventPrototype Clone()
+        {
+            return Create(m_EventName);
         }
     }
 

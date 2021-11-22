@@ -3,7 +3,7 @@
 namespace IVLab.MinVR3
 {
 
-    public interface IVREventFilter : IVREventProducer
+    public interface IVREventFilter
     {
         /// <summary>
         /// Each frame, IVREventFilters can process events and optionally modify them before the events

@@ -43,7 +43,7 @@ namespace IVLab.MinVR3
             base.GetObjectData(info, context);
         }
 
-        private T m_Data;
+        protected T m_Data;
     }
 
 } // namespace

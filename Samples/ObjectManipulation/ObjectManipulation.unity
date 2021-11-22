@@ -165,7 +165,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1608640912}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &194845406
 GameObject:
@@ -196,8 +196,354 @@ Transform:
   m_Children:
   - {fileID: 1497314917}
   m_Father: {fileID: 1608640912}
-  m_RootOrder: 8
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &380740324
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 380740325}
+  - component: {fileID: 380740329}
+  - component: {fileID: 380740328}
+  - component: {fileID: 380740327}
+  - component: {fileID: 380740326}
+  m_Layer: 0
+  m_Name: DH Event Aliases
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &380740325
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 380740324}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1608640912}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &380740326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 380740324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c035220ffaf4269aa4d2315c01a735, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AliasStrategy: 0
+  m_AliasEventName: _DH/Rotation
+  m_OriginalEvents:
+  - m_EventName: UnityXR/RightHand/Rotation
+    m_DataTypeName: Quaternion
+    m_DataTypeLocked: 0
+    m_EventPrototype:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeInt32:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeSingle:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector2:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector3:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeQuaternion:
+      m_EventName: 
+      m_DataTypeName: 
+  - m_EventName: zSpace/Stylus/Rotation
+    m_DataTypeName: Quaternion
+    m_DataTypeLocked: 0
+    m_EventPrototype:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeInt32:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeSingle:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector2:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector3:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeQuaternion:
+      m_EventName: 
+      m_DataTypeName: 
+  - m_EventName: FakeTrackers/Tracker 1/Rotation
+    m_DataTypeName: Quaternion
+    m_DataTypeLocked: 0
+    m_EventPrototype:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeInt32:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeSingle:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector2:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector3:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeQuaternion:
+      m_EventName: 
+      m_DataTypeName: 
+--- !u!114 &380740327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 380740324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c035220ffaf4269aa4d2315c01a735, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AliasStrategy: 0
+  m_AliasEventName: _DH/Position
+  m_OriginalEvents:
+  - m_EventName: UnityXR/RightHand/Position
+    m_DataTypeName: Vector3
+    m_DataTypeLocked: 0
+    m_EventPrototype:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeInt32:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeSingle:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector2:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector3:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeQuaternion:
+      m_EventName: 
+      m_DataTypeName: 
+  - m_EventName: zSpace/Stylus/Position
+    m_DataTypeName: Vector3
+    m_DataTypeLocked: 0
+    m_EventPrototype:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeInt32:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeSingle:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector2:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector3:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeQuaternion:
+      m_EventName: 
+      m_DataTypeName: 
+  - m_EventName: FakeTrackers/Tracker 1/Position
+    m_DataTypeName: Vector3
+    m_DataTypeLocked: 0
+    m_EventPrototype:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeInt32:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeSingle:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector2:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector3:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeQuaternion:
+      m_EventName: 
+      m_DataTypeName: 
+--- !u!114 &380740328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 380740324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c035220ffaf4269aa4d2315c01a735, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AliasStrategy: 0
+  m_AliasEventName: _DH/Btn Up
+  m_OriginalEvents:
+  - m_EventName: UnityXR/RightHand/Trigger/Up
+    m_DataTypeName: 
+    m_DataTypeLocked: 0
+    m_EventPrototype:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeInt32:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeSingle:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector2:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector3:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeQuaternion:
+      m_EventName: 
+      m_DataTypeName: 
+  - m_EventName: zSpace/Stylus/Primary Button/Up
+    m_DataTypeName: 
+    m_DataTypeLocked: 0
+    m_EventPrototype:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeInt32:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeSingle:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector2:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector3:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeQuaternion:
+      m_EventName: 
+      m_DataTypeName: 
+  - m_EventName: Mouse/Left/Up
+    m_DataTypeName: 
+    m_DataTypeLocked: 0
+    m_EventPrototype:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeInt32:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeSingle:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector2:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector3:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeQuaternion:
+      m_EventName: 
+      m_DataTypeName: 
+--- !u!114 &380740329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 380740324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c035220ffaf4269aa4d2315c01a735, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AliasStrategy: 0
+  m_AliasEventName: _DH/Btn Down
+  m_OriginalEvents:
+  - m_EventName: UnityXR/RightHand/Trigger/Down
+    m_DataTypeName: 
+    m_DataTypeLocked: 0
+    m_EventPrototype:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeInt32:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeSingle:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector2:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector3:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeQuaternion:
+      m_EventName: 
+      m_DataTypeName: 
+  - m_EventName: zSpace/Stylus/Primary Button/Down
+    m_DataTypeName: 
+    m_DataTypeLocked: 0
+    m_EventPrototype:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeInt32:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeSingle:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector2:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector3:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeQuaternion:
+      m_EventName: 
+      m_DataTypeName: 
+  - m_EventName: Mouse/Left/Down
+    m_DataTypeName: 
+    m_DataTypeLocked: 0
+    m_EventPrototype:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeInt32:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeSingle:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector2:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector3:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeQuaternion:
+      m_EventName: 
+      m_DataTypeName: 
 --- !u!1 &429965292
 GameObject:
   m_ObjectHideFlags: 0
@@ -209,7 +555,7 @@ GameObject:
   - component: {fileID: 429965294}
   - component: {fileID: 429965293}
   m_Layer: 0
-  m_Name: Directional Light
+  m_Name: Warm Light from Above
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -289,7 +635,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1608640912}
-  m_RootOrder: 6
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 65, y: 0, z: 0}
 --- !u!1 &702639173
 GameObject:
@@ -412,13 +758,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1511232417}
     m_Modifications:
-    - target: {fileID: 2363114344662124012, guid: 62ccb3b30286448ee857e92c832f2d5b, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3451567172576477581, guid: 62ccb3b30286448ee857e92c832f2d5b, type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3451567172576477581, guid: 62ccb3b30286448ee857e92c832f2d5b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -464,17 +806,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: VRConfig_zSpace
       objectReference: {fileID: 0}
-    - target: {fileID: 7853243300429548755, guid: 62ccb3b30286448ee857e92c832f2d5b, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 62ccb3b30286448ee857e92c832f2d5b, type: 3}
---- !u!20 &735262191 stripped
-Camera:
-  m_CorrespondingSourceObject: {fileID: 2478657936289068982, guid: 668a6857cf94f4c01bb8e8500f6363a0, type: 3}
-  m_PrefabInstance: {fileID: 1860133450}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &756163045
 GameObject:
   m_ObjectHideFlags: 0
@@ -504,7 +837,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1608640912}
-  m_RootOrder: 5
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &756163049
 MonoBehaviour:
@@ -521,28 +854,28 @@ MonoBehaviour:
   m_RoomToWorld: {fileID: 1608640912}
   m_RequireToken: {fileID: 141187366}
   m_Cursor0DownEvent:
-    m_EventName: DHand/Activate DOWN
+    m_EventName: _DH/Btn Down
     m_DataTypeName: 
   m_Cursor0PosEvent:
-    m_EventName: DHand/Position
+    m_EventName: _DH/Position
     m_DataTypeName: Vector3
   m_Cursor0RotEvent:
-    m_EventName: DHand/Rotation
+    m_EventName: _DH/Rotation
     m_DataTypeName: Quaternion
   m_Cursor0UpEvent:
-    m_EventName: DHand/Activate UP
+    m_EventName: _DH/Btn Up
     m_DataTypeName: 
   m_Cursor1DownEvent:
-    m_EventName: NDHand/Activate DOWN
+    m_EventName: _NDH/Btn Down
     m_DataTypeName: 
   m_Cursor1PosEvent:
-    m_EventName: NDHand/Position
+    m_EventName: _NDH/Position
     m_DataTypeName: Vector3
   m_Cursor1RotEvent:
-    m_EventName: DHand/Rotation
+    m_EventName: _NDH/Rotation
     m_DataTypeName: Quaternion
   m_Cursor1UpEvent:
-    m_EventName: NDHand/Activate UP
+    m_EventName: _NDH/Btn Up
     m_DataTypeName: 
   m_ObjectSelectedEvent:
     m_EventName: Select
@@ -688,7 +1021,7 @@ GameObject:
   - component: {fileID: 940979706}
   - component: {fileID: 940979707}
   m_Layer: 0
-  m_Name: Directional Light (1)
+  m_Name: Cool Light from Below
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -706,7 +1039,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1608640912}
-  m_RootOrder: 7
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!108 &940979707
 Light:
@@ -781,7 +1114,7 @@ GameObject:
   - component: {fileID: 1000235110}
   - component: {fileID: 1000235111}
   m_Layer: 0
-  m_Name: NDHand Cursor
+  m_Name: NDH Cursor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -800,7 +1133,7 @@ Transform:
   m_Children:
   - {fileID: 1772122261}
   m_Father: {fileID: 1608640912}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1000235111
 MonoBehaviour:
@@ -817,10 +1150,10 @@ MonoBehaviour:
   m_TrackingType: 0
   m_UpdateType: 0
   m_PositionEvent:
-    m_EventName: NDHand/Position
+    m_EventName: _NDH/Position
     m_DataTypeName: Vector3
   m_RotationEvent:
-    m_EventName: NDHand/Rotation
+    m_EventName: _NDH/Rotation
     m_DataTypeName: Quaternion
   m_CalibrationRotation: {x: 0, y: 0, z: 0, w: 0}
   m_CalibrationTranslation: {x: 0, y: 0, z: 0}
@@ -1001,6 +1334,268 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 534083198935067337, guid: dca87d82daaa94ca2ac32feb7fe1fd3d, type: 3}
   m_PrefabInstance: {fileID: 1511232416}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1563479557
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1563479558}
+  - component: {fileID: 1563479562}
+  - component: {fileID: 1563479561}
+  - component: {fileID: 1563479560}
+  - component: {fileID: 1563479559}
+  m_Layer: 0
+  m_Name: NDH Event Aliases
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1563479558
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1563479557}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1608640912}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1563479559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1563479557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c035220ffaf4269aa4d2315c01a735, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AliasStrategy: 0
+  m_AliasEventName: _NDH/Rotation
+  m_OriginalEvents:
+  - m_EventName: UnityXR/LeftHand/Rotation
+    m_DataTypeName: Quaternion
+    m_DataTypeLocked: 0
+    m_EventPrototype:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeInt32:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeSingle:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector2:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector3:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeQuaternion:
+      m_EventName: 
+      m_DataTypeName: 
+  - m_EventName: FakeTrackers/Tracker 2/Rotation
+    m_DataTypeName: Quaternion
+    m_DataTypeLocked: 0
+    m_EventPrototype:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeInt32:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeSingle:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector2:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector3:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeQuaternion:
+      m_EventName: 
+      m_DataTypeName: 
+--- !u!114 &1563479560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1563479557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c035220ffaf4269aa4d2315c01a735, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AliasStrategy: 0
+  m_AliasEventName: _NDH/Position
+  m_OriginalEvents:
+  - m_EventName: UnityXR/LeftHand/Position
+    m_DataTypeName: Vector3
+    m_DataTypeLocked: 0
+    m_EventPrototype:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeInt32:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeSingle:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector2:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector3:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeQuaternion:
+      m_EventName: 
+      m_DataTypeName: 
+  - m_EventName: FakeTrackers/Tracker 2/Position
+    m_DataTypeName: Vector3
+    m_DataTypeLocked: 0
+    m_EventPrototype:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeInt32:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeSingle:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector2:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector3:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeQuaternion:
+      m_EventName: 
+      m_DataTypeName: 
+--- !u!114 &1563479561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1563479557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c035220ffaf4269aa4d2315c01a735, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AliasStrategy: 0
+  m_AliasEventName: _NDH/Btn Up
+  m_OriginalEvents:
+  - m_EventName: UnityXR/LeftHand/Trigger/Up
+    m_DataTypeName: 
+    m_DataTypeLocked: 0
+    m_EventPrototype:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeInt32:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeSingle:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector2:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector3:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeQuaternion:
+      m_EventName: 
+      m_DataTypeName: 
+  - m_EventName: Keyboard/Space/Up
+    m_DataTypeName: 
+    m_DataTypeLocked: 0
+    m_EventPrototype:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeInt32:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeSingle:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector2:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector3:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeQuaternion:
+      m_EventName: 
+      m_DataTypeName: 
+--- !u!114 &1563479562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1563479557}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c035220ffaf4269aa4d2315c01a735, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AliasStrategy: 0
+  m_AliasEventName: _NDH/Btn Down
+  m_OriginalEvents:
+  - m_EventName: UnityXR/LeftHand/Trigger/Down
+    m_DataTypeName: 
+    m_DataTypeLocked: 0
+    m_EventPrototype:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeInt32:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeSingle:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector2:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector3:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeQuaternion:
+      m_EventName: 
+      m_DataTypeName: 
+  - m_EventName: Keyboard/Space/Down
+    m_DataTypeName: 
+    m_DataTypeLocked: 0
+    m_EventPrototype:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeInt32:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeSingle:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector2:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeVector3:
+      m_EventName: 
+      m_DataTypeName: 
+    m_EventPrototypeQuaternion:
+      m_EventName: 
+      m_DataTypeName: 
 --- !u!4 &1608640912 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8733674100138496754, guid: dca87d82daaa94ca2ac32feb7fe1fd3d, type: 3}
@@ -1201,37 +1796,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1511232417}
     m_Modifications:
-    - target: {fileID: 2478657936289068981, guid: 668a6857cf94f4c01bb8e8500f6363a0, type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 735262191}
-    - target: {fileID: 2478657936289068982, guid: 668a6857cf94f4c01bb8e8500f6363a0, type: 3}
-      propertyPath: m_ClearFlags
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2478657936289068982, guid: 668a6857cf94f4c01bb8e8500f6363a0, type: 3}
-      propertyPath: m_BackGroundColor.b
-      value: 0.1981132
-      objectReference: {fileID: 0}
-    - target: {fileID: 2478657936289068982, guid: 668a6857cf94f4c01bb8e8500f6363a0, type: 3}
-      propertyPath: m_BackGroundColor.g
-      value: 0.14271834
-      objectReference: {fileID: 0}
-    - target: {fileID: 2478657936289068982, guid: 668a6857cf94f4c01bb8e8500f6363a0, type: 3}
-      propertyPath: m_BackGroundColor.r
-      value: 0.10746707
-      objectReference: {fileID: 0}
-    - target: {fileID: 2478657936289068984, guid: 668a6857cf94f4c01bb8e8500f6363a0, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2478657936289068984, guid: 668a6857cf94f4c01bb8e8500f6363a0, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -3
-      objectReference: {fileID: 0}
     - target: {fileID: 2478657937237363830, guid: 668a6857cf94f4c01bb8e8500f6363a0, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2478657937237363830, guid: 668a6857cf94f4c01bb8e8500f6363a0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1438,7 +2005,7 @@ GameObject:
   - component: {fileID: 2124332665}
   - component: {fileID: 2124332667}
   m_Layer: 0
-  m_Name: DHand Cursor
+  m_Name: DH Cursor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1457,7 +2024,7 @@ Transform:
   m_Children:
   - {fileID: 702639174}
   m_Father: {fileID: 1608640912}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2124332667
 MonoBehaviour:
@@ -1474,10 +2041,10 @@ MonoBehaviour:
   m_TrackingType: 0
   m_UpdateType: 0
   m_PositionEvent:
-    m_EventName: DHand/Position
+    m_EventName: _DH/Position
     m_DataTypeName: Vector3
   m_RotationEvent:
-    m_EventName: DHand/Rotation
+    m_EventName: _DH/Rotation
     m_DataTypeName: Quaternion
   m_CalibrationRotation: {x: 0, y: 0, z: 0, w: 0}
   m_CalibrationTranslation: {x: 0, y: 0, z: 0}
@@ -1511,7 +2078,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1608640912}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2142361330
 MonoBehaviour:
@@ -1561,3 +2128,60 @@ MonoBehaviour:
     m_Bits: 0
   m_TouchRadius2: 0.01
   m_PointerDistance2: 1
+--- !u!1001 &4938273288688761656
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1511232417}
+    m_Modifications:
+    - target: {fileID: 3177763010429703281, guid: 2f0a1dc02fd37434b927d3816477ad4a, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3177763010429703281, guid: 2f0a1dc02fd37434b927d3816477ad4a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3177763010429703281, guid: 2f0a1dc02fd37434b927d3816477ad4a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3177763010429703281, guid: 2f0a1dc02fd37434b927d3816477ad4a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3177763010429703281, guid: 2f0a1dc02fd37434b927d3816477ad4a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3177763010429703281, guid: 2f0a1dc02fd37434b927d3816477ad4a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3177763010429703281, guid: 2f0a1dc02fd37434b927d3816477ad4a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3177763010429703281, guid: 2f0a1dc02fd37434b927d3816477ad4a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3177763010429703281, guid: 2f0a1dc02fd37434b927d3816477ad4a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3177763010429703281, guid: 2f0a1dc02fd37434b927d3816477ad4a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3177763010429703281, guid: 2f0a1dc02fd37434b927d3816477ad4a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3177763010429703282, guid: 2f0a1dc02fd37434b927d3816477ad4a, type: 3}
+      propertyPath: m_Name
+      value: VRConfig_UnityXR
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2f0a1dc02fd37434b927d3816477ad4a, type: 3}

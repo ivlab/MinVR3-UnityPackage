@@ -16,6 +16,11 @@ namespace IVLab.MinVR3
         {
             return false;
         }
+
+        public override VREvent Clone()
+        {
+            return new VREventGameObject(m_Name, m_Data);
+        }
     }
 
 
@@ -27,6 +32,11 @@ namespace IVLab.MinVR3
             var ep = new VREventPrototypeGameObject();
             ep.SetEventName(eventName);
             return ep;
+        }
+
+        public override IVREventPrototype Clone()
+        {
+            return Create(m_EventName);
         }
     }
 

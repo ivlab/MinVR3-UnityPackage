@@ -21,7 +21,6 @@ namespace IVLab.MinVR3
                 GameObject go = vrEvent.GetData<GameObject>();
                 Renderer r = go.GetComponent<Renderer>();
                 if (r != null) {
-                    Debug.Log("Highlight");
                     m_OrigMaterial = r.sharedMaterial;
                     r.material = m_HighlightMaterial;
                 }
@@ -29,7 +28,6 @@ namespace IVLab.MinVR3
                 GameObject go = vrEvent.GetData<GameObject>();
                 Renderer r = go.GetComponent<Renderer>();
                 if (r != null) {
-                    Debug.Log("Unhighlight");
                     r.material = m_OrigMaterial;
                 }
             }

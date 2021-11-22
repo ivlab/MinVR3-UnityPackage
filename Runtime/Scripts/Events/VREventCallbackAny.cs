@@ -141,6 +141,11 @@ namespace IVLab.MinVR3
             m_VRCallback.SetEventDataType(eventDataTypeName);
         }
 
+        public IVREventPrototype Clone()
+        {
+            return m_EventPrototype.Clone();
+        }
+
 
         // --- FORWARD THESE CALLS TO THE VRCALLBACK ---
 

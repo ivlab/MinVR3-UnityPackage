@@ -6,25 +6,26 @@ using TUIO;
 namespace IVLab.MinVR3
 {
 
-    [AddComponentMenu("MinVR/Input/Tuio Input")]
-    public class TuioInput : MonoBehaviour, IVREventProducer, TuioListener
+    [AddComponentMenu("MinVR/Input/Touch TUIO")]
+    public class TouchTuio : MonoBehaviour, IVREventProducer, TuioListener
     {
         private void Reset()
         {
+            m_DeviceIdString = "Tuio/";
             m_TuioPort = 3333;
             m_FlipYAxis = true;
             m_MaxTouches = 10;
             m_BaseEventNames = new[] {
-                "Touch/Finger 0",
-                "Touch/Finger 1",
-                "Touch/Finger 2",
-                "Touch/Finger 3",
-                "Touch/Finger 4",
-                "Touch/Finger 5",
-                "Touch/Finger 6",
-                "Touch/Finger 7",
-                "Touch/Finger 8",
-                "Touch/Finger 9"
+                "Touch 0",
+                "Touch 1",
+                "Touch 2",
+                "Touch 3",
+                "Touch 4",
+                "Touch 5",
+                "Touch 6",
+                "Touch 7",
+                "Touch 8",
+                "Touch 9"
             };
         }
 
@@ -79,7 +80,7 @@ namespace IVLab.MinVR3
 
         string GetBaseEventName(int fingerId)
         {
-            string baseName = "Touch/Finger" + fingerId;
+            string baseName = "Touch " + fingerId;
             if (fingerId < m_BaseEventNames.Length) {
                 baseName = m_BaseEventNames[fingerId];
             }
@@ -92,9 +93,9 @@ namespace IVLab.MinVR3
         {
             List<IVREventPrototype> eventsProduced = new List<IVREventPrototype>();
             for (int i = 0; i < m_MaxTouches; i++) {
-                eventsProduced.Add(VREventPrototypeVector2.Create(m_BaseEventNames[i] + " DOWN"));
-                eventsProduced.Add(VREventPrototypeVector2.Create(m_BaseEventNames[i] + "/Position"));
-                eventsProduced.Add(VREventPrototypeVector2.Create(m_BaseEventNames[i] + " UP"));
+                eventsProduced.Add(VREventPrototypeVector2.Create(m_DeviceIdString + m_BaseEventNames[i] + "/Down"));
+                eventsProduced.Add(VREventPrototypeVector2.Create(m_DeviceIdString + m_BaseEventNames[i] + "/Position"));
+                eventsProduced.Add(VREventPrototypeVector2.Create(m_DeviceIdString + m_BaseEventNames[i] + "/Up"));
             }
             return eventsProduced;
         }
@@ -112,7 +113,7 @@ namespace IVLab.MinVR3
             if (m_FlipYAxis) {
                 pos.y = 1.0f - pos.y;
             }
-            VREngine.instance.eventManager.QueueEvent(new VREventVector2(baseEventName + " DOWN", pos));
+            VREngine.instance.eventManager.QueueEvent(new VREventVector2(m_DeviceIdString + baseEventName + "/Down", pos));
         }
 
         public void updateTuioCursor(TuioCursor tcur)
@@ -124,7 +125,7 @@ namespace IVLab.MinVR3
             if (m_FlipYAxis) {
                 pos.y = 1.0f - pos.y;
             }
-            VREngine.instance.eventManager.QueueEvent(new VREventVector2(baseEventName + "/Position", pos));
+            VREngine.instance.eventManager.QueueEvent(new VREventVector2(m_DeviceIdString + baseEventName + "/Position", pos));
         }
 
         public void removeTuioCursor(TuioCursor tcur)
@@ -136,7 +137,7 @@ namespace IVLab.MinVR3
             if (m_FlipYAxis) {
                 pos.y = 1.0f - pos.y;
             }
-            VREngine.instance.eventManager.QueueEvent(new VREventVector2(baseEventName + " UP", pos));
+            VREngine.instance.eventManager.QueueEvent(new VREventVector2(m_DeviceIdString + baseEventName + "/Up", pos));
         }
 
 
@@ -187,6 +188,9 @@ namespace IVLab.MinVR3
 
 
         // ---- End Tuio Listener Callback Functions ----
+
+        [Tooltip("Prepended to the name of each VREvent produced")]
+        [SerializeField] private string m_DeviceIdString;
 
         [Tooltip("Port that the TuioServer implementation is running on (usually 3333).")]
         [SerializeField] private int m_TuioPort;

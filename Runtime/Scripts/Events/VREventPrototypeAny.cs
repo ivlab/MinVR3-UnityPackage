@@ -39,6 +39,14 @@ namespace IVLab.MinVR3
             InitAllEventPrototypes();
         }
 
+        public IVREventPrototype Clone()
+        {
+            var ep = new VREventPrototypeAny();
+            ep.SetEventDataType(m_DataTypeName);
+            ep.SetEventName(m_EventName);
+            return ep;
+        }
+
         public bool SupportsDataType(Type dataType)
         {
             string name = "";

@@ -1,12 +1,8 @@
 ﻿// This functionality is only available in projects using Unity's New Input System
 #if ENABLE_INPUT_SYSTEM
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
-
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 
@@ -19,8 +15,8 @@ namespace IVLab.MinVR3 {
     /// using the Unity Remote App.  Use the TouchInput class if you need to do that now while we wait for them to
     /// upgrade Unity Remote.
     /// </summary>
-    [AddComponentMenu("MinVR/Input/New Input System/UnityInputActions")]
-    public class UnityInputActionsNewSystem : MonoBehaviour, IVREventProducer
+    [AddComponentMenu("MinVR/Input/Unity InputActions To VREvents")]
+    public class InputActionsToVREvents : MonoBehaviour, IVREventProducer
     {
         /// <summary>
         /// All ActionMaps in these assets are automatically enabled.  These serve as the input sources for
@@ -51,9 +47,9 @@ namespace IVLab.MinVR3 {
 
         void Reset()
         {
+            m_DeviceIdString = "InputActions/";
             m_InputActionAssets = new List<InputActionAsset>();
-
-            m_BaseEventNames = new[] {
+            m_TouchEventNames = new[] {
                 "Touch/Finger 0",
                 "Touch/Finger 1",
                 "Touch/Finger 2",
@@ -112,9 +108,9 @@ namespace IVLab.MinVR3 {
 
             if (action.type == InputActionType.Button) {
                 if (phase == InputActionPhase.Started) {
-                    return name + " DOWN";
+                    return name + "/Down";
                 } else if (phase == InputActionPhase.Canceled) {
-                    return name + " UP";
+                    return name + "/Up";
                 }
             } else if (phase == InputActionPhase.Performed) {
                 return name;
@@ -153,27 +149,27 @@ namespace IVLab.MinVR3 {
                 }
 
                 string baseName = "Touch/Finger " + fingerId;
-                if (fingerId < m_BaseEventNames.Length) {
-                    baseName = m_BaseEventNames[fingerId];
+                if (fingerId < m_TouchEventNames.Length) {
+                    baseName = m_TouchEventNames[fingerId];
                 }
 
                 switch (touch.phase) {
                     case UnityEngine.InputSystem.TouchPhase.Began:
-                        VREngine.instance.eventManager.QueueEvent(new VREvent(baseName + " DOWN"));
-                        VREngine.instance.eventManager.QueueEvent(new VREventVector2(baseName + "/Position", touch.position));
+                        VREngine.instance.eventManager.QueueEvent(new VREvent(m_DeviceIdString + baseName + "/Down"));
+                        VREngine.instance.eventManager.QueueEvent(new VREventVector2(m_DeviceIdString + baseName + "/Position", touch.position));
                         break;
 
                     // Determine direction by comparing the current touch position with the initial one.
                     case UnityEngine.InputSystem.TouchPhase.Moved:
-                        VREngine.instance.eventManager.QueueEvent(new VREventVector2(baseName + "/Position", touch.position));
+                        VREngine.instance.eventManager.QueueEvent(new VREventVector2(m_DeviceIdString + baseName + "/Position", touch.position));
                         if (m_IncludePressureEvents) {
-                            VREngine.instance.eventManager.QueueEvent(new VREventFloat(baseName + "/Pressure", touch.pressure));
+                            VREngine.instance.eventManager.QueueEvent(new VREventFloat(m_DeviceIdString + baseName + "/Pressure", touch.pressure));
                         }
                         break;
 
                     // Report that a direction has been chosen when the finger is lifted.
                     case UnityEngine.InputSystem.TouchPhase.Ended:
-                        VREngine.instance.eventManager.QueueEvent(new VREvent(baseName + " UP"));
+                        VREngine.instance.eventManager.QueueEvent(new VREvent(m_DeviceIdString + baseName + "/Up"));
                         m_uidToFinger.Remove(uid);
                         break;
                 }
@@ -187,17 +183,17 @@ namespace IVLab.MinVR3 {
                 }
 
                 if ((expectedDataType == "") || (expectedDataType == "Button")) {
-                    VREngine.instance.eventManager.QueueEvent(new VREvent(eventName));
+                    VREngine.instance.eventManager.QueueEvent(new VREvent(m_DeviceIdString + eventName));
                 } else if (expectedDataType == typeof(int).Name) {
-                    VREngine.instance.eventManager.QueueEvent(new VREventInt(eventName, context.ReadValue<int>()));
+                    VREngine.instance.eventManager.QueueEvent(new VREventInt(m_DeviceIdString + eventName, context.ReadValue<int>()));
                 } else if (expectedDataType == typeof(float).Name) {
-                    VREngine.instance.eventManager.QueueEvent(new VREventFloat(eventName, context.ReadValue<float>()));
+                    VREngine.instance.eventManager.QueueEvent(new VREventFloat(m_DeviceIdString + eventName, context.ReadValue<float>()));
                 } else if (expectedDataType == typeof(Vector2).Name) {
-                    VREngine.instance.eventManager.QueueEvent(new VREventVector2(eventName, context.ReadValue<Vector2>()));
+                    VREngine.instance.eventManager.QueueEvent(new VREventVector2(m_DeviceIdString + eventName, context.ReadValue<Vector2>()));
                 } else if (expectedDataType == typeof(Vector3).Name) {
-                    VREngine.instance.eventManager.QueueEvent(new VREventVector3(eventName, context.ReadValue<Vector3>()));
+                    VREngine.instance.eventManager.QueueEvent(new VREventVector3(m_DeviceIdString + eventName, context.ReadValue<Vector3>()));
                 } else if (expectedDataType == typeof(Quaternion).Name) {
-                    VREngine.instance.eventManager.QueueEvent(new VREventQuaternion(eventName, context.ReadValue<Quaternion>()));
+                    VREngine.instance.eventManager.QueueEvent(new VREventQuaternion(m_DeviceIdString + eventName, context.ReadValue<Quaternion>()));
                 } else {
                     Debug.Log($"Not queueing event '{eventName}', which has an unrecognized expected data type = '" + expectedDataType + "'");
                 }
@@ -214,21 +210,21 @@ namespace IVLab.MinVR3 {
                     foreach (var actionMap in actionAsset.actionMaps) {
                         foreach (var action in actionMap) {
                             if (action.type == InputActionType.Button) {
-                                eventsProduced.Add(VREventPrototype.Create(GetEventName(action, InputActionPhase.Started)));
-                                eventsProduced.Add(VREventPrototype.Create(GetEventName(action, InputActionPhase.Canceled)));
+                                eventsProduced.Add(VREventPrototype.Create(m_DeviceIdString + GetEventName(action, InputActionPhase.Started)));
+                                eventsProduced.Add(VREventPrototype.Create(m_DeviceIdString + GetEventName(action, InputActionPhase.Canceled)));
                             } else {
                                 if (action.expectedControlType == "") {
-                                    eventsProduced.Add(VREventPrototype.Create(GetEventName(action, InputActionPhase.Performed)));
+                                    eventsProduced.Add(VREventPrototype.Create(m_DeviceIdString + GetEventName(action, InputActionPhase.Performed)));
                                 } else if (action.expectedControlType == "Integer") {
-                                    eventsProduced.Add(VREventPrototypeInt.Create(GetEventName(action, InputActionPhase.Performed)));
+                                    eventsProduced.Add(VREventPrototypeInt.Create(m_DeviceIdString + GetEventName(action, InputActionPhase.Performed)));
                                 } else if ((action.expectedControlType == "Analog") || (action.expectedControlType == "Axis")) {
-                                    eventsProduced.Add(VREventPrototypeFloat.Create(GetEventName(action, InputActionPhase.Performed)));
+                                    eventsProduced.Add(VREventPrototypeFloat.Create(m_DeviceIdString + GetEventName(action, InputActionPhase.Performed)));
                                 } else if ((action.expectedControlType == "Vector2") || (action.expectedControlType == "Stick") || (action.expectedControlType == "Dpad")) {
-                                    eventsProduced.Add(VREventPrototypeVector2.Create(GetEventName(action, InputActionPhase.Performed)));
+                                    eventsProduced.Add(VREventPrototypeVector2.Create(m_DeviceIdString + GetEventName(action, InputActionPhase.Performed)));
                                 } else if (action.expectedControlType == "Vector3") {
-                                    eventsProduced.Add(VREventPrototypeVector3.Create(GetEventName(action, InputActionPhase.Performed)));
+                                    eventsProduced.Add(VREventPrototypeVector3.Create(m_DeviceIdString + GetEventName(action, InputActionPhase.Performed)));
                                 } else if (action.expectedControlType == "Quaternion") {
-                                    eventsProduced.Add(VREventPrototypeQuaternion.Create(GetEventName(action, InputActionPhase.Performed)));
+                                    eventsProduced.Add(VREventPrototypeQuaternion.Create(m_DeviceIdString + GetEventName(action, InputActionPhase.Performed)));
                                 } else if (action.expectedControlType == "Touch") {
                                     expectingTouchEvents = true;
                                 } else {
@@ -244,13 +240,13 @@ namespace IVLab.MinVR3 {
             // InputActions maps, but we want to add them to the list of possible events if any of the InputActions are
             // 
             if (expectingTouchEvents) {
-                for (int i = 0; i < m_BaseEventNames.Length; i++) {
-                    eventsProduced.Add(VREventPrototype.Create(m_BaseEventNames[i] + " DOWN"));
-                    eventsProduced.Add(VREventPrototypeVector2.Create(m_BaseEventNames[i] + "/Position"));
+                for (int i = 0; i < m_TouchEventNames.Length; i++) {
+                    eventsProduced.Add(VREventPrototype.Create(m_DeviceIdString + m_TouchEventNames[i] + "/Down"));
+                    eventsProduced.Add(VREventPrototypeVector2.Create(m_DeviceIdString + m_TouchEventNames[i] + "/Position"));
                     if (m_IncludePressureEvents) {
-                        eventsProduced.Add(VREventPrototypeFloat.Create(m_BaseEventNames[i] + "/Pressure"));
+                        eventsProduced.Add(VREventPrototypeFloat.Create(m_DeviceIdString + m_TouchEventNames[i] + "/Pressure"));
                     }
-                    eventsProduced.Add(VREventPrototype.Create(m_BaseEventNames[i] + " UP"));
+                    eventsProduced.Add(VREventPrototype.Create(m_DeviceIdString + m_TouchEventNames[i] + "/Up"));
                 }
             }
 
@@ -258,13 +254,14 @@ namespace IVLab.MinVR3 {
         }
 
 
+        [Tooltip("Prepended to the name of each VREvent produced")]
+        [SerializeField] private string m_DeviceIdString = "InputActions/";
 
+        [Header("Input Source(s)")]
         [Tooltip("One or more Unity InputActionAssets that provide user input to the MinVRInput system")]
         [SerializeField] private List<InputActionAsset> m_InputActionAssets;
 
-        [Tooltip("If true, each touch position update event will be followed immediately by a pressure update event.")]
-        [SerializeField] private bool m_IncludePressureEvents = true;
-
+        [Header("Multi-touch Event Handling")]
         [Tooltip("Similar to the way you can assign a custom VREvent name to a keyboard keypress event, you can " +
             "also customize the touch event names.  To remap every possible event, the size of the array should " +
             "equal the max number of simultaneous touches supported by the hardware.  A default name will be used " +
@@ -272,9 +269,11 @@ namespace IVLab.MinVR3 {
             "telling whether the exact same finger was lifted and then placed down again, so indices are consistent " +
             "between the DOWN and UP events, but once an UP event is received there is no guarantee that index 0 " +
             "will be assigned to the same physical finger the next time that finger produces a touch.")]
-        [SerializeField] private string[] m_BaseEventNames;
+        [SerializeField] private string[] m_TouchEventNames;
 
-  
+        [Tooltip("If true, each touch position update event will be followed immediately by a pressure update event.")]
+        [SerializeField] private bool m_IncludePressureEvents = true;
+
         // maps the uid's returned by multi-touch devices to a "finger" id, where fingerIds range from 0 to the
         // max number of simultaneously supported touches on the system.  Finger IDs are consistent while the
         // touch persists, but IDs are reused for later touches.  So, you'll always get the same ID for Position

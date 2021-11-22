@@ -7,13 +7,16 @@ using zSpace.Core.Input;
 namespace IVLab.MinVR3
 {
     /// <summary>
-    /// Grabs input from the zSpace using the zCore library and converts that input to VREvents
+    /// Grabs input from the zSpace using the zCore library and converts head tracking and stylus
+    /// input to VREvents.  The dependency on zSpace's zCore API means this only works in
+    /// Unity 2019.x for now.
     /// </summary>
-    [AddComponentMenu("MinVR/Input/zSpace Input")]
-    public class zSpaceInput : MonoBehaviour, IPolledInputDevice
+    [AddComponentMenu("MinVR/Input/zSpace (Unity 2019.x)")]
+    public class zSpace : MonoBehaviour, IPolledInputDevice
     {
         void Reset()
         {
+            m_DeviceIdString = "zSpace/";
             m_HeadEventBaseName = "Head";
             m_StylusEventBaseName = "Stylus";
             m_ButtonEventBaseNames = new string[3];
@@ -47,29 +50,29 @@ namespace IVLab.MinVR3
         public void PollForEvents(ref List<VREvent> eventQueue)
         {
             if (m_zStylus.transform.position != m_LastStylusPos) {
-                eventQueue.Add(new VREventVector3(m_StylusEventBaseName + "/Position", m_zStylus.transform.position));
+                eventQueue.Add(new VREventVector3(m_DeviceIdString + m_StylusEventBaseName + "/Position", m_zStylus.transform.position));
                 m_LastStylusPos = m_zStylus.transform.position;
             }
             if (m_zStylus.transform.rotation != m_LastStylusRot) {
-                eventQueue.Add(new VREventQuaternion(m_StylusEventBaseName + "/Rotation", m_zStylus.transform.rotation));
+                eventQueue.Add(new VREventQuaternion(m_DeviceIdString + m_StylusEventBaseName + "/Rotation", m_zStylus.transform.rotation));
                 m_LastStylusRot = m_zStylus.transform.rotation;
             }
 
             if (m_zCameraRig.transform.position != m_LastHeadPos) {
-                eventQueue.Add(new VREventVector3(m_HeadEventBaseName + "/Position", m_zCameraRig.transform.position));
+                eventQueue.Add(new VREventVector3(m_DeviceIdString + m_HeadEventBaseName + "/Position", m_zCameraRig.transform.position));
                 m_LastHeadPos = m_zCameraRig.transform.position;
             }
             if (m_zCameraRig.transform.rotation != m_LastHeadRot) {
-                eventQueue.Add(new VREventQuaternion(m_HeadEventBaseName + "/Rotation", m_zCameraRig.transform.rotation));
+                eventQueue.Add(new VREventQuaternion(m_DeviceIdString + m_HeadEventBaseName + "/Rotation", m_zCameraRig.transform.rotation));
                 m_LastHeadRot = m_zCameraRig.transform.rotation;
             }
 
             for (int i = 0; i < 3; i++) {
                 if (m_zStylus.GetButtonDown(i)) {
-                    eventQueue.Add(new VREvent(m_ButtonEventBaseNames[i] + " DOWN"));
+                    eventQueue.Add(new VREvent(m_DeviceIdString + m_ButtonEventBaseNames[i] + "/Down"));
                 }
                 if (m_zStylus.GetButtonUp(i)) {
-                    eventQueue.Add(new VREvent(m_ButtonEventBaseNames[i] + " UP"));
+                    eventQueue.Add(new VREvent(m_DeviceIdString + m_ButtonEventBaseNames[i] + "/Up"));
                 }
             }
         }
@@ -77,18 +80,20 @@ namespace IVLab.MinVR3
         public List<IVREventPrototype> GetEventPrototypes()
         {
             List<IVREventPrototype> eventsProduced = new List<IVREventPrototype>();
-            eventsProduced.Add(VREventPrototypeVector3.Create(m_HeadEventBaseName + "/Position"));
-            eventsProduced.Add(VREventPrototypeQuaternion.Create(m_HeadEventBaseName + "/Rotation"));
-            eventsProduced.Add(VREventPrototypeVector3.Create(m_StylusEventBaseName + "/Position"));
-            eventsProduced.Add(VREventPrototypeQuaternion.Create(m_StylusEventBaseName + "/Rotation"));
+            eventsProduced.Add(VREventPrototypeVector3.Create(m_DeviceIdString + m_HeadEventBaseName + "/Position"));
+            eventsProduced.Add(VREventPrototypeQuaternion.Create(m_DeviceIdString + m_HeadEventBaseName + "/Rotation"));
+            eventsProduced.Add(VREventPrototypeVector3.Create(m_DeviceIdString + m_StylusEventBaseName + "/Position"));
+            eventsProduced.Add(VREventPrototypeQuaternion.Create(m_DeviceIdString + m_StylusEventBaseName + "/Rotation"));
             for (int i = 0; i < m_ButtonEventBaseNames.Length; i++) {
-                eventsProduced.Add(VREventPrototype.Create(m_ButtonEventBaseNames[i] + " DOWN"));
-                eventsProduced.Add(VREventPrototype.Create(m_ButtonEventBaseNames[i] + " UP"));
+                eventsProduced.Add(VREventPrototype.Create(m_DeviceIdString + m_ButtonEventBaseNames[i] + "/Down"));
+                eventsProduced.Add(VREventPrototype.Create(m_DeviceIdString + m_ButtonEventBaseNames[i] + "/Up"));
             }
 
             return eventsProduced;
         }
 
+        [Tooltip("Prepended to the name of each VREvent produced")]
+        [SerializeField] private string m_DeviceIdString;
         [SerializeField] private string m_HeadEventBaseName;
         [SerializeField] private string m_StylusEventBaseName;
         [SerializeField] private string[] m_ButtonEventBaseNames;

@@ -13,6 +13,8 @@ namespace IVLab.MinVR3
         string GetEventName();
         string GetEventDataTypeName();
         string GetEventDisplayName();
+
+        IVREventPrototype Clone();
     }
 
 } // namespace

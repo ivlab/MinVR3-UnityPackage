@@ -51,12 +51,12 @@ namespace IVLab.MinVR3
             if (m_HaveData1 && m_HaveData2) {
                 if (!m_InProximity) {
                     if ((m_Pos2 - m_Pos1).magnitude < m_ProximityThreshold) {
-                        VREngine.instance.eventManager.InsertInQueue(new VREvent(m_BaseEventName + " ON"));
+                        VREngine.instance.eventManager.InsertInQueue(new VREvent(m_BaseEventName + "/Close"));
                         m_InProximity = true;
                     }
                 } else {
                     if ((m_Pos2 - m_Pos1).magnitude > m_ProximityThreshold) {
-                        VREngine.instance.eventManager.InsertInQueue(new VREvent(m_BaseEventName + " OFF"));
+                        VREngine.instance.eventManager.InsertInQueue(new VREvent(m_BaseEventName + "/Far"));
                         m_InProximity = false;
                     }
                 }
@@ -66,8 +66,8 @@ namespace IVLab.MinVR3
         public List<IVREventPrototype> GetEventPrototypes()
         {
             List<IVREventPrototype> eventPrototypes = new List<IVREventPrototype>();
-            eventPrototypes.Add(VREventPrototype.Create(m_BaseEventName + " ON"));
-            eventPrototypes.Add(VREventPrototype.Create(m_BaseEventName + " OFF"));
+            eventPrototypes.Add(VREventPrototype.Create(m_BaseEventName + "/Close"));
+            eventPrototypes.Add(VREventPrototype.Create(m_BaseEventName + "/Far"));
             return eventPrototypes;
         }
 

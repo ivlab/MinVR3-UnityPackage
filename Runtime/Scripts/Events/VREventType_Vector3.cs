@@ -11,6 +11,11 @@ namespace IVLab.MinVR3
         public VREventVector3(string name, Vector3 data) : base(name, data)
         {
         }
+
+        public override VREvent Clone()
+        {
+            return new VREventVector3(m_Name, m_Data);
+        }
     }
 
     [Serializable]
@@ -21,6 +26,11 @@ namespace IVLab.MinVR3
             var ep = new VREventPrototypeVector3();
             ep.SetEventName(eventName);
             return ep;
+        }
+
+        public override IVREventPrototype Clone()
+        {
+            return Create(m_EventName);
         }
     }
 
