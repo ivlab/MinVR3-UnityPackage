@@ -67,6 +67,7 @@ namespace IVLab.MinVR3 {
         private int curTracker;
         private float lastx;
         private float lasty;
+        private bool initialized;
 
 
         private void OnEnable()
@@ -115,11 +116,21 @@ namespace IVLab.MinVR3 {
             tracker1Pos = initialTracker1Pos;
             tracker1Rot = Quaternion.Euler(initialTracker1Rot);
             tracker2Pos = initialTracker2Pos;
-            tracker2Rot = Quaternion.Euler(initialTracker1Rot);
+            tracker2Rot = Quaternion.Euler(initialTracker2Rot);
+            initialized = false;
         }
 
         public void PollForEvents(ref List<VREvent> eventQueue)
         {
+            if (!initialized) {
+                eventQueue.Add(new VREventVector3(m_DeviceIdString + headTrackerBaseName + "/Position", headTrackerPos));
+                eventQueue.Add(new VREventQuaternion(m_DeviceIdString + headTrackerBaseName + "/Rotation", headTrackerRot));
+                eventQueue.Add(new VREventVector3(m_DeviceIdString + tracker1BaseName + "/Position", tracker1Pos));
+                eventQueue.Add(new VREventQuaternion(m_DeviceIdString + tracker1BaseName + "/Rotation", tracker1Rot));
+                eventQueue.Add(new VREventVector3(m_DeviceIdString + tracker2BaseName + "/Position", tracker2Pos));
+                eventQueue.Add(new VREventQuaternion(m_DeviceIdString + tracker2BaseName + "/Rotation", tracker2Rot));
+                initialized = true;
+            }
             QueueHeadTrackerEvents(ref eventQueue);
             QueueRegularTrackerEvents(ref eventQueue);
         }

@@ -50,12 +50,14 @@ namespace IVLab.MinVR3
             return cb;
         }
 
+#if UNITY_EDITOR
         public static VRCallbackGameObject CreateInEditor(UnityAction<GameObject> callbackFunc)
         {
             var cb = new VRCallbackGameObject();
             cb.AddPersistentListener(callbackFunc);
             return cb;
         }
+#endif
     }
 
     [Serializable]
@@ -76,6 +78,7 @@ namespace IVLab.MinVR3
             return cb;
         }
 
+#if UNITY_EDITOR
         public static VREventCallbackGameObject CreateInEditor(string listenForEvent, UnityAction<GameObject> callbackFunc = null)
         {
             return CreateInEditor(VREventPrototypeGameObject.Create(listenForEvent), callbackFunc);
@@ -90,6 +93,7 @@ namespace IVLab.MinVR3
             }
             return cb;
         }
+#endif
     }
 
 } // end namespace

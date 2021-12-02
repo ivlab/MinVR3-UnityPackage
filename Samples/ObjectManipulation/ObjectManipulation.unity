@@ -1844,6 +1844,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: VRConfig_DesktopVRSimulator
       objectReference: {fileID: 0}
+    - target: {fileID: 2478657937237363831, guid: 668a6857cf94f4c01bb8e8500f6363a0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 668a6857cf94f4c01bb8e8500f6363a0, type: 3}
 --- !u!1001 &1920204345
@@ -2182,6 +2186,18 @@ PrefabInstance:
     - target: {fileID: 3177763010429703282, guid: 2f0a1dc02fd37434b927d3816477ad4a, type: 3}
       propertyPath: m_Name
       value: VRConfig_UnityXR
+      objectReference: {fileID: 0}
+    - target: {fileID: 3177763010429703282, guid: 2f0a1dc02fd37434b927d3816477ad4a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3177763010864698757, guid: 2f0a1dc02fd37434b927d3816477ad4a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3177763010864698757, guid: 2f0a1dc02fd37434b927d3816477ad4a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2f0a1dc02fd37434b927d3816477ad4a, type: 3}
