@@ -10,24 +10,54 @@ namespace IVLab.MinVR3
 
         public void Painting_OnUpdate()
         {
-            GameObject paintBlob;
-            if (paintBlobPrefab != null) {
-                paintBlob = Instantiate(paintBlobPrefab);
-                Material tmpMat = new Material(paintBlob.GetComponent<Renderer>().sharedMaterial);
+
+            // Find way for continous line
+            // get previous postion and current position
+            // draw triangles between them
+            GameObject paintBlobOne;
+
+            if (paintBlobPrefabOne != null) {
+                paintBlobOne = Instantiate(paintBlobPrefabOne);
+                Material tmpMat = new Material(paintBlobOne.GetComponent<Renderer>().sharedMaterial);
                 float r = (float)(brushCursor.transform.position.x - Math.Truncate(brushCursor.transform.position.x));
                 float g = (float)(brushCursor.transform.position.y - Math.Truncate(brushCursor.transform.position.y));
                 float b = (float)(brushCursor.transform.position.z - Math.Truncate(brushCursor.transform.position.z));
                 tmpMat.color = new Color(r,g,b);
-                paintBlob.GetComponent<Renderer>().sharedMaterial = tmpMat;
+                paintBlobOne.GetComponent<Renderer>().sharedMaterial = tmpMat;
             } else {
-                paintBlob = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                paintBlobOne = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             }
-            paintBlob.transform.parent = artworkParent.transform;
-            paintBlob.transform.position = brushCursor.transform.position;
-            paintBlob.transform.rotation = brushCursor.transform.rotation;
-            Vector3 s = paintBlob.transform.localScale;
-            s.Scale(brushCursor.transform.localScale);
-            paintBlob.transform.localScale = s;
+            paintBlobOne.transform.parent = artworkParent.transform;
+            paintBlobOne.transform.position = brushCursor.transform.position;
+            paintBlobOne.transform.rotation = brushCursor.transform.rotation;
+            Vector3 sOne = paintBlobOne.transform.localScale;
+            sOne.Scale(brushCursor.transform.localScale);
+            paintBlobOne.transform.localScale = sOne;
+            
+            
+            GameObject paintBlobTwo;
+
+            if (paintBlobPrefabTwo != null) {
+                paintBlobTwo = Instantiate(paintBlobPrefabTwo);
+                Material tmpMat = new Material(paintBlobTwo.GetComponent<Renderer>().sharedMaterial);
+                float r = (float)(brushCursor.transform.position.x - Math.Truncate(brushCursor.transform.position.x));
+                float g = (float)(brushCursor.transform.position.y - Math.Truncate(brushCursor.transform.position.y));
+                float b = (float)(brushCursor.transform.position.z - Math.Truncate(brushCursor.transform.position.z));
+                tmpMat.color = new Color(r,g,b);
+                paintBlobTwo.GetComponent<Renderer>().sharedMaterial = tmpMat;
+            } else {
+                paintBlobTwo = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            }
+            
+
+            paintBlobTwo.transform.parent = artworkParent.transform;
+            paintBlobTwo.transform.position = brushCursor.transform.position;
+            paintBlobTwo.transform.rotation = brushCursor.transform.rotation;
+            Vector3 sTwo = paintBlobTwo.transform.localScale;
+            sTwo.Scale(brushCursor.transform.localScale);
+            paintBlobTwo.transform.localScale = sTwo;
+
+
         }
 
 
@@ -83,7 +113,9 @@ namespace IVLab.MinVR3
         public GameObject artworkParent;
 
         [Tooltip("Prefab for a single `paint blob' deposited as the brush moves around")]
-        public GameObject paintBlobPrefab;
+        public GameObject paintBlobPrefabOne;
+        public GameObject paintBlobPrefabTwo;
+
 
         public GameObject brushCursor;
         public GameObject handCursor;
