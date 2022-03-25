@@ -102,6 +102,7 @@ namespace IVLab.MinVR3
 
         void RebuildMenu()
         {
+            Debug.Log("Rebuild");
             Material tmpMat;
 
             // Remove any menu geometry previously created
@@ -116,7 +117,7 @@ namespace IVLab.MinVR3
 
             // Create a title box and label
             GameObject titleTextObj = new GameObject(title + " Label");
-            titleTextObj.transform.SetParent(this.transform);
+            titleTextObj.transform.SetParent(this.transform, false);
             TextMesh titleTextMesh = titleTextObj.AddComponent<TextMesh>();
             titleTextMesh.font = font;
             titleTextMesh.GetComponent<MeshRenderer>().sharedMaterial = new Material(fontMaterial);
@@ -129,7 +130,7 @@ namespace IVLab.MinVR3
 
             titleBoxObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
             titleBoxObj.name = title + " Box";
-            titleBoxObj.transform.SetParent(this.transform);
+            titleBoxObj.transform.SetParent(this.transform, false);
             tmpMat = new Material(titleBoxObj.GetComponent<Renderer>().sharedMaterial);
             tmpMat.color = titleBGColor;
             titleBoxObj.GetComponent<Renderer>().sharedMaterial = tmpMat;
@@ -138,7 +139,7 @@ namespace IVLab.MinVR3
             // Create a box and label for each item
             for (int i = 0; i < menuItems.Count; i++) {
                 GameObject textObj = new GameObject(menuItems[i] + " Label");
-                textObj.transform.SetParent(this.transform);
+                textObj.transform.SetParent(this.transform, false);
                 TextMesh textMesh = textObj.AddComponent<TextMesh>();
                 textMesh.font = font;
                 textMesh.GetComponent<MeshRenderer>().sharedMaterial = new Material(fontMaterial);
@@ -150,7 +151,7 @@ namespace IVLab.MinVR3
 
                 GameObject boxObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 boxObj.name = menuItems[i] + " Box";
-                boxObj.transform.SetParent(this.transform);
+                boxObj.transform.SetParent(this.transform, false);
                 tmpMat = new Material(boxObj.GetComponent<Renderer>().sharedMaterial);
                 tmpMat.color = itemBGColor;
                 boxObj.GetComponent<Renderer>().sharedMaterial = tmpMat;
@@ -201,7 +202,7 @@ namespace IVLab.MinVR3
 
             bgBox = GameObject.CreatePrimitive(PrimitiveType.Cube);
             bgBox.name = "Background Box";
-            bgBox.transform.SetParent(this.transform);
+            bgBox.transform.SetParent(this.transform, false);
             bgBox.GetComponent<Renderer>().sharedMaterial.color = itemBGColor;
             bgBox.transform.localPosition = new Vector3(zEpsilon, 0f, 0.5f * itemSep + zEpsilon);
             bgBox.transform.localScale = new Vector3(menu_box_dims[0] - zEpsilon, height - 2.0f * zEpsilon, menu_box_dims[2] - itemSep);
