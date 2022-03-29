@@ -34,7 +34,6 @@ namespace IVLab.MinVR3
             SenselDeviceList list = new SenselDeviceList();
             list.num_devices = 0;
             Sensel.Sensel.senselGetDeviceList(ref list);
-            Debug.Log("Num Devices: " + list.num_devices);
             if (list.num_devices != 0)
             {
                 Sensel.Sensel.senselOpenDeviceByID(ref _handle, list.devices[0].idx);
@@ -42,11 +41,8 @@ namespace IVLab.MinVR3
             if (_handle != IntPtr.Zero)
             {
                 Sensel.Sensel.senselGetSensorInfo(_handle, ref _sensor_info);
-                Debug.Log("Sensel Device: " + System.Text.Encoding.Default.GetString(list.devices[0].serial_num));
-                Debug.Log("Width: " + _sensor_info.width+"mm");
-                Debug.Log("Height: " + _sensor_info.height + "mm");
-                Debug.Log("Cols: " + _sensor_info.num_cols); // 185
-                Debug.Log("Rows: " + _sensor_info.num_rows); // 105
+                string serialNum = System.Text.Encoding.Default.GetString(list.devices[0].serial_num).Replace("\0", String.Empty);
+                Debug.Log($"Sensel Device: {serialNum} -- Width: {_sensor_info.width}mm, Height: {_sensor_info.height}mm");
                 Sensel.Sensel.senselSetFrameContent(_handle, 0x04); // FRAME_CONTENT_CONTACTS_MASK
                 Sensel.Sensel.senselAllocateFrameData(_handle, _frame);
                 Sensel.Sensel.senselStartScanning(_handle);
