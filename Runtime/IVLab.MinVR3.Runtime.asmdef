@@ -2,7 +2,8 @@
     "name": "IVLab.MinVR3.Runtime",
     "references": [
         "Unity.TextMeshPro",
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "IVLab.Utilities.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
