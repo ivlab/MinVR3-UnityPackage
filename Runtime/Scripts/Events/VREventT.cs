@@ -7,6 +7,7 @@ using System.Runtime.Serialization;
 namespace IVLab.MinVR3
 {
 
+    [System.Serializable]
     public class VREventT<T> : VREvent
     {
         protected VREventT(string eventName, T eventData) : base(eventName)
@@ -43,6 +44,7 @@ namespace IVLab.MinVR3
             base.GetObjectData(info, context);
         }
 
+        [SerializeField]
         protected T m_Data;
     }
 
