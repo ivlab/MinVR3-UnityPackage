@@ -6,6 +6,7 @@ using System.Runtime.Serialization;
 
 namespace IVLab.MinVR3
 {
+    [System.Serializable]
     public class VREvent : ISerializable
     {
         public VREvent(string eventName)
@@ -78,6 +79,7 @@ namespace IVLab.MinVR3
             info.AddValue("name", m_Name);
         }
 
+        [SerializeField]
         protected string m_Name;
     }
 
