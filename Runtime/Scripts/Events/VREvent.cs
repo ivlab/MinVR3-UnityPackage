@@ -9,13 +9,14 @@ namespace IVLab.MinVR3
     [System.Serializable]
     public class VREvent : ISerializable
     {
-        public VREvent(string eventName)
+        public VREvent(string eventName) : this()
         {
             m_Name = eventName;
         }
 
         public VREvent()
         {
+            m_EventType = this.GetType().Name;
         }
 
         public string name {
@@ -26,6 +27,11 @@ namespace IVLab.MinVR3
         public string GetName()
         {
             return m_Name;
+        }
+
+        public string GetEventType()
+        {
+            return m_EventType;
         }
 
         public virtual string GetDataTypeName()
@@ -69,7 +75,7 @@ namespace IVLab.MinVR3
             return true;
         }
 
-        protected VREvent(SerializationInfo info, StreamingContext context)
+        protected VREvent(SerializationInfo info, StreamingContext context) : this()
         {
             m_Name = info.GetString("name");
         }
@@ -81,6 +87,9 @@ namespace IVLab.MinVR3
 
         [SerializeField]
         protected string m_Name;
+
+        [SerializeField]
+        protected string m_EventType;
     }
 
 } // namespace
