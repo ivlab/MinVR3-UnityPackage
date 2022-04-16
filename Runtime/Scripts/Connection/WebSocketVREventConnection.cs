@@ -81,8 +81,35 @@ namespace IVLab.MinVR3
                 // WebSocketTestServer.evtQueue.Enqueue(evt);
                 try{
                     Debug.Log("On message! " + e.Data);
-                    VREventSerialization.FromJson(e.Data);
-                    // VREvent evt = JsonUtility.FromJson<VREvent>(e.Data);
+                    // VREventSerialization.FromJson(e.Data);
+                    // Serialize once to get base fields of VREvent, including the type
+                    VREvent evt = JsonUtility.FromJson<VREvent>(e.Data);
+                    
+                    // Convert to the actual type
+                    // There may be a better way to do this, but at least a switch is fast.
+                    switch (evt.GetEventType())
+                    {
+                        case "VREventVector2":
+                            evt = JsonUtility.FromJson<VREventVector2>(e.Data);
+                            break;
+                        case "VREventVector3":
+                            evt = JsonUtility.FromJson<VREventVector3>(e.Data);
+                            break;
+                        case "VREventQuaternion":
+                            evt = JsonUtility.FromJson<VREventQuaternion>(e.Data);
+                            break;
+                        case "VREventGameObject":
+                            evt = JsonUtility.FromJson<VREventGameObject>(e.Data);
+                            break;
+                        case "VREventFloat":
+                            evt = JsonUtility.FromJson<VREventFloat>(e.Data);
+                            break;
+                        case "VREventInt":
+                            evt = JsonUtility.FromJson<VREventInt>(e.Data);
+                            break;
+                        default:
+                            break;
+                    }
                     // Debug.Log("Received " + evt.name + " " + evt.GetData<Vector2>());
                     // WebSocketVREventConnection.Instance.OnVREventReceived.Invoke(evt);
                 } catch (System.Exception err) { Debug.LogError(err); }
