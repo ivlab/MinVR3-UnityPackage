@@ -30,18 +30,18 @@ namespace IVLab.MinVR3
 
         private const string VREventPath = "/vrevent";
 
-#region VR Event Connection Send/Receive
+        #region VR Event Connection Send/Receive
         public IVREventConnection.VREventReceivedDelegate OnVREventReceived { get; set; }
 
         public void Send(in VREvent evt)
         {
-            string serializedEvent = VREventSerialization.ToJson(evt);
+            string serializedEvent = JsonUtility.ToJson(evt);
             wssv.WebSocketServices[VREventPath].Sessions.Broadcast(serializedEvent);
         }
-#endregion
+        #endregion
 
 
-#region Unity MonoBehaviour Methods
+        #region Unity MonoBehaviour Methods
         void Reset()
         {
             host = "127.0.0.1";
@@ -60,9 +60,9 @@ namespace IVLab.MinVR3
         {
             wssv.Stop();
         }
-#endregion
+        #endregion
 
-#region WebSocketSharp message handlers
+        #region WebSocketSharp message handlers
         private class VREventWebSocketMessage : WebSocketBehavior
         {
             protected override void OnOpen()
@@ -76,15 +76,11 @@ namespace IVLab.MinVR3
 
             protected override void OnMessage(MessageEventArgs e)
             {
-                // WebSocketVREventConnection.
-                // MockVREvent evt = JsonUtility.FromJson<MockVREvent>(e.Data);
-                // WebSocketTestServer.evtQueue.Enqueue(evt);
-                try{
-                    Debug.Log("On message! " + e.Data);
-                    // VREventSerialization.FromJson(e.Data);
+                try
+                {
                     // Serialize once to get base fields of VREvent, including the type
                     VREvent evt = JsonUtility.FromJson<VREvent>(e.Data);
-                    
+
                     // Convert to the actual type
                     // There may be a better way to do this, but at least a switch is fast.
                     switch (evt.GetEventType())
@@ -110,11 +106,13 @@ namespace IVLab.MinVR3
                         default:
                             break;
                     }
-                    // Debug.Log("Received " + evt.name + " " + evt.GetData<Vector2>());
-                    // WebSocketVREventConnection.Instance.OnVREventReceived.Invoke(evt);
-                } catch (System.Exception err) { Debug.LogError(err); }
+
+                    // Send the event to all listeners (usually, this might just go in the VREvent queue)
+                    WebSocketVREventConnection.Instance.OnVREventReceived.Invoke(evt);
+                }
+                catch (System.Exception) { Debug.LogError("Unable to deserialize WebSocket VREvent message"); }
             }
         }
-#endregion
+        #endregion
     }
 }
