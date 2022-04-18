@@ -90,6 +90,13 @@ namespace IVLab.MinVR3
 
         [SerializeField]
         protected string m_EventType;
+
+        // perhaps make this the data type instead of the class name
+        // Add a mapping or factory for creating VREventXXXX from XXXX data type
+        // have a Create(name, ?data) method in this class?
+        //  - register factory w/VREventFactory (subfactories)
+        //  - possibly also bring in the VREventPrototypeAny type mapping dict here.
+        //  - unity serialization :(
     }
 
 } // namespace
