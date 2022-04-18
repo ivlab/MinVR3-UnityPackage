@@ -2,13 +2,13 @@
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using IVLab.Utilities;
 
 namespace IVLab.MinVR3 {
 
     [RequireComponent(typeof(VREventManager))]
-    [AddComponentMenu("")] // don't list in the component menu
     [DefaultExecutionOrder(VREngine.ScriptPriority)] 
-    public class VREngine : OnDemandMonoBehaviourSingleton<VREngine>
+    public class VREngine : Singleton<VREngine>
     {
         // In (almost?) all situations, this script should be the first one to run during each frame's
         // Update() phase.  This script must be run before all other MinVR scripts to make sure that
@@ -111,12 +111,11 @@ namespace IVLab.MinVR3 {
         }
 
 
-        protected override void OnDestroy()
+        void OnDestroy()
         {
             if (m_ClusterNode != null) {
                 m_ClusterNode.Shutdown();
             }
-            base.OnDestroy();
         }
 
 

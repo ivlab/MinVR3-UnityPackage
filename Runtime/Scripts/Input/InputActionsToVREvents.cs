@@ -155,21 +155,21 @@ namespace IVLab.MinVR3 {
 
                 switch (touch.phase) {
                     case UnityEngine.InputSystem.TouchPhase.Began:
-                        VREngine.instance.eventManager.QueueEvent(new VREvent(m_DeviceIdString + baseName + "/Down"));
-                        VREngine.instance.eventManager.QueueEvent(new VREventVector2(m_DeviceIdString + baseName + "/Position", touch.position));
+                        VREngine.Instance.eventManager.QueueEvent(new VREvent(m_DeviceIdString + baseName + "/Down"));
+                        VREngine.Instance.eventManager.QueueEvent(new VREventVector2(m_DeviceIdString + baseName + "/Position", touch.position));
                         break;
 
                     // Determine direction by comparing the current touch position with the initial one.
                     case UnityEngine.InputSystem.TouchPhase.Moved:
-                        VREngine.instance.eventManager.QueueEvent(new VREventVector2(m_DeviceIdString + baseName + "/Position", touch.position));
+                        VREngine.Instance.eventManager.QueueEvent(new VREventVector2(m_DeviceIdString + baseName + "/Position", touch.position));
                         if (m_IncludePressureEvents) {
-                            VREngine.instance.eventManager.QueueEvent(new VREventFloat(m_DeviceIdString + baseName + "/Pressure", touch.pressure));
+                            VREngine.Instance.eventManager.QueueEvent(new VREventFloat(m_DeviceIdString + baseName + "/Pressure", touch.pressure));
                         }
                         break;
 
                     // Report that a direction has been chosen when the finger is lifted.
                     case UnityEngine.InputSystem.TouchPhase.Ended:
-                        VREngine.instance.eventManager.QueueEvent(new VREvent(m_DeviceIdString + baseName + "/Up"));
+                        VREngine.Instance.eventManager.QueueEvent(new VREvent(m_DeviceIdString + baseName + "/Up"));
                         m_uidToFinger.Remove(uid);
                         break;
                 }
@@ -183,17 +183,17 @@ namespace IVLab.MinVR3 {
                 }
 
                 if ((expectedDataType == "") || (expectedDataType == "Button")) {
-                    VREngine.instance.eventManager.QueueEvent(new VREvent(m_DeviceIdString + eventName));
+                    VREngine.Instance.eventManager.QueueEvent(new VREvent(m_DeviceIdString + eventName));
                 } else if (expectedDataType == typeof(int).Name) {
-                    VREngine.instance.eventManager.QueueEvent(new VREventInt(m_DeviceIdString + eventName, context.ReadValue<int>()));
+                    VREngine.Instance.eventManager.QueueEvent(new VREventInt(m_DeviceIdString + eventName, context.ReadValue<int>()));
                 } else if (expectedDataType == typeof(float).Name) {
-                    VREngine.instance.eventManager.QueueEvent(new VREventFloat(m_DeviceIdString + eventName, context.ReadValue<float>()));
+                    VREngine.Instance.eventManager.QueueEvent(new VREventFloat(m_DeviceIdString + eventName, context.ReadValue<float>()));
                 } else if (expectedDataType == typeof(Vector2).Name) {
-                    VREngine.instance.eventManager.QueueEvent(new VREventVector2(m_DeviceIdString + eventName, context.ReadValue<Vector2>()));
+                    VREngine.Instance.eventManager.QueueEvent(new VREventVector2(m_DeviceIdString + eventName, context.ReadValue<Vector2>()));
                 } else if (expectedDataType == typeof(Vector3).Name) {
-                    VREngine.instance.eventManager.QueueEvent(new VREventVector3(m_DeviceIdString + eventName, context.ReadValue<Vector3>()));
+                    VREngine.Instance.eventManager.QueueEvent(new VREventVector3(m_DeviceIdString + eventName, context.ReadValue<Vector3>()));
                 } else if (expectedDataType == typeof(Quaternion).Name) {
-                    VREngine.instance.eventManager.QueueEvent(new VREventQuaternion(m_DeviceIdString + eventName, context.ReadValue<Quaternion>()));
+                    VREngine.Instance.eventManager.QueueEvent(new VREventQuaternion(m_DeviceIdString + eventName, context.ReadValue<Quaternion>()));
                 } else {
                     Debug.Log($"Not queueing event '{eventName}', which has an unrecognized expected data type = '" + expectedDataType + "'");
                 }

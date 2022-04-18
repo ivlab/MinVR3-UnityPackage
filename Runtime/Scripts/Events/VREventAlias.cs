@@ -16,12 +16,12 @@ namespace IVLab.MinVR3
 
         void OnEnable()
         {
-            VREngine.instance.eventManager.AddEventFilter(this);
+            VREngine.Instance.eventManager.AddEventFilter(this);
         }
 
         void OnDisable()
         {
-            VREngine.instance?.eventManager?.RemoveEventFilter(this);
+            VREngine.Instance?.eventManager?.RemoveEventFilter(this);
         }
 
         protected virtual void Reset()

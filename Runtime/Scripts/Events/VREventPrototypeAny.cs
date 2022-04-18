@@ -154,6 +154,8 @@ namespace IVLab.MinVR3
         [SerializeField] private VREventPrototypeQuaternion m_EventPrototypeQuaternion;
 
         // Location 2 of 2 to edit when adding a new event data type.
+
+        public Dictionary<string, IVREventPrototype> AllEventPrototypes { get => m_AllEventPrototypes; }
     }
 
 } // namespace
