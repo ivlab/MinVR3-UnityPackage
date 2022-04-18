@@ -121,7 +121,7 @@ namespace IVLab.MinVR3
 
                             string baseEventName = GetBaseEventName(contactId);
                             string minVrString = m_DeviceIdString + baseEventName + "/" + touchEvent;
-                            VREngine.instance.eventManager.QueueEvent(new VREventVector2(minVrString, pos));
+                            VREngine.Instance.eventManager.QueueEvent(new VREventVector2(minVrString, pos));
                         }
                     }
 
