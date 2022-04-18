@@ -110,7 +110,7 @@ namespace IVLab.MinVR3
                     // Send the event to all listeners (usually, this might just go in the VREvent queue)
                     WebSocketVREventConnection.Instance.OnVREventReceived.Invoke(evt);
                 }
-                catch (System.Exception) { Debug.LogError("Unable to deserialize WebSocket VREvent message"); }
+                catch (System.Exception exc) { Debug.LogError("Unable to deserialize WebSocket VREvent message:\n" + exc); }
             }
         }
         #endregion

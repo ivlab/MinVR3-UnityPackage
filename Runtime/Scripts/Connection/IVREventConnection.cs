@@ -21,7 +21,7 @@ namespace IVLab.MinVR3
         /// <summary>
         /// Delegate that is called whenever a VREvent is received over the network "connection"
         /// </summary>
-        public VREventReceivedDelegate OnVREventReceived { get; }
+        public VREventReceivedDelegate OnVREventReceived { get; set; }
 
         /// <summary>
         /// Definition for the VREventReceived delegate
