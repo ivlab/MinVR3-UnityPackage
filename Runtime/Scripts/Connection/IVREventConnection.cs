@@ -29,6 +29,7 @@ namespace IVLab.MinVR3
         public delegate void VREventReceivedDelegate(VREvent evt);
     }
 
-    [System.Serializable]
-    public class NetworkVREvent : UnityEvent<VREvent> { }
+    // [System.Serializable]
+    // Alternate implementation using UnityEvents
+    // public class NetworkVREvent : UnityEvent<VREvent> { }
 }
