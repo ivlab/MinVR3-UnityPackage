@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
-using UnityEngine.Events;
+using System.Linq;
+using System.Reflection;
 using System.Collections.Generic;
 
 namespace IVLab.MinVR3
@@ -125,35 +126,39 @@ namespace IVLab.MinVR3
         {
             m_AllEventPrototypes = new Dictionary<string, IVREventPrototype>();
 
-            m_EventPrototype = new VREventPrototype();
-            m_AllEventPrototypes.Add("", m_EventPrototype);
+            // Get all the VREventPrototype classes from Reflection. This is
+            // SLOW, but that's okay because InitAllEventPrototypes is only
+            // called infrequently and in-editor. Requirements:
+            // - be a class
+            // - not be generic
+            // - not be this "any" prototype (shouldn't infinitely call this method)
+            // - be an IVREventPrototype
+            // - not be an IVRCallback
+            var assembly = Assembly.GetExecutingAssembly();
+            var allProtoTypes = assembly.GetTypes()
+                .Where(t =>
+                    t.IsClass &&
+                    !t.IsGenericType &&
+                    !t.IsAssignableFrom(this.GetType()) &&
+                    typeof(IVREventPrototype).IsAssignableFrom(t) &&
+                    !typeof(IVRCallback).IsAssignableFrom(t)
+                );
 
-            m_EventPrototypeInt32 = new VREventPrototypeInt();
-            m_AllEventPrototypes.Add(typeof(int).Name, m_EventPrototypeInt32);
+            // Construct an instance of each prototype class
+            var protoInstances = allProtoTypes
+                .Select((t) => t.GetConstructor(new Type[] {})) // get default constructor
+                .Where(c => c != null) // no null constructors
+                .Select(c => c.Invoke(new object[] {})) // actually call constructor to get object instance
+                .Select(c => c as IVREventPrototype); // convert to prototype
 
-            m_EventPrototypeSingle = new VREventPrototypeFloat();
-            m_AllEventPrototypes.Add(typeof(float).Name, m_EventPrototypeSingle);
-
-            m_EventPrototypeVector2 = new VREventPrototypeVector2();
-            m_AllEventPrototypes.Add(typeof(Vector2).Name, m_EventPrototypeVector2);
-
-            m_EventPrototypeVector3 = new VREventPrototypeVector3();
-            m_AllEventPrototypes.Add(typeof(Vector3).Name, m_EventPrototypeVector3);
-
-            m_EventPrototypeQuaternion = new VREventPrototypeQuaternion();
-            m_AllEventPrototypes.Add(typeof(Quaternion).Name, m_EventPrototypeQuaternion);
-
-            // Location 1 of 2 to edit when adding a new event data type.
+            // Add prototypes for all available data types defined in VREvent
+            // (and those that we *actually* have classes for)
+            foreach (var kv in VREvent.AvailableDataTypes)
+            {
+                IVREventPrototype protoInstance = protoInstances.First(p => p?.GetEventDataTypeName() == kv.Key);
+                m_AllEventPrototypes.Add(kv.Key, protoInstance);
+            }
         }
-
-        [SerializeField] private VREventPrototype m_EventPrototype;
-        [SerializeField] private VREventPrototypeInt m_EventPrototypeInt32;
-        [SerializeField] private VREventPrototypeFloat m_EventPrototypeSingle;
-        [SerializeField] private VREventPrototypeVector2 m_EventPrototypeVector2;
-        [SerializeField] private VREventPrototypeVector3 m_EventPrototypeVector3;
-        [SerializeField] private VREventPrototypeQuaternion m_EventPrototypeQuaternion;
-
-        // Location 2 of 2 to edit when adding a new event data type.
 
         public Dictionary<string, IVREventPrototype> AllEventPrototypes { get => m_AllEventPrototypes; }
     }
