@@ -16,7 +16,7 @@ namespace IVLab.MinVR3
 
         public VREvent()
         {
-            m_EventType = this.GetType().Name;
+            m_DataTypeName = null; // by default, there is no data in a VREvent
         }
 
         public string name {
@@ -29,14 +29,9 @@ namespace IVLab.MinVR3
             return m_Name;
         }
 
-        public string GetEventType()
+        public string GetDataTypeName()
         {
-            return m_EventType;
-        }
-
-        public virtual string GetDataTypeName()
-        {
-            return "";
+            return m_DataTypeName;
         }
 
         public T GetData<T>()
@@ -89,9 +84,8 @@ namespace IVLab.MinVR3
         protected string m_Name;
 
         [SerializeField]
-        protected string m_EventType;
+        protected string m_DataTypeName;
 
-        // perhaps make this the data type instead of the class name
         // Add a mapping or factory for creating VREventXXXX from XXXX data type
         // have a Create(name, ?data) method in this class?
         //  - register factory w/VREventFactory (subfactories)

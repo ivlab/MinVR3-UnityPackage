@@ -83,24 +83,24 @@ namespace IVLab.MinVR3
 
                     // Convert to the actual type
                     // There may be a better way to do this, but at least a switch is fast.
-                    switch (evt.GetEventType())
+                    switch (evt.GetDataTypeName())
                     {
-                        case "VREventVector2":
+                        case "Vector2":
                             evt = JsonUtility.FromJson<VREventVector2>(e.Data);
                             break;
-                        case "VREventVector3":
+                        case "Vector3":
                             evt = JsonUtility.FromJson<VREventVector3>(e.Data);
                             break;
-                        case "VREventQuaternion":
+                        case "Quaternion":
                             evt = JsonUtility.FromJson<VREventQuaternion>(e.Data);
                             break;
-                        case "VREventGameObject":
+                        case "GameObject":
                             evt = JsonUtility.FromJson<VREventGameObject>(e.Data);
                             break;
-                        case "VREventFloat":
+                        case "float":
                             evt = JsonUtility.FromJson<VREventFloat>(e.Data);
                             break;
-                        case "VREventInt":
+                        case "int":
                             evt = JsonUtility.FromJson<VREventInt>(e.Data);
                             break;
                         default:
