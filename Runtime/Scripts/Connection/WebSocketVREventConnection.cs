@@ -11,7 +11,7 @@ namespace IVLab.MinVR3
     /// <summary>
     /// WebSocket-based network connection for VREvents. Can be used with a Web Browser.
     /// </summary>
-    public class WebSocketVREventConnection : Singleton<WebSocketVREventConnection>, IVREventConnection
+    public class WebSocketVREventConnection : MonoBehaviour, IVREventConnection
     {
 
         [Header("Networking Setup")]
@@ -51,7 +51,7 @@ namespace IVLab.MinVR3
         void Start()
         {
             wssv = new WebSocketServer("ws://" + host + ":" + port);
-            wssv.AddWebSocketService<VREventWebSocketMessage>(VREventPath);
+            wssv.AddWebSocketService<VREventWebSocketMessage>(VREventPath, s => s.owner = this);
 
             Task.Run(() => wssv.Start());
         }
@@ -65,6 +65,8 @@ namespace IVLab.MinVR3
         #region WebSocketSharp message handlers
         private class VREventWebSocketMessage : WebSocketBehavior
         {
+            public WebSocketVREventConnection owner;
+
             protected override void OnOpen()
             {
                 Debug.Log("New WebSocket VREvent connection");
@@ -108,7 +110,7 @@ namespace IVLab.MinVR3
                     }
 
                     // Send the event to all listeners (usually, this might just go in the VREvent queue)
-                    WebSocketVREventConnection.Instance.OnVREventReceived.Invoke(evt);
+                    owner.OnVREventReceived.Invoke(evt);
                 }
                 catch (System.Exception exc) { Debug.LogError("Unable to deserialize WebSocket VREvent message:\n" + exc); }
             }
