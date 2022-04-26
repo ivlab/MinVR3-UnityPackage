@@ -17,15 +17,11 @@ namespace IVLab.MinVR3
 
         protected VREventT() : base()
         {
+            m_DataTypeName = typeof(T).Name;
         }
 
         public T data {
             get => m_Data;
-        }
-
-        public override string GetDataTypeName()
-        {
-            return typeof(T).Name;
         }
 
         public T GetData()
