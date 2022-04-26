@@ -74,6 +74,9 @@ namespace IVLab.MinVR3
                     case "Vector3":
                         evt = JsonUtility.FromJson<VREventVector3>(eventJson);
                         break;
+                    case "Vector4":
+                        evt = JsonUtility.FromJson<VREventVector4>(eventJson);
+                        break;
                     case "Quaternion":
                         evt = JsonUtility.FromJson<VREventQuaternion>(eventJson);
                         break;
@@ -85,6 +88,9 @@ namespace IVLab.MinVR3
                         break;
                     case "int":
                         evt = JsonUtility.FromJson<VREventInt>(eventJson);
+                        break;
+                    case "string":
+                        evt = JsonUtility.FromJson<VREventString>(eventJson);
                         break;
                     default:
                         break;
@@ -136,9 +142,11 @@ namespace IVLab.MinVR3
         {
             { typeof(Vector2).Name, typeof(VREventVector2) },
             { typeof(Vector3).Name, typeof(VREventVector3) },
+            { typeof(Vector4).Name, typeof(VREventVector4) },
             { typeof(Quaternion).Name, typeof(VREventQuaternion) },
             { typeof(float).Name, typeof(VREventFloat) },
             { typeof(int).Name, typeof(VREventInt) },
+            { typeof(string).Name, typeof(VREventString) },
             { typeof(GameObject).Name, typeof(GameObject) },
         };
     }
