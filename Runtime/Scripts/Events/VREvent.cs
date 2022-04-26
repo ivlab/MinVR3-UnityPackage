@@ -1,7 +1,6 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using System.Runtime.Serialization;
 
 namespace IVLab.MinVR3
@@ -54,6 +53,52 @@ namespace IVLab.MinVR3
             return new VREvent(m_Name);
         }
 
+
+        public static VREvent CreateFromJson(string eventJson)
+        {
+            try
+            {
+                // Serialize once to get base fields of VREvent, including the type
+                VREvent evt = JsonUtility.FromJson<VREvent>(eventJson);
+
+                // PLACE 2 OF 2 TO MODIFY WHEN ADDING A NEW DATA TYPE
+                // Convert to the actual type
+                // There may be a better way to do this, but at least a switch is fast.
+                // Alternative would be to use reflection to convert the type
+                // using the s_AvailableDataTypes dictionary.
+                switch (evt.GetDataTypeName())
+                {
+                    case "Vector2":
+                        evt = JsonUtility.FromJson<VREventVector2>(eventJson);
+                        break;
+                    case "Vector3":
+                        evt = JsonUtility.FromJson<VREventVector3>(eventJson);
+                        break;
+                    case "Quaternion":
+                        evt = JsonUtility.FromJson<VREventQuaternion>(eventJson);
+                        break;
+                    case "GameObject":
+                        evt = JsonUtility.FromJson<VREventGameObject>(eventJson);
+                        break;
+                    case "float":
+                        evt = JsonUtility.FromJson<VREventFloat>(eventJson);
+                        break;
+                    case "int":
+                        evt = JsonUtility.FromJson<VREventInt>(eventJson);
+                        break;
+                    default:
+                        break;
+                }
+
+                return evt;
+            }
+            catch (System.Exception exc)
+            {
+                Debug.LogError("Unable to deserialize JSON VREvent message:\n" + exc);
+                return null;
+            }
+        }
+
         /// <summary>
         /// True for raw VREvents created from input devices, trackers, etc.  These need to be sent
         /// across the network to synchronize nodes when running in cluster mode so that all nodes
@@ -86,11 +131,16 @@ namespace IVLab.MinVR3
         [SerializeField]
         protected string m_DataTypeName;
 
-        // Add a mapping or factory for creating VREventXXXX from XXXX data type
-        // have a Create(name, ?data) method in this class?
-        //  - register factory w/VREventFactory (subfactories)
-        //  - possibly also bring in the VREventPrototypeAny type mapping dict here.
-        //  - unity serialization :(
+        // PLACE 1 OF 2 TO MODIFY WHEN ADDING A NEW DATA TYPE
+        public static Dictionary<string, Type> AvailableDataTypes { get; } = new Dictionary<string, Type>()
+        {
+            { typeof(Vector2).Name, typeof(VREventVector2) },
+            { typeof(Vector3).Name, typeof(VREventVector3) },
+            { typeof(Quaternion).Name, typeof(VREventQuaternion) },
+            { typeof(float).Name, typeof(VREventFloat) },
+            { typeof(int).Name, typeof(VREventInt) },
+            { typeof(GameObject).Name, typeof(GameObject) },
+        };
     }
 
 } // namespace
