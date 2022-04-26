@@ -87,7 +87,10 @@ namespace IVLab.MinVR3
             var typeDict = new Dictionary<string, string>()
             {
                 { "html", "text/html" },
+                { "txt", "text/plain" },
+                { "js", "text/javascript" },
                 { "png", "image/png" },
+                { "jpg", "image/jpeg" },
             };
 
             wssv.OnGet += (sender, e) => {
