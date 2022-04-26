@@ -78,41 +78,9 @@ namespace IVLab.MinVR3
 
             protected override void OnMessage(MessageEventArgs e)
             {
-                try
-                {
-                    // Serialize once to get base fields of VREvent, including the type
-                    VREvent evt = JsonUtility.FromJson<VREvent>(e.Data);
-
-                    // Convert to the actual type
-                    // There may be a better way to do this, but at least a switch is fast.
-                    switch (evt.GetDataTypeName())
-                    {
-                        case "Vector2":
-                            evt = JsonUtility.FromJson<VREventVector2>(e.Data);
-                            break;
-                        case "Vector3":
-                            evt = JsonUtility.FromJson<VREventVector3>(e.Data);
-                            break;
-                        case "Quaternion":
-                            evt = JsonUtility.FromJson<VREventQuaternion>(e.Data);
-                            break;
-                        case "GameObject":
-                            evt = JsonUtility.FromJson<VREventGameObject>(e.Data);
-                            break;
-                        case "float":
-                            evt = JsonUtility.FromJson<VREventFloat>(e.Data);
-                            break;
-                        case "int":
-                            evt = JsonUtility.FromJson<VREventInt>(e.Data);
-                            break;
-                        default:
-                            break;
-                    }
-
-                    // Send the event to all listeners (usually, this might just go in the VREvent queue)
-                    owner.OnVREventReceived.Invoke(evt);
-                }
-                catch (System.Exception exc) { Debug.LogError("Unable to deserialize WebSocket VREvent message:\n" + exc); }
+                VREvent evt = VREvent.CreateFromJson(e.Data);
+                // Send the event to all listeners (usually, this might just go in the VREvent queue)
+                owner.OnVREventReceived.Invoke(evt);
             }
         }
         #endregion
