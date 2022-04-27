@@ -24,6 +24,11 @@
             "displayName": "ShadowTouch",
             "description": "Divides the display into two windows that are intended to span two screens arranged in a L-shape, with a horizontal touch table as one display and a vertical stereoscopic window for the other.  Demonstrates the ShadowWIM technique, which is a precursor to the SliceWIM and Interactive SliceWIM user interfaces developed in Dane Coffey's dissertation work.",
             "path": "Samples~/ShadowTouch"
+        },
+        {
+            "displayName": "Networked Events",
+            "description": "Demonstrates some of the possibilities enabled by asynchronous networked VREvents. This particular sample serves a small webpage and passes VREvents back and forth between Unity and the browser.",
+            "path": "Samples~/NetworkedEvents"
         }
     ]
 }

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MinVR3 Events Example</title>
+
+    <style>
+        #cursor-space {
+            border: 1px solid gray;
+        }
+    </style>
+</head>
+<body>
+    <h1>MinVR3 Events Example</h1>
+    <p>Mouse over the rectangle below to control the position of the cursor in Unity</p>
+    <p>Use the color picker to change the cursor's color</p>
+    <p>Apply any of the same operations in Unity to see the changes propagate to this webpage (not implemented yet)</p>
+    <canvas id="cursor-space"></canvas>
+    <div>
+        <input data-jscolor value="#000000" id="color-picker">
+    </div>
+
+    <script src="./jscolor.js"></script>
+    <script src="./color.js"></script>
+    <script src="./MinVR3Events.js"></script>
+    <script>
+        // Set up color picker
+        jscolor.presets.default = {
+            format: 'hex'
+        };
+
+        // Connect to Unity-hosted WebSocket
+        let ws = new WebSocket(`ws://${window.location.host}/vrevent/`);
+
+        // Initialize DOM variables
+        let picker = document.getElementById('color-picker');
+        let canvas = document.getElementById('cursor-space');
+        let ctx = canvas.getContext('2d');
+
+        // Initialize state variables
+        var currentColor = picker.value;
+        var cx = 0;
+        var cy = 0;
+
+        // Send a message when things are modified on the webpage:
+        // 1. Cursor position
+        let cursorHandler = (x, y) => {
+            ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+
+            ctx.fillStyle = currentColor;
+            ctx.fillRect(x - 15, y - 15, 30, 30);
+
+            let vx = (x / canvas.clientWidth) * 2.0 - 1.0;
+            let vy = 1.0 - (y / canvas.clientHeight) * 2.0;
+
+            cx = x;
+            cy = y;
+
+            let evt = new MinVR3Event.Vector2("Cursor2D/Position", vx, vy);
+            ws.send(evt.toJson());
+        };
+
+        canvas.addEventListener('mousemove', (evt) => {
+            let x = evt.pageX - canvas.offsetLeft;
+            let y = evt.pageY - canvas.offsetTop;
+            cursorHandler(x, y);
+        });
+        canvas.addEventListener('touchmove', (evt) => {
+            let x = evt.touches[0].pageX - canvas.offsetLeft;
+            let y = evt.touches[0].pageY - canvas.offsetTop;
+            cursorHandler(x, y);
+        });
+
+        // 2. Colors
+        let colorHandler = (c) => {
+            currentColor = c;
+            let floatColor = hexToFloat(currentColor);
+
+            let evt = new MinVR3Event.Vector4("Cursor2D/Color", floatColor.r, floatColor.g, floatColor.b, 1.0);
+            ws.send(evt.toJson());
+
+            cursorHandler(cx, cy);
+        };
+
+        picker.addEventListener('input', (evt) => colorHandler(evt.target.value));
+    </script>
+</body>
+</html>
