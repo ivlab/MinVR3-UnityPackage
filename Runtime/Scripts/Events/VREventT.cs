@@ -13,6 +13,7 @@ namespace IVLab.MinVR3
         protected VREventT(string eventName, T eventData) : base(eventName)
         {
             m_Data = eventData;
+            m_DataTypeName = typeof(T).Name;
         }
 
         protected VREventT() : base()
