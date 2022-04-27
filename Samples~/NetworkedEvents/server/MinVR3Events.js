@@ -15,6 +15,9 @@ class VREvent {
     #eventName;
     #dataTypeName;
 
+    get name() { return this.#eventName };
+    get dataTypeName() { return this.#dataTypeName };
+
     constructor(eventName, dataTypeName) {
         this.#eventName = eventName;
         this.#dataTypeName = dataTypeName;
@@ -27,6 +30,31 @@ class VREvent {
         evt.m_Name = this.#eventName;
         evt.m_Data = obj;
         return JSON.stringify(evt);
+    }
+
+    static fromJson(jsonString) {
+        let json = JSON.parse(jsonString);
+
+        // Mirrors the switch in VREvent.cs
+        switch (json.m_DataTypeName)
+        {
+            case 'Vector2':
+                return new MinVR3Event.Vector2(json.m_Name, json.m_Data.x, json.m_Data.y);
+            case 'Vector3':
+                return new MinVR3Event.Vector3(json.m_Name, json.m_Data.x, json.m_Data.y, json.m_Data.z);
+            case 'Vector4':
+                return new MinVR3Event.Vector4(json.m_Name, json.m_Data.x, json.m_Data.y, json.m_Data.z, json.m_Data.w);
+            case 'Quaternion':
+                return new MinVR3Event.Quaternion(json.m_Name, json.m_Data.x, json.m_Data.y, json.m_Data.z, json.m_Data.w);
+            case 'string':
+                return new MinVR3Event.String(json.m_Name, json.m_Data.value);
+            case 'int':
+                return new MinVR3Event.Int(json.m_Name, json.m_Data.value);
+            case 'float':
+                return new MinVR3Event.Float(json.m_Name, json.m_Data.value);
+            default:
+                return null;
+        }
     }
 }
 

@@ -317,6 +317,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1314886815}
   - component: {fileID: 1314886816}
+  - component: {fileID: 1314886817}
   - component: {fileID: 1314886814}
   - component: {fileID: 1314886813}
   - component: {fileID: 1314886812}
@@ -421,6 +422,19 @@ MonoBehaviour:
   colorEvent:
     m_EventName: Cursor2D/Color
     m_DataTypeName: Vector4
+  cursorColor: {r: 0, g: 0, b: 0, a: 0}
+--- !u!114 &1314886817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1314886811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f70cdf802aed88f47b893bf2cf5df1d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1516188266
 GameObject:
   m_ObjectHideFlags: 0
@@ -525,6 +539,7 @@ GameObject:
   - component: {fileID: 1649550973}
   - component: {fileID: 1649550972}
   - component: {fileID: 1649550974}
+  - component: {fileID: 1649550975}
   m_Layer: 0
   m_Name: HttpServer
   m_TagString: Untagged
@@ -544,10 +559,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1416049ed70faf8479d9f98bdeb47c99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  host: 127.0.0.1
+  host: 0.0.0.0
   port: 8000
   webServerLocation: 0
-  webServerFolder: Samples/MinVR3/0.0.1/NetworkedEvents/server
+  webServerFolder: Samples\MinVR3\0.0.1\Networked Events\server
 --- !u!4 &1649550973
 Transform:
   m_ObjectHideFlags: 0
@@ -582,3 +597,18 @@ MonoBehaviour:
   - Vector2
   - Single
   - Vector4
+--- !u!114 &1649550975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1649550971}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32888c1903de3c944a0f639ce102a8cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventsToSend:
+  - Cursor3D/Position
+  - Cursor3D/Color
