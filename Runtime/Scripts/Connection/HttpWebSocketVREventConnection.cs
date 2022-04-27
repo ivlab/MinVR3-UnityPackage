@@ -94,6 +94,7 @@ namespace IVLab.MinVR3
             };
 
             wssv.OnGet += (sender, e) => {
+                // Debug.Log("GET " + e.Request.RawUrl);
                 string path = e.Request.RawUrl;
                 if (path == "/")
                     path += "index.html";
@@ -114,10 +115,10 @@ namespace IVLab.MinVR3
                     return;
                 }
 
-                e.Response.WriteContent(contents);
                 e.Response.ContentEncoding = System.Text.Encoding.UTF8;
                 e.Response.ContentType = typeDict[ext];
                 e.Response.ContentLength64 = contents.LongLength;
+                e.Response.WriteContent(contents);
                 e.Response.Close(contents, true);
             };
 
