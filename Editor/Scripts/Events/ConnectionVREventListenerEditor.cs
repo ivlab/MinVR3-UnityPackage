@@ -6,22 +6,16 @@ using System.Linq;
 
 namespace IVLab.MinVR3
 {
-    [CustomEditor(typeof(ConnectionVREventProducer))]
-    public class ConnectionVREventProducerEditor : Editor
+    [CustomEditor(typeof(ConnectionVREventListener))]
+    public class ConnectionVREventListenerEditor : Editor
     {
         int _typeChoice = 0;
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-            ConnectionVREventProducer script = (ConnectionVREventProducer) target;
+            ConnectionVREventListener script = (ConnectionVREventListener) target;
             VREventPrototypeAny any = new VREventPrototypeAny();
-
-            EditorGUILayout.HelpBox(
-                "You may optionally identify what types of VREvents you wish to forward from Unity to this connection. " +
-                "If you leave this empty, all MinVR3 events from Unity will be forwarded to the connection.",
-                MessageType.None
-            );
 
             // Check to see if the GameObject has the proper script attached
             IVREventConnection conn;
@@ -43,14 +37,18 @@ namespace IVLab.MinVR3
                 return;
             }
 
+            EditorGUILayout.HelpBox(
+                "You must identify what types of VREvents you expect to receive along this connection. " +
+                "For example, if your connection is a web browser, you may receive a Vector2 event called " +
+                "'Cursor2D/Position', which would be defined in the browser JavaScript. Check out the NetworkedEvents sample for more info.",
+                MessageType.None
+            );
+
             int numExpectedEvents = Mathf.Min(script.EventNames.Count, script.EventTypes.Count);
             if (numExpectedEvents == 0)
             {
-                EditorGUILayout.HelpBox(
-                    "No events defined: forwarding ALL events to the connection.\n" + 
-                    "Add a new event to forward by pressing the + button:",
-                    MessageType.Info
-                );
+                EditorGUILayout.HelpBox("No events defined: add events you expect to receive from this connection.", MessageType.Warning);
+                EditorGUILayout.HelpBox("Add a new event to forward by pressing the + button:", MessageType.Info);
             }
             else
             {
@@ -61,7 +59,6 @@ namespace IVLab.MinVR3
                 EditorGUILayout.LabelField("Event Type");
                 EditorGUILayout.EndHorizontal();
             }
-
 
             var eventDataTypes = any.AllEventPrototypes.Keys.ToList();
             List<int> idxToDelete = new List<int>();
