@@ -10,14 +10,21 @@ namespace IVLab.MinVR3
     [RequireComponent(typeof(IVREventConnection))]
     public class ConnectionVREventListener : MonoBehaviour, IVREventFilter
     {
+        public List<string> EventNames { get => eventsToSend; }
+        public List<string> EventTypes { get => eventsTypesToSend; }
+
         [SerializeField, Tooltip("Event names to send along the connection. If empty, will send all events -- it's usually best to provide an explicit set of events to forward, though.")]
         private List<string> eventsToSend;
+
+        [SerializeField, Tooltip("Event types to send along the connection.")]
+        private List<string> eventsTypesToSend;
 
         private IVREventConnection connection;
 
         void Reset()
         {
             eventsToSend = new List<string>();
+            eventsTypesToSend = new List<string>();
         }
 
         void Start()
