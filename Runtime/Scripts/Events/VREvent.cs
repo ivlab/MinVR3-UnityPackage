@@ -15,7 +15,7 @@ namespace IVLab.MinVR3
 
         public VREvent()
         {
-            m_DataTypeName = null; // by default, there is no data in a VREvent
+            m_DataTypeName = ""; // by default, there is no data in a VREvent
         }
 
         public string name {
@@ -140,6 +140,7 @@ namespace IVLab.MinVR3
         // PLACE 1 OF 2 TO MODIFY WHEN ADDING A NEW DATA TYPE
         public static Dictionary<string, Type> AvailableDataTypes { get; } = new Dictionary<string, Type>()
         {
+            { "", typeof(VREvent) },
             { typeof(Vector2).Name, typeof(VREventVector2) },
             { typeof(Vector3).Name, typeof(VREventVector3) },
             { typeof(Vector4).Name, typeof(VREventVector4) },
