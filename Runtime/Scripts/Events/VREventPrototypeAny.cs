@@ -156,7 +156,10 @@ namespace IVLab.MinVR3
             foreach (var kv in VREvent.AvailableDataTypes)
             {
                 IVREventPrototype protoInstance = protoInstances.First(p => p?.GetEventDataTypeName() == kv.Key);
-                m_AllEventPrototypes.Add(kv.Key, protoInstance);
+                if (protoInstance != null)
+                {
+                    m_AllEventPrototypes.Add(kv.Key, protoInstance);
+                }
             }
         }
 

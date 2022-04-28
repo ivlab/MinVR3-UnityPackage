@@ -61,6 +61,11 @@ namespace IVLab.MinVR3
             }
 
             var eventDataTypes = any.AllEventPrototypes.Keys.ToList();
+            int blankIndex = eventDataTypes.FindIndex(t => t.Length == 0);
+            if (blankIndex >= 0)
+            {
+                eventDataTypes[blankIndex] = "[None]";
+            }
             List<int> idxToDelete = new List<int>();
 
             for (int evtNum = 0; evtNum < numExpectedEvents; evtNum++)
