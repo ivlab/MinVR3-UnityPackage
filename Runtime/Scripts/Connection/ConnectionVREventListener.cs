@@ -36,7 +36,10 @@ namespace IVLab.MinVR3
         public bool FilterEvent(VREvent evt, ref List<VREvent> filterResult)
         {
             // Send the event to the connection, if it's one of the events we've selected to send along
-            if (eventsToSend.Count == 0 || eventsToSend.Contains(evt.name))
+            if (
+                System.Math.Max(eventsToSend.Count, eventsTypesToSend.Count) == 0 ||
+                (eventsToSend.Contains(evt.name) && eventsTypesToSend.Contains(evt.GetDataTypeName()))
+            )
             {
                 connection.Send(evt);
             }
