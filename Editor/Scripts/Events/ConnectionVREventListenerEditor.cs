@@ -63,10 +63,11 @@ namespace IVLab.MinVR3
             }
 
             var eventDataTypes = any.AllEventPrototypes.Keys.ToList();
-            int blankIndex = eventDataTypes.FindIndex(t => t.Length == 0);
+            var eventDataTypesDisplay = any.AllEventPrototypes.Keys.ToList();
+            int blankIndex = eventDataTypesDisplay.FindIndex(t => t.Length == 0);
             if (blankIndex >= 0)
             {
-                eventDataTypes[blankIndex] = "[None]";
+                eventDataTypesDisplay[blankIndex] = "[None]";
             }
             List<int> idxToDelete = new List<int>();
 
@@ -81,7 +82,7 @@ namespace IVLab.MinVR3
                 int typeIndex = eventDataTypes.FindIndex(e => e == script.EventTypes[evtNum]);
                 typeIndex = Mathf.Clamp(typeIndex, 0, eventDataTypes.Count);
 
-                int newTypeIndex = EditorGUILayout.Popup(typeIndex, eventDataTypes.ToArray());
+                int newTypeIndex = EditorGUILayout.Popup(typeIndex, eventDataTypesDisplay.ToArray());
                 script.EventTypes[evtNum] = eventDataTypes[newTypeIndex];
 
                 if (GUILayout.Button("-"))
