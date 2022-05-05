@@ -47,7 +47,8 @@ namespace IVLab.MinVR3
         private Vector2 lastMousePosition = Vector2.zero;
         private bool mousePressed = false;
 
-        private FSM fsm;
+        // private FSM fsm;
+        private Dictionary<TrackballState, FSM> fsms;
 
         private bool firstMovement = false;
         private float slowing = 0.0f;
@@ -78,18 +79,6 @@ namespace IVLab.MinVR3
         {
             axesWidget.SetActive(showWidgets);
 
-            fsm = this.gameObject.AddComponent<FSM>();
-
-            fsm.AddState("Idle");
-            foreach (var state in Enum.GetValues(typeof(TrackballState)))
-            {
-                fsm.AddState(
-                    state.ToString(),
-                    onEnterCallback: VRCallback.CreateRuntime(() => OnMovementStart((TrackballState) state)),
-                    onExitCallback: VRCallback.CreateRuntime(() => OnMovementEnd((TrackballState) state))
-                );
-            }
-
             var startCallbacks = new Dictionary<TrackballState, VREventPrototype>
             {
                 { TrackballState.Orbit, orbitStartEvent },
@@ -105,11 +94,23 @@ namespace IVLab.MinVR3
                 { TrackballState.Rotate, rotateEndEvent },
             };
 
+            fsms = new Dictionary<TrackballState, FSM>();
             foreach (var state in Enum.GetValues(typeof(TrackballState)))
             {
+                var fsm = this.gameObject.AddComponent<FSM>();
+
+                fsm.AddState("Idle");
+                fsm.AddState(
+                    state.ToString(),
+                    onEnterCallback: VRCallback.CreateRuntime(() => OnMovementStart((TrackballState) state)),
+                    onExitCallback: VRCallback.CreateRuntime(() => OnMovementEnd((TrackballState) state))
+                );
+
                 fsm.AddArc("Idle", state.ToString(), VREventCallbackAny.CreateRuntime(startCallbacks[(TrackballState) state]));
                 fsm.AddArc(state.ToString(), "Idle", VREventCallbackAny.CreateRuntime(endCallbacks[(TrackballState) state]));
                 fsm.AddArc(state.ToString(), state.ToString(), VREventCallbackAny.CreateRuntime(mousePositionEvent, pos => OnMovement((TrackballState) state, pos)));
+
+                fsms.Add((TrackballState) state, fsm);
             }
         }
 
@@ -184,10 +185,9 @@ namespace IVLab.MinVR3
             rotationWidget.transform.rotation = Quaternion.identity;
 
             // Set visibility of other widgets
-            TrackballState currentState = (TrackballState) (fsm.currentStateID);
-            rotationWidget.SetActive(showWidgets && (currentState == TrackballState.Orbit || currentState == TrackballState.Rotate));
-            truckWidget.SetActive(showWidgets && currentState == TrackballState.Truck);
-            // panWidget.SetActive(showWidgets && trackballState[TrackballState.Pan]);
+            rotationWidget.SetActive(showWidgets && (fsms[TrackballState.Orbit].currentStateID != 0 || fsms[TrackballState.Rotate].currentStateID != 0));
+            truckWidget.SetActive(showWidgets && fsms[TrackballState.Truck].currentStateID != 0);
+            panWidget.SetActive(showWidgets && fsms[TrackballState.Pan].currentStateID != 0);
         }
 
         void SchmUpdate()
