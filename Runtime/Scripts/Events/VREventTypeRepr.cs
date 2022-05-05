@@ -14,5 +14,7 @@ namespace IVLab.MinVR3
         private string eventType;
 
         public Type EventDataType { get => VREvent.AvailableDataTypes[eventType]; }
+
+        public override string ToString() => eventType;
     }
 }
