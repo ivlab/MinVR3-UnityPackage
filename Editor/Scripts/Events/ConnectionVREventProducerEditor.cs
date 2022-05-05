@@ -11,11 +11,11 @@ namespace IVLab.MinVR3
     {
         int _typeChoice = 0;
 
+        // POSSIBLE HACK -- this script duplicates some functionality of VREventTypeReprDrawer.
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
             ConnectionVREventProducer script = (ConnectionVREventProducer) target;
-            VREventPrototypeAny any = new VREventPrototypeAny();
 
             // Check to see if the GameObject has the proper script attached
             IVREventConnection conn;
@@ -61,6 +61,7 @@ namespace IVLab.MinVR3
             }
 
 
+            VREventPrototypeAny any = new VREventPrototypeAny();
             var eventDataTypes = any.AllEventPrototypes.Keys.ToList();
             var eventDataTypesDisplay = eventDataTypes.ToList();
             int blankIndex = eventDataTypesDisplay.FindIndex(t => t.Length == 0);

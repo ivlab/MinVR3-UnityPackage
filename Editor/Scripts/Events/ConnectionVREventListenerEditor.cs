@@ -11,6 +11,7 @@ namespace IVLab.MinVR3
     {
         int _typeChoice = 0;
 
+        // POSSIBLE HACK -- this script duplicates some functionality of VREventTypeReprDrawer.
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
