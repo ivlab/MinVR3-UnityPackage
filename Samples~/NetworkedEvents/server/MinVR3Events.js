@@ -38,6 +38,8 @@ class VREvent {
         // Mirrors the switch in VREvent.cs
         switch (json.m_DataTypeName)
         {
+            case '':
+                return new MinVR3Event.VREvent(json.m_Name);
             case 'Vector2':
                 return new MinVR3Event.Vector2(json.m_Name, json.m_Data.x, json.m_Data.y);
             case 'Vector3':
@@ -57,6 +59,8 @@ class VREvent {
         }
     }
 }
+
+MinVR3Event.VREvent = VREvent;
 
 MinVR3Event.Vector2 = class extends VREvent {
     constructor(eventName, x, y) {
