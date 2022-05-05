@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -19,12 +20,12 @@ namespace IVLab.MinVR3
         public VREventPrototypeVector2 mousePositionEvent;
         public VREventPrototype orbitStartEvent;
         public VREventPrototype orbitEndEvent;
-        public VREventPrototype rotateStartEvent;
-        public VREventPrototype rotateEndEvent;
         public VREventPrototype truckStartEvent;
         public VREventPrototype truckEndEvent;
         public VREventPrototype panStartEvent;
         public VREventPrototype panEndEvent;
+        public VREventPrototype rotateStartEvent;
+        public VREventPrototype rotateEndEvent;
 
         public GameObject rotationWidget;
         public GameObject truckWidget;
@@ -36,7 +37,6 @@ namespace IVLab.MinVR3
 
         //zzzzzzzzzzzzzzz
         private Quaternion rotationVelocity = Quaternion.identity;
-        Vector2 panAmt = Vector2.zero;
         Vector3 panVelocity = Vector3.zero;
 
         float speedMult = 1000.0f;
@@ -51,7 +51,6 @@ namespace IVLab.MinVR3
         private FSM fsm;
 
         private bool firstMovement = false;
-        private Dictionary<TrackballMovement, bool> trackballState;
         private float slowing = 0.0f;
         private const float SlowingDuration = 5.0f; // seconds
 
@@ -61,13 +60,13 @@ namespace IVLab.MinVR3
         // quaternions.
         private Vector3 angularVelocity = Vector3.zero;
 
-        [System.Serializable]
-        public enum TrackballMovement
+        // Lines up with state specified in Finite State Machine
+        public enum TrackballState
         {
-            Orbit = 0,
-            Rotate = 1,
-            Pan = 2,
-            Truck = 3
+            Orbit = 1,
+            Truck = 2,
+            Pan = 3,
+            Rotate = 4,
         }
 
         void Reset()
@@ -78,71 +77,54 @@ namespace IVLab.MinVR3
         void Start()
         {
             axesWidget.SetActive(showWidgets);
-            trackballState = new Dictionary<TrackballMovement, bool>
-            {
-                { TrackballMovement.Orbit, false },
-                { TrackballMovement.Truck, false },
-                { TrackballMovement.Pan, false },
-                { TrackballMovement.Rotate, false },
-            };
 
             fsm = this.gameObject.AddComponent<FSM>();
 
             fsm.AddState("Idle");
-            fsm.AddState("Moving");
-            // foreach (var state in trackballState.Keys)
-            // {
-            //     fsm.AddState(
-            //         state.ToString("G"),
-            //         onEnterCallback: VRCallback.CreateRuntime(() => OnMovementStart(state)),
-            //         onExitCallback: VRCallback.CreateRuntime(() => OnMovementEnd(state))
-            //     );
-            // }
+            foreach (var state in Enum.GetValues(typeof(TrackballState)))
+            {
+                fsm.AddState(
+                    state.ToString(),
+                    onEnterCallback: VRCallback.CreateRuntime(() => OnMovementStart((TrackballState) state)),
+                    onExitCallback: VRCallback.CreateRuntime(() => OnMovementEnd((TrackballState) state))
+                );
+            }
 
-            var startCallbacks = new Dictionary<TrackballMovement, VREventPrototype>
+            var startCallbacks = new Dictionary<TrackballState, VREventPrototype>
             {
-                { TrackballMovement.Orbit, orbitStartEvent },
-                { TrackballMovement.Truck, truckStartEvent },
-                { TrackballMovement.Pan, panStartEvent },
-                { TrackballMovement.Rotate, rotateStartEvent },
+                { TrackballState.Orbit, orbitStartEvent },
+                { TrackballState.Truck, truckStartEvent },
+                { TrackballState.Pan, panStartEvent },
+                { TrackballState.Rotate, rotateStartEvent },
             };
-            var endCallbacks = new Dictionary<TrackballMovement, VREventPrototype>
+            var endCallbacks = new Dictionary<TrackballState, VREventPrototype>
             {
-                { TrackballMovement.Orbit, orbitEndEvent },
-                { TrackballMovement.Truck, truckEndEvent },
-                { TrackballMovement.Pan, panEndEvent },
-                { TrackballMovement.Rotate, rotateEndEvent },
+                { TrackballState.Orbit, orbitEndEvent },
+                { TrackballState.Truck, truckEndEvent },
+                { TrackballState.Pan, panEndEvent },
+                { TrackballState.Rotate, rotateEndEvent },
             };
 
-            foreach (var state in trackballState.Keys)
+            foreach (var state in Enum.GetValues(typeof(TrackballState)))
             {
-                // fsm.AddArc("Idle", state.ToString("G"), VREventCallbackAny.CreateRuntime(startCallbacks[state]));
-                // fsm.AddArc(state.ToString("G"), "Idle", VREventCallbackAny.CreateRuntime(endCallbacks[state]));
-                fsm.AddArc("Idle", "Moving", VREventCallbackAny.CreateRuntime(startCallbacks[state]));
-                fsm.AddArc("Moving", "Idle", VREventCallbackAny.CreateRuntime(endCallbacks[state]));
-                fsm.AddArc("Moving", "Moving", VREventCallbackAny.CreateRuntime(mousePositionEvent, pos => OnMovement(state, pos)));
+                fsm.AddArc("Idle", state.ToString(), VREventCallbackAny.CreateRuntime(startCallbacks[(TrackballState) state]));
+                fsm.AddArc(state.ToString(), "Idle", VREventCallbackAny.CreateRuntime(endCallbacks[(TrackballState) state]));
+                fsm.AddArc(state.ToString(), state.ToString(), VREventCallbackAny.CreateRuntime(mousePositionEvent, pos => OnMovement((TrackballState) state, pos)));
             }
         }
 
-        public void OnMovementStart(TrackballMovement mvmt)
+        public void OnMovementStart(TrackballState mvmt)
         {
-            trackballState[mvmt] = true;
             firstMovement = true;
             slowing = 0.0f;
         }
 
-        public void OnMovementEnd(TrackballMovement mvmt)
+        public void OnMovementEnd(TrackballState mvmt)
         {
-            trackballState[mvmt] = false;
-
-            // Start slowing down if all movement has ended
-            if (trackballState.Values.All(v => !v))
-            {
-                slowing = SlowingDuration;
-            }
+            slowing = SlowingDuration;
         }
 
-        public void OnMovement(TrackballMovement movement, Vector2 mousePosition)
+        public void OnMovement(TrackballState movement, Vector2 mousePosition)
         {
             if (firstMovement)
             {
@@ -152,13 +134,17 @@ namespace IVLab.MinVR3
 
             Vector2 mouseDelta = mousePosition - mousePositionAtStart;
 
-            if (trackballState[TrackballMovement.Orbit])
+            if (movement == TrackballState.Orbit)
             {
                 angularVelocity += new Vector3(
                     -mouseDelta.y * rotationSpeed * Time.deltaTime * speedMult,
                     mouseDelta.x * rotationSpeed * Time.deltaTime * speedMult,
                     0.0f
                 );
+            }
+            else if (movement == TrackballState.Truck)
+            {
+                panVelocity += new Vector3(0.0f, 0.0f, mouseDelta.y * zoomSpeed) * Time.deltaTime;
             }
 
             lastMousePosition = mousePosition;
@@ -169,6 +155,7 @@ namespace IVLab.MinVR3
             if (slowing > 0.0f)
             {
                 angularVelocity = Vector3.LerpUnclamped(Vector3.zero, angularVelocity, slowing / SlowingDuration);
+                panVelocity = Vector3.LerpUnclamped(Vector3.zero, panVelocity, slowing / SlowingDuration);
                 slowing -= Time.deltaTime;
             }
             // transform.rotation *= rotationVelocity;
@@ -197,9 +184,10 @@ namespace IVLab.MinVR3
             rotationWidget.transform.rotation = Quaternion.identity;
 
             // Set visibility of other widgets
-            rotationWidget.SetActive(showWidgets && (trackballState[TrackballMovement.Orbit] || trackballState[TrackballMovement.Rotate]));
-            truckWidget.SetActive(showWidgets && trackballState[TrackballMovement.Truck]);
-            panWidget.SetActive(showWidgets && trackballState[TrackballMovement.Pan]);
+            TrackballState currentState = (TrackballState) (fsm.currentStateID);
+            rotationWidget.SetActive(showWidgets && (currentState == TrackballState.Orbit || currentState == TrackballState.Rotate));
+            truckWidget.SetActive(showWidgets && currentState == TrackballState.Truck);
+            // panWidget.SetActive(showWidgets && trackballState[TrackballState.Pan]);
         }
 
         void SchmUpdate()
