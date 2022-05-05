@@ -127,7 +127,7 @@ namespace IVLab.MinVR3
                     eventQueue.Add(new VREvent(m_MiddleBtnEventName + "/Down"));
                 }
                 if (MouseState.MiddleButtonWasReleasedThisFrame()) {
-                    eventQueue.Add(new VREvent(m_MiddleBtnEventName + "/Down"));
+                    eventQueue.Add(new VREvent(m_MiddleBtnEventName + "/Up"));
                 }
             }
 
