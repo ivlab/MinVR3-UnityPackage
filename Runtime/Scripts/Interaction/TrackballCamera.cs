@@ -37,7 +37,6 @@ namespace IVLab.MinVR3
 
         //zzzzzzzzzzzzzzz
         private Quaternion rotationVelocity = Quaternion.identity;
-        Vector3 panVelocity = Vector3.zero;
 
         float speedMult = 1000.0f;
 
@@ -59,6 +58,7 @@ namespace IVLab.MinVR3
         // Euler Angles rather than as Quaternions. Absolute rotation remains as
         // quaternions.
         private Vector3 angularVelocity = Vector3.zero;
+        private Vector3 panVelocity = Vector3.zero;
 
         // Lines up with state specified in Finite State Machine
         public enum TrackballState
