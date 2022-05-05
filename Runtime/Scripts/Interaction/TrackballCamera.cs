@@ -13,47 +13,54 @@ namespace IVLab.MinVR3
     /// </summary>
     public class TrackballCamera : MonoBehaviour
     {
-        public float rotationSpeed = 0.00001f;
-        public float panSpeed = 0.0005f;
-        public float zoomSpeed = 0.001f;
+        [Header("Styling controls")]
+        [SerializeField, Tooltip("Show the on-screen widgets for indicating current axis and orbit/zoom/pan/rotate mode")]
+        private bool showWidgets;
 
-        public VREventPrototypeVector2 mousePositionEvent;
-        public VREventPrototype orbitStartEvent;
-        public VREventPrototype orbitEndEvent;
-        public VREventPrototype truckStartEvent;
-        public VREventPrototype truckEndEvent;
-        public VREventPrototype panStartEvent;
-        public VREventPrototype panEndEvent;
-        public VREventPrototype rotateStartEvent;
-        public VREventPrototype rotateEndEvent;
+        [Header("Speed controls")]
+        [SerializeField, Tooltip("Multiplier for orbit and rotational speed")]
+        private float rotationSpeed = 0.01f;
+        [SerializeField, Tooltip("Multiplier for pan speed")]
+        private float panSpeed = 0.0005f;
+        [SerializeField, Tooltip("Multiplier for zoom/truck speed")]
+        private float zoomSpeed = 0.001f;
 
-        public GameObject rotationWidget;
-        public GameObject truckWidget;
-        public GameObject panWidget;
-        public GameObject axesWidget;
+        [Header("Camera control events")]
+        [SerializeField, Tooltip("Event for mouse position on the screen, in pixel coordinates")]
+        private VREventPrototypeVector2 mousePositionEvent;
+        [SerializeField, Tooltip("Event for orbit start")]
+        private VREventPrototype orbitStartEvent;
+        [SerializeField, Tooltip("Event for orbit end")]
+        private VREventPrototype orbitEndEvent;
+        [SerializeField, Tooltip("Event for truck/zoom start")]
+        private VREventPrototype truckStartEvent;
+        [SerializeField, Tooltip("Event for truck/zoom end")]
+        private VREventPrototype truckEndEvent;
+        [SerializeField, Tooltip("Event for pan start")]
+        private VREventPrototype panStartEvent;
+        [SerializeField, Tooltip("Event for pan end")]
+        private VREventPrototype panEndEvent;
+        [SerializeField, Tooltip("Event for rotate start")]
+        private VREventPrototype rotateStartEvent;
+        [SerializeField, Tooltip("Event for rotate end")]
+        private VREventPrototype rotateEndEvent;
 
-        public bool showWidgets = true;
-        public bool weightedControl = false;
+        // Widgets for on-screen display of movement mode
+        private GameObject rotationWidget;
+        private GameObject truckWidget;
+        private GameObject panWidget;
+        private GameObject axesWidget;
 
-        //zzzzzzzzzzzzzzz
-        private Quaternion rotationVelocity = Quaternion.identity;
-
-        float speedMult = 1000.0f;
-
-        bool shiftPressed = false;
-        bool ctrlPressed = false;
-
+        // State indicators
         private Vector2 mousePositionAtStart = Vector2.zero;
         private Vector2 lastMousePosition = Vector2.zero;
         private bool mousePressed = false;
-
-        // private FSM fsm;
-        private Dictionary<TrackballState, FSM> fsms;
-
         private bool firstMovement = false;
         private float slowing = 0.0f;
         private const float SlowingDuration = 5.0f; // seconds
 
+        // State machines for each type of interaction/movement
+        private Dictionary<TrackballState, FSM> fsms;
 
         // Apparently in Unity it is better to represent angular velocity as
         // Euler Angles rather than as Quaternions. Absolute rotation remains as
@@ -61,7 +68,8 @@ namespace IVLab.MinVR3
         private Vector3 angularVelocity = Vector3.zero;
         private Vector3 panVelocity = Vector3.zero;
 
-        // Lines up with state specified in Finite State Machine
+        // Does not lines up with state specified in Finite State Machines
+        // (since each FSM only has 2 states)
         public enum TrackballState
         {
             Orbit = 1,
@@ -72,11 +80,34 @@ namespace IVLab.MinVR3
 
         void Reset()
         {
-            mousePositionEvent = VREventPrototypeVector2.Create("Mouse/Position");
+            // Reset widget visibility
+            showWidgets = true;
+
+            // Reset movement multipliers
+            rotationSpeed = 0.01f;
+            panSpeed = 0.0005f;
+            zoomSpeed = 0.001f;
+
+            // Reset events to default
+            mousePositionEvent  = VREventPrototypeVector2.Create("TrackballCamera/MousePosition");
+            orbitStartEvent     = VREventPrototype.Create("TrackballCamera/Orbit/On");
+            orbitEndEvent       = VREventPrototype.Create("TrackballCamera/Orbit/Off");
+            truckStartEvent     = VREventPrototype.Create("TrackballCamera/Truck/On");
+            truckEndEvent       = VREventPrototype.Create("TrackballCamera/Truck/Off");
+            panStartEvent       = VREventPrototype.Create("TrackballCamera/Pan/On");
+            panEndEvent         = VREventPrototype.Create("TrackballCamera/Pan/Off");
+            rotateStartEvent    = VREventPrototype.Create("TrackballCamera/Rotate/On");
+            rotateEndEvent      = VREventPrototype.Create("TrackballCamera/Rotate/Off");
         }
 
         void Start()
         {
+            // Find widgets in scene
+            axesWidget = transform.GetChild(0).Find("LeftHandAxis").gameObject;
+            panWidget = transform.GetChild(0).Find("pan_arrow").gameObject;
+            truckWidget = transform.GetChild(0).Find("truck_arrow").gameObject;
+            rotationWidget = transform.GetChild(0).Find("rotation_axes").gameObject;
+
             axesWidget.SetActive(showWidgets);
 
             var startCallbacks = new Dictionary<TrackballState, VREventPrototype>
@@ -137,15 +168,19 @@ namespace IVLab.MinVR3
 
             if (movement == TrackballState.Orbit)
             {
-                angularVelocity += new Vector3(
-                    -mouseDelta.y * rotationSpeed * Time.deltaTime * speedMult,
-                    mouseDelta.x * rotationSpeed * Time.deltaTime * speedMult,
-                    0.0f
-                );
+                angularVelocity += new Vector3(-mouseDelta.y, mouseDelta.x, 0.0f) * Time.deltaTime * rotationSpeed;
             }
             else if (movement == TrackballState.Truck)
             {
-                panVelocity += new Vector3(0.0f, 0.0f, mouseDelta.y * zoomSpeed) * Time.deltaTime;
+                panVelocity += new Vector3(0.0f, 0.0f, mouseDelta.y) * Time.deltaTime * zoomSpeed;
+            }
+            else if (movement == TrackballState.Pan)
+            {
+                panVelocity += new Vector3(-mouseDelta.x, -mouseDelta.y, 0.0f) * Time.deltaTime * panSpeed;
+            }
+            else if (movement == TrackballState.Rotate)
+            {
+                angularVelocity += new Vector3(0.0f, 0.0f, -mouseDelta.y + mouseDelta.x) * Time.deltaTime * rotationSpeed;
             }
 
             lastMousePosition = mousePosition;
@@ -188,136 +223,6 @@ namespace IVLab.MinVR3
             rotationWidget.SetActive(showWidgets && (fsms[TrackballState.Orbit].currentStateID != 0 || fsms[TrackballState.Rotate].currentStateID != 0));
             truckWidget.SetActive(showWidgets && fsms[TrackballState.Truck].currentStateID != 0);
             panWidget.SetActive(showWidgets && fsms[TrackballState.Pan].currentStateID != 0);
-        }
-
-        void SchmUpdate()
-        {
-            // Sync the trick/theta with the actual transforms
-            float truck = this.transform.GetChild(0).transform.localPosition.z;
-
-            // Make sure the mouse is not over the GUI
-            if (EventSystem.current.IsPointerOverGameObject())
-            {
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.W))
-            {
-                showWidgets = !showWidgets;
-            }
-
-            // Shift-click pans the camera
-            if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
-            {
-                shiftPressed = true;
-            }
-            if (Input.GetKeyUp(KeyCode.LeftShift) || Input.GetKeyUp(KeyCode.RightShift))
-            {
-                shiftPressed = false;
-            }
-            if (Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.RightControl))
-            {
-                ctrlPressed = true;
-            }
-            if (Input.GetKeyUp(KeyCode.LeftControl) || Input.GetKeyUp(KeyCode.RightControl))
-            {
-                ctrlPressed = false;
-            }
-
-            var pan = Input.GetMouseButton(2) && !shiftPressed && !ctrlPressed;
-            var rotate = Input.GetMouseButton(0) && shiftPressed && !ctrlPressed;
-            var orbit = Input.GetMouseButton(0) && !shiftPressed && !ctrlPressed;
-            var zoom = Input.GetMouseButton(1) || (Input.GetMouseButton(0) && ctrlPressed);
-
-            // This doesn't seem to work in Unity (mouse scroll)
-            // var zoomWheel = Input.mouseScrollDelta.y > 0;
-
-            bool mouseDown = (pan || rotate || orbit || zoom);
-
-            Vector2 mousePos = Input.mousePosition;
-
-            if (mouseDown && !mousePressed)
-            {
-                mousePositionAtStart = mousePos;
-                mousePressed = true;
-
-            }
-            else if (!mouseDown && mousePressed)
-            {
-                mousePressed = false;
-            }
-
-
-            if (mousePressed)
-            {
-                rotationVelocity = Quaternion.identity;
-                Vector2 mouseDelta = mousePos - mousePositionAtStart;
-                Vector2 mouseDeltaInstant = new Vector2(
-                    Input.GetAxis("Mouse X"),
-                    Input.GetAxis("Mouse Y")
-                );
-
-                if (orbit)
-                {
-                    if (weightedControl)
-                    {
-                        rotationVelocity *= new Quaternion(-mouseDelta.y * rotationSpeed * Time.deltaTime, mouseDelta.x * rotationSpeed * Time.deltaTime, 0.0f, Time.deltaTime);
-                    }
-                    else
-                    {
-                        rotationVelocity = new Quaternion(-mouseDeltaInstant.y * rotationSpeed * Time.deltaTime * speedMult, mouseDeltaInstant.x * rotationSpeed * Time.deltaTime * speedMult, 0.0f, Time.deltaTime);
-                    }
-                }
-
-                if (rotate)
-                {
-                    if (weightedControl)
-                    {
-                        rotationVelocity *= new Quaternion(0.0f, 0.0f, -mouseDelta.y * rotationSpeed * Time.deltaTime + mouseDelta.x * rotationSpeed * Time.deltaTime, Time.deltaTime);
-                    }
-                    else
-                    {
-                        rotationVelocity = new Quaternion(0.0f, 0.0f, -mouseDeltaInstant.y * rotationSpeed * Time.deltaTime * speedMult + mouseDeltaInstant.x * rotationSpeed * Time.deltaTime * speedMult, Time.deltaTime);
-                    }
-                }
-
-                if (pan)
-                {
-                    if (weightedControl)
-                    {
-                        panVelocity += new Vector3(-mouseDelta.x * panSpeed, -mouseDelta.y * panSpeed, 0.0f) * Time.deltaTime;
-                    }
-                    else
-                    {
-                        panVelocity = new Vector3(-mouseDeltaInstant.x * panSpeed * speedMult * 20, -mouseDeltaInstant.y * panSpeed * speedMult * 20, 0.0f) * Time.deltaTime;
-                    }
-                }
-
-                if (zoom)
-                {
-                    if (weightedControl)
-                    {
-                        panVelocity += new Vector3(0.0f, 0.0f, mouseDelta.y * zoomSpeed) * Time.deltaTime;
-                    }
-                    else
-                    {
-                        panVelocity = new Vector3(0.0f, 0.0f, mouseDeltaInstant.y * zoomSpeed * speedMult * 20) * Time.deltaTime;
-                    }
-                }
-            }
-            else
-            {
-                if (weightedControl)
-                {
-                    rotationVelocity = Quaternion.LerpUnclamped(rotationVelocity, Quaternion.identity, rotationSpeed * speedMult);
-                    panVelocity = Vector3.LerpUnclamped(panVelocity, Vector3.zero, panSpeed * speedMult);
-                }
-                else
-                {
-                    rotationVelocity = Quaternion.identity;
-                    panVelocity = Vector3.zero;
-                }
-            }
         }
     }
 }
