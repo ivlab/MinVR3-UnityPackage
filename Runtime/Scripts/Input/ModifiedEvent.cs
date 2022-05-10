@@ -22,7 +22,7 @@ namespace IVLab.MinVR3
 
         void OnEnable()
         {
-            VREngine.Instance.eventManager.AddEventFilter(this);
+            VREngine.Instance.eventManager.AddEventFilter(this, -1);
         }
 
         void OnDisable()
@@ -34,9 +34,13 @@ namespace IVLab.MinVR3
         {
             bool modified = false;
             if (e.Matches(m_ModifierOnEvent))
+            {
                 m_ModifierOn = true;
+            }
             else if (e.Matches(m_ModifierOffEvent))
+            {
                 m_ModifierOn = false;
+            }
 
             if (e.Matches(m_BaseEvent))
             {
