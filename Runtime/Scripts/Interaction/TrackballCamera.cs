@@ -13,6 +13,10 @@ namespace IVLab.MinVR3
     /// </summary>
     public class TrackballCamera : MonoBehaviour
     {
+        [Header("Click checkbox to reset view")]
+        [SerializeField, Tooltip("Reset the camera's view to its initial view")]
+        private bool resetView;
+
         [Header("Styling controls")]
         [SerializeField, Tooltip("Show the on-screen widgets for indicating current axis and orbit/zoom/pan/rotate mode")]
         private bool showWidgets;
@@ -68,6 +72,15 @@ namespace IVLab.MinVR3
         private Vector3 angularVelocity = Vector3.zero;
         private Vector3 panVelocity = Vector3.zero;
 
+        // Keep track of initial transforms of Trackball / Camera Pivot (this) / Main
+        // Camera GameObjects
+        private Transform trackballParent;
+        private Transform mainCamera;
+
+        private Matrix4x4 initialTrackballXform;
+        private Matrix4x4 initialThisXform;
+        private Matrix4x4 initialMainCameraXform;
+
         // Does not lines up with state specified in Finite State Machines
         // (since each FSM only has 2 states)
         public enum TrackballState
@@ -102,6 +115,15 @@ namespace IVLab.MinVR3
 
         void Start()
         {
+            // Populate relative GameObjects
+            trackballParent = this.transform.parent;
+            mainCamera = this.transform.GetComponentInChildren<Camera>().transform;
+
+            // Populate starting transforms
+            initialTrackballXform = trackballParent.localToWorldMatrix;
+            initialThisXform = this.transform.localToWorldMatrix;
+            initialMainCameraXform = mainCamera.localToWorldMatrix;
+
             // Find widgets in scene
             axesWidget = transform.GetChild(0).Find("LeftHandAxis").gameObject;
             panWidget = transform.GetChild(0).Find("pan_arrow").gameObject;
@@ -186,6 +208,24 @@ namespace IVLab.MinVR3
             lastMousePosition = mousePosition;
         }
 
+        void ResetView()
+        {
+            angularVelocity = Vector3.zero;
+            panVelocity = Vector3.zero;
+
+            trackballParent.position = initialTrackballXform.ExtractPosition();
+            trackballParent.rotation = initialTrackballXform.ExtractRotation();
+            trackballParent.localScale = initialTrackballXform.ExtractScale();
+
+            this.transform.position = initialThisXform.ExtractPosition();
+            this.transform.rotation = initialThisXform.ExtractRotation();
+            this.transform.localScale = initialThisXform.ExtractScale();
+
+            mainCamera.position = initialMainCameraXform.ExtractPosition();
+            mainCamera.rotation = initialMainCameraXform.ExtractRotation();
+            mainCamera.localScale = initialMainCameraXform.ExtractScale();
+        }
+
         void Update()
         {
             if (slowing > 0.0f)
@@ -194,7 +234,6 @@ namespace IVLab.MinVR3
                 panVelocity = Vector3.LerpUnclamped(Vector3.zero, panVelocity, slowing / SlowingDuration);
                 slowing -= Time.deltaTime;
             }
-            // transform.rotation *= rotationVelocity;
             transform.rotation *= Quaternion.Euler(angularVelocity);
 
             Transform cam = this.transform.GetChild(0);
@@ -223,6 +262,12 @@ namespace IVLab.MinVR3
             rotationWidget.SetActive(showWidgets && (fsms[TrackballState.Orbit].currentStateID != 0 || fsms[TrackballState.Rotate].currentStateID != 0));
             truckWidget.SetActive(showWidgets && fsms[TrackballState.Truck].currentStateID != 0);
             panWidget.SetActive(showWidgets && fsms[TrackballState.Pan].currentStateID != 0);
+
+            if (resetView)
+            {
+                ResetView();
+                resetView = false;
+            }
         }
     }
 }
