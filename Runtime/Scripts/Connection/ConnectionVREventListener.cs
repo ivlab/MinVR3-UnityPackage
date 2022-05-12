@@ -8,7 +8,7 @@ namespace IVLab.MinVR3
     /// VREventConnection (for example, to a web browser.)
     /// </summary>
     [RequireComponent(typeof(IVREventConnection))]
-    public class ConnectionVREventListener : MonoBehaviour, IVREventFilter
+    public class ConnectionVREventListener : MonoBehaviour, IVREventListener
     {
         public List<string> EventNames { get => eventsToSend; }
         public List<string> EventTypes { get => eventsTypesToSend; }
@@ -29,11 +29,11 @@ namespace IVLab.MinVR3
 
         void Start()
         {
-            VREngine.Instance.eventManager.AddEventFilter(this);
+            VREngine.Instance.eventManager.AddEventListener(this);
             connection = this.GetComponent<IVREventConnection>();
         }
 
-        public bool FilterEvent(VREvent evt, ref List<VREvent> filterResult)
+        public void OnVREvent(VREvent evt)
         {
             // Send the event to the connection, if it's one of the events we've selected to send along
             if (
@@ -43,10 +43,9 @@ namespace IVLab.MinVR3
             {
                 connection.Send(evt);
             }
-
-            // Does not actually modify the event list, only receives the events
-            // and sends them along the connection
-            return false;
         }
+
+        public void StartListening() { }
+        public void StopListening() { }
     }
 }
