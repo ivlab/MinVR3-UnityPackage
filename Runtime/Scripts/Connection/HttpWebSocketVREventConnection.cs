@@ -24,9 +24,11 @@ namespace IVLab.MinVR3
         [Header("Networking Setup")]
         [SerializeField, Tooltip("WebSocket server host (usually IP address of this machine)")]
         private string host;
+        public string Host { get => host; }
 
         [SerializeField, Tooltip("WebSocket server port")]
         private string port;
+        public string Port { get => port; }
 
         [SerializeField, Tooltip("Root of the web server")]
         private WebServerRoot webServerLocation;

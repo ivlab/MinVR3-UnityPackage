@@ -49,11 +49,11 @@ class VREvent {
             case 'Quaternion':
                 return new MinVR3Event.Quaternion(json.m_Name, json.m_Data.x, json.m_Data.y, json.m_Data.z, json.m_Data.w);
             case 'string':
-                return new MinVR3Event.String(json.m_Name, json.m_Data.value);
-            case 'int':
-                return new MinVR3Event.Int(json.m_Name, json.m_Data.value);
-            case 'float':
-                return new MinVR3Event.Float(json.m_Name, json.m_Data.value);
+                return new MinVR3Event.String(json.m_Name, json.m_Data);
+            case 'Int32':
+                return new MinVR3Event.Int(json.m_Name, json.m_Data);
+            case 'Single':
+                return new MinVR3Event.Float(json.m_Name, json.m_Data);
             default:
                 return null;
         }
