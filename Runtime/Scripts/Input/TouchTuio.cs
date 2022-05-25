@@ -113,7 +113,7 @@ namespace IVLab.MinVR3
             if (m_FlipYAxis) {
                 pos.y = 1.0f - pos.y;
             }
-            VREngine.instance.eventManager.QueueEvent(new VREventVector2(m_DeviceIdString + baseEventName + "/Down", pos));
+            VREngine.Instance.eventManager.QueueEvent(new VREventVector2(m_DeviceIdString + baseEventName + "/Down", pos));
         }
 
         public void updateTuioCursor(TuioCursor tcur)
@@ -125,7 +125,7 @@ namespace IVLab.MinVR3
             if (m_FlipYAxis) {
                 pos.y = 1.0f - pos.y;
             }
-            VREngine.instance.eventManager.QueueEvent(new VREventVector2(m_DeviceIdString + baseEventName + "/Position", pos));
+            VREngine.Instance.eventManager.QueueEvent(new VREventVector2(m_DeviceIdString + baseEventName + "/Position", pos));
         }
 
         public void removeTuioCursor(TuioCursor tcur)
@@ -137,7 +137,7 @@ namespace IVLab.MinVR3
             if (m_FlipYAxis) {
                 pos.y = 1.0f - pos.y;
             }
-            VREngine.instance.eventManager.QueueEvent(new VREventVector2(m_DeviceIdString + baseEventName + "/Up", pos));
+            VREngine.Instance.eventManager.QueueEvent(new VREventVector2(m_DeviceIdString + baseEventName + "/Up", pos));
         }
 
 

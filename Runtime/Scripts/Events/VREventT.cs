@@ -7,24 +7,22 @@ using System.Runtime.Serialization;
 namespace IVLab.MinVR3
 {
 
+    [System.Serializable]
     public class VREventT<T> : VREvent
     {
         protected VREventT(string eventName, T eventData) : base(eventName)
         {
             m_Data = eventData;
+            m_DataTypeName = typeof(T).Name;
         }
 
         protected VREventT() : base()
         {
+            m_DataTypeName = typeof(T).Name;
         }
 
         public T data {
             get => m_Data;
-        }
-
-        public override string GetDataTypeName()
-        {
-            return typeof(T).Name;
         }
 
         public T GetData()
@@ -43,6 +41,7 @@ namespace IVLab.MinVR3
             base.GetObjectData(info, context);
         }
 
+        [SerializeField]
         protected T m_Data;
     }
 

@@ -8,22 +8,27 @@
         {
             "displayName": "CavePainting-Lite",
             "description": "Simple 3D painting application with a bimanual 3DUI for painting; translating, rotating, and scaling the artwork; and scaling the brush.  Demonstrates the use of a ProximityEvent to overload the meaning of a button when holding both hands close together, like in the original CavePainting software.",
-            "path": "Samples/CavePainting-Lite"
+            "path": "Samples~/CavePainting-Lite"
         },
         {
             "displayName": "ObjectManipulation",
             "description": "Demonstrates bimanual manipulation of both the object and the scene using something like the classic SmartScene 3DUI.",
-            "path": "Samples/ObjectManipulation"
+            "path": "Samples~/ObjectManipulation"
         },
         {
             "displayName": "SailingMapNav",
             "description": "Demonstrates a ClipboardVR config, including a map-based, wim-style navigation technique developed in Jung Nam's forestry data vis project; applied here to the idea of sailing around in a lagoon of islands.",
-            "path": "Samples/SailingMapNav"
+            "path": "Samples~/SailingMapNav"
         },
         {
             "displayName": "ShadowTouch",
             "description": "Divides the display into two windows that are intended to span two screens arranged in a L-shape, with a horizontal touch table as one display and a vertical stereoscopic window for the other.  Demonstrates the ShadowWIM technique, which is a precursor to the SliceWIM and Interactive SliceWIM user interfaces developed in Dane Coffey's dissertation work.",
-            "path": "Samples/ShadowTouch"
+            "path": "Samples~/ShadowTouch"
+        },
+        {
+            "displayName": "Networked Events",
+            "description": "Demonstrates some of the possibilities enabled by asynchronous networked VREvents. This particular sample serves a small webpage and passes VREvents back and forth between Unity and the browser.",
+            "path": "Samples~/NetworkedEvents"
         }
     ]
 }
