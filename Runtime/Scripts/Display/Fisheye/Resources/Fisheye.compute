@@ -1,0 +1,51 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel fisheye
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+float fisheyeAngle;
+float invTextureSize;
+TextureCube sourceCubemap;
+RWTexture2D<float4> result;
+
+SamplerState sampler_sourceCubemap
+{
+	Filter = ANISOTROPIC;
+	AddressU = Wrap;
+	AddressV = Wrap;
+};
+
+
+[numthreads(32,32,1)]
+void fisheye(uint3 id : SV_DispatchThreadID)
+{
+	float2 uv = id.xy * invTextureSize;
+	uv *= 2;
+	uv -= 1;
+	uv.y *= -1;
+
+	float r = (uv.x * uv.x) + (uv.y * uv.y);
+	if (r > 1)
+	{
+		result[id.xy] = float4(0, 0, 0, 0);
+		return;
+	}
+
+	float theta = atan2(uv.y, uv.x);
+	float phi = fisheyeAngle * sqrt(r);
+	float3 unit = float3(0, 0, 0);
+
+	float sintheta = 0;
+	float costheta = 0;
+	float sinphi = 0;
+	float cosphi = 0;
+
+	sincos(theta, sintheta, costheta);
+	sincos(phi, sinphi, cosphi);
+
+	unit.x = sinphi * costheta;
+	unit.y = sinphi * sintheta;// *-1;
+	unit.z = cosphi;
+
+	result[id.xy] = sourceCubemap.SampleLevel(sampler_sourceCubemap, unit, 0);
+}

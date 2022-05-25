@@ -56,6 +56,31 @@ namespace IVLab.MinVR3
         {
             if (!m_EventFilters.Contains(filter)) {
                 m_EventFilters.Add(filter);
+                int maxPriority = 0;
+                try { maxPriority = m_EventFilterPriorities.Max(); }
+                catch (InvalidOperationException) { }
+                m_EventFilterPriorities.Add(maxPriority + 1);
+            }
+        }
+
+        /// <summary>
+        /// Add an event filter and specify the priority (index) with which it
+        /// should be run relative to other event filters.
+        /// </summary>
+        public void AddEventFilter(IVREventFilter filter, int priority)
+        {
+            int insertPriority = m_EventFilterPriorities.FindIndex(p => p >= priority);
+            if (!m_EventFilters.Contains(filter)) {
+                if (insertPriority >= 0)
+                {
+                    m_EventFilters.Insert(insertPriority, filter);
+                    m_EventFilterPriorities.Insert(insertPriority, priority);
+                }
+                else
+                {
+                    m_EventFilters.Add(filter);
+                    m_EventFilterPriorities.Add(priority);
+                }
             }
         }
 
@@ -214,6 +239,7 @@ namespace IVLab.MinVR3
         [NonSerialized] private List<IPolledInputDevice> m_PolledInputDevices = new List<IPolledInputDevice>();
         [NonSerialized] private List<Tuple<int, IVREventListener>> m_EventListeners = new List<Tuple<int, IVREventListener>>();
         [NonSerialized] private List<IVREventFilter> m_EventFilters = new List<IVREventFilter>();
+        [NonSerialized] private List<int> m_EventFilterPriorities = new List<int>();
         [NonSerialized] private List<VREvent> m_Queue = new List<VREvent>();
         [NonSerialized] private List<VREvent> m_DerivedQueue = new List<VREvent>();
 

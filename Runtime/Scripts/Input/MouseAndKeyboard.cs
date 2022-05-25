@@ -31,12 +31,12 @@ namespace IVLab.MinVR3
 
         private void OnEnable()
         {
-            VREngine.instance.eventManager.AddPolledInputDevice(this);
+            VREngine.Instance.eventManager.AddPolledInputDevice(this);
         }
 
         private void OnDisable()
         {
-            VREngine.instance?.eventManager?.RemovePolledInputDevice(this);
+            VREngine.Instance?.eventManager?.RemovePolledInputDevice(this);
         }
 
         void Reset()
@@ -62,6 +62,11 @@ namespace IVLab.MinVR3
             m_KeysToVREventNames.Add(new KeyToVREventName(KeyCode.Y, "Keyboard/Y"));
             m_KeysToVREventNames.Add(new KeyToVREventName(KeyCode.Z, "Keyboard/Z"));
             m_KeysToVREventNames.Add(new KeyToVREventName(KeyCode.LeftShift, "Keyboard/LeftShift"));
+            m_KeysToVREventNames.Add(new KeyToVREventName(KeyCode.RightShift, "Keyboard/RightShift"));
+            m_KeysToVREventNames.Add(new KeyToVREventName(KeyCode.LeftControl, "Keyboard/LeftControl"));
+            m_KeysToVREventNames.Add(new KeyToVREventName(KeyCode.RightControl, "Keyboard/RightControl"));
+            m_KeysToVREventNames.Add(new KeyToVREventName(KeyCode.LeftAlt, "Keyboard/LeftAlt"));
+            m_KeysToVREventNames.Add(new KeyToVREventName(KeyCode.RightAlt, "Keyboard/RightAlt"));
             m_KeysToVREventNames.Add(new KeyToVREventName(KeyCode.Alpha0, "Keyboard/0"));
             m_KeysToVREventNames.Add(new KeyToVREventName(KeyCode.Alpha1, "Keyboard/1"));
             m_KeysToVREventNames.Add(new KeyToVREventName(KeyCode.Alpha2, "Keyboard/2"));
@@ -127,7 +132,7 @@ namespace IVLab.MinVR3
                     eventQueue.Add(new VREvent(m_MiddleBtnEventName + "/Down"));
                 }
                 if (MouseState.MiddleButtonWasReleasedThisFrame()) {
-                    eventQueue.Add(new VREvent(m_MiddleBtnEventName + "/Down"));
+                    eventQueue.Add(new VREvent(m_MiddleBtnEventName + "/Up"));
                 }
             }
 

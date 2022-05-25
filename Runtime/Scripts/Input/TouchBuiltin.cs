@@ -33,12 +33,12 @@ namespace IVLab.MinVR3
 
         private void OnEnable()
         {
-            VREngine.instance.eventManager.AddPolledInputDevice(this);
+            VREngine.Instance.eventManager.AddPolledInputDevice(this);
         }
 
         private void OnDisable()
         {
-            VREngine.instance?.eventManager?.RemovePolledInputDevice(this);
+            VREngine.Instance?.eventManager?.RemovePolledInputDevice(this);
         }
 
 

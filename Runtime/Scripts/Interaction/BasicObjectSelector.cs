@@ -52,11 +52,11 @@ namespace IVLab.MinVR3
             if ((m_RequireToken == null) || (m_RequireToken.RequestToken(this))) {
                 if (nowSelected != null) {
                     if (m_Selected != null) {
-                        VREngine.instance.eventManager.InsertInQueue(new VREventGameObject(m_DeselectEventName, m_Selected.gameObject));
+                        VREngine.Instance.eventManager.InsertInQueue(new VREventGameObject(m_DeselectEventName, m_Selected.gameObject));
                     }
-                    VREngine.instance.eventManager.InsertInQueue(new VREventGameObject(m_SelectEventName, nowSelected.gameObject));
+                    VREngine.Instance.eventManager.InsertInQueue(new VREventGameObject(m_SelectEventName, nowSelected.gameObject));
                 } else {
-                    VREngine.instance.eventManager.InsertInQueue(new VREventGameObject(m_DeselectEventName, m_Selected.gameObject));
+                    VREngine.Instance.eventManager.InsertInQueue(new VREventGameObject(m_DeselectEventName, m_Selected.gameObject));
                 }
                 m_Selected = nowSelected;
                 if (m_RequireToken != null) {

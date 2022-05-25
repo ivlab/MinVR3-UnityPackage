@@ -16,12 +16,12 @@ namespace IVLab.MinVR3
 
         void OnEnable()
         {
-            VREngine.instance.eventManager.AddEventFilter(this);
+            VREngine.Instance.eventManager.AddEventFilter(this);
         }
 
         void OnDisable()
         {
-            VREngine.instance?.eventManager?.RemoveEventFilter(this);
+            VREngine.Instance?.eventManager?.RemoveEventFilter(this);
         }
 
         protected virtual void Reset()
@@ -33,22 +33,23 @@ namespace IVLab.MinVR3
 
         public bool FilterEvent(VREvent e, ref List<VREvent> filterResult)
         {
+            bool modified = false;
             foreach (var prototype in m_OriginalEvents) {
                 if (e.Matches(prototype)) {
                     if (m_AliasStrategy == AliasStrategy.RenameOriginal) {
                         e.name = m_AliasEventName;
                         filterResult.Add(e);
-                        return true;
+                        modified = true;
                     } else {
                         VREvent e2 = e.Clone();
                         e2.name = m_AliasEventName;
                         filterResult.Add(e);
                         filterResult.Add(e2);
-                        return true;
+                        modified = true;
                     }
                 }
             }
-            return false;
+            return modified;
         }
 
 

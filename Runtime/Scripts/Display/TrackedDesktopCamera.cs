@@ -24,12 +24,12 @@ namespace IVLab.MinVR3 {
             if (m_Camera == null) {
                 m_Camera = Camera.main;
             }
-            VREngine.instance.eventManager.AddEventListener(this);
+            VREngine.Instance.eventManager.AddEventListener(this);
         }
 
         void OnDisable()
         {
-            VREngine.instance?.eventManager?.RemoveEventListener(this);
+            VREngine.Instance?.eventManager?.RemoveEventListener(this);
         }
 
         public void OnVREvent(VREvent vrEvent)
@@ -48,13 +48,13 @@ namespace IVLab.MinVR3 {
 
         public void StartListening()
         {
-            VREngine.instance.eventManager.AddEventListener(this);
+            VREngine.Instance.eventManager.AddEventListener(this);
             m_Listening = true;
         }
 
         public void StopListening()
         {
-            VREngine.instance?.eventManager?.RemoveEventListener(this);
+            VREngine.Instance?.eventManager?.RemoveEventListener(this);
             m_Listening = false;
         }
 
