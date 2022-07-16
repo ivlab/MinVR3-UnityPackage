@@ -1,0 +1,479 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1796001304921477646
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6472071522499809476}
+  - component: {fileID: 2808469265045074649}
+  m_Layer: 0
+  m_Name: RightHand XRController (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6472071522499809476
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1796001304921477646}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5899677088487712102}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2808469265045074649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1796001304921477646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f95d5bb211ac64f779196a5b7d6435d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_DeviceName: MinVRRightHand
+  m_CommonUsages: RightHand
+  m_PositionEvent:
+    m_EventName: FakeTrackers/Tracker 2/Position
+    m_DataTypeName: Vector3
+  m_RotationEvent:
+    m_EventName: FakeTrackers/Tracker 2/Rotation
+    m_DataTypeName: Quaternion
+  m_PrimaryButtonDownEvent:
+    m_EventName: Mouse/Right/Down
+    m_DataTypeName: 
+  m_PrimaryButtonUpEvent:
+    m_EventName: Mouse/Right/Up
+    m_DataTypeName: 
+  m_SecondaryButtonDownEvent:
+    m_EventName: 
+    m_DataTypeName: 
+  m_SecondaryButtonUpEvent:
+    m_EventName: 
+    m_DataTypeName: 
+  m_PrimaryAxisEvent:
+    m_EventName: 
+    m_DataTypeName: Single
+  m_Primary2DAxisEvent:
+    m_EventName: 
+    m_DataTypeName: Vector2
+--- !u!1 &2347648879630540810
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2229996673909892079}
+  - component: {fileID: 7643212408287801544}
+  - component: {fileID: 1185372979940044619}
+  m_Layer: 0
+  m_Name: Fake VR Input Devices
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2229996673909892079
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2347648879630540810}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5899677088487712102}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7643212408287801544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2347648879630540810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d15ba399a76aa4ba0b9e5b3f5ae18ba4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_DeviceIdString: FakeTrackers/
+  moveHeadForwardKey: 273
+  moveHeadBackKey: 274
+  turnHeadLeftKey: 276
+  turnHeadRightKey: 275
+  headTrackerBaseName: Head
+  initialHeadPos: {x: 0, y: 1, z: -2}
+  initialHeadRot: {x: 0, y: 0, z: 0}
+  toggleTracker1Key: 49
+  toggleTracker2Key: 50
+  rotateXKey: 120
+  rotateYKey: 121
+  rotateZKey: 122
+  dollyKey: 304
+  tracker1BaseName: Tracker 1
+  initialTracker1Pos: {x: 0, y: 0, z: 0}
+  initialTracker1Rot: {x: 0, y: 0, z: 0}
+  tracker2BaseName: Tracker 2
+  initialTracker2Pos: {x: 0, y: 0, z: 0}
+  initialTracker2Rot: {x: 0, y: 0, z: 0}
+--- !u!114 &1185372979940044619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2347648879630540810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 665a0284d633747369d96c465970a8fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PointerEventName: Mouse/Position
+  m_LeftBtnEventName: Mouse/Left
+  m_MiddleBtnEventName: Mouse/Middle
+  m_RightBtnEventName: Mouse/Right
+  m_KeysToVREventNames:
+  - key: 32
+    name: Keyboard/Space
+  - key: 273
+    name: Keyboard/UpArrow
+  - key: 274
+    name: Keyboard/DownArrow
+  - key: 276
+    name: Keyboard/LeftArrow
+  - key: 275
+    name: Keyboard/RightArrow
+  - key: 119
+    name: Keyboard/W
+  - key: 97
+    name: Keyboard/A
+  - key: 115
+    name: Keyboard/S
+  - key: 100
+    name: Keyboard/D
+  - key: 120
+    name: Keyboard/X
+  - key: 121
+    name: Keyboard/Y
+  - key: 122
+    name: Keyboard/Z
+  - key: 304
+    name: Keyboard/LeftShift
+  - key: 48
+    name: Keyboard/0
+  - key: 49
+    name: Keyboard/1
+  - key: 50
+    name: Keyboard/2
+  - key: 51
+    name: Keyboard/3
+  - key: 52
+    name: Keyboard/4
+  - key: 53
+    name: Keyboard/5
+  - key: 54
+    name: Keyboard/6
+  - key: 55
+    name: Keyboard/7
+  - key: 56
+    name: Keyboard/8
+  - key: 57
+    name: Keyboard/9
+--- !u!1 &2750466822763730025
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2750466822763730026}
+  - component: {fileID: 2750466822763730028}
+  - component: {fileID: 2750466822763730027}
+  m_Layer: 0
+  m_Name: Unity XR Event System
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2750466822763730026
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2750466822763730025}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5899677088487712102}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2750466822763730028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2750466822763730025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76c392e42b5098c458856cdf6ecaaaa1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 1
+  m_DragThreshold: 10
+--- !u!114 &2750466822763730027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2750466822763730025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab68ce6587aab0146b8dabefbd806791, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ClickSpeed: 0.3
+  m_MoveDeadzone: 0.6
+  m_RepeatDelay: 0.5
+  m_RepeatRate: 0.1
+  m_TrackedDeviceDragThresholdMultiplier: 1.4
+  m_MaxTrackedDeviceRaycastDistance: 1000
+  m_EnableXRInput: 1
+  m_EnableMouseInput: 1
+  m_EnableTouchInput: 1
+  m_EnableGamepadInput: 1
+  m_EnableJoystickInput: 1
+  m_HorizontalAxis: Horizontal
+  m_VerticalAxis: Vertical
+  m_SubmitButton: Submit
+  m_CancelButton: Cancel
+--- !u!1 &2750466823851932260
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2750466823851932261}
+  - component: {fileID: 2750466823851932262}
+  m_Layer: 0
+  m_Name: LeftHand XRController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2750466823851932261
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2750466823851932260}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5899677088487712102}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2750466823851932262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2750466823851932260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f95d5bb211ac64f779196a5b7d6435d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_DeviceName: MinVRLeftHand
+  m_CommonUsages: LeftHand
+  m_PositionEvent:
+    m_EventName: FakeTrackers/Tracker 1/Position
+    m_DataTypeName: Vector3
+  m_RotationEvent:
+    m_EventName: FakeTrackers/Tracker 1/Rotation
+    m_DataTypeName: Quaternion
+  m_PrimaryButtonDownEvent:
+    m_EventName: Mouse/Left/Down
+    m_DataTypeName: 
+  m_PrimaryButtonUpEvent:
+    m_EventName: Mouse/Left/Up
+    m_DataTypeName: 
+  m_SecondaryButtonDownEvent:
+    m_EventName: 
+    m_DataTypeName: 
+  m_SecondaryButtonUpEvent:
+    m_EventName: 
+    m_DataTypeName: 
+  m_PrimaryAxisEvent:
+    m_EventName: 
+    m_DataTypeName: Single
+  m_Primary2DAxisEvent:
+    m_EventName: 
+    m_DataTypeName: Vector2
+--- !u!1 &4005386514795107628
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9013987384796966420}
+  - component: {fileID: 2904820301482174332}
+  - component: {fileID: 4898758899096648038}
+  - component: {fileID: 4836109304889711378}
+  m_Layer: 0
+  m_Name: Main Camera
+  m_TagString: MainCamera
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9013987384796966420
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4005386514795107628}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: -3.56}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5899677088487712102}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!20 &2904820301482174332
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4005386514795107628}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.10746707, g: 0.14271834, b: 0.1981132, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_FocalLength: 50
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 70
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!81 &4898758899096648038
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4005386514795107628}
+  m_Enabled: 1
+--- !u!114 &4836109304889711378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4005386514795107628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a369e5af6af647d7ad0953208f4468a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_PositionEvent:
+    m_EventName: FakeTrackers/Head/Position
+    m_DataTypeName: Vector3
+  m_RotationEvent:
+    m_EventName: FakeTrackers/Head/Rotation
+    m_DataTypeName: Quaternion
+  m_Camera: {fileID: 2904820301482174332}
+--- !u!1 &6347391856107626000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5899677088487712102}
+  m_Layer: 0
+  m_Name: VRConfig_DesktopVRSimulatorWithXRI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5899677088487712102
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6347391856107626000}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 9013987384796966420}
+  - {fileID: 2229996673909892079}
+  - {fileID: 2750466822763730026}
+  - {fileID: 2750466823851932261}
+  - {fileID: 6472071522499809476}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
