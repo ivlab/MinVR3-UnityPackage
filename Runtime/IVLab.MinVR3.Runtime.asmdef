@@ -7,7 +7,8 @@
         "IVLab.Utilities.Runtime",
         "Unity.XR.Interaction.Toolkit",
         "IVLab.TUIO11.Runtime",
-        "IVLab.zCore6.Runtime"
+        "IVLab.zCore6.Runtime",
+        "IVLab.Template.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -31,6 +32,11 @@
             "name": "edu.umn.cs.ivlab.zcore6",
             "expression": "0.1.0",
             "define": "ZCORE_PRESENT"
+        },
+        {
+            "name": "edu.umn.cs.ivlab.sensel",
+            "expression": "0.1.0",
+            "define": "SENSEL_PRESENT"
         }
     ],
     "noEngineReferences": false

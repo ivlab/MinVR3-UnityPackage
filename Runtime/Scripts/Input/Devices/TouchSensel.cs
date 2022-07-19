@@ -1,3 +1,5 @@
+#if SENSEL_PRESENT
+
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -191,3 +193,5 @@ namespace IVLab.MinVR3
     }
 
 } // namespace
+
+# endif
