@@ -5,7 +5,9 @@
         "Unity.TextMeshPro",
         "Unity.InputSystem",
         "IVLab.Utilities.Runtime",
-        "Unity.XR.Interaction.Toolkit"
+        "Unity.XR.Interaction.Toolkit",
+        "IVLab.TUIO11.Runtime",
+        "IVLab.zCore6.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -19,6 +21,16 @@
             "name": "com.unity.xr.interaction.toolkit",
             "expression": "1.0",
             "define": "XR_INTERACTION_TOOLKIT_PRESENT"
+        },
+        {
+            "name": "edu.umn.cs.ivlab.tuio11",
+            "expression": "0.1.0",
+            "define": "TUIO_PRESENT"
+        },
+        {
+            "name": "edu.umn.cs.ivlab.zcore6",
+            "expression": "0.1.0",
+            "define": "ZCORE_PRESENT"
         }
     ],
     "noEngineReferences": false

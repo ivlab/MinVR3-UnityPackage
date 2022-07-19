@@ -1,4 +1,5 @@
-using System.Collections;
+#if TUIO_PRESENT
+
 using System.Collections.Generic;
 using UnityEngine;
 using TUIO;
@@ -226,3 +227,5 @@ namespace IVLab.MinVR3
     }
 
 } // namespace
+
+#endif
