@@ -13,7 +13,22 @@
 2. Click the ```+``` button
 3. Select ```Add package from git URL```
 4. Paste ```git@github.umn.edu:ivlab-cs/MinVR3-UnityPackage.git``` for the latest package
-5. Repeat steps 2-4 for each of these additional dependencies:
+5. Repeat steps 2-4 for each of these required dependencies:
+  - REQUIRED: ```git@github.umn.edu:ivlab-cs/IVLab-Utilities-UnityPackage.git```
+6. Repeat steps 2-4 for any of these optional dependencies IF you would like to use the functionality they provide.  Note: The logic for these optional dependencies is contained in the MinVR3/Runtime/IVLab.MinVR3.Runtime.asmdef file, which you can see/edit within the Unity editor by clicking on the filename in the Project view.  If MinVR finds the optional packages within the solution, it sets a #define of the form PACKAGENAME_PRESENT.  All of the MinVR code that relates to the package is written inside #if PACKAGENAME_PRESENT ... #endif blocks.  This is a nice way to implement optional dependencies in that MinVR automatically compiles and works without the optional functionality when the package is not found, and MinVR automatically includes the functionality that depends on the package whenever the package is installed.
+
+| Package Name | Functionality / Notes | git repo |
+|--------------|-----------------------|----------|
+| Sensel       | Reads data from a [Sensel Morph](https://morph.sensel.com/) pressure-sensitive multi-touch devices and translates input to VREvents. | ```git@github.umn.edu:ivlab-cs/Sensel-UnityPackage.git``` |
+| TUIO11       | Reads touch data sent over a network connection via the TUIO protocol.  [TUIO servers and simulators are available for many touch devices and platforms.](https://www.tuio.org/?software) | ```git@github.umn.edu:ivlab-cs/TUIO11-UnityPackage.git``` |
+| WebSocket    | Makes it possible to use the scripts in Scripts/Connection to make a MinVR Unity program talk (send/receive VREvents) with a webpage. | ```git@github.umn.edu:ivlab-cs/WebSocket-UnityPackage.git``` |
+| XR Interaction Toolkit | Makes it possible to use Unity's XR Interaction Toolkit and New Event System side-by-side with MinVR.  VREvents can be combined into a MinVRController that implements the XRController interface that the XR Interaction Toolkit expects.  AND, input from any XRControllers that Unity knows about can also be converted into VREvents. | Install the XR Interaction Toolkit package from Unity. | 
+| zCore6       | Provides support for zSpace input and display devices via their zCore 6.0 API.  Note: The API (and hence this support) only works on Unity 2019. | ```git@github.umn.edu:ivlab-cs/zCore6-UnityPackage.git``` |
+
+
+
+
+6. Repeat steps 2-4 for each of these additional dependencies:
   - REQUIRED: ```git@github.umn.edu:ivlab-cs/IVLab-Utilities-UnityPackage.git```
   - (Optional, only needed if WebSocket support is desired) ```git@github.umn.edu:ivlab-cs/WebSocket-UnityPackage.git```
   - (Optional, only needed if Sensel support is desired) ```git@github.umn.edu:ivlab-cs/Sensel-UnityPackage.git```
