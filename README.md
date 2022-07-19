@@ -26,15 +26,6 @@
 | zCore6       | Provides support for zSpace input and display devices via their zCore 6.0 API.  Note: The API (and hence this support) only works on Unity 2019. | ```git@github.umn.edu:ivlab-cs/zCore6-UnityPackage.git``` |
 
 
-
-
-6. Repeat steps 2-4 for each of these additional dependencies:
-  - REQUIRED: ```git@github.umn.edu:ivlab-cs/IVLab-Utilities-UnityPackage.git```
-  - (Optional, only needed if WebSocket support is desired) ```git@github.umn.edu:ivlab-cs/WebSocket-UnityPackage.git```
-  - (Optional, only needed if Sensel support is desired) ```git@github.umn.edu:ivlab-cs/Sensel-UnityPackage.git```
-  - (Optional, only needed if zSpace support is desired) ```git@github.umn.edu:ivlab-cs/zCore6-UnityPackage.git```
-  - (Optional, only needed if TUIO support is desired) ```git@github.umn.edu:ivlab-cs/TUIO11-UnityPackage.git```
-
 ## To switch to development mode so you can edit code within the package
 Note: Collectively, the lab now recommends a development process where you start by adding the package to your project in read-only mode, as described above.  This way, your Unity project files will always maintain a link to download the latest version of the package from git whenever the project is loaded, and all users of the package will be including it the same way.  If/when you have a need to edit the package, the process is then to "temporarily" switch into development mode by cloning a temporary copy of the package, then edit the source as needed, test your edits for as long as you like, etc.  Finally, when you get to a good stopping point, commit and push the changes to github.  Once the latest version of your package is on github, you can then switch out of development mode.  This will cause Unity to revert to using the read-only version of the package, and since Unity knows where to access this on github, it is easy to tell Unity to use the latest available version.
 
