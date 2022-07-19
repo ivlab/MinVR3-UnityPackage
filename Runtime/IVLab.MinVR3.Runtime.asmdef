@@ -8,7 +8,8 @@
         "Unity.XR.Interaction.Toolkit",
         "IVLab.TUIO11.Runtime",
         "IVLab.zCore6.Runtime",
-        "IVLab.Template.Runtime"
+        "IVLab.Template.Runtime",
+        "IVLab.WebSocket.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -37,6 +38,11 @@
             "name": "edu.umn.cs.ivlab.sensel",
             "expression": "0.1.0",
             "define": "SENSEL_PRESENT"
+        },
+        {
+            "name": "edu.umn.cs.ivlab.websocket",
+            "expression": "0.1.0",
+            "define": "WEBSOCKET_PRESENT"
         }
     ],
     "noEngineReferences": false

@@ -1,3 +1,5 @@
+#if WEBSOCKET_PRESENT
+
 using UnityEngine;
 using System.Collections.Generic;
 using WebSocketSharp;
@@ -45,7 +47,7 @@ namespace IVLab.MinVR3
 
         private const string VREventPath = "/vrevent";
 
-        #region VR Event Connection Send/Receive
+#region VR Event Connection Send/Receive
         public IVREventConnection.VREventReceivedDelegate OnVREventReceived { get; set; }
 
         public void Send(in VREvent evt)
@@ -53,10 +55,10 @@ namespace IVLab.MinVR3
             string serializedEvent = JsonUtility.ToJson(evt);
             wssv.WebSocketServices[VREventPath].Sessions.Broadcast(serializedEvent);
         }
-        #endregion
+#endregion
 
 
-        #region Unity MonoBehaviour Methods
+#region Unity MonoBehaviour Methods
         void Reset()
         {
             host = "127.0.0.1";
@@ -131,9 +133,9 @@ namespace IVLab.MinVR3
         {
             wssv.Stop();
         }
-        #endregion
+#endregion
 
-        #region WebSocketSharp message handlers
+#region WebSocketSharp message handlers
         private class VREventWebSocketMessage : WebSocketBehavior
         {
             public HttpWebSocketVREventConnection owner;
@@ -154,6 +156,8 @@ namespace IVLab.MinVR3
                 owner.OnVREventReceived.Invoke(evt);
             }
         }
-        #endregion
+#endregion
     }
 }
+
+#endif

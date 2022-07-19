@@ -1,3 +1,5 @@
+#if WEBSOCKET_PRESENT
+
 using UnityEngine;
 using UnityEngine.Events;
 using WebSocketSharp;
@@ -86,3 +88,5 @@ namespace IVLab.MinVR3
         #endregion
     }
 }
+
+#endif
