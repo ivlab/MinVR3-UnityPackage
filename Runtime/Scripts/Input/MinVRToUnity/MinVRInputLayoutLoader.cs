@@ -1,3 +1,5 @@
+#if XR_INTERACTION_TOOLKIT_PRESENT
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -35,3 +37,5 @@ namespace IVLab.MinVR3
         }
     }
 }
+
+#endif

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace IVLab.MinVR3
 {
-
+    
     /// <summary>
     /// This is useful for debugging displays that use off-axis projection, like the walls of a Cave of a fishtank VR
     /// or Powerwall display.  The position of each eye (as reported via head tracking) is projected onto the plane of

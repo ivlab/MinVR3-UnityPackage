@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 namespace IVLab.MinVR3 {
-
+    
     /*  You should define one or more VRDevices in your application for MinVR to use by attaching a VRDevice
      *  component to one or more GameObjects.  When initialized, the VREngine will activate exactly one of these
      *  VRDevices and deactivate all others.  This acts like a switch, so you can attach anything that should only
