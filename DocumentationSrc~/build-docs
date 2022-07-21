@@ -28,6 +28,7 @@ help()
   echo "Usage: build-docs [--help|build|serve|clean]"
   echo "options:"
   echo "--serve [default] Builds the webpages and starts a web server on localhost:8080"
+  echo "--publish         Git pushes the contents of Documentation~ to origin/gh-pages"
   echo "--build           Builds only, does not start the webserver"
   echo "--clean           Removes temporary files created by DocFx (**/obj/**, api/*.yml)"
   echo "--help            Displays this message"
@@ -66,6 +67,8 @@ elif [ $# -eq 1 ]; then
     buildMode="--build"
   elif [[ "$1" == "--clean" ]]; then
     buildMode="--clean"
+  elif [[ "$1" == "--publish" ]]; then
+    buildMode="--publish"
   elif [[ "$1" == "--help" ]]; then
     help
     exit 0
@@ -108,6 +111,10 @@ if [[ "$buildMode" == "--clean" ]]; then
   exe find $docSrcDir/api -type f -name "*.yml" -delete
   exe find $docSrcDir/api -type f -name ".manifest" -delete
   exe find $apiSrcDir -type d -name "obj" -exec /bin/rm -rf "{}" +
+  exit
+elif [[ "$buildMode" == "--publish" ]]; then
+  cd $scriptDir/..
+  exe git subtree push --prefix Documentation\~ origin gh-pages
   exit
 fi
 
