@@ -1,4 +1,4 @@
-#if XR_INTERACTION_TOOLKIT_PRESENT
+#if XR_INTERACTION_TOOLKIT_PRESENT || BUILDING_DOCS
 
 using System.Runtime.InteropServices;
 using UnityEngine.InputSystem.Layouts;
@@ -62,7 +62,7 @@ namespace IVLab.MinVR3 {
         /// </summary>
         /// <param name="button">Button whose state to set.</param>
         /// <param name="state">Whether to set the bit on or off.</param>
-        /// <returns>The same <see cref="XRSimulatedControllerState"/> with the change applied.</returns>
+        /// <returns>The same <see cref="MinVRControllerState"/> with the change applied.</returns>
         /// <seealso cref="buttons"/>
         public MinVRControllerState WithButton(MinVRControllerButton button, bool state = true)
         {

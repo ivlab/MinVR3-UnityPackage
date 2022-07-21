@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace IVLab.MinVR3 {
-    
+namespace IVLab.MinVR3
+{
+
     /*  You should define one or more VRDevices in your application for MinVR to use by attaching a VRDevice
      *  component to one or more GameObjects.  When initialized, the VREngine will activate exactly one of these
      *  VRDevices and deactivate all others.  This acts like a switch, so you can attach anything that should only
@@ -31,7 +32,8 @@ namespace IVLab.MinVR3 {
      *  switch.
      */
     [AddComponentMenu("MinVR/VRConfig Selector")]
-    public class VRConfigSelector : MonoBehaviour {
+    public class VRConfigSelector : MonoBehaviour
+    {
 
         public string[] GetConfigNames()
         {

@@ -186,7 +186,7 @@ namespace IVLab.MinVR3
         /// <summary>
         /// Not fast; intended only for populating dropdown lists in the Unity Editor
         /// </summary>
-        /// <returns>A list of all events produced by all sources
+        /// <returns>A list of all events produced by all sources</returns>
         static public List<IVREventPrototype> GetAllEventPrototypes()
         {
             return GetMatchingEventPrototypes("*");
@@ -199,7 +199,7 @@ namespace IVLab.MinVR3
         /// typeof(T).Name. The string "" will match events that do not have a data payload, and
         /// the wildcard character * will match events of any datatype.
         /// </summary>
-        /// <returns>A list of all events with the specified datatype produced by all sources
+        /// <returns>A list of all events with the specified datatype produced by all sources</returns>
         static public List<IVREventPrototype> GetMatchingEventPrototypes(string dataTypeName, bool includeInactive = true)
         {
 #if UNITY_EDITOR

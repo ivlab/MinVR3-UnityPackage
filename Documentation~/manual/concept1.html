@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>MinVR's Event System | MinVR3 </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="MinVR's Event System | MinVR3 ">
+    <meta name="generator" content="docfx 2.59.3.0">
+    
+    <link rel="shortcut icon" href="../resources/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc">
+    <meta property="docfx:tocrel" content="toc">
+    
+    <meta property="docfx:rel" content="../">
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../resources/logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+                
+                <ul class="nav level1 navbar-nav">
+                      <li>
+                          <a href="../index.html" title="Home">Home</a>
+                      </li>
+                      <li>
+                          <a href="../manual/intro.html" title="Manual">Manual</a>
+                      </li>
+                      <li>
+                          <a href="../api/index.html" title="API Documentation">API Documentation</a>
+                      </li>
+                </ul>    </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div>
+              <div class="sidefilter">
+                <form class="toc-filter">
+                  <span class="glyphicon glyphicon-filter filter-icon"></span>
+                  <input type="text" id="toc_filter_input" placeholder="Enter here to filter..." onkeypress="if(event.keyCode==13) {return false;}">
+                </form>
+              </div>
+              <div class="sidetoc">
+                <div class="toc" id="toc">
+                  
+                  <ul class="nav level1">
+                    <li class="">
+                      <a href="intro.html" title="Introduction" class="">Introduction</a>
+                    </li>
+                    <li class="">
+                      <a href="install.html" title="Installation" class="">Installation</a>
+                    </li>
+                    <li class="active">
+                      <a href="concept1.html" title="Concept 1" class="active">Concept 1</a>
+                    </li>
+                    <li class="">
+                      <a href="concept2.html" title="Concept 2" class="">Concept 2</a>
+                    </li>
+                  </ul>        </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="minvrs-event-system">MinVR&#39;s Event System</h1>
+
+<h2 id="guiding-principles-and-observations">Guiding Principles and Observations:</h2>
+<ol>
+<li>Unity does not support and/or we can do a better job than Unity at supporting: a) Scientific research (rather than gaming industry) XR devices and displays like the Cave, custom input devices with optical tracking and input from hand-wired sensors, etc.  b) Programmers writing sophisticated / innovative / multi-modal 3D user interactions for research where the goal is to explore XR novel interactions rather than employ a toolkit of existing interactions to create a new game or app.</li>
+<li>We do not want to give up and/or we cannot do a better job than Unity at: a) rapid development using existing assets and packages contributed by the community, b) publishing online tutorials and examples to introduce XR programming in Unity to new programmers, c) rewriting all of the existing UI support in Unity to &quot;do it our way&quot;.</li>
+<li>The landscape of VR software is rapidly changing; stay flexible.</li>
+</ol>
+<h2 id="resulting-design-decisions">Resulting Design Decisions:</h2>
+<ol>
+<li>Develop our own event-based VR interaction toolkit, drawing upon code and VR interaction techniques from &gt;20 years of experience.</li>
+<li>When possible, leverage Unity&#39;s built-in support for XR devices, touchscreens, etc. to get input into our system, so we do not need to write new device drivers for keyboard, mouse, new headsets, etc.  Simply, convert the input data Unity can already receive from these devices to our VREvents.  This should make it possible for any input data Unity knows about to be used with MinVR.</li>
+<li>For devices not supported by Unity, write new drivers and use device drivers we have written in the past, VRPN, etc. to get their input data into our system as VREvents.</li>
+<li>In general, code our innovative research-style user interfaces using VREvents and our lessons learned over the years rather than what we commonly see with Unity (e.g., XR Toolkit style interfaces).</li>
+<li>However, make it possible for our system to co-exist with the packages Unity developers continue to improve, like Unity UI and Unity XR Toolkit, so we do not miss out on those developments when they are useful.  A programmer may wish, for example, to code &quot;more traditional&quot; parts of an applications user interface using Unity&#39;s XR Interaction Toolkit or to include menus created using Unity&#39;s Canvas and UI support, and to mix this with &quot;more research&quot; parts of the application that they prefer to write using MinVR&#39;s VREvent system.</li>
+<li>To use Unity&#39;s UI capabilities while still supporting input from custom devices that Unity does not support, use virtual input devices (e.g., MinVR XRController) to feed input from MinVR into Unity&#39;s UI system.  This should make it possible for any VREvents MinVR knows about to also be used with native Unity UI widgets (e.g., canvases) and techniques (e.g., XRTK teleport).</li>
+</ol>
+<h2 id="how-to">How To:</h2>
+<h3 id="generate-vrevents-from-the-input-devices-unity-already-supports">Generate VREvents from the input devices Unity already supports</h3>
+<p>XR Tracking and Controller Input:</p>
+<ul>
+<li><a class="xref" href="../api/IVLab.MinVR3.InputActionsToVREvents.html">InputActionsToVREvents</a> - Unity XR apps created in the past year or so will use the New Input System with InputActions.  MinVR can translate any InputAction into a corresponding VREvent.</li>
+<li>Runtime/Scripts/Input/UnityToMinVR/UnityXR.cs UnityXR  - VREvents can also be created by reading directly from devices supported by the UnityXR system.</li>
+</ul>
+<p>Touch Input:</p>
+<ul>
+<li>(Not yet supported by Unity)  Runtime/Scripts/Input/UnityToMinVR/InputActionsToVREvents.cs New Input System via Input Actions - Unity&#39;s new input system does not yet work for touch on mobile platforms, when it does, the InputActionsToVREvents component should work fine with it.</li>
+<li>Runtime/Scripts/Input/UnityToMinVR/TouchBuiltin.cs Legacy Input Module - Can translate any touch events UnityEngine.Input can read into VREvents.</li>
+</ul>
+<p>Input from Phone and Tablet Sensors:</p>
+<ul>
+<li>(Not yet supported by Unity) Runtime/Scripts/Input/UnityToMinVR/InputActionsToVREvents.cs  New Input System via Input Actions - Unity&#39;s new input system does not yet work for sensor data on mobile platforms, when it does, the InputActionsToVREvents component should work fine with it.</li>
+<li>Runtime/Scripts/Input/UnityToMinVR/MobileSensors.cs Legacy Input Module - Can translate mobile sensor data accessed via UnityEngine.Input into VREvents.</li>
+</ul>
+<p>Input from Mouse, Keyboard, Joysticks, Controllers</p>
+<ul>
+<li>Runtime/Scripts/Input/UnityToMinVR/InputActionsToVREvents.cs InputActionsToVREvents - If already using the New Input System to access tracking or other events, it&#39;s easy to also use it to capture keyboard, mouse, and any other input from Unity.</li>
+<li>Runtime/Scripts/Input/UnityToMinVR/MouseAndKeyboard.cs Legacy Input Module - If you don&#39;t plan to use Unity&#39;s New Input System, you can use this to get mouse and keyboard VREvents from the legacy input module.</li>
+</ul>
+<h3 id="generate-vrevents-from-other-sources">Generate VREvents from other sources</h3>
+<p>Look in the Runtime/Scripts/Input/Devices Runtime/Scripts/Input/Devices folder for the latest list of MinVR input device drivers.  These include support for networked VR input using VRPN and TUIO as well as custom drivers for touchscreens, zSpace, and custom sensors.</p>
+<h3 id="send-vrevents-back-into-unitys-input-system">Send VREvents (back) into Unity&#39;s Input System</h3>
+<p>This should only be done for input from devices that Unity does not already support.  One useful example is to combine VRPN tracking and button events (which cannot be read by Unity&#39;s input system) in a virtual, Unity-style XRController.  This makes it possible to use custom VR devices, like those used in the CAVE, with Unity&#39;s XR Interaction Toolkit, including it&#39;s built-in support for interacting with 2D UIs displayed on Unity world-space Canvases.  Support for this piping of VREvents (backwards) into the Unity Input System is only planned to be supported for the New Input System with the XR Interaction Toolkit.  Technically it is possible with the Legacy Input Module, but it is a fair amount of work, and it may be best to upgrade applications instead of diving into that work.</p>
+<ul>
+<li>Add Unity&#39;s XRInteraction Toolkit package to your project.  This defines the XRController base class.</li>
+<li>Create a new GameObject and add a Runtime/Scripts/Input/MinVRToUnity/MinVRController.cs MinVRController  to it.  Adjust its properties to drive the position, rotation, and buttons of the controller using VREvents.</li>
+<li>Use input from this controller to drive interactions (grabbing, teleporting, etc.) supported out of the box with the XR Interaction Toolkit</li>
+<li>And/or, use it to drive interaction with Unity UI (canvases, physics raycasting).  For this, you need to add Unity&#39;s XRUIInputModule to a gameobject somewhere in your scene AND you need to add a TrackedDeviceRaycaster component to each Canvas that you wish to interact with.</li>
+</ul>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.umn.edu/ivlab-cs/MinVR3-UnityPackage/blob/master/DocumentationSrc~/manual/concept1.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            <a href="https://ivlab.cs.umn.edu">Interactive Visualization Lab</a><br>Copyright 2022, Regents of the University of Minnesota, All Rights Reserved
+            
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

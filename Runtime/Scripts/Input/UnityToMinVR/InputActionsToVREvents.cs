@@ -1,5 +1,5 @@
 ﻿// This functionality is only available in projects using Unity's New Input System
-#if ENABLE_INPUT_SYSTEM
+#if ENABLE_INPUT_SYSTEM || BUILDING_DOCS
 
 using System.Collections.Generic;
 using UnityEngine;
@@ -238,7 +238,7 @@ namespace IVLab.MinVR3 {
 
             // The class uses its own logic to generate these per-finger touch events.  They do not show up in the
             // InputActions maps, but we want to add them to the list of possible events if any of the InputActions are
-            // 
+            //
             if (expectingTouchEvents) {
                 for (int i = 0; i < m_TouchEventNames.Length; i++) {
                     eventsProduced.Add(VREventPrototype.Create(m_DeviceIdString + m_TouchEventNames[i] + "/Down"));

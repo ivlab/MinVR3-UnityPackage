@@ -1,4 +1,4 @@
-#if XR_INTERACTION_TOOLKIT_PRESENT
+#if XR_INTERACTION_TOOLKIT_PRESENT || BUILDING_DOCS
 
 using UnityEngine;
 using UnityEngine.InputSystem;

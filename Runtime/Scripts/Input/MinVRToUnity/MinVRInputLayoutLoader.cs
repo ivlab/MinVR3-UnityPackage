@@ -1,4 +1,4 @@
-#if XR_INTERACTION_TOOLKIT_PRESENT
+#if XR_INTERACTION_TOOLKIT_PRESENT || BUILDING_DOCS
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -10,7 +10,7 @@ using UnityEngine.Scripting;
 namespace IVLab.MinVR3
 {
     /// <summary>
-    /// This class automatically registers control layouts used by the <see cref="XRDeviceSimulator"/>.
+    /// This class automatically registers control layouts used by the <see cref="MinVRControllerDevice"/>.
     /// </summary>
 #if UNITY_EDITOR
     [InitializeOnLoad]

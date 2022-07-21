@@ -1,4 +1,4 @@
-#if XR_INTERACTION_TOOLKIT_PRESENT
+#if XR_INTERACTION_TOOLKIT_PRESENT || BUILDING_DOCS
 
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.Layouts;
@@ -12,7 +12,7 @@ namespace IVLab.MinVR3
         /// The primary touchpad or joystick on a device.
         public Vector2Control primary2DAxis { get; private set; }
 
-        /// An analog (axis) control, like a pressure or force sensitive switch, trigger, grip... 
+        /// An analog (axis) control, like a pressure or force sensitive switch, trigger, grip...
         public AxisControl primaryAxis { get; private set; }
 
         public ButtonControl primaryButton { get; private set; }

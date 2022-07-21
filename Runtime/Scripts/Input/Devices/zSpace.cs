@@ -1,4 +1,4 @@
-﻿#if ZCORE_PRESENT
+﻿#if ZCORE_PRESENT || BUILDING_DOCS
 
 using System.Collections;
 using System.Collections.Generic;

@@ -1,4 +1,4 @@
-#if WEBSOCKET_PRESENT
+#if WEBSOCKET_PRESENT || BUILDING_DOCS
 
 using UnityEngine;
 using UnityEngine.Events;

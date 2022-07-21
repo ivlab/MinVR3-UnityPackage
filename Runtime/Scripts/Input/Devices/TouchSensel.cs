@@ -1,4 +1,4 @@
-#if SENSEL_PRESENT
+#if SENSEL_PRESENT || BUILDING_DOCS
 
 using System;
 using System.Linq;

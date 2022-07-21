@@ -1,4 +1,4 @@
-#if TUIO_PRESENT
+#if TUIO_PRESENT || BUILDING_DOCS
 
 using System.Collections.Generic;
 using UnityEngine;
