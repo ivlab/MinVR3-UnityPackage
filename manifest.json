@@ -1578,7 +1578,7 @@
       "output": {
         ".html": {
           "relative_path": "api/index.html",
-          "hash": "XXAftTF/3+7pim5jUJPa66f27H/dyALWesM6Azwi+TQ="
+          "hash": "UM5Jy37atwopvNwuFq9YE7x5opDToDTB0CRyAfxmUYk="
         }
       },
       "is_incremental": false,
@@ -1598,11 +1598,23 @@
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "manual/changelog.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/changelog.html",
+          "hash": "DmPc7ahrNXdPmd9rhH37IKxx+AvqqbslrPoGpAlk1bc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
       "source_relative_path": "manual/concept1.md",
       "output": {
         ".html": {
           "relative_path": "manual/concept1.html",
-          "hash": "Znt/bV4QBWd5PmEc5Snut9Qovlv/qkCmJFOXofljKP0="
+          "hash": "LN894If7b4gB0R0fAu00kkzgFWDOTKhAJrYAJq9Mcqg="
         }
       },
       "is_incremental": false,
@@ -1614,7 +1626,7 @@
       "output": {
         ".html": {
           "relative_path": "manual/concept2.html",
-          "hash": "PScB/CW/8phc+NE12EUv3c+k9rPyBEOnukKGnMm9Zro="
+          "hash": "2HS0Z/oI46DNZ4lhgnKzxgBWR6Zlw/w0Cysz8KU3cxc="
         }
       },
       "is_incremental": false,
@@ -1626,7 +1638,7 @@
       "output": {
         ".html": {
           "relative_path": "manual/install.html",
-          "hash": "geV0HGnc7r+vpc+I8ppy7LDypeatwurdxtHAbfWRgsg="
+          "hash": "1JF9OGl0HdMXQTCarMCeVxcpHX8rtFz2L8xOMegqE0o="
         }
       },
       "is_incremental": false,
@@ -1638,7 +1650,19 @@
       "output": {
         ".html": {
           "relative_path": "manual/intro.html",
-          "hash": "HjpRX+IwyFwu7tY1rENIYf9yxsWZPFGCMpJ5vL/rnYc="
+          "hash": "1LIBYUz8wBn82n9TZB5o+uENxGY5/pveQYZS3Ppl7yA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/license.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/license.html",
+          "hash": "1q1DHjOSvB2kt7zItm7RKNcle5VX3+nudPPfWQJw1Oo="
         }
       },
       "is_incremental": false,
@@ -1692,7 +1716,7 @@
         "ConceptualDocumentProcessor": {
           "can_incremental": false,
           "incrementalPhase": "build",
-          "total_file_count": 6,
+          "total_file_count": 8,
           "skipped_file_count": 0
         },
         "ManagedReferenceDocumentProcessor": {
