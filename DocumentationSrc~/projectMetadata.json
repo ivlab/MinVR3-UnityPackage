@@ -2,11 +2,11 @@
     "_appTitle": "MinVR3",
     "_gitUrlPattern": "github.umn.edu",
     "newFileRepository": {
-      "branch": "master",
+      "branch": "main",
     },
     "_gitContribute": {
       "repo": "git@github.umn.edu/ivlab-cs/MinVR3-UnityPackage",
-      "branch": "master",
+      "branch": "main",
       "apiSpecFolder": "Documentation~/apidocs-overrides",
     }
 }
