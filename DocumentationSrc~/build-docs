@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+# Notes:
+# - need to manually publish if hosting on github.umn.edu
+# - otherwise, can use github actions to do it automatically
+
+
 # Directories:
 # Runtime/Scripts --> root for .cs files that are the source for the API
 # Documentation~ --> DocFx destination dir; holds the complete built website.

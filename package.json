@@ -1,11 +1,13 @@
 {
     "name": "edu.umn.cs.ivlab.minvr3",
     "displayName": "MinVR3",
+    "description": "The 3rd incarnation of the MinVR library, this time centered  on Unity.",
     "version": "0.1.0",
     "unity": "2020.1",
     "author": { "name": "IV/LAB", "email": "dfk@umn.edu", "url": "https://ivlab.cs.umn.edu" },
-    "documentationUrl": "https://github.umn.edu/ivlab-cs/MinVR3-UnityPackage",
-    "description": "The 3rd incarnation of the MinVR library, this time centered  on Unity.",
+    "documentationUrl": "https://pages.github.umn.edu/ivlab-cs/MinVR3-UnityPackage",
+    "changelogUrl": "https://github.umn.edu/ivlab-cs/MinVR3-UnityPackage/blob/master/CHANGELOG.md",
+    "license": "See LICENSE.md file",
     "samples": [
         {
             "displayName": "CavePainting-Lite",
