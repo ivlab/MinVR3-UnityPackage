@@ -7,7 +7,8 @@
     "author": { "name": "IV/LAB", "email": "dfk@umn.edu", "url": "https://ivlab.cs.umn.edu" },
     "documentationUrl": "https://pages.github.umn.edu/ivlab-cs/MinVR3-UnityPackage",
     "changelogUrl": "https://github.umn.edu/ivlab-cs/MinVR3-UnityPackage/blob/main/CHANGELOG.md",
-    "license": "See LICENSE.md file",
+    "licensesUrl": "https://github.umn.edu/ivlab-cs/MinVR3-UnityPackage/blob/main/LICENSE.md",
+    "hideInEditor": "false",
     "samples": [
         {
             "displayName": "CavePainting-Lite",
