@@ -4,7 +4,7 @@
     "description": "The 3rd incarnation of the MinVR library, this time centered  on Unity.",
     "version": "0.1.0",
     "unity": "2020.1",
-    "author": { "name": "IV/LAB", "email": "dfk@umn.edu", "url": "https://ivlab.cs.umn.edu" },
+    "author": { "name": "IVLab", "email": "dfk@umn.edu", "url": "https://ivlab.cs.umn.edu" },
     "documentationUrl": "https://pages.github.umn.edu/ivlab-cs/MinVR3-UnityPackage",
     "changelogUrl": "https://pages.github.umn.edu/ivlab-cs/MinVR3-UnityPackage/manual/changelog.html",
     "licensesUrl": "https://pages.github.umn.edu/ivlab-cs/MinVR3-UnityPackage/manual/license.html",
