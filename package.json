@@ -34,6 +34,11 @@
             "displayName": "Networked Events",
             "description": "Demonstrates some of the possibilities enabled by asynchronous networked VREvents. This particular sample serves a small webpage and passes VREvents back and forth between Unity and the browser.",
             "path": "Samples~/NetworkedEvents"
+        },
+        {
+            "displayName": "MinVR with XR Interaction (XRI) Toolkit",
+            "description": "Demonstrates how MinVR events can drive Unity's notion of a XRController.  This makes it possible to use input coming through the MinVR event system to drive Unity XRI Toolkit user interfaces.  One feature of the XRI is making it possible for XRControllers to interact with the traditional 2D Unity UI system with buttons, sliders, etc. on Canvases.  This sample demonstrates how to do that.",
+            "path": "Samples~/MinvRWithXRI"
         }
     ]
 }

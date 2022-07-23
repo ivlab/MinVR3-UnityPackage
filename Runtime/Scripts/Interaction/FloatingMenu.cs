@@ -114,6 +114,14 @@ namespace IVLab.MinVR3
             }
 
 
+            // Save current transform, set to identity for rebuilding, then restore at the end
+            Vector3 origPos = transform.localPosition;
+            Quaternion origRot = transform.localRotation;
+            Vector3 origScale = transform.localScale;
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.identity;
+            transform.localScale = Vector3.one;
+
             // Create a title box and label
             GameObject titleTextObj = new GameObject(title + " Label");
             titleTextObj.transform.SetParent(this.transform);
@@ -205,6 +213,11 @@ namespace IVLab.MinVR3
             bgBox.GetComponent<Renderer>().sharedMaterial.color = itemBGColor;
             bgBox.transform.localPosition = new Vector3(zEpsilon, 0f, 0.5f * itemSep + zEpsilon);
             bgBox.transform.localScale = new Vector3(menu_box_dims[0] - zEpsilon, height - 2.0f * zEpsilon, menu_box_dims[2] - itemSep);
+
+            transform.localPosition = origPos;
+            transform.localRotation = origRot;
+            transform.localScale = origScale;
+
             dirty = false;
         }
 

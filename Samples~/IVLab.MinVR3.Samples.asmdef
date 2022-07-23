@@ -3,7 +3,8 @@
     "rootNamespace": "",
     "references": [
         "IVLab.MinVR3.Runtime",
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "Unity.XR.Interaction.Toolkit",
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -12,6 +13,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.xr.interaction.toolkit",
+            "expression": "1.0",
+            "define": "XR_INTERACTION_TOOLKIT_PRESENT"
+        }
+    ],
     "noEngineReferences": false
 }
