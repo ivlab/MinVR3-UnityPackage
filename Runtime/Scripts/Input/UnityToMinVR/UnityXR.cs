@@ -122,7 +122,7 @@ namespace IVLab.MinVR3
             UnityEngine.XR.InputDevices.GetDevicesAtXRNode(UnityEngine.XR.XRNode.LeftHand, leftHandDevices);
             if (leftHandDevices.Count > 0) {
                 lHandDev = leftHandDevices[0];
-                Debug.Log(string.Format("UnityXR Left Hand Device '{0}' has characteristics '{1}'", lHandDev.name, lHandDev.characteristics.ToString()));
+                //Debug.Log(string.Format("UnityXR Left Hand Device '{0}' has characteristics '{1}'", lHandDev.name, lHandDev.characteristics.ToString()));
                 CheckButton(lHandDev, UnityEngine.XR.CommonUsages.triggerButton, m_DeviceIdString + "LeftHand/Trigger", ref m_LastLeftTriggerButton, ref eventQueue);
                 CheckButton(lHandDev, UnityEngine.XR.CommonUsages.gripButton, m_DeviceIdString + "LeftHand/Grip", ref m_LastLeftGripButton, ref eventQueue);
                 CheckButton(lHandDev, UnityEngine.XR.CommonUsages.primaryButton, m_DeviceIdString + "LeftHand/PrimaryButton", ref m_LastLeftPrimaryButton, ref eventQueue);
@@ -140,7 +140,7 @@ namespace IVLab.MinVR3
             UnityEngine.XR.InputDevices.GetDevicesAtXRNode(UnityEngine.XR.XRNode.RightHand, rightHandDevices);
             if (rightHandDevices.Count > 0) {
                 rHandDev = rightHandDevices[0];
-                Debug.Log(string.Format("UnityXR Right Hand Device '{0}' has characteristics '{1}'", rHandDev.name, rHandDev.characteristics.ToString()));
+                //Debug.Log(string.Format("UnityXR Right Hand Device '{0}' has characteristics '{1}'", rHandDev.name, rHandDev.characteristics.ToString()));
                 CheckButton(rHandDev, UnityEngine.XR.CommonUsages.triggerButton, m_DeviceIdString + "RightHand/Trigger", ref m_LastRightTriggerButton, ref eventQueue);
                 CheckButton(rHandDev, UnityEngine.XR.CommonUsages.gripButton, m_DeviceIdString + "RightHand/Grip", ref m_LastRightGripButton, ref eventQueue);
                 CheckButton(rHandDev, UnityEngine.XR.CommonUsages.primaryButton, m_DeviceIdString + "RightHand/PrimaryButton", ref m_LastRightPrimaryButton, ref eventQueue);
@@ -158,7 +158,7 @@ namespace IVLab.MinVR3
             UnityEngine.XR.InputDevices.GetDevicesAtXRNode(UnityEngine.XR.XRNode.CenterEye, headDevices);
             if (headDevices.Count > 0) {
                 headDev = headDevices[0];
-                Debug.Log(string.Format("UnityXR Head Device '{0}' has characteristics '{1}'", headDev.name, headDev.characteristics.ToString()));
+                //Debug.Log(string.Format("UnityXR Head Device '{0}' has characteristics '{1}'", headDev.name, headDev.characteristics.ToString()));
                 CheckVector3(headDev, UnityEngine.XR.CommonUsages.centerEyePosition, m_DeviceIdString + "Head/Position", ref m_LastHeadPosition, ref eventQueue);
                 CheckQuaternion(headDev, UnityEngine.XR.CommonUsages.centerEyeRotation, m_DeviceIdString + "Head/Rotation", ref m_LastHeadRotation, ref eventQueue);
             }
