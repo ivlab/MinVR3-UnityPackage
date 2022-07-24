@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title> | MinVR3 </title>
+    <title>Input Devices | MinVR3 </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content=" | MinVR3 ">
+    <meta name="title" content="Input Devices | MinVR3 ">
     <meta name="generator" content="docfx 2.59.3.0">
     
     <link rel="shortcut icon" href="../resources/favicon.ico">
@@ -110,8 +110,8 @@
                     <li class="">
                       <a href="12-vrevents.html" title="VREvents in Detail" class="">VREvents in Detail</a>
                     </li>
-                    <li class="">
-                      <a href="13-input-devices.html" title="Input Devices" class="">Input Devices</a>
+                    <li class="active">
+                      <a href="13-input-devices.html" title="Input Devices" class="active">Input Devices</a>
                     </li>
                     <li class="">
                       <a href="14-display-devices.html" title="Display Devices" class="">Display Devices</a>
@@ -125,8 +125,8 @@
                     <li class="">
                       <a href="20-interaction.html" title="Interaction Techniques" class="">Interaction Techniques</a>
                     </li>
-                    <li class="active">
-                      <a href="license.html" title="License" class="active">License</a>
+                    <li class="">
+                      <a href="license.html" title="License" class="">License</a>
                     </li>
                     <li class="">
                       <a href="changelog.html" title="Change Log" class="">Change Log</a>
@@ -139,8 +139,26 @@
         <div class="article row grid-right">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
+<h1 id="input-devices">Input Devices</h1>
 
-<p>Copyright 2020,2021,2022 Regents of the University of Minnesota, All Rights Reserved</p>
+<p>Classes that connect to hardware input devices or their software drivers to capture user input should implement the <a class="xref" href="../api/IVLab.MinVR3.IVREventProducer.html">IVREventProducer</a> interface in order to send @IVLab.MinVR3.VREvent\s to MinVR&#39;s <a class="xref" href="../api/IVLab.MinVR3.VREventManager.html">VREventManager</a>.</p>
+<p><strong>For devices already supported by Unity</strong>, we recommend simply creating a virtual input device that converts input from Unity to VREvents.  As you see in the list below, these have already been developed for most of the devices handled by Unity, and it is extend these existing scripts or add new ones.</p>
+<p><strong>For devices not supported by Unity</strong>, new support can be added by writing a class that reads data from the device and implements the <a class="xref" href="../api/IVLab.MinVR3.IVREventProducer.html">IVREventProducer</a> interface in order to send @IVLab.MinVR3.VREvent\s to MinVR&#39;s <a class="xref" href="../api/IVLab.MinVR3.VREventManager.html">VREventManager</a>.  If the device requires an external library or code that will only compile on some platforms, then implement the driver as a <a href="03-plugin-packages.html">MinVR plugin package</a> so that it does not add a required external dependency to the main MinVR package.</p>
+<h2 id="devices-to-support-various-types-of-input">Devices to Support Various Types of Input</h2>
+<h4 id="misc">Misc</h4>
+<p><a class="xref" href="../api/IVLab.MinVR3.InputActionsToVREvents.html">InputActionsToVREvents</a> [Requires: New Input System] - This class converts Unity InputActions to VREvents.  It should work with any input devices that Unity can convert to InputActions, which will eventually be everything Unity supports.  Right now, there are a lot of devices that are not yet supported, like the Quest and mobile phones and tablets.</p>
+<h4 id="6-dof-trackers-xr-controllers">6-DOF Trackers, XR Controllers</h4>
+<p><a class="xref" href="../api/IVLab.MinVR3.UnityXR.html">UnityXR</a> - Converts tracking, button, and axis data from devices supported by Unity&#39;s XRInputSubsystem into VREvents.</p>
+<p>VRPN [Requires VRPN Plugin Package] - Support is planned for VRPN; it exists in MinVR2 and just needs to be ported over.</p>
+<p><a class="xref" href="../api/IVLab.MinVR3.zSpace.html">zSpace</a> [Requires zSpace Plugin Package, which runs on Unity2019 only] - Support for the zSpace Device.  Converts tracking data for the head and tracking and button data for the 3D pen to VREvents.</p>
+<h4 id="touch-input">Touch Input</h4>
+<p><a class="xref" href="../api/IVLab.MinVR3.TouchBuiltin.html">TouchBuiltin</a> - Coverts touch data from devices supported by UnityEngine.Input into VREvents.</p>
+<p><a class="xref" href="../api/IVLab.MinVR3.TouchTuio.html">TouchTuio</a> [Requires TUIO11 Plugin Package] - Coverts touch data received over the network from a TUIO server into VREvents.</p>
+<p><a class="xref" href="../api/IVLab.MinVR3.TouchTuio.html">TouchTuio</a> [Requires Sensel Plugin Package] - Coverts touch data from a Sensel Morph device into VREvents.</p>
+<h4 id="phone-and-tablet-sensors">Phone and Tablet Sensors:</h4>
+<p><a class="xref" href="../api/IVLab.MinVR3.MobileSensors.html">MobileSensors</a> - Converts gyro rotation, heading, and acceleration data from devices supported by UnityEngine.Input into VREvents.</p>
+<h4 id="mouse-and-keyboard">Mouse and Keyboard</h4>
+<p><a class="xref" href="../api/IVLab.MinVR3.MouseAndKeyboard.html">MouseAndKeyboard</a> - Converts mouse and keyboard input to VREvents.  Automatically switches between accessing the data via the New Input System or the Legacy InputModule based on what is enabled in the current project.</p>
 </article>
           </div>
           
@@ -149,7 +167,7 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.umn.edu/ivlab-cs/MinVR3-UnityPackage/blob/main/DocumentationSrc~/manual/license.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.umn.edu/ivlab-cs/MinVR3-UnityPackage/blob/main/DocumentationSrc~/manual/13-input-devices.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>

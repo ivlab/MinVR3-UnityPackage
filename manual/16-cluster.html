@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Concept 2 | MinVR3 </title>
+    <title>Cluster Mode | MinVR3 </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Concept 2 | MinVR3 ">
+    <meta name="title" content="Cluster Mode | MinVR3 ">
     <meta name="generator" content="docfx 2.59.3.0">
     
     <link rel="shortcut icon" href="../resources/favicon.ico">
@@ -50,7 +50,7 @@
                           <a href="../index.html" title="Home">Home</a>
                       </li>
                       <li>
-                          <a href="../manual/intro.html" title="Manual">Manual</a>
+                          <a href="../manual/intro.md" title="Manual">Manual</a>
                       </li>
                       <li>
                           <a href="../api/index.html" title="API Documentation">API Documentation</a>
@@ -93,16 +93,37 @@
                   
                   <ul class="nav level1">
                     <li class="">
-                      <a href="intro.html" title="Introduction" class="">Introduction</a>
+                      <a href="01-intro.html" title="Introduction" class="">Introduction</a>
                     </li>
                     <li class="">
-                      <a href="install.html" title="Installation" class="">Installation</a>
+                      <a href="02-install.html" title="Installation" class="">Installation</a>
                     </li>
                     <li class="">
-                      <a href="concept1.html" title="Concept 1" class="">Concept 1</a>
+                      <a href="03-plugin-packages.html" title="Optional Plugin Packages" class="">Optional Plugin Packages</a>
+                    </li>
+                    <li class="">
+                      <a href="10-vr-coord-spaces.html" title="VR Coordinate Spaces" class="">VR Coordinate Spaces</a>
+                    </li>
+                    <li class="">
+                      <a href="11-vrconfigs.html" title="VRConfigs for Multi-Platform Dev" class="">VRConfigs for Multi-Platform Dev</a>
+                    </li>
+                    <li class="">
+                      <a href="12-vrevents.html" title="VREvents in Detail" class="">VREvents in Detail</a>
+                    </li>
+                    <li class="">
+                      <a href="13-input-devices.html" title="Input Devices" class="">Input Devices</a>
+                    </li>
+                    <li class="">
+                      <a href="14-display-devices.html" title="Display Devices" class="">Display Devices</a>
+                    </li>
+                    <li class="">
+                      <a href="15-remote-connections.html" title="Remote Connections" class="">Remote Connections</a>
                     </li>
                     <li class="active">
-                      <a href="concept2.html" title="Concept 2" class="active">Concept 2</a>
+                      <a href="16-cluster.html" title="Cluster Synchronization" class="active">Cluster Synchronization</a>
+                    </li>
+                    <li class="">
+                      <a href="20-interaction.html" title="Interaction Techniques" class="">Interaction Techniques</a>
                     </li>
                     <li class="">
                       <a href="license.html" title="License" class="">License</a>
@@ -118,9 +139,13 @@
         <div class="article row grid-right">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
-<h1 id="concept-2">Concept 2</h1>
+<h1 id="cluster-mode">Cluster Mode</h1>
 
-<p>Concept 2 is also important.</p>
+<p>Cluster mode provides support for tiled displays powered by a cluster of graphics computers.  Key features are:</p>
+<ul>
+<li>Frame-level dual or quad-buffered rendering synchronization (i.e., swap lock)</li>
+<li>Frame-level event synchronization (i.e., VREvents are synchronized across all nodes each frame, and any node can act as the original event generator).</li>
+</ul>
 </article>
           </div>
           
@@ -129,7 +154,7 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.umn.edu/ivlab-cs/MinVR3-UnityPackage/blob/main/DocumentationSrc~/manual/concept2.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.umn.edu/ivlab-cs/MinVR3-UnityPackage/blob/main/DocumentationSrc~/manual/16-cluster.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>
