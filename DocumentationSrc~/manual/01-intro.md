@@ -1,4 +1,7 @@
 # MinVR3 Unity Package
+
+![minvr-teaser](../resources/minvr-teaser.png)
+
 This in the 3rd incarnation of "MinVR", an open source toolkit designed to support *experiental and creative research in* XR, spatial user interfaces, pen and touch interfaces, and 3D data visualization.
 
 MinVR3 is being created because research practice has evolved in recent years to, almost exclusively, rely upon the Unity game and C# scripting.  MinVR2 included some early support for Unity via a [UnityClient](https://github.com/MinVR/MinVRUnity) that could be used together with a MinVR2 server application written in C++ to deliver input events and handle synchronization for cluster rendering.  

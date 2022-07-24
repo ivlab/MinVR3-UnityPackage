@@ -1,4 +1,4 @@
-# Cluster Mode
+# Synchronized Cluster Rendering for Interactive Tiled Displays
 
 Cluster mode provides support for tiled displays powered by a cluster of graphics computers.  Key features are:
 - Frame-level dual or quad-buffered rendering synchronization (i.e., swap lock)

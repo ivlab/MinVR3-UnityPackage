@@ -19,7 +19,7 @@
 - name: Cluster Synchronization
   href: 16-cluster.md
 - name: Interaction Techniques
-  href: 20-interaction-techniques.md
+  href: 20-interaction.md
 - name: License
   href: license.md
 - name: Change Log

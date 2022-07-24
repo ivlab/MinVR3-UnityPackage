@@ -5,9 +5,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>To install MinVR3 in a Unity Project | MinVR3 </title>
+    <title>MinVR3 Plugin Packages | MinVR3 </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="To install MinVR3 in a Unity Project | MinVR3 ">
+    <meta name="title" content="MinVR3 Plugin Packages | MinVR3 ">
     <meta name="generator" content="docfx 2.59.3.0">
     
     <link rel="shortcut icon" href="../resources/favicon.ico">
@@ -50,7 +50,7 @@
                           <a href="../index.html" title="Home">Home</a>
                       </li>
                       <li>
-                          <a href="../manual/intro.html" title="Manual">Manual</a>
+                          <a href="../manual/intro.md" title="Manual">Manual</a>
                       </li>
                       <li>
                           <a href="../api/index.html" title="API Documentation">API Documentation</a>
@@ -93,16 +93,37 @@
                   
                   <ul class="nav level1">
                     <li class="">
-                      <a href="intro.html" title="Introduction" class="">Introduction</a>
+                      <a href="01-intro.html" title="Introduction" class="">Introduction</a>
+                    </li>
+                    <li class="">
+                      <a href="02-install.html" title="Installation" class="">Installation</a>
                     </li>
                     <li class="active">
-                      <a href="install.html" title="Installation" class="active">Installation</a>
+                      <a href="03-plugin-packages.html" title="Optional Plugin Packages" class="active">Optional Plugin Packages</a>
                     </li>
                     <li class="">
-                      <a href="concept1.html" title="Concept 1" class="">Concept 1</a>
+                      <a href="10-vr-coord-spaces.html" title="VR Coordinate Spaces" class="">VR Coordinate Spaces</a>
                     </li>
                     <li class="">
-                      <a href="concept2.html" title="Concept 2" class="">Concept 2</a>
+                      <a href="11-vrconfigs.html" title="VRConfigs for Multi-Platform Dev" class="">VRConfigs for Multi-Platform Dev</a>
+                    </li>
+                    <li class="">
+                      <a href="12-vrevents.html" title="VREvents in Detail" class="">VREvents in Detail</a>
+                    </li>
+                    <li class="">
+                      <a href="13-input-devices.html" title="Input Devices" class="">Input Devices</a>
+                    </li>
+                    <li class="">
+                      <a href="14-display-devices.html" title="Display Devices" class="">Display Devices</a>
+                    </li>
+                    <li class="">
+                      <a href="15-remote-connections.html" title="Remote Connections" class="">Remote Connections</a>
+                    </li>
+                    <li class="">
+                      <a href="16-cluster.html" title="Cluster Synchronization" class="">Cluster Synchronization</a>
+                    </li>
+                    <li class="">
+                      <a href="20-interaction.html" title="Interaction Techniques" class="">Interaction Techniques</a>
                     </li>
                     <li class="">
                       <a href="license.html" title="License" class="">License</a>
@@ -118,28 +139,14 @@
         <div class="article row grid-right">
           <div class="col-md-10">
             <article class="content wrap" id="_content" data-uid="">
-<h1 id="to-install-minvr3-in-a-unity-project">To install MinVR3 in a Unity Project</h1>
+<h1 id="minvr3-plugin-packages">MinVR3 Plugin Packages</h1>
 
-<h2 id="prereqs-ssh-access-to-githubumnedu-and-being-a-member-of-the-ivlab-organization-on-githubumnedu">Prereqs: SSH access to github.umn.edu and being a member of the IV/LAB Organization on github.umn.edu.</h2>
-<ol>
-<li>Create a <a href="https://docs.github.com/en/github-ae@latest/github/authenticating-to-github/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">GitHub SSH key</a> for your UMN GitHub account on your development machine.  Unity has trouble sshing with passwords; just leave the password for this key blank.</li>
-<li>If you cannot see the <a href="https://github.umn.edu/ivlab-cs">IV/LAB Organization on github.umn.edu</a>, then ask the <a href="https://docs.google.com/document/d/1p3N2YOQLKyyNpSSTtALgtXoB3Tchy4BVgEEbAG6KYfg/edit?skip_itp2_check=true&amp;pli=1">Current Lab GitHub and Software Development Czar</a> to please add you to the org.</li>
-</ol>
-<h2 id="to-use-the-package-in-a-read-only-mode-the-same-way-you-would-for-packages-downloaded-directly-from-unity">To use the package in a read-only mode, the same way you would for packages downloaded directly from Unity</h2>
-<ol>
-<li>In Unity, open Window -&gt; Package Manager.</li>
-<li>Click the <code>+</code> button</li>
-<li>Select <code>Add package from git URL</code></li>
-<li>Paste <code>git@github.umn.edu:ivlab-cs/MinVR3-UnityPackage.git</code> for the latest package</li>
-<li>Repeat steps 2-4 for each of these required dependencies:<ul>
-<li>REQUIRED: <code>git@github.umn.edu:ivlab-cs/IVLab-Utilities-UnityPackage.git</code></li>
-</ul>
-</li>
-</ol>
-<h2 id="optional-packages">Optional Packages</h2>
-<ol>
-<li>Repeat steps 2-4 for any of these optional dependencies IF you would like to use the functionality they provide.  Note: The logic for these optional dependencies is contained in the MinVR3/Runtime/IVLab.MinVR3.Runtime.asmdef file, which you can see/edit within the Unity editor by clicking on the filename in the Project view.  If MinVR finds the optional packages within the solution, it sets a #define of the form PACKAGENAME_PRESENT.  All of the MinVR code that relates to the package is written inside #if PACKAGENAME_PRESENT ... #endif blocks.  This is a nice way to implement optional dependencies in that MinVR automatically compiles and works without the optional functionality when the package is not found, and MinVR automatically includes the functionality that depends on the package whenever the package is installed.</li>
-</ol>
+<p>These packages integrate with the main MinVR3 package to provide additional functionality, typically to support input or display devices that require external dependencies.  All of these plugins are installed via the Unity Package Manager.  The installation instructions are the same as for the main MinVR3 package, only the name of the package git URL changes:</p>
+<pre><code>1. In Unity, open Window -&gt; Package Manager.
+2. Click the ```+``` button
+3. Select ```Add package from git URL```
+4. Paste ```git@github.umn.edu:ivlab-cs/PackageName-UnityPackage.git```, where &quot;PackageName&quot; will change for each package listed below.
+</code></pre><h2 id="available-packages">Available Packages</h2>
 <table>
 <thead>
 <tr>
@@ -176,16 +183,8 @@
 </tr>
 </tbody>
 </table>
-<h2 id="to-switch-to-development-mode-so-you-can-edit-code-within-the-package">To switch to development mode so you can edit code within the package</h2>
-<p>Note: Collectively, the lab now recommends a development process where you start by adding the package to your project in read-only mode, as described above.  This way, your Unity project files will always maintain a link to download the latest version of the package from git whenever the project is loaded, and all users of the package will be including it the same way.  If/when you have a need to edit the package, the process is then to &quot;temporarily&quot; switch into development mode by cloning a temporary copy of the package, then edit the source as needed, test your edits for as long as you like, etc.  Finally, when you get to a good stopping point, commit and push the changes to github.  Once the latest version of your package is on github, you can then switch out of development mode.  This will cause Unity to revert to using the read-only version of the package, and since Unity knows where to access this on github, it is easy to tell Unity to use the latest available version.</p>
-<ol>
-<li>Follow the read-only mode steps above.</li>
-<li>Navigate your terminal or Git tool into your Unity project&#39;s main folder and clone this repository into the packages folder, e.g., <code>cd Packages; git clone git@github.umn.edu:ivlab-cs/MinVR3-UnityPackage.git MinVR3</code>.  This will create a MinVR3 folder that contains all the sourcecode in the package.</li>
-<li>Go for it.  Edit the source you just checked out; add files, etc.  However, BE VERY CAREFUL NOT TO ADD THE MinVR3-UnityPackage FOLDER TO YOUR PROJECT&#39;S GIT REPO.  We are essentially cloning one git repo inside another here, but we do not want to add the package repo as a submodule or subdirectory of the project&#39;s repo, we just want to temporarily work with the source.</li>
-<li>When you are ready to commit and push changes to the package repo, go for it.  JUST MAKE SURE YOU DO THIS FROM WITHIN THE Packages/MinVR3-UnityPackage DIRECTORY!  </li>
-<li>Once these changes are up on github, you can switch out of &quot;development mode&quot; by simply deleting the MinVR3-UnityPackage directory.  The presence of that directory is like a temporary override.  Once it is gone, Unity will revert back to using the cached version of MinVR3 that it originally downloaded from git.</li>
-<li>The final step is to force a refresh of the package cache so that you can pull in the new version of the package you just saved to github.  To do this, simply delete the <a href="https://docs.unity3d.com/Manual/upm-conflicts-auto.html">package-lock.json</a> file inside your project&#39;s Packages folder.</li>
-</ol>
+<h2 id="under-the-hood">Under the Hood</h2>
+<p>Some key logic for making these packages &quot;optional&quot; is contained in the MinVR3/Runtime/IVLab.MinVR3.Runtime.asmdef file, which you can see/edit within the Unity editor by clicking on the filename in the Project view.  Notice that each of the packages is listed as what we will call a &quot;soft-dependency&quot; of the main Runtime package.  Also, notice the rules toward the bottom of the asmdef file.  When Unity finds that a the package is available, it sets a #define of the form PACKAGENAME_PRESENT.  If the package is not found, PACKAGENAME_PRESENT is left undefined.  Code inside the main MinVR3 package can then be compiled conditionally depending upon the presence of a certain package by placing it inside an #if PACKAGENAME_PRESENT ... #endif block.  In this way, the main MinVR package compiles regardless of whether any of the optional packages are present, but functionality is limited to the features supported by installed packages.</p>
 </article>
           </div>
           
@@ -194,7 +193,7 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.umn.edu/ivlab-cs/MinVR3-UnityPackage/blob/main/DocumentationSrc~/manual/install.md/#L1" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.umn.edu/ivlab-cs/MinVR3-UnityPackage/blob/main/DocumentationSrc~/manual/03-plugin-packages.md/#L1" class="contribution-link">Improve this Doc</a>
                   </li>
                 </ul>
               </div>

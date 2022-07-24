@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6472071522499809476}
   - component: {fileID: 2808469265045074649}
+  - component: {fileID: 1112918667751965227}
   m_Layer: 0
-  m_Name: RightHand XRController (1)
+  m_Name: RightHand XRController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,7 +30,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5899677088487712102}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2808469265045074649
 MonoBehaviour:
@@ -43,32 +44,134 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f95d5bb211ac64f779196a5b7d6435d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DeviceName: MinVRRightHand
-  m_CommonUsages: RightHand
+  m_UpdateTrackingType: 0
+  m_EnableInputTracking: 1
+  m_EnableInputActions: 1
+  m_ModelPrefab: {fileID: 0}
+  m_ModelParent: {fileID: 0}
+  m_Model: {fileID: 0}
+  m_AnimateModel: 0
+  m_ModelSelectTransition: 
+  m_ModelDeSelectTransition: 
   m_PositionEvent:
-    m_EventName: FakeTrackers/Tracker 2/Position
+    m_EventName: FakeTrackers/Tracker 1/Position
     m_DataTypeName: Vector3
   m_RotationEvent:
-    m_EventName: FakeTrackers/Tracker 2/Rotation
+    m_EventName: FakeTrackers/Tracker 1/Rotation
     m_DataTypeName: Quaternion
-  m_PrimaryButtonDownEvent:
-    m_EventName: Mouse/Right/Down
+  m_UIButtonDownEvent:
+    m_EventName: Mouse/Left/Down
     m_DataTypeName: 
-  m_PrimaryButtonUpEvent:
-    m_EventName: Mouse/Right/Up
+  m_UIButtonUpEvent:
+    m_EventName: Mouse/Left/Up
     m_DataTypeName: 
-  m_SecondaryButtonDownEvent:
-    m_EventName: 
-    m_DataTypeName: 
-  m_SecondaryButtonUpEvent:
-    m_EventName: 
-    m_DataTypeName: 
-  m_PrimaryAxisEvent:
-    m_EventName: 
-    m_DataTypeName: Single
-  m_Primary2DAxisEvent:
-    m_EventName: 
-    m_DataTypeName: Vector2
+--- !u!114 &1112918667751965227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1796001304921477646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6803edce0201f574f923fd9d10e5b30a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_InteractionManager: {fileID: 0}
+  m_InteractionLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_InteractionLayers:
+    m_Bits: 4294967295
+  m_AttachTransform: {fileID: 0}
+  m_KeepSelectedTargetValid: 1
+  m_StartingSelectedInteractable: {fileID: 0}
+  m_HoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnSelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectActionTrigger: 0
+  m_HideControllerOnSelect: 0
+  m_AllowHoveredActivate: 0
+  m_PlayAudioClipOnSelectEntered: 0
+  m_AudioClipForOnSelectEntered: {fileID: 0}
+  m_PlayAudioClipOnSelectExited: 0
+  m_AudioClipForOnSelectExited: {fileID: 0}
+  m_PlayAudioClipOnSelectCanceled: 0
+  m_AudioClipForOnSelectCanceled: {fileID: 0}
+  m_PlayAudioClipOnHoverEntered: 0
+  m_AudioClipForOnHoverEntered: {fileID: 0}
+  m_PlayAudioClipOnHoverExited: 0
+  m_AudioClipForOnHoverExited: {fileID: 0}
+  m_PlayAudioClipOnHoverCanceled: 0
+  m_AudioClipForOnHoverCanceled: {fileID: 0}
+  m_PlayHapticsOnSelectEntered: 0
+  m_HapticSelectEnterIntensity: 0
+  m_HapticSelectEnterDuration: 0
+  m_PlayHapticsOnSelectExited: 0
+  m_HapticSelectExitIntensity: 0
+  m_HapticSelectExitDuration: 0
+  m_PlayHapticsOnSelectCanceled: 0
+  m_HapticSelectCancelIntensity: 0
+  m_HapticSelectCancelDuration: 0
+  m_PlayHapticsOnHoverEntered: 0
+  m_HapticHoverEnterIntensity: 0
+  m_HapticHoverEnterDuration: 0
+  m_PlayHapticsOnHoverExited: 0
+  m_HapticHoverExitIntensity: 0
+  m_HapticHoverExitDuration: 0
+  m_PlayHapticsOnHoverCanceled: 0
+  m_HapticHoverCancelIntensity: 0
+  m_HapticHoverCancelDuration: 0
+  m_LineType: 0
+  m_BlendVisualLinePoints: 1
+  m_MaxRaycastDistance: 30
+  m_RayOriginTransform: {fileID: 0}
+  m_ReferenceFrame: {fileID: 0}
+  m_Velocity: 16
+  m_Acceleration: 9.8
+  m_AdditionalGroundHeight: 0.1
+  m_AdditionalFlightTime: 0.5
+  m_EndPointDistance: 30
+  m_EndPointHeight: -10
+  m_ControlPointDistance: 10
+  m_ControlPointHeight: 5
+  m_SampleFrequency: 20
+  m_HitDetectionType: 0
+  m_SphereCastRadius: 0.1
+  m_RaycastMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RaycastTriggerInteraction: 1
+  m_HitClosestOnly: 0
+  m_HoverToSelect: 0
+  m_HoverTimeToSelect: 0.5
+  m_EnableUIInteraction: 1
+  m_AllowAnchorControl: 1
+  m_UseForceGrab: 1
+  m_RotateSpeed: 180
+  m_TranslateSpeed: 1
+  m_AnchorRotateReferenceFrame: {fileID: 0}
 --- !u!1 &2347648879630540810
 GameObject:
   m_ObjectHideFlags: 0
@@ -81,7 +184,7 @@ GameObject:
   - component: {fileID: 7643212408287801544}
   - component: {fileID: 1185372979940044619}
   m_Layer: 0
-  m_Name: Fake VR Input Devices
+  m_Name: Fake VR Inputs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -99,7 +202,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5899677088487712102}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7643212408287801544
 MonoBehaviour:
@@ -226,7 +329,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5899677088487712102}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2750466822763730028
 MonoBehaviour:
@@ -279,7 +382,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2750466823851932261}
-  - component: {fileID: 2750466823851932262}
   m_Layer: 0
   m_Name: LeftHand XRController
   m_TagString: Untagged
@@ -299,46 +401,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5899677088487712102}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2750466823851932262
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2750466823851932260}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f95d5bb211ac64f779196a5b7d6435d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_DeviceName: MinVRLeftHand
-  m_CommonUsages: LeftHand
-  m_PositionEvent:
-    m_EventName: FakeTrackers/Tracker 1/Position
-    m_DataTypeName: Vector3
-  m_RotationEvent:
-    m_EventName: FakeTrackers/Tracker 1/Rotation
-    m_DataTypeName: Quaternion
-  m_PrimaryButtonDownEvent:
-    m_EventName: Mouse/Left/Down
-    m_DataTypeName: 
-  m_PrimaryButtonUpEvent:
-    m_EventName: Mouse/Left/Up
-    m_DataTypeName: 
-  m_SecondaryButtonDownEvent:
-    m_EventName: 
-    m_DataTypeName: 
-  m_SecondaryButtonUpEvent:
-    m_EventName: 
-    m_DataTypeName: 
-  m_PrimaryAxisEvent:
-    m_EventName: 
-    m_DataTypeName: Single
-  m_Primary2DAxisEvent:
-    m_EventName: 
-    m_DataTypeName: Vector2
 --- !u!1 &4005386514795107628
 GameObject:
   m_ObjectHideFlags: 0
@@ -352,7 +416,7 @@ GameObject:
   - component: {fileID: 4898758899096648038}
   - component: {fileID: 4836109304889711378}
   m_Layer: 0
-  m_Name: Main Camera
+  m_Name: Head Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -370,7 +434,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5899677088487712102}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &2904820301482174332
 Camera:
@@ -469,11 +533,11 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 9013987384796966420}
   - {fileID: 2229996673909892079}
   - {fileID: 2750466822763730026}
-  - {fileID: 2750466823851932261}
+  - {fileID: 9013987384796966420}
   - {fileID: 6472071522499809476}
+  - {fileID: 2750466823851932261}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
