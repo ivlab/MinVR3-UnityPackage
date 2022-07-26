@@ -119,6 +119,8 @@ namespace IVLab.MinVR3 {
 
 
 
+
+
         // Can reference either a ClusterClient or a ClusterServer
         private IClusterNode m_ClusterNode;
 

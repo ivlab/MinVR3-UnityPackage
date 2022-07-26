@@ -58,7 +58,7 @@ namespace IVLab.MinVR3
         // State indicators
         private Vector2 mousePositionAtStart = Vector2.zero;
         private Vector2 lastMousePosition = Vector2.zero;
-        private bool mousePressed = false;
+        //private bool mousePressed = false;
         private bool firstMovement = false;
         private float slowing = 0.0f;
         private const float SlowingDuration = 5.0f; // seconds
@@ -213,17 +213,17 @@ namespace IVLab.MinVR3
             angularVelocity = Vector3.zero;
             panVelocity = Vector3.zero;
 
-            trackballParent.position = initialTrackballXform.ExtractPosition();
-            trackballParent.rotation = initialTrackballXform.ExtractRotation();
-            trackballParent.localScale = initialTrackballXform.ExtractScale();
+            trackballParent.position = initialTrackballXform.GetTranslationFast();
+            trackballParent.rotation = initialTrackballXform.GetRotationFast();
+            trackballParent.localScale = initialTrackballXform.GetScaleFast();
 
-            this.transform.position = initialThisXform.ExtractPosition();
-            this.transform.rotation = initialThisXform.ExtractRotation();
-            this.transform.localScale = initialThisXform.ExtractScale();
+            this.transform.position = initialThisXform.GetTranslationFast();
+            this.transform.rotation = initialThisXform.GetRotationFast();
+            this.transform.localScale = initialThisXform.GetScaleFast();
 
-            mainCamera.position = initialMainCameraXform.ExtractPosition();
-            mainCamera.rotation = initialMainCameraXform.ExtractRotation();
-            mainCamera.localScale = initialMainCameraXform.ExtractScale();
+            mainCamera.position = initialMainCameraXform.GetTranslationFast();
+            mainCamera.rotation = initialMainCameraXform.GetRotationFast();
+            mainCamera.localScale = initialMainCameraXform.GetScaleFast();
         }
 
         void Update()

@@ -246,8 +246,8 @@ namespace IVLab.MinVR3
                     Matrix4x4 newMenuMat = deltaTracker * origMenuMat;
 
                     // Save the result, converting from Matrix4x4 back to unity's Transform class.
-                    transform.position = Matrix4x4Extensions.GetTranslation(newMenuMat);
-                    transform.rotation = Matrix4x4Extensions.GetRotation(newMenuMat);
+                    transform.position = Matrix4x4Extensions.GetTranslationFast(newMenuMat);
+                    transform.rotation = Matrix4x4Extensions.GetRotationFast(newMenuMat);
                 } else if (!buttonPressed) {
                     // Clear selection and highlighting
                     if ((inputFocusToken != null) && (selected >= 0)) {

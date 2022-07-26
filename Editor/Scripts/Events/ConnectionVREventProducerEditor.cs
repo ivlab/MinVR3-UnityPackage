@@ -9,7 +9,7 @@ namespace IVLab.MinVR3
     [CustomEditor(typeof(ConnectionVREventProducer))]
     public class ConnectionVREventProducerEditor : Editor
     {
-        int _typeChoice = 0;
+        //int _typeChoice = 0;
 
         // POSSIBLE HACK -- this script duplicates some functionality of VREventTypeReprDrawer.
         public override void OnInspectorGUI()
