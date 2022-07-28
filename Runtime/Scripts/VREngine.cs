@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 namespace IVLab.MinVR3 {
 
+    [RequireComponent(typeof(VRConfigManager))]
     [RequireComponent(typeof(VREventManager))]
     [DefaultExecutionOrder(VREngine.ScriptPriority)] 
     public class VREngine : Singleton<VREngine>
@@ -23,6 +24,16 @@ namespace IVLab.MinVR3 {
                 return m_EventManager;
             }
         }
+
+        public VRConfigManager configManager {
+            get {
+                if (m_ConfigManager == null) {
+                    m_ConfigManager = GetComponent<VRConfigManager>();
+                }
+                return m_ConfigManager;
+            }
+        }
+
 
 
         // since the DefaultExecutionOrder makes this script run first, the Initialize function will be called before
@@ -49,15 +60,27 @@ namespace IVLab.MinVR3 {
                     if (args.Length <= i) {
                         throw new Exception("The command line argument -vrconfig must be followed by the name of the config to activate.");
                     }
+
                     string vrConfigName = args[i + 1];
-                    VRConfigSelector[] selectors = GameObject.FindObjectsOfType<VRConfigSelector>();
-                    foreach (VRConfigSelector cs in selectors) {
-                        cs.SelectConfig(vrConfigName);
+                    VRConfig vrConfig = configManager.GetConfigByName(vrConfigName);
+                    if (vrConfig != null) {
+                        configManager.startupConfig = vrConfig;
+                    } else {
+                        throw new Exception($"Cannot find a VRConfig named '{vrConfigName}'");
                     }
                 }
 
                 i++;
             }
+
+
+            // This looks at all GameObjects with VRConfig scripts attached and disables all of them but the one
+            // current VRConfig.
+            configManager.EnableStartupVRConfigAndDisableOthers();
+
+
+            // Load Config Files
+            configManager.ParseConfigFiles();
 
             // check to see if the app should run as a node of a cluster, either a client or a server
             ClusterClient[] clientObjs = GameObject.FindObjectsOfType<ClusterClient>();
@@ -102,7 +125,7 @@ namespace IVLab.MinVR3 {
 
         public void OnPostRender()
         {
-            // BLOCK WAITING FOR THE SIGNAL THAT ALL CLIENTS ARE ALSO READY, THEN SWAPBUFFERS
+            // BLOCK WAITING FOR  THE SIGNAL THAT ALL CLIENTS ARE ALSO READY, THEN SWAPBUFFERS
             if ((m_ClusterNode != null) && (m_ClusterComState == ClusterCommunicationState.PostRenderNext)) {
                 m_ClusterNode.SynchronizeSwapBuffersAcrossAllNodes();
                 m_ClusterComState = ClusterCommunicationState.PreUpdateNext;
@@ -118,9 +141,6 @@ namespace IVLab.MinVR3 {
         }
 
 
-
-
-
         // Can reference either a ClusterClient or a ClusterServer
         private IClusterNode m_ClusterNode;
 
@@ -131,6 +151,7 @@ namespace IVLab.MinVR3 {
 
         // cached access to other components attached to the gameobject
         private VREventManager m_EventManager;
+        private VRConfigManager m_ConfigManager;
     }
 
 } // namespace

@@ -10,9 +10,26 @@ namespace IVLab.MinVR3
     {
         public enum AliasStrategy
         {
-            RenameOriginal,
-            RenameClone
+            RenameClone,
+            RenameOriginal
         }
+
+
+        public AliasStrategy aliasStrategy {
+            get { return m_AliasStrategy; }
+            set { m_AliasStrategy = value; }
+        }
+
+        public string aliasEventName {
+            get { return m_AliasEventName; }
+            set { m_AliasEventName = value; }
+        }
+
+        public List<VREventPrototypeAny> originalEvents {
+            get { return m_OriginalEvents; }
+            set { m_OriginalEvents = value; }
+        }
+
 
         void OnEnable()
         {
@@ -80,7 +97,7 @@ namespace IVLab.MinVR3
         [Tooltip("Set to RenameClone if you want the filter to clone the original event, and pass through both " +
             "the original and a new renamed clone.  Set to RenameOriginal (slightly more efficient) if you do not " +
             "need to listen for the original event anywhere in your application")]
-        [SerializeField] private AliasStrategy m_AliasStrategy = AliasStrategy.RenameOriginal;
+        [SerializeField] private AliasStrategy m_AliasStrategy = AliasStrategy.RenameClone;
         [Tooltip("The original event(s) are renamed to this.")]
         [SerializeField] private string m_AliasEventName = "MyEvent (Alias)";
         [Tooltip("One or more events that you wish to rename or clone and rename using the alias")]
