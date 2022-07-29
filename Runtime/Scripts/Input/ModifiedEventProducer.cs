@@ -9,8 +9,8 @@ namespace IVLab.MinVR3
     /// DOWN). When the modifier is ON, this script will send "modified" events
     /// as specified by the modified event naming strategy
     /// </summary>
-    [AddComponentMenu("MinVR/Input/ModifiedEvent")]
-    public class ModifiedEvent : MonoBehaviour, IVREventFilter, IVREventProducer
+    [AddComponentMenu("MinVR/Input/Modified Event Producer")]
+    public class ModifiedEventProducer : MonoBehaviour, IVREventFilter, IVREventProducer
     {
         void Reset()
         {

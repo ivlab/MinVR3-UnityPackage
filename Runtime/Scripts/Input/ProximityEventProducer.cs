@@ -8,8 +8,8 @@ namespace IVLab.MinVR3
     /// Listens for two 3D position events (typically from VR trackers) and generates VREvents for when the two
     /// trackers are moved close together (i.e., in proximity to each other) and when they move apart.
     /// </summary>
-    [AddComponentMenu("MinVR/Input/Proximity Event")]
-    public class ProximityEvent : MonoBehaviour, IVREventListener, IVREventProducer
+    [AddComponentMenu("MinVR/Input/Proximity Event Producer")]
+    public class ProximityEventProducer : MonoBehaviour, IVREventListener, IVREventProducer
     {
         void Reset()
         {
