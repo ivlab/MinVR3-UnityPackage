@@ -98,7 +98,7 @@ namespace IVLab.MinVR3
             MenuHelpers.CreateAndPlaceGameObject("Fake Tracking Device", command.context as GameObject, typeof(FakeTrackers));
         }
 
-        [MenuItem("GameObject/MinVR/Input Devices/Unity to MinVR/Unity XR", false, MenuHelpers.minVRSec2Priority)]
+        [MenuItem("GameObject/MinVR/Input Devices/Unity Builtin/Unity XR", false, MenuHelpers.minVRSec2Priority)]
         public static void CreateInputUnityXR(MenuCommand command)
         {
             MenuHelpers.CreateVREngineIfNeeded();
@@ -106,7 +106,7 @@ namespace IVLab.MinVR3
             MenuHelpers.CreateAndPlaceGameObject("UnityXR", command.context as GameObject, typeof(UnityXR));
         }
 
-        [MenuItem("GameObject/MinVR/Input Devices/Unity to MinVR/Mouse and Keyboard", false, MenuHelpers.minVRSec2Priority)]
+        [MenuItem("GameObject/MinVR/Input Devices/Unity Builtin/Mouse and Keyboard", false, MenuHelpers.minVRSec2Priority)]
         public static void CreateInputMouseAndKeyboard(MenuCommand command)
         {
             MenuHelpers.CreateVREngineIfNeeded();
@@ -114,7 +114,7 @@ namespace IVLab.MinVR3
             MenuHelpers.CreateAndPlaceGameObject("Mouse and Keyboard", command.context as GameObject, typeof(MouseAndKeyboard));
         }
 
-        [MenuItem("GameObject/MinVR/Input Devices/Unity to MinVR/Touch Builtin", false, MenuHelpers.minVRSec2Priority)]
+        [MenuItem("GameObject/MinVR/Input Devices/Unity Builtin/Touch Builtin", false, MenuHelpers.minVRSec2Priority)]
         public static void CreateInputTouch(MenuCommand command)
         {
             MenuHelpers.CreateVREngineIfNeeded();
@@ -122,7 +122,7 @@ namespace IVLab.MinVR3
             MenuHelpers.CreateAndPlaceGameObject("Touch Builtin", command.context as GameObject, typeof(TouchBuiltin));
         }
 
-        [MenuItem("GameObject/MinVR/Input Devices/Unity to MinVR/Mobile Sensors", false, MenuHelpers.minVRSec2Priority)]
+        [MenuItem("GameObject/MinVR/Input Devices/Unity Builtin/Mobile Sensors", false, MenuHelpers.minVRSec2Priority)]
         public static void CreateInputMobileSensors(MenuCommand command)
         {
             MenuHelpers.CreateVREngineIfNeeded();
@@ -130,7 +130,7 @@ namespace IVLab.MinVR3
             MenuHelpers.CreateAndPlaceGameObject("Mobile Sensors", command.context as GameObject, typeof(MobileSensors));
         }
 
-        [MenuItem("GameObject/MinVR/Input Devices/Unity to MinVR/Input Actions (New Input System)", false, MenuHelpers.minVRSec2Priority)]
+        [MenuItem("GameObject/MinVR/Input Devices/Unity Builtin/Input Actions (New Input System)", false, MenuHelpers.minVRSec2Priority)]
         public static void CreateInputInputActions(MenuCommand command)
         {
             MenuHelpers.CreateVREngineIfNeeded();
