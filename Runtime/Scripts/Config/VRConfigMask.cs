@@ -9,12 +9,14 @@ namespace IVLab.MinVR3
     {
         public bool IsEnabledForConfig(VRConfig config)
         {
+            if (config == null) return false;
             return m_EnabledConfigsList.Contains(config);
         }
 
 
         public bool IsEnabledForConfig(string configName)
         {
+            if (configName == "") return false;
             foreach (var c in m_EnabledConfigsList) {
                 if (c.name == configName) {
                     return true;

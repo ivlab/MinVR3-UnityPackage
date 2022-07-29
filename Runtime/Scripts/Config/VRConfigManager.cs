@@ -31,19 +31,20 @@ namespace IVLab.MinVR3
         /// </summary>
         public void EnableStartupVRConfigAndDisableOthers()
         {
-            // if null, then assume not using configs and do nothing
-            // otherwise, enable the vrconfig object marked startup and disable all others
-            if (m_StartupVRConfig != null) {
-                VRConfig[] availableConfigs = GetAvailableConfigs();
-                foreach (var cfg in availableConfigs) {
-                    cfg.gameObject.SetActive(cfg == m_StartupVRConfig);
-                }
+            VRConfig[] availableConfigs = GetAvailableConfigs();
 
-                VRConfigMask[] objectsWithConfigMask = Resources.FindObjectsOfTypeAll<VRConfigMask>();
-                foreach (var cfgMask in objectsWithConfigMask) {
-                    cfgMask.gameObject.SetActive(cfgMask.IsEnabledForConfig(m_StartupVRConfig));
-                }
+            if ((m_StartupVRConfig == null) && (availableConfigs.Length > 0)) {
+                throw new System.Exception("VRConfigs are available in the scene, but none of them are set as the startup config.  Please go to VREngine > VRConfigManager and select the VRConfig to start.");
             }
+
+            foreach (var cfg in availableConfigs) {
+                cfg.gameObject.SetActive(cfg == m_StartupVRConfig);
+            }
+
+            VRConfigMask[] objectsWithConfigMask = Resources.FindObjectsOfTypeAll<VRConfigMask>();
+            foreach (var cfgMask in objectsWithConfigMask) {
+                cfgMask.gameObject.SetActive(cfgMask.IsEnabledForConfig(m_StartupVRConfig));
+            }            
         }
 
 
@@ -85,6 +86,11 @@ namespace IVLab.MinVR3
             m_DefaultConfigFiles.Add(configFile);
         }
 #endif
+
+        private void OnValidate()
+        {
+            EnableStartupVRConfigAndDisableOthers();
+        }
 
         private void Reset()
         {
