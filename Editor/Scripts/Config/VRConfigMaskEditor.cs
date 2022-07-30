@@ -53,6 +53,7 @@ namespace IVLab.MinVR3
                         newConfigObj.objectReferenceValue = availableConfigs[i];
                     }
                 }
+
             }
 
             serializedObject.ApplyModifiedProperties();

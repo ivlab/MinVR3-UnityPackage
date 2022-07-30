@@ -40,6 +40,16 @@ namespace IVLab.MinVR3
                 if (selected >= 0) {
                     //Debug.Log("Selected: " + availableConfigs[selected].name);
                     m_StartupVRConfigProp.objectReferenceValue = availableConfigs[selected];
+
+
+                    foreach (var cfg in availableConfigs) {
+                        cfg.gameObject.SetActive(cfg == availableConfigs[selected]);
+                    }
+
+                    VRConfigMask[] objectsWithConfigMask = Resources.FindObjectsOfTypeAll<VRConfigMask>();
+                    foreach (var cfgMask in objectsWithConfigMask) {
+                        cfgMask.gameObject.SetActive(cfgMask.IsEnabledForConfig(availableConfigs[selected]));
+                    }
                 }
             }
 

@@ -90,11 +90,6 @@ namespace IVLab.MinVR3
         }
 #endif
 
-        private void OnValidate()
-        {
-            EnableStartupVRConfigAndDisableOthers();
-        }
-
         private void Reset()
         {
             m_StartupVRConfig = null;
