@@ -3,20 +3,22 @@ using System.Collections.Generic;
 
 namespace IVLab.MinVR3 {
 
-    /* Genertates fake VREvents for 3 trackers (usually assigned to the head and 2 hands).  This is similar to the 
-	 * XR Device Simulator provided with Unity's XR Interaction Toolkit, but this is a simpler simulator and has better
-	 * mouse and keyboard controls (IMHO).
-	 * 
-	 * This is only intended to be used while debugging and testing; not for an actual deployed VR app!
-	 * 
-	 * To make debugging VR apps easier, you can use the mouse and keyboard to create 'fake' input for two trackers.
-	 * "Press the '1' or '2' key to switch between controlling tracker1 or tracker2. Move the mouse around the screen
-	 * to move the 3D position of that tracker within a plane parallel to the screen.  Hold down 'left shift' while
-	 * moving the mouse vertically to change the 3D depth. Hold 'x', 'y', or 'z' while moving the mouse horizontally
-	 * to rotate the tracker around the X, Y, or Z axis.
-	 * 
-	 * Move the head around with the arrow keys.
-	 */
+
+    /// <summary>
+    /// Genertates fake VREvents for 3 trackers (usually assigned to the head and 2 hands).  This is similar to the 
+	/// XR Device Simulator provided with Unity's XR Interaction Toolkit, but this is a simpler simulator and has better
+    /// mouse and keyboard controls (IMHO).
+    ///
+    /// This is only intended to be used while debugging and testing; not for an actual deployed VR app!
+    ///
+    /// To make debugging VR apps easier, you can use the mouse and keyboard to create 'fake' input for two trackers.
+	/// "Press the '1' or '2' key to switch between controlling tracker1 or tracker2. Move the mouse around the screen
+	/// to move the 3D position of that tracker within a plane parallel to the screen. Hold down 'left shift' while
+	/// moving the mouse vertically to change the 3D depth.  Hold 'x', 'y', or 'z' while moving the mouse horizontally
+	/// to rotate the tracker around the X, Y, or Z axis.
+    ///
+    /// Move the head around with the arrow keys.
+    /// </summary>
     [AddComponentMenu("MinVR/Input/Fake Trackers (Desktop VR Debugging)")]
     public class FakeTrackers : MonoBehaviour, IPolledInputDevice {
 
@@ -28,6 +30,10 @@ namespace IVLab.MinVR3 {
         [SerializeField] private KeyCode moveHeadBackKey;
         [SerializeField] private KeyCode turnHeadLeftKey;
         [SerializeField] private KeyCode turnHeadRightKey;
+        [Range(0.0f, 10.0f)]
+        [SerializeField] private float forwardBackSensitivity = 1.0f;
+        [Range(0.0f, 10.0f)]
+        [SerializeField] private float turningSensitivity = 1.0f;
 
         [Tooltip("Fake head tracking with arrow keys. 'up' moves forward, 'down' moves backward, 'left' rotates left, 'right' rotates right.")]
         public string headTrackerBaseName;
@@ -67,7 +73,7 @@ namespace IVLab.MinVR3 {
         private int curTracker;
         private float lastx;
         private float lasty;
-
+        private bool initialPoll;
 
         private void OnEnable()
         {
@@ -83,15 +89,15 @@ namespace IVLab.MinVR3 {
         {
             m_DeviceIdString = "FakeTrackers/";
             headTrackerBaseName = "Head";
-            initialHeadPos = new Vector3(0, 1, -2);
+            initialHeadPos = new Vector3(0, 1, -2.5f);
             initialHeadRot = new Vector3();
             
             tracker1BaseName = "Tracker 1";
-            initialTracker1Pos = new Vector3();
+            initialTracker1Pos = new Vector3(0.5f, 0, 0);
             initialTracker1Rot = new Vector3();
 
             tracker2BaseName = "Tracker 2";
-            initialTracker2Pos = new Vector3();
+            initialTracker2Pos = new Vector3(-0.5f, 0, 0);
             initialTracker2Rot = new Vector3();
 
             moveHeadForwardKey = KeyCode.UpArrow;
@@ -107,6 +113,7 @@ namespace IVLab.MinVR3 {
         }
 
         void Start() {
+            initialPoll = true;
             curTracker = 0;
             lastx = float.NaN;
             lasty = float.NaN;
@@ -122,6 +129,7 @@ namespace IVLab.MinVR3 {
         {
             QueueHeadTrackerEvents(ref eventQueue);
             QueueRegularTrackerEvents(ref eventQueue);
+            initialPoll = false;
         }
 
         private void QueueHeadTrackerEvents(ref List<VREvent> eventQueue) {
@@ -129,22 +137,22 @@ namespace IVLab.MinVR3 {
 
             if (KeyboardState.KeyIsPressed(moveHeadForwardKey)) {
                 sendEvent = true;
-                headTrackerPos += 0.1f * Camera.main.transform.forward;
+                headTrackerPos += forwardBackSensitivity * 0.005f * Camera.main.transform.forward;
             }
             else if (KeyboardState.KeyIsPressed(moveHeadBackKey)) {
                 sendEvent = true;
-                headTrackerPos -= 0.1f * Camera.main.transform.forward;
+                headTrackerPos -= forwardBackSensitivity * 0.005f * Camera.main.transform.forward;
             }
             else if (KeyboardState.KeyIsPressed(turnHeadLeftKey)) {
                 sendEvent = true;
-                headTrackerRot *= Quaternion.AngleAxis(-1.0f, new Vector3(0f, 1f, 0f));
+                headTrackerRot *= Quaternion.AngleAxis(turningSensitivity * -0.3f, new Vector3(0f, 1f, 0f));
             }
             else if (KeyboardState.KeyIsPressed(turnHeadRightKey)) {
                 sendEvent = true;
-                headTrackerRot *= Quaternion.AngleAxis(1.0f, new Vector3(0f, 1f, 0f));
+                headTrackerRot *= Quaternion.AngleAxis(turningSensitivity * 0.3f, new Vector3(0f, 1f, 0f));
             }
 
-            if (sendEvent) {
+            if ((sendEvent) || (initialPoll)) {
                 eventQueue.Add(new VREventVector3(m_DeviceIdString + headTrackerBaseName + "/Position", headTrackerPos));
                 eventQueue.Add(new VREventQuaternion(m_DeviceIdString + headTrackerBaseName + "/Rotation", headTrackerRot));
             }
@@ -225,11 +233,12 @@ namespace IVLab.MinVR3 {
                 }
             }
 
-            if (sendEvent) {
-                if (curTracker == 0) {
+            if ((sendEvent) || (initialPoll)) {
+                if ((curTracker == 0) || (initialPoll)) {
                     eventQueue.Add(new VREventVector3(m_DeviceIdString + tracker1BaseName + "/Position", tracker1Pos));
                     eventQueue.Add(new VREventQuaternion(m_DeviceIdString + tracker1BaseName + "/Rotation", tracker1Rot));
-                } else if (curTracker == 1) {
+                }
+                if ((curTracker == 1) || (initialPoll)) {
                     eventQueue.Add(new VREventVector3(m_DeviceIdString + tracker2BaseName + "/Position", tracker2Pos));
                     eventQueue.Add(new VREventQuaternion(m_DeviceIdString + tracker2BaseName + "/Rotation", tracker2Rot));
                 }

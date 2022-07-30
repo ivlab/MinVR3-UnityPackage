@@ -10,6 +10,8 @@ namespace IVLab.MinVR3
 {
     public class Menu_GameObject_MinVR_VRConfigs : MonoBehaviour
     {
+        public static Vector3 defaultCameraPosition = new Vector3(0.0f, 1.0f, -2.5f);
+
 
         /// ---- VRCONFIGS ----
         
@@ -50,6 +52,7 @@ namespace IVLab.MinVR3
             inputDevicesChild?.AddComponent<TouchBuiltin>();
 
             Camera c = displayDevicesChild?.AddComponent<Camera>();
+            c.transform.position = defaultCameraPosition;
             c.tag = "MainCamera";
         }
 
@@ -65,12 +68,15 @@ namespace IVLab.MinVR3
             GameObject eventAliasesChild = null;
             GameObject vrConfigObj = MenuHelpers.CreateVRConfigTemplate(command, "BasicVRSimulator", ref inputDevicesChild, ref displayDevicesChild, ref eventAliasesChild);
 
-            inputDevicesChild?.AddComponent<MouseAndKeyboard>();
-            inputDevicesChild?.AddComponent<FakeTrackers>();
+            inputDevicesChild.AddComponent<MouseAndKeyboard>();
+            inputDevicesChild.AddComponent<FakeTrackers>();
 
-            Camera c = displayDevicesChild?.AddComponent<Camera>();
+            Camera c = displayDevicesChild.AddComponent<Camera>();
+            c.transform.position = defaultCameraPosition;
             c.tag = "MainCamera";
-            displayDevicesChild?.AddComponent<TrackedDesktopCamera>();
+            TrackedDesktopCamera trackedDesktopCamera = displayDevicesChild.AddComponent<TrackedDesktopCamera>();
+            trackedDesktopCamera.positionEvent = VREventPrototypeVector3.Create("FakeTrackers/Head/Position");
+            trackedDesktopCamera.rotationEvent = VREventPrototypeQuaternion.Create("FakeTrackers/Head/Rotation");
 
             MenuHelpers.AddTrackingAliases(eventAliasesChild, "Head", "FakeTrackers/Head");
             MenuHelpers.AddTrackingAliases(eventAliasesChild, "DH", "FakeTrackers/Tracker 1");
@@ -96,6 +102,7 @@ namespace IVLab.MinVR3
             inputDevicesChild.AddComponent<UnityXR>();
 
             Camera c = displayDevicesChild.AddComponent<Camera>();
+            c.transform.position = defaultCameraPosition;
             c.stereoTargetEye = StereoTargetEyeMask.Both;
             c.tag = "MainCamera";
             TrackedPoseDriver poseDriver = displayDevicesChild.AddComponent<TrackedPoseDriver>();
@@ -130,12 +137,14 @@ namespace IVLab.MinVR3
 
             GameObject leftObj = MenuHelpers.CreateAndPlaceGameObject("Left Camera", displayDevicesChild, typeof(Camera));
             Camera leftCam = leftObj.GetComponent<Camera>();
+            leftCam.transform.position = defaultCameraPosition;
             leftCam.rect = new Rect(0, 0, 0.499f, 1);
             leftCam.stereoTargetEye = StereoTargetEyeMask.Left;
             leftCam.tag = "MainCamera";
 
             GameObject rightObj = MenuHelpers.CreateAndPlaceGameObject("Right Camera", displayDevicesChild, typeof(Camera));
             Camera rightCam = rightObj.GetComponent<Camera>();
+            rightCam.transform.position = defaultCameraPosition;
             rightCam.rect = new Rect(0.501f, 0, 0.499f, 1);
             rightCam.stereoTargetEye = StereoTargetEyeMask.Right;
 
@@ -164,6 +173,8 @@ namespace IVLab.MinVR3
 
             // stereo cameras
             GameObject stereoCamsObj = MenuHelpers.CreateAndPlaceGameObject("Stereo Cameras", displayDevicesChild, typeof(TrackedPoseDriver));
+            stereoCamsObj.transform.position = defaultCameraPosition;
+
 
             TrackedPoseDriver poseDriver = stereoCamsObj.GetComponent<TrackedPoseDriver>();
             poseDriver.rotationEvent = VREventPrototypeQuaternion.Create("Mobile/Rotation");
@@ -181,7 +192,10 @@ namespace IVLab.MinVR3
             // clipboard camera
             GameObject clipCamObj = MenuHelpers.CreateAndPlaceGameObject("Clipboard Camera", displayDevicesChild, typeof(Camera));
             Camera clipCam = clipCamObj.GetComponent<Camera>();
-            clipCam.rect = new Rect(0, 0, 1, 0.75f);
+            clipCam.transform.localPosition = new Vector3(0, 10, 0);
+            clipCam.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, 0));
+            clipCam.orthographic = true;
+            clipCam.rect = new Rect(0, 0, 1, 0.749f);
             clipCam.tag = "MainCamera";
 
             MenuHelpers.AddTrackingAliases(eventAliasesChild, "Head", "Mobile");
@@ -203,6 +217,7 @@ namespace IVLab.MinVR3
 
 
             Camera c = displayDevicesChild.AddComponent<Camera>();
+            c.transform.position = defaultCameraPosition;
             c.stereoTargetEye = StereoTargetEyeMask.Both;
             c.tag = "MainCamera";
             TrackedProjectionScreen trackedScreen = displayDevicesChild.AddComponent<TrackedProjectionScreen>();
@@ -223,6 +238,7 @@ namespace IVLab.MinVR3
             vrConfigObj.AddComponent<ClusterServer>();
 
             Camera c = displayDevicesChild.AddComponent<Camera>();
+            c.transform.position = defaultCameraPosition;
             c.stereoTargetEye = StereoTargetEyeMask.Both;
             c.tag = "MainCamera";
             TrackedProjectionScreen trackedScreen = displayDevicesChild.AddComponent<TrackedProjectionScreen>();
@@ -243,6 +259,7 @@ namespace IVLab.MinVR3
             vrConfigObj.AddComponent<ClusterClient>();
 
             Camera c = displayDevicesChild.AddComponent<Camera>();
+            c.transform.position = defaultCameraPosition;
             c.stereoTargetEye = StereoTargetEyeMask.Both;
             c.tag = "MainCamera";
             TrackedProjectionScreen trackedScreen = displayDevicesChild.AddComponent<TrackedProjectionScreen>();

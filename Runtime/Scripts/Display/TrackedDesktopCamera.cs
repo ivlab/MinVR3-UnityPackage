@@ -11,26 +11,34 @@ namespace IVLab.MinVR3 {
     [AddComponentMenu("MinVR/Display/Tracked Desktop Camera")]
     public class TrackedDesktopCamera : MonoBehaviour, IVREventListener {
 
-        [Tooltip("Name of the VREvent that provides positional updates.")]
-        public VREventPrototypeVector3 m_PositionEvent;
-
-        [Tooltip("Name of the VREvent that provides rotational updates.")]
-        public VREventPrototypeQuaternion m_RotationEvent;
-        
-        [Tooltip("The camera to apply the tracking updates to.  Defaults to Main Camera.")]
-        public Camera m_Camera;
-
-        void OnEnable() {
-            if (m_Camera == null) {
-                m_Camera = Camera.main;
+        public VREventPrototypeVector3 positionEvent {
+            get { return m_PositionEvent; }
+            set {
+                m_PositionEvent = value;
             }
-            VREngine.Instance.eventManager.AddEventListener(this);
         }
 
-        void OnDisable()
-        {
-            VREngine.Instance?.eventManager?.RemoveEventListener(this);
+        public VREventPrototypeQuaternion rotationEvent {
+            get { return m_RotationEvent; }
+            set { m_RotationEvent = value; }
         }
+
+        public Camera trackedCamera {
+            get { return m_Camera; }
+            set { m_Camera = value; }
+        }
+
+
+        void Start()
+        {
+            if (m_Camera == null) {
+                m_Camera = GetComponentInChildren<Camera>();
+                if (m_Camera == null) {
+                    m_Camera = Camera.main;
+                }
+            }
+        }
+
 
         public void OnVREvent(VREvent vrEvent)
         {
@@ -41,23 +49,33 @@ namespace IVLab.MinVR3 {
             }
         }
 
-        public bool IsListening()
-        {
-            return m_Listening;
+
+        void OnEnable() {
+            VREngine.Instance.eventManager.AddEventListener(this);
         }
+
+        void OnDisable()
+        {
+            VREngine.Instance?.eventManager?.RemoveEventListener(this);
+        }
+
 
         public void StartListening()
         {
             VREngine.Instance.eventManager.AddEventListener(this);
-            m_Listening = true;
         }
 
         public void StopListening()
         {
             VREngine.Instance?.eventManager?.RemoveEventListener(this);
-            m_Listening = false;
         }
 
-        private bool m_Listening = false;
+
+        [Tooltip("Name of the VREvent that provides positional updates.")]
+        [SerializeField] private VREventPrototypeVector3 m_PositionEvent;
+        [Tooltip("Name of the VREvent that provides rotational updates.")]
+        [SerializeField] private VREventPrototypeQuaternion m_RotationEvent;
+        [Tooltip("The camera to apply the tracking updates to.  Defaults to Main Camera.")]
+        [SerializeField] private Camera m_Camera;
     }
 }

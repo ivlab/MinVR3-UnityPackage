@@ -36,8 +36,21 @@ namespace IVLab.MinVR3
         {
             VRConfig[] availableConfigs = GetAvailableConfigs();
 
-            if ((m_StartupVRConfig == null) && (availableConfigs.Length > 0)) {
-                throw new System.Exception("VRConfigs are available in the scene, but none of them are set as the startup config.  Please go to VREngine > VRConfigManager and select the VRConfig to start.");
+            if (m_StartupVRConfig == null) {
+                if (availableConfigs.Length == 1) {
+                    // only one config in the scene, set it as the startup config
+                    m_StartupVRConfig = availableConfigs[0];
+                } else if (availableConfigs.Length > 1) {
+                    // use the first one, remind user to set it
+                    m_StartupVRConfig = availableConfigs[0];
+                    Debug.LogWarning("VRConfigs are available in the scene, but none of them is set as the startup config.  Please go to VREngine > VRConfigManager and select the VRConfig to start.");
+                } else {
+                    Debug.LogWarning("The scene does not contain any VRConfigs.");
+                }
+            }
+
+            if (m_StartupVRConfig != null) {
+                Debug.Log($"MinVR Starting with VRConfig: {m_StartupVRConfig.name}");
             }
 
             foreach (var cfg in availableConfigs) {
