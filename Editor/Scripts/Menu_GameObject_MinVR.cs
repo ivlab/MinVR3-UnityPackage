@@ -98,6 +98,8 @@ namespace IVLab.MinVR3
             MenuHelpers.CreateAndPlaceGameObject("Fake Tracking Device", command.context as GameObject, typeof(FakeTrackers));
         }
 
+        #if ENABLE_INPUT_SYSTEM
+        // This functionality is only available in projects using Unity's New Input System
         [MenuItem("GameObject/MinVR/Input Devices/Unity Builtin/Unity XR", false, MenuHelpers.minVRSec2Priority)]
         public static void CreateInputUnityXR(MenuCommand command)
         {
@@ -105,6 +107,7 @@ namespace IVLab.MinVR3
             MenuHelpers.CreateRoomSpaceOriginIfNeeded();
             MenuHelpers.CreateAndPlaceGameObject("UnityXR", command.context as GameObject, typeof(UnityXR));
         }
+        #endif
 
         [MenuItem("GameObject/MinVR/Input Devices/Unity Builtin/Mouse and Keyboard", false, MenuHelpers.minVRSec2Priority)]
         public static void CreateInputMouseAndKeyboard(MenuCommand command)
@@ -130,6 +133,9 @@ namespace IVLab.MinVR3
             MenuHelpers.CreateAndPlaceGameObject("Mobile Sensors", command.context as GameObject, typeof(MobileSensors));
         }
 
+
+        #if ENABLE_INPUT_SYSTEM
+        // This functionality is only available in projects using Unity's New Input System
         [MenuItem("GameObject/MinVR/Input Devices/Unity Builtin/Input Actions (New Input System)", false, MenuHelpers.minVRSec2Priority)]
         public static void CreateInputInputActions(MenuCommand command)
         {
@@ -137,7 +143,7 @@ namespace IVLab.MinVR3
             MenuHelpers.CreateRoomSpaceOriginIfNeeded();
             MenuHelpers.CreateAndPlaceGameObject("Input Actions", command.context as GameObject, typeof(InputActionsToVREvents));
         }
-
+        #endif
 
 
         // ---- DISPLAY DEVICES SUBMENU ----
@@ -198,4 +204,4 @@ namespace IVLab.MinVR3
 
 } // end namespace
 
-#pragma warning restore IDE0051       
+#pragma warning restore IDE0051

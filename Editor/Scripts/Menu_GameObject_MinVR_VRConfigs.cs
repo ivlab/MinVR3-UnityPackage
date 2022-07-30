@@ -80,6 +80,8 @@ namespace IVLab.MinVR3
         }
 
 
+#if ENABLE_INPUT_SYSTEM
+        // This functionality is only available in projects using Unity's New Input System
         [MenuItem("GameObject/MinVR/VRConfig/VRConfig_UnityXR (HMDs supported by UnityEngine.XR)", false, MenuHelpers.vrConfigSec2Priority)]
         public static void CreateVRConfigUnityXR(MenuCommand command)
         {
@@ -106,7 +108,7 @@ namespace IVLab.MinVR3
             MenuHelpers.AddTrackingAliases(eventAliasesChild, "NDH", "UnityXR/LeftHand");
             MenuHelpers.AddButtonAliases(eventAliasesChild, "NDH", "UnityXR/LeftHand/Trigger");
         }
-
+#endif
 
         [MenuItem("GameObject/MinVR/VRConfig/VRConfig_CardboardVR (Phone or Tablet)", false, MenuHelpers.vrConfigSec2Priority)]
         public static void CreateVRConfigCardboardVR(MenuCommand command)
