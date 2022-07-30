@@ -37,6 +37,7 @@ namespace IVLab.MinVR3
             m_DataTypeName = "";
             m_EventName = "";
             m_DataTypeLocked = false;
+            m_DefineNewPrototypeInEditor = false;
             InitAllEventPrototypes();
         }
 
@@ -114,10 +115,22 @@ namespace IVLab.MinVR3
             m_DataTypeLocked = false;
         }
 
+        public void SetDefineNewPrototypeInEditor(bool value)
+        {
+            m_DefineNewPrototypeInEditor = value;
+        }
+
 
         [SerializeField] private string m_EventName;
         [SerializeField] private string m_DataTypeName;
         [SerializeField] private bool m_DataTypeLocked;
+
+        // if false (default), the editor interface is designed for picking an existing prototype from
+        //    the list of event prototypes reported by the event manager.  use this when you want to
+        //    be able to select an event that your class should respond to in some way.
+        // if true, the editor interface is instead used to define a new event prototype.  use this when
+        //    you are creating an event producer and want to define prototypes for the events it produces.
+        [SerializeField] private bool m_DefineNewPrototypeInEditor = false;
 
         [NonSerialized] private Dictionary<string, IVREventPrototype> m_AllEventPrototypes;
 

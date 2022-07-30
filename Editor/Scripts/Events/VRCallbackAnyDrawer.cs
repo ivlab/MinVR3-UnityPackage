@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System.Collections.Generic;
-
+using System.Linq;
 
 namespace IVLab.MinVR3
 {
@@ -24,15 +23,18 @@ namespace IVLab.MinVR3
             // data type dropdown
             SerializedProperty showDataTypeProp = property.FindPropertyRelative("m_ShowDataTypeInEditor");
             if (showDataTypeProp.boolValue) {
-                List<string> dataTypeNamesList = new List<string>();
-                SerializedProperty iteratorProp = property.serializedObject.GetIterator();
-                while (iteratorProp.NextVisible(true)) {
-                    if (iteratorProp.name.StartsWith("m_Callback")) {
-                        dataTypeNamesList.Add(iteratorProp.name.Substring(10));
-                    }
+
+                VREventPrototypeAny any = new VREventPrototypeAny();
+                var dataTypeNames = any.AllEventPrototypes.Keys.ToList();
+                var dataTypeNamesList = dataTypeNames.ToList();
+                int blankIndex = dataTypeNamesList.FindIndex(t => t.Length == 0);
+                if (blankIndex >= 0) {
+                    dataTypeNamesList[blankIndex] = "(none)";
                 }
-                string[] dataTypeNames = new string[dataTypeNamesList.Count];
-                GUIContent[] displayNames = new GUIContent[dataTypeNamesList.Count];
+                var displayNames = dataTypeNamesList
+                    .Select(t => new GUIContent(t))
+                    .ToArray();
+
                 int selected = -1;
                 for (int i = 0; i < dataTypeNamesList.Count; i++) {
                     dataTypeNames[i] = dataTypeNamesList[i];

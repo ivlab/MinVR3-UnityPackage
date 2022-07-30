@@ -181,6 +181,14 @@ namespace IVLab.MinVR3
 
         public void InitAllCallbacks()
         {
+            // TODO: BUG: This list does not include all of the current VREvent Types.
+            // This can likely be revised to follow the same approach as in VREventPrototypeAny of using
+            // reflection to automatically detect all of the available types so that there are fewer
+            // places to edit when a new type is added.  When fixing this, remember to also update the
+            // editor scripts.  They assume all the callbacks are listed in this class and that they
+            // all begin with "m_Callback*".  The editor for VREventPrototypeAny includes an alternative
+            // strategy that should translate here as well.
+
             m_AllCallbacks = new Dictionary<string, IVRCallback>();
 
             m_Callback = new VRCallback();

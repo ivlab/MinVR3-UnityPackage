@@ -105,6 +105,7 @@ namespace IVLab.MinVR3
             }
         }
 
+
         /// <summary>
         /// True for raw VREvents created from input devices, trackers, etc.  These need to be sent
         /// across the network to synchronize nodes when running in cluster mode so that all nodes

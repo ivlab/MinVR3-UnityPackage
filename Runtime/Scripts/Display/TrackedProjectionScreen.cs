@@ -12,7 +12,9 @@ namespace IVLab.MinVR3 {
      * corners and head position are defined relative to the same physical coordinates.
      * The projection screen must be a rectangle.
      *
-     * By default the script will modify the Main Camera.
+     * By default the script will modify the Camera component attached to the same
+     * GameObject as this script or the Main Camera if no Camera component is found.
+     * You can override this by setting the cam field explicitly.
      *
      * To specify a default or initial head transform to use when head tracking is not
      * active, set the position of the head using the camera's transform.
@@ -53,11 +55,18 @@ namespace IVLab.MinVR3 {
 
         [Tooltip("Color to use when drawing the projection plane and off-axis view frustrum in the editor.")]
         public Color debugColor = Color.green;
-        
+
+
+        void Reset()
+        {
+            trackingSpaceCorners = new ScreenCorners();
+            headTrackingPosEvent = null;
+            headTrackingRotEvent = null;
+            projectionType = ProjectionType.Perspective;
+            debugColor = Color.green;
+        }
+
         void OnEnable() {
-            if (cam == null) {
-                cam = Camera.main;
-            }
             if (Application.IsPlaying(gameObject)) { // play mode
                 VREngine.Instance.eventManager.AddEventListener(this);
             }
@@ -70,12 +79,17 @@ namespace IVLab.MinVR3 {
             }
         }
 
+        void Start()
+        {
+            if (cam == null) {
+                cam = gameObject.GetComponent<Camera>();
+                if (cam == null) {
+                    cam = Camera.main;
+                }
+            }
+        }
         
         void Update() {
-            if (cam == null) {
-                cam = Camera.main;
-            }
-
             if (!Application.IsPlaying(gameObject)) {  // edit mode only
                 Color c = debugColor;
                 if (!IsRectangle(trackingSpaceCorners)) {
