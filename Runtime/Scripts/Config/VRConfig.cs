@@ -7,6 +7,7 @@ namespace IVLab.MinVR3
     /// <summary>
     /// Attach to game objects you wish to act as VRConfig objects.
     /// </summary>
+    [AddComponentMenu("MinVR/Config/VRConfig")]
     public class VRConfig : MonoBehaviour
     {
         [Tooltip("MinVR Config Files that are specific to this VRConfig.  These are only parsed when this VRConfig is active, and the values override any defaults that appear in the config files loaded from the VRConfigManager attached to the UnityEngine Game Object.")]

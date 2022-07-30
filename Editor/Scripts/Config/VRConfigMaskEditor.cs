@@ -35,6 +35,9 @@ namespace IVLab.MinVR3
                 }
             }
 
+            EditorGUILayout.HelpBox("Check the VRConfigs for which this GameObject should be active.",
+                MessageType.Info);
+
             EditorGUI.BeginChangeCheck();
             for (int i = 0; i < displayNames.Length; i++) {
                 enabled[i] = EditorGUILayout.Toggle(new GUIContent(displayNames[i]), enabled[i]);

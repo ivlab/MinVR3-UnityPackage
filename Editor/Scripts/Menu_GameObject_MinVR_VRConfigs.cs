@@ -76,7 +76,7 @@ namespace IVLab.MinVR3
             MenuHelpers.AddTrackingAliases(eventAliasesChild, "DH", "FakeTrackers/Tracker 1");
             MenuHelpers.AddButtonAliases(eventAliasesChild, "DH", "Mouse/Left");
             MenuHelpers.AddTrackingAliases(eventAliasesChild, "NDH", "FakeTrackers/Tracker 2");
-            MenuHelpers.AddButtonAliases(eventAliasesChild, "DH", "Mouse/Right");
+            MenuHelpers.AddButtonAliases(eventAliasesChild, "NDH", "Mouse/Right");
         }
 
 
@@ -104,7 +104,7 @@ namespace IVLab.MinVR3
             MenuHelpers.AddTrackingAliases(eventAliasesChild, "DH", "UnityXR/RightHand");
             MenuHelpers.AddButtonAliases(eventAliasesChild, "DH", "UnityXR/RightHand/Trigger");
             MenuHelpers.AddTrackingAliases(eventAliasesChild, "NDH", "UnityXR/LeftHand");
-            MenuHelpers.AddButtonAliases(eventAliasesChild, "DH", "UnityXR/LeftHand/Trigger");
+            MenuHelpers.AddButtonAliases(eventAliasesChild, "NDH", "UnityXR/LeftHand/Trigger");
         }
 
 

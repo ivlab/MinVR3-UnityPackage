@@ -5,6 +5,9 @@ using UnityEngine;
 namespace IVLab.MinVR3
 {
 
+    /// <summary>
+    /// The VRConfigManager should not be created directly.  Instead, use the one attached to VREngine.
+    /// </summary>
     [DisallowMultipleComponent]
     public class VRConfigManager : MonoBehaviour
     {
