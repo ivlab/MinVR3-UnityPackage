@@ -3,11 +3,7 @@
     "rootNamespace": "",
     "references": [
         "Unity.TextMeshPro",
-        "Unity.InputSystem",
-        "IVLab.Utilities.Runtime",
-        "IVLab.TUIO11.Runtime",
-        "IVLab.zCore6.Runtime",
-        "IVLab.WebSocket.Runtime"
+        "Unity.InputSystem"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -16,27 +12,6 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [
-        {
-            "name": "edu.umn.cs.ivlab.tuio11",
-            "expression": "0.1.0",
-            "define": "TUIO_PRESENT"
-        },
-        {
-            "name": "edu.umn.cs.ivlab.zcore6",
-            "expression": "0.1.0",
-            "define": "ZCORE_PRESENT"
-        },
-        {
-            "name": "edu.umn.cs.ivlab.sensel",
-            "expression": "0.1.0",
-            "define": "SENSEL_PRESENT"
-        },
-        {
-            "name": "edu.umn.cs.ivlab.websocket",
-            "expression": "0.1.0",
-            "define": "WEBSOCKET_PRESENT"
-        }
-    ],
+    "versionDefines": [],
     "noEngineReferences": false
 }
