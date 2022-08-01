@@ -178,6 +178,7 @@ namespace IVLab.MinVR3
 
             TrackedPoseDriver poseDriver = stereoCamsObj.GetComponent<TrackedPoseDriver>();
             poseDriver.rotationEvent = VREventPrototypeQuaternion.Create("Mobile/Rotation");
+            poseDriver.trackingType = TrackedPoseDriver.TrackingType.RotationOnly;
 
             GameObject leftCamObj = MenuHelpers.CreateAndPlaceGameObject("Left Camera", stereoCamsObj, typeof(Camera));
             Camera leftCam = leftCamObj.GetComponent<Camera>();
