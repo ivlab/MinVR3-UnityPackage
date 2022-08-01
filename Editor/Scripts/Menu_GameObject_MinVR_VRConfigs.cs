@@ -225,6 +225,40 @@ namespace IVLab.MinVR3
         }
 
 
+        [MenuItem("GameObject/MinVR/VRConfig/VRConfig_Workbench (Fishtank + Touch Table)", false, MenuHelpers.vrConfigSec2Priority)]
+        public static void CreateVRConfigWorkbench(MenuCommand command)
+        {
+            MenuHelpers.CreateVREngineIfNeeded();
+            MenuHelpers.CreateRoomSpaceOriginIfNeeded();
+
+            GameObject inputDevicesChild = null;
+            GameObject displayDevicesChild = null;
+            GameObject eventAliasesChild = null;
+            GameObject vrConfigObj = MenuHelpers.CreateVRConfigTemplate(command, "Workbench", ref inputDevicesChild, ref displayDevicesChild, ref eventAliasesChild);
+
+
+            GameObject vertDisplay = MenuHelpers.CreateAndPlaceGameObject("Vertical Display", displayDevicesChild, typeof(Camera), typeof(TrackedProjectionScreen));
+
+            Camera vertCam = vertDisplay.GetComponent<Camera>();
+            vertCam.transform.position = defaultCameraPosition;
+            vertCam.stereoTargetEye = StereoTargetEyeMask.Both;
+            vertCam.tag = "MainCamera";
+            vertCam.rect = new Rect(0, 0.499f, 1, 0.499f);
+
+            TrackedProjectionScreen trackedScreen = vertDisplay.GetComponent<TrackedProjectionScreen>();
+
+            GameObject touchDisplay = MenuHelpers.CreateAndPlaceGameObject("Touch Display", displayDevicesChild, typeof(Camera));
+            Camera touchCam = touchDisplay.GetComponent<Camera>();
+            touchCam.transform.localPosition = new Vector3(0, 10, 0);
+            touchCam.transform.localRotation = Quaternion.Euler(new Vector3(90, 0, 0));
+            touchCam.orthographic = true;
+            touchCam.rect = new Rect(0, 0, 1, 0.499f);
+
+            Selection.activeGameObject = vrConfigObj;
+        }
+
+
+
         [MenuItem("GameObject/MinVR/VRConfig/VRConfig_ClusterServer (Tiled Display Server)", false, MenuHelpers.vrConfigSec2Priority)]
         public static void CreateVRConfigClusterServer(MenuCommand command)
         {

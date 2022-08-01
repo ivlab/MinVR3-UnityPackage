@@ -75,7 +75,7 @@ namespace IVLab.MinVR3 {
         void OnDisable()
         {
             if (Application.IsPlaying(gameObject)) { // play mode
-                VREngine.Instance.eventManager.RemoveEventListener(this);
+                VREngine.Instance?.eventManager?.RemoveEventListener(this);
             }
         }
 
