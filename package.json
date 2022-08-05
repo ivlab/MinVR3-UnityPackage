@@ -29,6 +29,11 @@
             "displayName": "ShadowTouch",
             "description": "Divides the display into two windows that are intended to span two screens arranged in a L-shape, with a horizontal touch table as one display and a vertical stereoscopic window for the other.  Demonstrates the ShadowWIM technique, which is a precursor to the SliceWIM and Interactive SliceWIM user interfaces developed in Dane Coffey's dissertation work.",
             "path": "Samples~/ShadowTouch"
+        },
+        {
+            "displayName": "ClusterTest",
+            "description": "The simplest example of MinVR3's cluster mode support.  This runs two instances of the same app in two desktop windows (no VR required).  One app acts as the cluster server; on acts as a client.  They communicate with each other over a TCP connection, but the sample is configured for both apps to run on the same machine to keep it simple.  This demonstrates how both rendering and input events are synchronized at a per-frame level in cluster mode.  You will notice that moving the mouse in one app to move the 3D cursors around also moves them in the same way in the other app.  This is because MinVR3 synchronizes all VREvents across all nodes at the beginning of each frame.  MinVR3 also synchronizes the graphics rendering swapbuffers calls, meaning after each frame is rendered offscreen and just before it is actually displayed on the screen, each node pauses and waits for a signal that all other nodes are also done with rendering.  When every node is ready, they all swap to displaying the next frame at the same time.  This is important for synchronized rendering on tiled displays.",
+            "path": "Samples~/ClusterTest"
         }
     ]
 }

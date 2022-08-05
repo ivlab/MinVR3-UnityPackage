@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 using System.Net; 
 using System.Net.Sockets;
+using System.Threading;
 
 namespace IVLab.MinVR3 {
 
@@ -23,22 +24,46 @@ namespace IVLab.MinVR3 {
 
         public void Initialize() {
 
+            string hostname = "localhost";
+            IPHostEntry host = Dns.GetHostEntry(hostname);
+
+            Console.WriteLine($"GetHostEntry({hostname}) returns:");
+
+            foreach (IPAddress address in host.AddressList) {
+                Console.WriteLine($"    {address}");
+            }
+            
+
+            Debug.Log("Cluster Server: Starting TCP Listener");
+            Console.WriteLine("Cluster Server: Starting TCP Listener");
             server = new TcpListener(IPAddress.Any, serverPort);
             server.Start();
 
             Debug.Log("Server waiting for " + numClients + " connection(s)...");
+            Console.WriteLine("Server waiting for " + numClients + " connection(s)...");
             while (clients.Count < numClients) {
-                try {
-                    // Blocking call to accept requests
-                    TcpClient client = server.AcceptTcpClient();
-                    if (client.Connected) {
-                        client.NoDelay = true;
-                        clients.Add(client);
+                if (server.Pending()) {
+                    try {
+                        // Blocking call to accept requests
+                        TcpClient client = server.AcceptTcpClient();
+                        if (client.Connected) {
+                            client.NoDelay = true;
+                            clients.Add(client);
+                            Debug.Log("Accepted connection #" + clients.Count);
+                            Console.WriteLine("Accepted connection #" + clients.Count);
+                        }
+                    } catch (Exception e) {
+                        Debug.Log(String.Format("Exception: {0}", e));
+                        Console.WriteLine("Exception: {0}", e);
+                        #if UNITY_EDITOR
+                        UnityEditor.EditorApplication.isPlaying = false;
+                        #else
+                        Application.Quit();
+                        #endif
+                        return;
                     }
-                }
-                catch (Exception e) {
-                    Debug.Log(String.Format("Exception: {0}", e));
-                    Console.WriteLine("Exception: {0}", e);
+                } else {
+                    Thread.Sleep(50);
                 }
             }
         }
@@ -67,6 +92,8 @@ namespace IVLab.MinVR3 {
             }
 
             // loop until the list of streams to read from is empty
+            System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+            stopwatch.Start();
             while (toRead.Count > 0) {
                 int i = 0;
                 while (i < toRead.Count) {
@@ -80,6 +107,10 @@ namespace IVLab.MinVR3 {
                         // this stream not ready to read, move on to the next
                         i++;
                     }
+                    if (stopwatch.Elapsed.TotalSeconds > 5) {
+                        NetUtils.BrokenConnectionError();
+                        return;
+                    }
                 }
             }
 
@@ -87,6 +118,7 @@ namespace IVLab.MinVR3 {
             // 2. SEND THE COMBINED INPUT EVENTS LIST OUT TO ALL CLIENTS
             for (int i = 0; i < clients.Count; i++) {
                 TcpClient c = clients[i];
+                //Debug.Log("Sending input events " + inputEvents.Count);
                 NetUtils.SendEventData(ref c, in inputEvents);
             }
             
@@ -110,6 +142,8 @@ namespace IVLab.MinVR3 {
             }
 
             // loop until the list of streams to read from is empty
+            System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+            stopwatch.Start();
             while (toRead.Count > 0) {
                 int i = 0;
                 while (i < toRead.Count) {
@@ -122,6 +156,10 @@ namespace IVLab.MinVR3 {
                     else {
                         // this stream not ready to read, move on to the next
                         i++;
+                    }
+                    if (stopwatch.Elapsed.TotalSeconds > 5) {
+                        NetUtils.BrokenConnectionError();
+                        return;
                     }
                 }
             }

@@ -1,0 +1,6 @@
+# MinVR3 ConfigVal File (Assets/minvr-configvals-basicvrsimulator.txt)
+# This file is only parsed when VRConfig_BasicVRSimulator is used.
+# When parsed, settings in this file will override those with the same name in minvr-configvals-default.txt
+
+MENU_SIZE = 0.25
+

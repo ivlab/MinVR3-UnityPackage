@@ -49,6 +49,8 @@ namespace IVLab.MinVR3 {
         // Blocks until the specific message specified is received
         public static void ReceiveOneByteMessage(ref TcpClient client, byte[] message) {
             byte[] received = new byte[1];
+            System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
+            stopwatch.Start();
             while (received[0] != message[0]) {
                 int status = -1;
                 if (!client.Connected) {
@@ -69,6 +71,10 @@ namespace IVLab.MinVR3 {
                 }
                 else if ((status == 1) && (received[0] != message[0])) {
                     Console.WriteLine("WaitForAndReceiveMessageHeader error: expected {0} got {1}", message[0], received[0]);
+                    return;
+                }
+                if (stopwatch.Elapsed.TotalSeconds > 5) {
+                    BrokenConnectionError();
                     return;
                 }
             }
@@ -110,7 +116,8 @@ namespace IVLab.MinVR3 {
                 return;
             }
             try {
-                BinaryFormatter bf = new BinaryFormatter();
+                BinaryFormatter bf = binaryFormatter;
+
                 using (MemoryStream ms = new MemoryStream()) {
                     bf.Serialize(ms, inputEvents);
                     byte[] bytes = ms.ToArray();
@@ -139,8 +146,9 @@ namespace IVLab.MinVR3 {
                     Console.WriteLine("ReceiveEventData error reading data");
                     return;
                 }
-                BinaryFormatter bf = new BinaryFormatter();
-                using (MemoryStream ms = new MemoryStream()) {
+                
+                BinaryFormatter bf = binaryFormatter;
+                using (MemoryStream ms = new MemoryStream(bytes, 0, bytes.Length)) {
                     List<VREvent> events = (List<VREvent>)bf.Deserialize(ms);
                     inputEvents.AddRange(events);
                 }
@@ -159,9 +167,11 @@ namespace IVLab.MinVR3 {
 
         // Blocks and continues reading until len bytes are read into buf
         public static int ReceiveAll(ref TcpClient client, ref byte[] buf, int len) {
+            System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
             int total = 0;        // how many bytes we've received
             int bytesleft = len; // how many we have left to receive
             int n;
+            stopwatch.Start();
             while (total < len) {
                 if (!client.Connected) {
                     BrokenConnectionError();
@@ -176,6 +186,10 @@ namespace IVLab.MinVR3 {
                     Console.WriteLine("Exception: {0}", e);
                     BrokenConnectionError();
                     return -1;
+                }
+                if (stopwatch.Elapsed.TotalSeconds > 5) {
+                    BrokenConnectionError();
+                    return -1;                        
                 }
             }
             return total; // return -1 on failure, total on success
@@ -233,6 +247,30 @@ namespace IVLab.MinVR3 {
             #endif
         }
 
+
+        private static BinaryFormatter binaryFormatter {
+            get {
+                if (s_BinaryFormatter == null) {
+                    BinaryFormatter bf = new BinaryFormatter();
+
+                    SurrogateSelector ss = new SurrogateSelector();
+                    ss.AddSurrogate(typeof(Vector2), new StreamingContext(StreamingContextStates.All),
+                                    new Vector2SerializationSurrogate());
+                    ss.AddSurrogate(typeof(Vector3), new StreamingContext(StreamingContextStates.All),
+                                    new Vector3SerializationSurrogate());
+                    ss.AddSurrogate(typeof(Vector4), new StreamingContext(StreamingContextStates.All),
+                                    new Vector4SerializationSurrogate());
+                    ss.AddSurrogate(typeof(Quaternion), new StreamingContext(StreamingContextStates.All),
+                                    new QuaternionSerializationSurrogate());
+                    bf.SurrogateSelector = ss;
+                    s_BinaryFormatter = bf;
+                }
+                return s_BinaryFormatter;
+            }
+        }
+
+
+        private static BinaryFormatter s_BinaryFormatter;
     }
 
 } // namespace

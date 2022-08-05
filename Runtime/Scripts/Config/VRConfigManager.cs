@@ -36,6 +36,13 @@ namespace IVLab.MinVR3
         {
             VRConfig[] availableConfigs = GetAvailableConfigs();
 
+            string msg = $"VRConfigManager: {availableConfigs.Length} available VRConfigs:\n";
+            foreach (var cfg in availableConfigs) {
+                string startup = cfg == m_StartupVRConfig ? "*" : " ";
+                msg += $"  [{startup}] {cfg.gameObject.name}\n";
+            }
+            Debug.Log(msg);
+
             if (m_StartupVRConfig == null) {
                 if (availableConfigs.Length == 1) {
                     // only one config in the scene, set it as the startup config

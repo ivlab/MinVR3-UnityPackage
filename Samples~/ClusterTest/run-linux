@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# TODO: This is untested, but this or something very close to it should work
+xterm -T Server -e ./Build/ClusterTest -vrconfig VRConfig_Server &
+xterm -T Client -e ./Build/ClusterTest -vrconfig VRConfig_Client &

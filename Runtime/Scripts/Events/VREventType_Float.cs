@@ -1,10 +1,11 @@
 using System;
 using UnityEngine.Events;
+using System.Runtime.Serialization;
 
 namespace IVLab.MinVR3
 {
     [Serializable]
-    public class VREventFloat : VREventT<float>
+    public class VREventFloat : VREventT<float>, ISerializable
     {
         public VREventFloat(string name, float data) : base(name, data)
         {
@@ -13,6 +14,15 @@ namespace IVLab.MinVR3
         public override VREvent Clone()
         {
             return new VREventFloat(m_Name, m_Data);
+        }
+
+        protected VREventFloat(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
         }
     }
 

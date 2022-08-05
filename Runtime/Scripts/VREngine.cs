@@ -2,6 +2,7 @@
 using System.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace IVLab.MinVR3 {
 
@@ -110,9 +111,9 @@ namespace IVLab.MinVR3 {
                     Debug.Log("Command Line Arguments:\n" +
                         "-help\n" +
                         "     Display this message.\n" +
-                        "-vrconfig [name of the VRConfig component to activate]\n"
-                    );
-                    i++;
+                        "-vrconfig [name of the VRConfig component to activate]\n");
+                    Application.Quit();
+                    return;
                 }
 
                 // vrconfig
@@ -161,6 +162,7 @@ namespace IVLab.MinVR3 {
             if (clientObjs.Length > 1) {
                 throw new Exception("Only one ClusterClient object can be active in the Application.");
             } else if (clientObjs.Length > 0) {
+                Debug.Log("Running in Cluster Mode: CLIENT");
                 m_ClusterNode = clientObjs[0];
             }
 
@@ -171,12 +173,15 @@ namespace IVLab.MinVR3 {
                 if (m_ClusterNode != null) {
                     throw new Exception("The application cannot be both a ClusterClient and a ClusterServer.");
                 }
+                Debug.Log("Running in Cluster Mode: SERVER");
                 m_ClusterNode = serverObjs[0];
             }
 
             if (m_ClusterNode != null) {
                 m_ClusterNode.Initialize();
             }
+
+            m_ClusterComState = ClusterCommunicationState.SyncEventsNext;
         }
 
 
@@ -188,21 +193,23 @@ namespace IVLab.MinVR3 {
             eventManager.PollInputDevices();
 
             // SYNCHRONIZE INPUT EVENTS SO EACH NODE WILL PROCESS AN IDENTICAL EVENTQUEUE DURING UPDATE()
-            if ((m_ClusterNode != null) && (m_ClusterComState == ClusterCommunicationState.PreUpdateNext)) {
+            if ((m_ClusterNode != null) && (m_ClusterComState == ClusterCommunicationState.SyncEventsNext)) {
                 List<VREvent> queue = eventManager.GetEventQueue();
                 m_ClusterNode.SynchronizeInputEventsAcrossAllNodes(ref queue);
                 eventManager.SetEventQueue(queue);
-                m_ClusterComState = ClusterCommunicationState.PostRenderNext;
+                m_ClusterComState = ClusterCommunicationState.SwapBuffersNext;
+                StartCoroutine(WaitForEndOfFrame());
             }
         }
 
 
-        public void OnPostRender()
+        private IEnumerator WaitForEndOfFrame()
         {
+            yield return (new WaitForEndOfFrame());
             // BLOCK WAITING FOR  THE SIGNAL THAT ALL CLIENTS ARE ALSO READY, THEN SWAPBUFFERS
-            if ((m_ClusterNode != null) && (m_ClusterComState == ClusterCommunicationState.PostRenderNext)) {
+            if ((m_ClusterNode != null) && (m_ClusterComState == ClusterCommunicationState.SwapBuffersNext)) {
                 m_ClusterNode.SynchronizeSwapBuffersAcrossAllNodes();
-                m_ClusterComState = ClusterCommunicationState.PreUpdateNext;
+                m_ClusterComState = ClusterCommunicationState.SyncEventsNext;
             }
         }
 
@@ -220,8 +227,8 @@ namespace IVLab.MinVR3 {
 
         // When Unity starts up, Update seems to be called twice before we reach the EndOfFrame callback, so we maintain
         // a state variable here to make sure that we don't request events twice before requesting swapbuffers.
-        private enum ClusterCommunicationState { PreUpdateNext, PostRenderNext }
-        private ClusterCommunicationState m_ClusterComState = ClusterCommunicationState.PreUpdateNext;
+        private enum ClusterCommunicationState { SyncEventsNext, SwapBuffersNext }
+        private ClusterCommunicationState m_ClusterComState = ClusterCommunicationState.SyncEventsNext;
 
         // cached access to other components attached to the gameobject
         private VREventManager m_EventManager;

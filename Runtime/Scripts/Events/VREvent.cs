@@ -105,6 +105,10 @@ namespace IVLab.MinVR3
             }
         }
 
+        public override string ToString()
+        {
+            return $"{GetName()} ()";
+        }
 
         /// <summary>
         /// True for raw VREvents created from input devices, trackers, etc.  These need to be sent
@@ -125,11 +129,13 @@ namespace IVLab.MinVR3
         protected VREvent(SerializationInfo info, StreamingContext context) : this()
         {
             m_Name = info.GetString("name");
+            m_DataTypeName = info.GetString("dataTypeName");
         }
 
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("name", m_Name);
+            info.AddValue("dataTypeName", m_DataTypeName);
         }
 
         [SerializeField]

@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine.Events;
+using System.Runtime.Serialization;
 
 namespace IVLab.MinVR3
 {
@@ -14,6 +15,15 @@ namespace IVLab.MinVR3
         public override VREvent Clone()
         {
             return new VREventInt(m_Name, m_Data);
+        }
+
+        protected VREventInt(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
         }
     }
 

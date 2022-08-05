@@ -8,7 +8,7 @@ namespace IVLab.MinVR3
 {
 
     [System.Serializable]
-    public class VREventT<T> : VREvent
+    public class VREventT<T> : VREvent, ISerializable
     {
         protected VREventT(string eventName, T eventData) : base(eventName)
         {
@@ -28,6 +28,11 @@ namespace IVLab.MinVR3
         public T GetData()
         {
             return m_Data;
+        }
+
+        public override string ToString()
+        {
+            return $"{GetName()} ({GetDataTypeName()}) = {m_Data.ToString()}";
         }
 
         protected VREventT(SerializationInfo info, StreamingContext context) : base(info, context)

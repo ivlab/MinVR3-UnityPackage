@@ -28,6 +28,7 @@ namespace IVLab.MinVR3 {
 	    public void Initialize() {
             // continue trying to connect until we have success
             bool success = false;
+            int retries = 0;
             while (!success) {
                 try {
                     client = new TcpClient(AddressFamily.InterNetwork);
@@ -41,9 +42,21 @@ namespace IVLab.MinVR3 {
                     Console.WriteLine("Exception: {0}", e);
                 }
                 if (!success) {
-                    Debug.Log("Having trouble connecting to the VRNetServer.  Trying again...");
-                    Console.WriteLine("Having trouble connecting to the VRNetServer.  Trying again...");
+                    Debug.Log($"Having trouble connecting to the VRNetServer.  Trying again ({retries})...");
+                    Console.WriteLine($"Having trouble connecting to the VRNetServer.  Trying again ({retries})...");
                     Thread.Sleep(500);
+                    retries++;
+                }
+
+                if (retries >= 120) {
+                    Debug.Log("Giving up after trying for 1 minute.");
+                    Console.WriteLine("Giving up after trying for 1 minute.") ;
+                    #if UNITY_EDITOR
+                    UnityEditor.EditorApplication.isPlaying = false;
+                    #else
+                    Application.Quit();
+                    #endif
+                    return;
                 }
             }
 	    }
@@ -67,9 +80,14 @@ namespace IVLab.MinVR3 {
             // 2. receive and parse serverInputEvents
             List<VREvent> serverInputEvents = new List<VREvent>();
             NetUtils.ReceiveEventData(ref client, ref serverInputEvents);
-		
-		    // 3. inputEvents = serverInputEvents
-		    inputEvents = serverInputEvents;
+
+            //Debug.Log($"Received {serverInputEvents.Count} events:");
+            foreach (var e in serverInputEvents) {
+                Debug.Log(e.ToString());
+            }
+
+            // 3. inputEvents = serverInputEvents
+            inputEvents = serverInputEvents;
 	    }
 	
 	    public void SynchronizeSwapBuffersAcrossAllNodes() {

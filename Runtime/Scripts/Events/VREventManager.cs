@@ -148,7 +148,7 @@ namespace IVLab.MinVR3
         public void ProcessEvent(VREvent e)
         {
             if (m_ShowDebuggingOutput) {
-                Debug.Log("Processing event " + e.name);
+                Debug.Log("Processing event " + e.ToString());
             }
             foreach (Tuple<int,IVREventListener> listenerTuple in m_EventListeners.ToList()) {
                 listenerTuple.Item2.OnVREvent(e);

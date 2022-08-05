@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+open --new ./Build/ClusterTest.app --args -vrconfig VRConfig_Server
+open --new ./Build/ClusterTest.app --args -vrconfig VRConfig_Client
