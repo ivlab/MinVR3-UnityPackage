@@ -3,33 +3,54 @@ using UnityEngine.Events;
 namespace IVLab.MinVR3
 {
     /// <summary>
-    /// Event communicator for transferring asynchronous events to/from MinVR over the network.
+    /// Defines an interface for classes that can send and/or receive VREvents over some sort
+    /// of remote network connection.  Unlike the network transport provided by MinVR3's
+    /// Cluster Mode, which supports frame-level synchronization of the entire event queue,
+    /// this network connection is intended for sending/receiving a subset of VREvents and
+    /// for situations where the clients at either end of the connection are running
+    /// asynchronously.  This can be used to connect a MinVR Unity app to a web browser or
+    /// to connect multiple MinVR apps running on various brands of headsets -- basically
+    /// all situations *other than* a cluster powering a tiled display.
     /// </summary>
     public interface IVREventConnection
     {
+        /// <summary>
+        /// Returns true if the VREventConnection supports sending VREvents.
+        /// </summary>
+        public bool CanSend();
+
         /// <summary>
         /// Send a VR event to the other end of this "connection"
         /// </summary>
         public void Send(in VREvent evt);
 
-        // UnityEvents are an alternate way to handle VREvents that are
-        // received. However, this does not work nicely because UnityEvents'
-        // `Invoke()` method needs to be called from the Main thread, which
-        // these networked communicators frequently aren't.
-        // NetworkVREvent OnVREventReceived { get; }
 
         /// <summary>
-        /// Delegate that is called whenever a VREvent is received over the network "connection"
+        /// Returns true if the VREventConnection supports receiving VREvents.
         /// </summary>
-        public VREventReceivedDelegate OnVREventReceived { get; set; }
+        public bool CanReceive();
 
         /// <summary>
-        /// Definition for the VREventReceived delegate
+        /// Delagate to define the structure for OnVREventReceived callbacks.
         /// </summary>
-        public delegate void VREventReceivedDelegate(VREvent evt);
+        public delegate void OnVREventReceivedDelegate(VREvent evt);
+
+        /// <summary>
+        /// Subscribe to OnVREventReceived to recieve a callback whenever a VREvent is
+        /// received over the network "connection",
+        /// </summary>
+        public OnVREventReceivedDelegate OnVREventReceived { get; set; }
     }
 
+
+    // Notes on pros/cons of an alternate implementation using UnityEvents:
+
     // [System.Serializable]
-    // Alternate implementation using UnityEvents
     // public class NetworkVREvent : UnityEvent<VREvent> { }
+
+    // UnityEvents are an alternate way to handle VREvents that are
+    // received. However, this does not work nicely because UnityEvents'
+    // `Invoke()` method needs to be called from the Main thread, which
+    // these networked communicators frequently aren't.
+    // NetworkVREvent OnVREventReceived { get; }
 }

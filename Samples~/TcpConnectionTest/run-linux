@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+# TODO: This is untested, but this or something very close to it should work
+xterm -T Driver -e ./Build/TcpConnectionTest -vrconfig VRConfig_Driver &
+
+sleep 2
+
+xterm -T Viewer -e ./Build/TcpConnectionTest -vrconfig VRConfig_Viewer &
+xterm -T Viewer -e ./Build/TcpConnectionTest -vrconfig VRConfig_Viewer &

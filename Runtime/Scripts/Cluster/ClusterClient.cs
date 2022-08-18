@@ -21,65 +21,24 @@ namespace IVLab.MinVR3 {
         [Tooltip("The port the server is running on.")]
         public int serverPort = 3490;
 
-
         TcpClient client;
-	    NetworkStream stream;
 
 	    public void Initialize() {
-            // continue trying to connect until we have success
-            bool success = false;
-            int retries = 0;
-            while (!success) {
-                try {
-                    client = new TcpClient(AddressFamily.InterNetwork);
-                    client.NoDelay = true;
-                    client.Connect(IPAddress.Parse(serverIPAddress), serverPort);
-                    stream = client.GetStream();
-                    success = client.Connected;
-                }
-                catch (Exception e) {
-                    Debug.Log(String.Format("Exception: {0}", e));
-                    Console.WriteLine("Exception: {0}", e);
-                }
-                if (!success) {
-                    Debug.Log($"Having trouble connecting to the VRNetServer.  Trying again ({retries})...");
-                    Console.WriteLine($"Having trouble connecting to the VRNetServer.  Trying again ({retries})...");
-                    Thread.Sleep(500);
-                    retries++;
-                }
-
-                if (retries >= 120) {
-                    Debug.Log("Giving up after trying for 1 minute.");
-                    Console.WriteLine("Giving up after trying for 1 minute.") ;
-                    #if UNITY_EDITOR
-                    UnityEditor.EditorApplication.isPlaying = false;
-                    #else
-                    Application.Quit();
-                    #endif
-                    return;
-                }
-            }
+            client = NetUtils.ConnectToTcpServer(serverIPAddress, serverPort);
 	    }
 	  
         public void Shutdown() {
-            try {
-			    stream.Close();         
-			    client.Close();         
-		    }
-            catch (Exception e) {
-                Debug.Log(String.Format("Exception: {0}", e));
-                Console.WriteLine("Exception: {0}", e);
-            }
+            NetUtils.CloseTcpClient(client, true);
         }
 
 
         public void SynchronizeInputEventsAcrossAllNodes(ref List<VREvent> inputEvents) {
             // 1. send inputEvents to server
-            NetUtils.SendEventData(ref client, in inputEvents);
+            NetUtils.SendEventData(ref client, in inputEvents, true);
 
             // 2. receive and parse serverInputEvents
             List<VREvent> serverInputEvents = new List<VREvent>();
-            NetUtils.ReceiveEventData(ref client, ref serverInputEvents);
+            NetUtils.ReceiveEventData(ref client, ref serverInputEvents, true);
 
             //Debug.Log($"Received {serverInputEvents.Count} events:");
             foreach (var e in serverInputEvents) {
@@ -92,10 +51,10 @@ namespace IVLab.MinVR3 {
 	
 	    public void SynchronizeSwapBuffersAcrossAllNodes() {
             // 1. send a swap_buffers_request message to the server
-            NetUtils.SendSwapBuffersRequest(ref client);
+            NetUtils.SendSwapBuffersRequest(ref client, true);
 
             // 2. wait for and receive a swap_buffers_now message from the server
-            NetUtils.ReceiveSwapBuffersNow(ref client);
+            NetUtils.ReceiveSwapBuffersNow(ref client, true);
 	    }
     }
 

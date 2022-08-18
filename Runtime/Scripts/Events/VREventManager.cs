@@ -232,6 +232,38 @@ namespace IVLab.MinVR3
         }
 
 
+#if UNITY_EDITOR
+        static public string GetUniqueEventPrototypeName(string baseName, bool includeInactive = true)
+        {
+            List<IVREventPrototype> existingPrototypes = GetAllEventPrototypes();
+
+            string newName = baseName;
+            int nameCounter = 0;
+
+            while (nameCounter < existingPrototypes.Count) {
+                bool match = false;
+                int i = 0;
+                while ((!match) && (i < existingPrototypes.Count)) {
+                    if (existingPrototypes[i].GetEventName() == newName) {
+                        match = true;
+                    } else {
+                        i++;
+                    }
+                }
+                if (!match) {
+                    return newName;
+                } else {
+                    nameCounter++;
+                    newName = baseName + " " + nameCounter;
+                }
+            }
+            // should never reach this point
+            return baseName;
+        }
+
+#endif
+
+
         [Tooltip("Logs events to the console as they are processed")]
         public bool m_ShowDebuggingOutput = false;
 

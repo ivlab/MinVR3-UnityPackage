@@ -24,9 +24,16 @@ namespace IVLab.MinVR3
 
                 string labelText = label.text;
 
-                // data type dropdown
-                Rect propRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing);
+                Rect propRect = new Rect(position.x, position.y, EditorGUIUtility.labelWidth, EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing);
 
+
+                // event name field
+                EditorGUI.PropertyField(propRect, eventNameProp, new GUIContent());
+
+
+                // data type field
+                propRect.x += propRect.width;
+                propRect.width = position.width - propRect.width;
                 VREventPrototypeAny any = new VREventPrototypeAny();
                 var dataTypeNames = any.AllEventPrototypes.Keys.ToList();
                 var dataTypeNamesList = dataTypeNames.ToList();
@@ -51,16 +58,13 @@ namespace IVLab.MinVR3
                     }
                 }
                 EditorGUI.BeginChangeCheck();
-                selected = EditorGUI.Popup(propRect, new GUIContent(labelText + " Data Type"), selected, displayNames);
+                selected = EditorGUI.Popup(propRect, selected, displayNames);
                 if (EditorGUI.EndChangeCheck()) {
                     if (selected >= 0) {
                         SetDataType(property, dataTypeNames[selected]);
                     }
                 }
-                propRect.y += propRect.height;
 
-                // event name field
-                EditorGUI.PropertyField(propRect, eventNameProp, new GUIContent(labelText + " Event Name"));
 
             } else {
                 // Pick for an existing event prototype
@@ -124,10 +128,11 @@ namespace IVLab.MinVR3
                 property.FindPropertyRelative("m_DefineNewPrototypeInEditor");
 
             float height = 1.0f * (EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing);
-            if ((defineNewPrototypeInEditorProp != null) && (defineNewPrototypeInEditorProp.boolValue)) {
-                return height += EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
-            } else if (GetExpectedEventPrototypes(property).Count == 0) {
-                height += 4.0f * EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+
+            if ((defineNewPrototypeInEditorProp == null) || (!defineNewPrototypeInEditorProp.boolValue)) {
+                if (GetExpectedEventPrototypes(property).Count == 0) {
+                    height += 4.0f * EditorGUIUtility.singleLineHeight + EditorGUIUtility.standardVerticalSpacing;
+                }
             }
             return height;
         }

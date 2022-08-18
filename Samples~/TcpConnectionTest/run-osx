@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+open --new ./Build/TcpConnectionTest.app --args -vrconfig VRConfig_Driver
+sleep 2
+open --new ./Build/TcpConnectionTest.app --args -vrconfig VRConfig_Viewer
+open --new ./Build/TcpConnectionTest.app --args -vrconfig VRConfig_Viewer

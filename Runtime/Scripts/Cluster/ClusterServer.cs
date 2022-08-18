@@ -100,7 +100,7 @@ namespace IVLab.MinVR3 {
                     if (clients[toRead[i]].GetStream().DataAvailable) {
                         // if ready to read, read data and remove from the list of streams to read from
                         TcpClient c = clients[toRead[i]];
-                        NetUtils.ReceiveEventData(ref c, ref inputEvents);
+                        NetUtils.ReceiveEventData(ref c, ref inputEvents, true);
                         toRead.RemoveAt(i);
                     }
                     else {
@@ -108,7 +108,7 @@ namespace IVLab.MinVR3 {
                         i++;
                     }
                     if (stopwatch.Elapsed.TotalSeconds > 5) {
-                        NetUtils.BrokenConnectionError();
+                        NetUtils.BrokenConnectionError(true);
                         return;
                     }
                 }
@@ -119,7 +119,7 @@ namespace IVLab.MinVR3 {
             for (int i = 0; i < clients.Count; i++) {
                 TcpClient c = clients[i];
                 //Debug.Log("Sending input events " + inputEvents.Count);
-                NetUtils.SendEventData(ref c, in inputEvents);
+                NetUtils.SendEventData(ref c, in inputEvents, true);
             }
             
         }
@@ -150,7 +150,7 @@ namespace IVLab.MinVR3 {
                     if (clients[toRead[i]].GetStream().DataAvailable) {
                         // if ready to read, read data and remove from the list of streams to read from
                         TcpClient c = clients[toRead[i]];
-                        NetUtils.ReceiveSwapBuffersRequest(ref c);
+                        NetUtils.ReceiveSwapBuffersRequest(ref c, true);
                         toRead.RemoveAt(i);
                     }
                     else {
@@ -158,7 +158,7 @@ namespace IVLab.MinVR3 {
                         i++;
                     }
                     if (stopwatch.Elapsed.TotalSeconds > 5) {
-                        NetUtils.BrokenConnectionError();
+                        NetUtils.BrokenConnectionError(true);
                         return;
                     }
                 }
@@ -168,7 +168,7 @@ namespace IVLab.MinVR3 {
             // 2. SEND A SWAP BUFFERS NOW MESSAGE TO ALL CLIENTS
             for (int i = 0; i < clients.Count; i++) {
                 TcpClient c = clients[i];
-                NetUtils.SendSwapBuffersNow(ref c);
+                NetUtils.SendSwapBuffersNow(ref c, true);
             }
 
         }
