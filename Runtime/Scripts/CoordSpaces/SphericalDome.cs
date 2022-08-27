@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-namespace IVLab.MinVR3 {
+namespace IVLab.MinVR3
+{
 
     /// <summary>
     /// A brush up on spherical coordinate systems may be helpful :)
@@ -87,9 +88,11 @@ namespace IVLab.MinVR3 {
         /// <summary>
         /// Radius of the spherical dome (in meters)
         /// </summary>
-        public float domeRadius {
+        public float domeRadius
+        {
             get { return m_DomeRadius; }
-            set {
+            set
+            {
                 m_DomeRadius = value;
                 m_DebugLinesDirty = true;
             }
@@ -100,9 +103,11 @@ namespace IVLab.MinVR3 {
         /// the projection (in degrees), i.e., two times the polar angle from zenith down to the
         /// bottom edge of the projection.
         /// </summary>
-        public float domeViewAngle {
+        public float domeViewAngle
+        {
             get { return m_DomeViewAngle; }
-            set {
+            set
+            {
                 m_DomeViewAngle = value;
                 m_DebugLinesDirty = true;
             }
@@ -115,7 +120,8 @@ namespace IVLab.MinVR3 {
         /// angle will be drawn right on the edge of the spherical dome, any greater angle will make
         /// the graphics fall "off the screen".
         /// </summary>
-        public float maxPolarAngleInView {
+        public float maxPolarAngleInView
+        {
             get { return domeViewAngle / 2.0f; }
         }
 
@@ -131,7 +137,8 @@ namespace IVLab.MinVR3 {
         /// that means "dome space" is rotated relative to the physical "room space".  In this case,
         /// the zenith will not be the same as the "room space" Up vector.
         /// </summary>
-        public Vector3 zenith {
+        public Vector3 zenith
+        {
             get { return Vector3.up; }
         }
 
@@ -140,10 +147,15 @@ namespace IVLab.MinVR3 {
         /// The dome's forward direction in Dome Space coordinates.  (See documentation at the top of
         /// the class for more description.)
         /// </summary>
-        public Vector3 forward {
+        public Vector3 forward
+        {
             get { return Vector3.forward; }
         }
 
+        public Vector3 CenterInWorldSpace()
+        {
+            return DomePointToWorldSpace(Vector3.zero);
+        }
 
         public Vector3 DomePointToWorldSpace(Vector3 domePoint)
         {
@@ -230,12 +242,27 @@ namespace IVLab.MinVR3 {
         }
 
         /// <summary>
-        /// Returns the Dome Space rectangular coordinates for the point on the dome's surface uniquely
-        /// defined by the two angles and the dome's radius.
+        /// Returns the Dome Space rectangular coordinates for the point on the dome sphere's surface
+        /// uniquely defined by the two angles and the dome's radius.  Note, if the polar angle is greater
+        /// than the max polar angle in view, the point will like on the dome's sphere, but will not
+        /// be visible on the dome.
+        /// </summary>
+        public Vector3 PointOnSphere(float polarAngleInDeg, float azimuthalAngleInDeg)
+        {
+            var sPoint = new SphericalCoordinate(domeRadius, polarAngleInDeg, azimuthalAngleInDeg);
+            return SphericalPointToRectangular(sPoint);
+        }
+
+        /// <summary>
+        /// If the polarAngleInDeg is less than the maxPolarAngleInView, returns the Dome Space
+        /// rectangular coordinates for the point on the dome's surface uniquely defined by the two
+        /// angles and the dome's radius.  Otherwise, the polarAngleInDeg is clamped to the maximum
+        /// value, and the closet point that is actually visible on the dome's screen is returned.
         /// </summary>
         public Vector3 PointOnDome(float polarAngleInDeg, float azimuthalAngleInDeg)
         {
-            var sPoint = new SphericalCoordinate(domeRadius, polarAngleInDeg, azimuthalAngleInDeg);
+            var pAngle = Mathf.Clamp(polarAngleInDeg, 0, maxPolarAngleInView);
+            var sPoint = new SphericalCoordinate(domeRadius, pAngle, azimuthalAngleInDeg);
             return SphericalPointToRectangular(sPoint);
         }
 
@@ -246,7 +273,7 @@ namespace IVLab.MinVR3 {
         /// </summary>
         public Quaternion InwardFacingRotation(float polarAngleInDeg, float azimuthalAngleInDeg)
         {
-            Vector3 p = PointOnDome(polarAngleInDeg, azimuthalAngleInDeg);
+            Vector3 p = PointOnSphere(polarAngleInDeg, azimuthalAngleInDeg);
             return Quaternion.LookRotation(p, Vector3.up);
         }
 
@@ -261,8 +288,18 @@ namespace IVLab.MinVR3 {
         }
 
         /// <summary>
+        /// Given a Dome Space point, p, that does not necessarily lie on the surface of the Dome's,
+        /// sphere, returns the closest point to p that is on the surface of the sphere.
+        /// </summary>
+        public Vector3 ClosestPointOnSphere(Vector3 p)
+        {
+            SphericalCoordinate s = RectangularPointToSpherical(p);
+            return PointOnSphere(s.polarAngleInDeg, s.azimuthalAngleInDeg);
+        }
+
+        /// <summary>
         /// Given a Dome Space point, p, that does not necessarily lie on the surface of the Dome,
-        /// returns the closest point to p that is on the surface of the dome.
+        /// returns the closest point to p that is on the visible, projection-screen surface of the dome.
         /// </summary>
         public Vector3 ClosestPointOnDome(Vector3 p)
         {
@@ -270,12 +307,14 @@ namespace IVLab.MinVR3 {
             return PointOnDome(s.polarAngleInDeg, s.azimuthalAngleInDeg);
         }
 
+
         /// <summary>
         /// Returns a random point on the surface of the dome.
         /// </summary>
         public Vector3 RandomPointOnDome()
         {
-            if (m_Random == null) {
+            if (m_Random == null)
+            {
                 m_Random = new System.Random();
             }
             float pa = (float)m_Random.NextDouble() * maxPolarAngleInView;
@@ -297,7 +336,7 @@ namespace IVLab.MinVR3 {
 
             Vector3 position = new Vector3();
             position.x = Mathf.Cos(paRad) * Mathf.Cos(-azRad + azOffset);
-            position.y = Mathf.Sin(paRad); 
+            position.y = Mathf.Sin(paRad);
             position.z = Mathf.Cos(paRad) * Mathf.Sin(-azRad + azOffset);
             return sPoint.radialDist * position;
         }
@@ -316,9 +355,6 @@ namespace IVLab.MinVR3 {
 
 
 
-
-
-
         private void Start()
         {
             m_DebugLinesDirty = true;
@@ -328,7 +364,8 @@ namespace IVLab.MinVR3 {
 
         private void Update()
         {
-            if (m_DebugLinesDirty) {
+            if (m_DebugLinesDirty)
+            {
                 RebuildDebugLines();
             }
         }
@@ -336,13 +373,16 @@ namespace IVLab.MinVR3 {
         private void RebuildDebugLines()
         {
             // wipe out any previous geometry
-            if (m_LinesParent != null) {
+            if (m_LinesParent != null)
+            {
                 DestroyImmediate(m_LinesParent);
             }
 
-            if (m_ShowDebugLines) {
+            if (m_ShowDebugLines)
+            {
 
-                if (m_DebugLinesMaterial == null) {
+                if (m_DebugLinesMaterial == null)
+                {
                     // create a tmp gameobject to get access to a default material
                     GameObject tmp = GameObject.CreatePrimitive(PrimitiveType.Plane);
                     m_DebugLinesMaterial = tmp.GetComponent<MeshRenderer>().sharedMaterial;
@@ -356,7 +396,8 @@ namespace IVLab.MinVR3 {
                 // the angle increased going down from that point until it reaches maxPolarAngleInView,
                 // which would be 90 deg for a dome with 180 deg view angle.
 
-                for (float pa = 0.0f; pa <= maxPolarAngleInView; pa += 10.0f) {
+                for (float pa = 0.0f; pa <= maxPolarAngleInView; pa += 10.0f)
+                {
                     GameObject go = new GameObject("Polar Angle " + pa);
 
                     go.transform.SetParent(m_LinesParent.transform);
@@ -374,7 +415,8 @@ namespace IVLab.MinVR3 {
                     Vector3[] positions = new Vector3[36];
                     int i = 0;
                     // az = Azimuth Angle 0 to 360
-                    for (float az = 0.0f; az < 360.0f; az += 10.0f) {
+                    for (float az = 0.0f; az < 360.0f; az += 10.0f)
+                    {
                         positions[i] = PointOnDome(pa, az);
                         i++;
                     }
@@ -384,7 +426,8 @@ namespace IVLab.MinVR3 {
 
 
                 // LINES OF EQUAL AZIMUTH ANGLE (SLICES)
-                for (float az = -170.0f; az <= 180.0f; az += 10.0f) {
+                for (float az = -170.0f; az <= 180.0f; az += 10.0f)
+                {
                     GameObject go = new GameObject("Azimuth Angle " + az);
                     go.transform.SetParent(m_LinesParent.transform);
                     LineRenderer lr = go.AddComponent<LineRenderer>();
@@ -401,7 +444,8 @@ namespace IVLab.MinVR3 {
                     int nPositions = (int)Mathf.Floor(maxPolarAngleInView / 10.0f) + 1;
                     Vector3[] positions = new Vector3[nPositions];
                     int i = 0;
-                    for (float pa = 0.0f; pa <= maxPolarAngleInView; pa += 10.0f) {
+                    for (float pa = 0.0f; pa <= maxPolarAngleInView; pa += 10.0f)
+                    {
                         positions[i] = PointOnDome(pa, az);
                         i++;
                     }
@@ -451,7 +495,7 @@ namespace IVLab.MinVR3 {
         [Tooltip("The material for the lines, Unity's default material is used.")]
         [SerializeField] public Material m_DebugLinesMaterial;
 
-        [SerializeField,HideInInspector] private GameObject m_LinesParent;
+        [SerializeField, HideInInspector] private GameObject m_LinesParent;
 
         // runtime only member vars
         private RoomSpaceOrigin m_RoomSpaceOrigin;
