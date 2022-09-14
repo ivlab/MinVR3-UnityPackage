@@ -12,7 +12,7 @@ using IVLab.MinVR3;
 /// May need to configure public variables for this script in the inspector
 /// Events: (Touch 0 and 1: up, position, and down for each)
 /// 
-/// InputDevices needs touchTUIO component added
+/// InputDevices (under MinVR3 in hierarchy) needs touchTUIO component added
 /// </summary>
 
 
