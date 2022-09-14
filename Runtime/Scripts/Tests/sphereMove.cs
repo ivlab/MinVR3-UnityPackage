@@ -81,7 +81,7 @@ namespace IVLab.MinVR3.TUIO11 {
         {
             if ((movingSphereA.activeSelf == true) && (movingSphereB.activeSelf == true))
             {
-                //fetch positions of movingSphere A and B
+                //fetch 3D positions of movingSphere A and B
                 sphereAxyz = new Vector3(movingSphereA.transform.position.x, movingSphereA.transform.position.y, movingSphereA.transform.position.z);
                 sphereBxyz = new Vector3(movingSphereB.transform.position.x, movingSphereB.transform.position.y, movingSphereA.transform.position.z);
 
