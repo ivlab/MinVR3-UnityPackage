@@ -13,17 +13,20 @@ namespace IVLab.MinVR3
         {
             InfoBoxAttribute infoBoxAttribute = attribute as InfoBoxAttribute;
             if (infoBoxAttribute != null) {
-                EditorGUI.HelpBox(position, infoBoxAttribute.message, MessageType.None);
+                GUIStyle myStyle = GUI.skin.GetStyle("HelpBox");
+                myStyle.richText = true;
+                EditorGUI.TextArea(position, infoBoxAttribute.message, myStyle);
             }
         }
 
         public override float GetHeight()
         {
             InfoBoxAttribute infoBoxAttribute = attribute as InfoBoxAttribute;
-            GUIStyle guiStyle = (GUI.skin != null) ? GUI.skin.GetStyle("helpbox") : null;
-            if ((infoBoxAttribute != null) && (guiStyle != null)) {
-                return Mathf.Max(40f, guiStyle.CalcHeight(new GUIContent(infoBoxAttribute.message),
-                    EditorGUIUtility.currentViewWidth) + 4);
+            GUIStyle myStyle = GUI.skin.GetStyle("HelpBox");
+            myStyle.richText = true;
+            if ((infoBoxAttribute != null) && (myStyle != null)) {
+                return myStyle.CalcHeight(new GUIContent(infoBoxAttribute.message),
+                    EditorGUIUtility.currentViewWidth-60);
             } else {
                 return base.GetHeight();
             }
