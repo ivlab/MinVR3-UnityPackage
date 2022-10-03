@@ -415,13 +415,13 @@ namespace IVLab.MinVR3
         [SerializeField] private float m_Depth;
         [SerializeField] private float m_ZEpsilon;
 
+        [SerializeField, HideInInspector] private GameObject m_GeometryParent;
 
 
         // dynamically created geometry
         private const string k_GeometryParentName = "Menu Geometry [Generated]";
 
         private bool m_Dirty = true;
-        private GameObject m_GeometryParent;
         private List<TextMesh> m_LabelMeshes;
         private List<GameObject> m_LabelBoxes;
         private GameObject m_TitleBoxObj;
