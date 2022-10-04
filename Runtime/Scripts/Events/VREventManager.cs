@@ -147,11 +147,17 @@ namespace IVLab.MinVR3
 
         public void ProcessEvent(VREvent e)
         {
-            if (m_ShowDebuggingOutput) {
-                Debug.Log("Processing event " + e.ToString());
-            }
-            foreach (Tuple<int,IVREventListener> listenerTuple in m_EventListeners.ToList()) {
-                listenerTuple.Item2.OnVREvent(e);
+            // run the event through the event filters
+            List<VREvent> filterResults = RunEventFilters(e);
+
+            // send the results to all event listeners
+            foreach (VREvent eFiltered in filterResults) {
+                if (m_ShowDebuggingOutput) {
+                    Debug.Log("Processing event " + e.ToString());
+                }
+                foreach (Tuple<int, IVREventListener> listenerTuple in m_EventListeners.ToList()) {
+                    listenerTuple.Item2.OnVREvent(e);
+                }
             }
         }
 
@@ -159,19 +165,14 @@ namespace IVLab.MinVR3
         {
             lock (m_Queue) {
                 foreach (VREvent e in m_Queue) {
-                    // run each event in the queue through the event filters
-                    List<VREvent> filterResults = RunEventFilters(e);
-                    foreach (VREvent eFiltered in filterResults) {
-                        // process each event to come out of the filters
-                        ProcessEvent(eFiltered);
+                    ProcessEvent(e);
 
-                        // if processing caused any derived events to be inserted
-                        // in the queue process them right away
-                        foreach (VREvent eDerived in m_DerivedQueue) {
-                            ProcessEvent(eDerived);
-                        }
-                        m_DerivedQueue.Clear();
+                    // if processing caused any derived events to be inserted
+                    // in the queue process them right away
+                    foreach (VREvent eDerived in m_DerivedQueue) {
+                        ProcessEvent(eDerived);
                     }
+                    m_DerivedQueue.Clear();                    
                 }
                 m_Queue.Clear();
             }

@@ -11,7 +11,7 @@ namespace IVLab.MinVR3
     /// </summary>
     [ExecuteAlways]
     [AddComponentMenu("MinVR/Interaction/Floating Menu")]
-    public class FloatingMenu : MonoBehaviour, IVREventListener
+    public class FloatingMenu : MonoBehaviour, IVREventListener, IVREventProducer
     {
         /// <summary>
         /// Title displayed in all caps on the left side of the menu
@@ -289,6 +289,12 @@ namespace IVLab.MinVR3
             m_TrackerRot = rot;
         }
 
+
+        public string GetEventNameForMenuItem(int itemId)
+        {
+            return gameObject.name + "/Select Item " + itemId;
+        }
+
         public void OnButtonDown()
         {
             m_ButtonPressed = true;
@@ -298,7 +304,15 @@ namespace IVLab.MinVR3
                 m_LabelBoxes[m_Selected - 1].GetComponent<Renderer>().sharedMaterial.color = m_PressColor;
 
                 Debug.Log("Selected menu item " + (m_Selected - 1));
+
+                // There are multiple ways developer's code can respond to a menu selection:
+
+                // 1: In the editor, subscribe to the OnMenuItemSelected UnityEvent
                 m_OnMenuItemSelected.Invoke(m_Selected - 1);
+
+                // 2. With a VREventListener that listens for a new MinVR3 event, named based on the name
+				// of the GameObject this script is attached to.
+                VREngine.instance.eventManager.InsertInQueue(new VREvent(GetEventNameForMenuItem(m_Selected - 1)));
             }
         }
 
@@ -331,6 +345,16 @@ namespace IVLab.MinVR3
         public void StopListening()
         {
             VREngine.Instance?.eventManager?.RemoveEventListener(this);
+        }
+
+
+        public List<IVREventPrototype> GetEventPrototypes()
+        {
+            List<IVREventPrototype> eventPrototypes = new List<IVREventPrototype>();
+            for (int i = 0; i < m_MenuItems.Count; i++) {
+                eventPrototypes.Add(VREventPrototype.Create(GetEventNameForMenuItem(i)));
+            }
+            return eventPrototypes;
         }
 
 
