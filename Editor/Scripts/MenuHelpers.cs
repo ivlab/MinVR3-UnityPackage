@@ -285,7 +285,7 @@ namespace IVLab.MinVR3
         /// <param name="parent">Parent for the new prefab or null to place at the root of the hierarchy.</param>
         /// <param name="searchStr">Identifies the prefab by path or type.  Several options are possible.  See
         /// Unity's AssetDatabase.FindAssets() for details.</param>
-        public static void InstatiatePrefabFromAsset(GameObject parent, string searchStr)
+        public static GameObject InstatiatePrefabFromAsset(GameObject parent, string searchStr)
         {
             UnityEngine.Object prefabAsset = null;
             string[] guids = AssetDatabase.FindAssets(searchStr);
@@ -301,6 +301,7 @@ namespace IVLab.MinVR3
             // Register the creation in the undo system
             Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
             Selection.activeObject = go;
+            return go;
         }
     }
 
