@@ -76,6 +76,7 @@ namespace IVLab.MinVR3
         ///   2. Which direction is considered "Up"
         ///   3. Which direction is considered "Forward"
         /// </summary>
+        [System.Serializable]
         public class CoordSystem
         {
             public enum Handedness
