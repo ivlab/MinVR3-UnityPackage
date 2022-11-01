@@ -8,6 +8,8 @@ namespace IVLab.MinVR3
     [AddComponentMenu("MinVR/Interaction/Basic Object Selector")]
     public class BasicObjectSelector : MonoBehaviour, IVREventProducer
     {
+        public Transform CursorTransform { get => m_CursorTransform; set => m_CursorTransform = value; }
+
         public enum SelectionMode
         {
             PointAt, // uses the transform's position and forward direction to create a laser pointer

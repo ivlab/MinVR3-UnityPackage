@@ -7,6 +7,7 @@ namespace IVLab.MinVR3
     [AddComponentMenu("MinVR/Interaction/Bimanual Object Selector")]
     public class BimanualObjectSelector : BasicObjectSelector
     {
+        public Transform CursorTransform2 { get => m_CursorTransform2; set => m_CursorTransform2 = value; }
         public override void Reset()
         {
             m_CursorTransform2 = transform;
