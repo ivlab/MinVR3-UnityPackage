@@ -153,10 +153,10 @@ namespace IVLab.MinVR3
             // send the results to all event listeners
             foreach (VREvent eFiltered in filterResults) {
                 if (m_ShowDebuggingOutput) {
-                    Debug.Log("Processing event " + e.ToString());
+                    Debug.Log("Processing event " + eFiltered.ToString());
                 }
                 foreach (Tuple<int, IVREventListener> listenerTuple in m_EventListeners.ToList()) {
-                    listenerTuple.Item2.OnVREvent(e);
+                    listenerTuple.Item2.OnVREvent(eFiltered);
                 }
             }
         }
