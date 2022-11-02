@@ -14,6 +14,14 @@ namespace IVLab.MinVR3
     /// </summary>
     static public class MouseState
     {
+// On Windows, right mouse button seems to be button 1 instead of 2...
+#if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+        const int RightMouseButtonNum = 1;
+#else
+        const int RightMouseButtonNum = 2;
+#endif
+        
+
         // position
         static public Vector2 Position()
         {
@@ -89,7 +97,7 @@ namespace IVLab.MinVR3
 #if ENABLE_INPUT_SYSTEM
             return Mouse.current.rightButton.wasPressedThisFrame;
 #else
-            return Input.GetMouseButtonDown(2);
+            return Input.GetMouseButtonDown(RightMouseButtonNum);
 #endif
         }
 
@@ -98,7 +106,7 @@ namespace IVLab.MinVR3
 #if ENABLE_INPUT_SYSTEM
             return Mouse.current.rightButton.wasReleasedThisFrame;
 #else
-            return Input.GetMouseButtonUp(2);
+            return Input.GetMouseButtonUp(RightMouseButtonNum);
 #endif
         }
 
@@ -107,7 +115,7 @@ namespace IVLab.MinVR3
 #if ENABLE_INPUT_SYSTEM
             return Mouse.current.rightButton.isPressed;
 #else
-            return Input.GetMouseButton(2);
+            return Input.GetMouseButton(RightMouseButtonNum);
 #endif
         }
     }
