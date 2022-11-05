@@ -1,8 +1,7 @@
-﻿using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using IVLab.MinVR3.ExtensionMethods;
 
 namespace IVLab.MinVR3
 {
