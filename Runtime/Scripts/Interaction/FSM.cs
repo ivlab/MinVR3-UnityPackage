@@ -290,6 +290,7 @@ namespace IVLab.MinVR3
 
         // logs OnEnter(), OnTrigger(), and OnExit() calls 
         [SerializeField] private bool m_Debug = false;
+        public bool DebugMode { get => m_Debug; set => m_Debug = value; }
 
 
         // RUNTIME ONLY
