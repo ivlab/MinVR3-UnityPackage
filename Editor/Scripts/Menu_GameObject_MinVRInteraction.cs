@@ -156,6 +156,14 @@ namespace IVLab.MinVR3
             MenuHelpers.CreateAndPlaceGameObject("Smart Scene", command.context as GameObject, typeof(SmartScene));
         }
 
+        [MenuItem("GameObject/MinVR Interaction/Navigation and Manipulation/Bimanual Object Manipulation", false, MenuHelpers.mvriItemPriority)]
+        public static void CreateInteractionBimanualObjectManipulator(MenuCommand command)
+        {
+            MenuHelpers.CreateVREngineIfNeeded();
+            MenuHelpers.CreateRoomSpaceOriginIfNeeded();
+            MenuHelpers.CreateAndPlaceGameObject("Bimanual Object Manipulator", command.context as GameObject, typeof(BimanualObjectManipulator));
+        }
+
 
 
 

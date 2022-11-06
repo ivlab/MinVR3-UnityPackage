@@ -5,25 +5,31 @@ using System.Linq;
 namespace IVLab.MinVR3
 {
     /// <summary>
-    /// Additions to Unity's useful debugging utililies like Debug.DrawRay and Debug.DrawLine. These are particularly useful for AR/VR applications where the debug output needs to be seen in the Game View (not just scene view.)
+    /// Additions to Unity's useful debugging utililies like Debug.DrawRay and
+    /// Debug.DrawLine. These are particularly useful for AR/VR applications
+    /// where the debug output needs to be seen in the Game View (not just scene
+    /// view.)
+    ///
+    /// All parameters `duration` will default to a single frame when left at 0,
+    /// otherwise duration is in seconds.
     /// </summary>
     public static class DebugDraw
     {
         /// <summary>
         /// Draw a ray as an in-game-rendered cylinder
         /// </summary>
-        public static void Ray(Vector3 start, Vector3 direction, Color color, float duration = 0.0f, float radius = 0.001f)
+        public static void Ray(Vector3 start, Vector3 direction, Color color, float duration = 0.0f, float thickness = 0.001f)
         {
-            DebugDrawing.Instance.DrawRay(start, direction, color, duration, radius);
+            DebugDrawing.Instance.DrawRay(start, direction, color, duration, thickness);
         }
 
         /// <summary>
         /// Draw a line as an in-game-rendered cylinder
         /// </summary>
-        public static void Line(Vector3 start, Vector3 end, Color color, float duration = 0.0f, float radius = 0.001f)
+        public static void Line(Vector3 start, Vector3 end, Color color, float duration = 0.0f, float thickness = 0.001f)
         {
             Vector3 direction = end - start;
-            DebugDrawing.Instance.DrawRay(start, direction, color, duration, radius);
+            DebugDrawing.Instance.DrawRay(start, direction, color, duration, thickness);
         }
 
         /// <summary>
@@ -32,6 +38,18 @@ namespace IVLab.MinVR3
         public static void Circle(Vector3 center, float radius, Vector3 normal, Color color, float duration = 0.0f)
         {
             DebugDrawing.Instance.DrawCircle(center, radius, normal, color, duration);
+        }
+
+        /// <summary>
+        /// Draw a sphere/point mesh
+        /// </summary>
+        public static void Sphere(Vector3 center, float radius, Color color, float duration = 0.0f)
+        {
+            DebugDrawing.Instance.DrawSphere(center, radius, color, duration);
+        }
+        public static void Point(Vector3 center, float radius, Color color, float duration = 0.0f)
+        {
+            DebugDrawing.Instance.DrawSphere(center, radius, color, duration);
         }
 
         /// <summary>
@@ -47,6 +65,7 @@ namespace IVLab.MinVR3
     {
         private List<RayWithMagnitude> rays = new List<RayWithMagnitude>();
         private List<Circle> circles = new List<Circle>();
+        private List<Sphere> spheres = new List<Sphere>();
         private List<BoundsWithColor> boundsList = new List<BoundsWithColor>();
 
         private struct RayWithMagnitude
@@ -67,6 +86,14 @@ namespace IVLab.MinVR3
             public float duration;
         }
 
+        private struct Sphere
+        {
+            public Vector3 center;
+            public float radius;
+            public Color color;
+            public float duration;
+        }
+
         private struct BoundsWithColor
         {
             public Bounds bounds;
@@ -75,6 +102,7 @@ namespace IVLab.MinVR3
         }
 
         private Mesh cylinderMesh;
+        private Mesh sphereMesh;
         private Material debugMaterial;
 
         void Start()
@@ -82,6 +110,9 @@ namespace IVLab.MinVR3
             GameObject cyl = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
             cylinderMesh = cyl.GetComponent<MeshFilter>().mesh;
             Destroy(cyl);
+            GameObject sph = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            sphereMesh = sph.GetComponent<MeshFilter>().mesh;
+            Destroy(sph);
 
             Shader s = Shader.Find("Unlit/Color");
             debugMaterial = new Material(s);
@@ -122,6 +153,22 @@ namespace IVLab.MinVR3
 
                 c.duration -= Time.deltaTime;
                 circles[i] = c;
+            }
+
+            // Draw spheres
+            for (int i = 0; i < spheres.Count; i++)
+            {
+                Sphere s = spheres[i];
+                var localScale = Vector3.one * s.radius;
+                var position = s.center;
+                Matrix4x4 m = Matrix4x4.TRS(position, Quaternion.identity, localScale);
+
+                MaterialPropertyBlock block = new MaterialPropertyBlock();
+                block.SetColor("_Color", s.color);
+                Graphics.DrawMesh(sphereMesh, m, debugMaterial, 0, null, 0, properties: block);
+
+                s.duration -= Time.deltaTime;
+                spheres[i] = s;
             }
 
             // Draw bounds
@@ -202,6 +249,17 @@ namespace IVLab.MinVR3
                 center = center,
                 radius = radius,
                 normal = normal,
+                color = color,
+                duration = duration
+            });
+        }
+
+        public void DrawSphere(Vector3 center, float radius, Color color, float duration)
+        {
+            spheres.Add(new Sphere()
+            {
+                center = center,
+                radius = radius,
                 color = color,
                 duration = duration
             });

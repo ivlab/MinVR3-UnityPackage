@@ -53,5 +53,20 @@ namespace IVLab.MinVR3.ExtensionMethods
             scale.z = new Vector4(matrix.m02, matrix.m12, matrix.m22, matrix.m32).magnitude;
             return scale;
         }
+
+        public static void SetPosition(this ref Matrix4x4 matrix, Vector3 position)
+        {
+            matrix.SetTRS(position, matrix.GetRotationFast(), matrix.GetScaleFast());
+        }
+
+        public static void SetScale(this ref Matrix4x4 matrix, Vector3 scale)
+        {
+            matrix.SetTRS(matrix.GetPosition(), matrix.GetRotationFast(), scale);
+        }
+
+        public static void SetRotation(this ref Matrix4x4 matrix, Quaternion rotation)
+        {
+            matrix.SetTRS(matrix.GetPosition(), rotation, matrix.GetScaleFast());
+        }
     }
 }
