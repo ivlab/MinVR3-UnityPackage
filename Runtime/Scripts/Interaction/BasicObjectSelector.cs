@@ -102,8 +102,8 @@ namespace IVLab.MinVR3
         public List<IVREventPrototype> GetEventPrototypes()
         {
             var generated = new List<IVREventPrototype>();
-            generated.Add(VREventPrototypeGameObject.Create("Select"));
-            generated.Add(VREventPrototypeGameObject.Create("Deselect"));
+            generated.Add(VREventPrototypeGameObject.Create(m_SelectEventName));
+            generated.Add(VREventPrototypeGameObject.Create(m_DeselectEventName));
             return generated;
         }
 
