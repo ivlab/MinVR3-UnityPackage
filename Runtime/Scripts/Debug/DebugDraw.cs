@@ -59,6 +59,16 @@ namespace IVLab.MinVR3
         {
             DebugDrawing.Instance.DrawBounds(bounds, color, duration);
         }
+
+        /// <summary>
+        /// Draw a set of axes corresponding to a Matrix4x4 basis. Uses standard RGB->XYZ coloring.
+        /// </summary>
+        public static void Axes(Matrix4x4 basis, float size = 0.1f, float duration = 0.0f, float thickness = 0.001f)
+        {
+            DebugDrawing.Instance.DrawRay(basis.GetPosition(), basis.GetColumn(0) * size, Color.red, duration, thickness);
+            DebugDrawing.Instance.DrawRay(basis.GetPosition(), basis.GetColumn(1) * size, Color.green, duration, thickness);
+            DebugDrawing.Instance.DrawRay(basis.GetPosition(), basis.GetColumn(2) * size, Color.blue, duration, thickness);
+        }
     }
 
     internal class DebugDrawing : Singleton<DebugDrawing>

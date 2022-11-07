@@ -41,7 +41,6 @@ namespace IVLab.MinVR3
         {
             public Matrix4x4 currentXform = Matrix4x4.identity;
             public Matrix4x4 lastXform = Matrix4x4.identity;
-            public bool grab = false;
         }
 
         private VREventCallbackGameObject m_SelectObjCallback;
@@ -165,6 +164,8 @@ namespace IVLab.MinVR3
 
         public void InitTwoHandedManipulation()
         {
+            if (m_ManipulatingObj == null)
+                return;
             initialDistBetweenCursors = (cursorStates[1].currentXform.GetPosition() - cursorStates[0].currentXform.GetPosition()).magnitude;
             initialObjectScale = m_ManipulatingObj.transform.localScale;
             Vector3 cur0Pos = cursorStates[0].currentXform.GetPosition();
