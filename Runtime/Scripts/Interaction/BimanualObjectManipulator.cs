@@ -27,10 +27,6 @@ namespace IVLab.MinVR3
 
         private FSM m_FSM;
 
-        // Initialized?
-        private bool lastPosInitialized;
-        private bool lastRotInitialized;
-
         // two-handed manip variables
         private float initialDistBetweenCursors;
         private Vector3 initialObjectScale;
@@ -41,6 +37,8 @@ namespace IVLab.MinVR3
         {
             public Matrix4x4 currentXform = Matrix4x4.identity;
             public Matrix4x4 lastXform = Matrix4x4.identity;
+            public bool lastPosInitialized = false;
+            public bool lastRotInitialized = false;
         }
 
         private VREventCallbackGameObject m_SelectObjCallback;
@@ -52,9 +50,12 @@ namespace IVLab.MinVR3
         // different from above in case the object becomes unselected after the manipulation has
         // begun
         private GameObject m_ManipulatingObj;
-
-        [SerializeField]
-        private GameObject hoveredObject;
+        // Two-handed manipulation is initializing
+        private bool twoHandStarting = false;
+        private bool TwoHandTrackingInitialized
+        {
+            get => cursorStates[0].lastPosInitialized && cursorStates[0].lastRotInitialized && cursorStates[1].lastPosInitialized && cursorStates[1].lastRotInitialized;
+        }
 
         // Start is called before the first frame update
         void Start()
@@ -69,13 +70,13 @@ namespace IVLab.MinVR3
             m_FSM.AddState("Grab1");
             m_FSM.AddState("GrabBoth");
 
-            m_FSM.AddArc("START", "Grab0", VREventCallbackAny.CreateRuntime(m_Cursor0DownEvent, InitManipulation));
-            m_FSM.AddArc("Grab0", "GrabBoth", VREventCallbackAny.CreateRuntime(m_Cursor1DownEvent, InitTwoHandedManipulation));
+            m_FSM.AddArc("START", "Grab0", VREventCallbackAny.CreateRuntime(m_Cursor0DownEvent, () => InitManipulation(0)));
+            m_FSM.AddArc("Grab0", "GrabBoth", VREventCallbackAny.CreateRuntime(m_Cursor1DownEvent, StartTwoHandManipulation));
             m_FSM.AddArc("GrabBoth", "Grab0", VREventCallbackAny.CreateRuntime(m_Cursor1UpEvent));
             m_FSM.AddArc("Grab0", "START", VREventCallbackAny.CreateRuntime(m_Cursor0UpEvent, CancelManipulation));
 
-            m_FSM.AddArc("START", "Grab1", VREventCallbackAny.CreateRuntime(m_Cursor1DownEvent, InitManipulation));
-            m_FSM.AddArc("Grab1", "GrabBoth", VREventCallbackAny.CreateRuntime(m_Cursor0DownEvent, InitTwoHandedManipulation));
+            m_FSM.AddArc("START", "Grab1", VREventCallbackAny.CreateRuntime(m_Cursor1DownEvent, () => InitManipulation(1)));
+            m_FSM.AddArc("Grab1", "GrabBoth", VREventCallbackAny.CreateRuntime(m_Cursor0DownEvent, StartTwoHandManipulation));
             m_FSM.AddArc("GrabBoth", "Grab1", VREventCallbackAny.CreateRuntime(m_Cursor0UpEvent));
             m_FSM.AddArc("Grab1", "START", VREventCallbackAny.CreateRuntime(m_Cursor1UpEvent, CancelManipulation));
 
@@ -105,10 +106,17 @@ namespace IVLab.MinVR3
 
         void Update()
         {
+            // Wait for the latest frames to become available on BOTH cursors
+            // before we initialize the two handed manipulation
+            if (twoHandStarting && TwoHandTrackingInitialized)
+            {
+                twoHandStarting = false;
+                InitializeTwoHandManipulation();
+            }
             if (m_ManipulatingObj != null)
             {
                 // Handle two-handed manipulation
-                if (m_FSM.currentStateID == m_FSM.GetStateID("GrabBoth"))
+                if (m_FSM.currentStateID == m_FSM.GetStateID("GrabBoth") && !twoHandStarting)
                 {
                     Vector3 cur0Pos = cursorStates[0].currentXform.GetPosition();
                     Vector3 cur1Pos = cursorStates[1].currentXform.GetPosition();
@@ -155,17 +163,33 @@ namespace IVLab.MinVR3
             }
         }
 
-        public void InitManipulation()
+        private void InitManipulation(int cursorID)
         {
-            lastPosInitialized = false;
-            lastRotInitialized = false;
+            cursorStates[cursorID].lastPosInitialized = false;
+            cursorStates[cursorID].lastRotInitialized = false;
             m_ManipulatingObj = m_SelectedObj;
         }
 
-        public void InitTwoHandedManipulation()
+        private void CancelManipulation()
+        {
+            m_ManipulatingObj = null;
+        }
+
+        private void StartTwoHandManipulation()
         {
             if (m_ManipulatingObj == null)
                 return;
+
+            twoHandStarting = true;
+            for (int cursorID = 0; cursorID < 2; cursorID++)
+            {
+                cursorStates[cursorID].lastPosInitialized = false;
+                cursorStates[cursorID].lastRotInitialized = false;
+            }
+        }
+
+        private void InitializeTwoHandManipulation()
+        {
             initialDistBetweenCursors = (cursorStates[1].currentXform.GetPosition() - cursorStates[0].currentXform.GetPosition()).magnitude;
             initialObjectScale = m_ManipulatingObj.transform.localScale;
             Vector3 cur0Pos = cursorStates[0].currentXform.GetPosition();
@@ -186,30 +210,25 @@ namespace IVLab.MinVR3
             lastMidpointXform = Matrix4x4.TRS(averagePos, averageRot, sharedScale * Vector3.one);
         }
 
-        public void CancelManipulation()
-        {
-            m_ManipulatingObj = null;
-        }
-
-        public void UpdateCursorPosition(int cursorID, Vector3 pos)
+        private void UpdateCursorPosition(int cursorID, Vector3 pos)
         {
             cursorStates[cursorID].currentXform.SetPosition(pos);
             // Check if already initialized to avoid "snapping" back into place (initialize to first position on this move)
-            if (!lastPosInitialized)
+            if (!cursorStates[cursorID].lastPosInitialized)
             {
                 cursorStates[cursorID].lastXform.SetPosition(pos);
             }
-            lastPosInitialized = true;
+            cursorStates[cursorID].lastPosInitialized = true;
         }
-        public void UpdateCursorRotation(int cursorID, Quaternion rot)
+        private void UpdateCursorRotation(int cursorID, Quaternion rot)
         {
             cursorStates[cursorID].currentXform.SetRotation(rot.normalized);
             // Check if already initialized to avoid "snapping" back into place (initialize to first rotation on this move)
-            if (!lastRotInitialized)
+            if (!cursorStates[cursorID].lastRotInitialized)
             {
                 cursorStates[cursorID].lastXform.SetRotation(rot.normalized);
             }
-            lastRotInitialized = true;
+            cursorStates[cursorID].lastRotInitialized = true;
         }
     }
 }
