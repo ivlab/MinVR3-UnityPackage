@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using IVLab.MinVR3.ExtensionMethods;
 
 namespace IVLab.MinVR3
 {
@@ -55,9 +56,14 @@ namespace IVLab.MinVR3
         /// <summary>
         /// Draw a bounds outline mesh
         /// </summary>
-        public static void Bounds(Bounds bounds, Color color, float duration = 0.0f)
+        public static void Bounds(Bounds bounds, Color color, float duration = 0.0f, float thickness = 0.001f)
         {
-            DebugDrawing.Instance.DrawBounds(bounds, color, duration);
+            DebugDrawing.Instance.DrawBounds(bounds, color, thickness, Matrix4x4.identity, duration);
+        }
+
+        public static void Bounds(Bounds bounds, Color color, Matrix4x4 boundsTransform, float duration = 0.0f, float thickness = 0.001f)
+        {
+            DebugDrawing.Instance.DrawBounds(bounds, color, thickness, boundsTransform, duration);
         }
 
         /// <summary>
@@ -108,6 +114,8 @@ namespace IVLab.MinVR3
         {
             public Bounds bounds;
             public Color color;
+            public float thickness;
+            public Matrix4x4 transform;
             public float duration;
         }
 
@@ -185,8 +193,9 @@ namespace IVLab.MinVR3
             for (int i = 0; i < boundsList.Count; i++)
             {
                 BoundsWithColor b = boundsList[i];
-                var lineWidth = b.bounds.extents.magnitude * 0.01f;
+                var lineWidth = b.thickness;
                 var bT = Matrix4x4.Translate(b.bounds.center);
+                var tf = b.transform;
 
                 // 0 = along y axis
                 // 1 = along z axis
@@ -216,20 +225,20 @@ namespace IVLab.MinVR3
 
                 MaterialPropertyBlock block = new MaterialPropertyBlock();
                 block.SetColor("_Color", b.color);
-                Graphics.DrawMesh(cylinderMesh, bT * t00 * s0 * r0, debugMaterial, 0, null, 0, properties: block);
-                Graphics.DrawMesh(cylinderMesh, bT * t01 * s0 * r0, debugMaterial, 0, null, 0, properties: block);
-                Graphics.DrawMesh(cylinderMesh, bT * t02 * s0 * r0, debugMaterial, 0, null, 0, properties: block);
-                Graphics.DrawMesh(cylinderMesh, bT * t03 * s0 * r0, debugMaterial, 0, null, 0, properties: block);
+                Graphics.DrawMesh(cylinderMesh, tf * bT * t00 * s0 * r0, debugMaterial, 0, null, 0, properties: block);
+                Graphics.DrawMesh(cylinderMesh, tf * bT * t01 * s0 * r0, debugMaterial, 0, null, 0, properties: block);
+                Graphics.DrawMesh(cylinderMesh, tf * bT * t02 * s0 * r0, debugMaterial, 0, null, 0, properties: block);
+                Graphics.DrawMesh(cylinderMesh, tf * bT * t03 * s0 * r0, debugMaterial, 0, null, 0, properties: block);
 
-                Graphics.DrawMesh(cylinderMesh, bT * t10 * s1 * r1, debugMaterial, 0, null, 0, properties: block);
-                Graphics.DrawMesh(cylinderMesh, bT * t11 * s1 * r1, debugMaterial, 0, null, 0, properties: block);
-                Graphics.DrawMesh(cylinderMesh, bT * t12 * s1 * r1, debugMaterial, 0, null, 0, properties: block);
-                Graphics.DrawMesh(cylinderMesh, bT * t13 * s1 * r1, debugMaterial, 0, null, 0, properties: block);
+                Graphics.DrawMesh(cylinderMesh, tf * bT * t10 * s1 * r1, debugMaterial, 0, null, 0, properties: block);
+                Graphics.DrawMesh(cylinderMesh, tf * bT * t11 * s1 * r1, debugMaterial, 0, null, 0, properties: block);
+                Graphics.DrawMesh(cylinderMesh, tf * bT * t12 * s1 * r1, debugMaterial, 0, null, 0, properties: block);
+                Graphics.DrawMesh(cylinderMesh, tf * bT * t13 * s1 * r1, debugMaterial, 0, null, 0, properties: block);
 
-                Graphics.DrawMesh(cylinderMesh, bT * t20 * s2 * r2, debugMaterial, 0, null, 0, properties: block);
-                Graphics.DrawMesh(cylinderMesh, bT * t21 * s2 * r2, debugMaterial, 0, null, 0, properties: block);
-                Graphics.DrawMesh(cylinderMesh, bT * t22 * s2 * r2, debugMaterial, 0, null, 0, properties: block);
-                Graphics.DrawMesh(cylinderMesh, bT * t23 * s2 * r2, debugMaterial, 0, null, 0, properties: block);
+                Graphics.DrawMesh(cylinderMesh, tf * bT * t20 * s2 * r2, debugMaterial, 0, null, 0, properties: block);
+                Graphics.DrawMesh(cylinderMesh, tf * bT * t21 * s2 * r2, debugMaterial, 0, null, 0, properties: block);
+                Graphics.DrawMesh(cylinderMesh, tf * bT * t22 * s2 * r2, debugMaterial, 0, null, 0, properties: block);
+                Graphics.DrawMesh(cylinderMesh, tf * bT * t23 * s2 * r2, debugMaterial, 0, null, 0, properties: block);
 
                 b.duration -= Time.deltaTime;
                 boundsList[i] = b;
@@ -275,12 +284,14 @@ namespace IVLab.MinVR3
             });
         }
 
-        public void DrawBounds(Bounds bounds, Color color, float duration)
+        public void DrawBounds(Bounds bounds, Color color, float thickness, Matrix4x4 boundsTransform, float duration)
         {
             boundsList.Add(new BoundsWithColor()
             {
                 bounds = bounds,
                 color = color,
+                thickness = thickness,
+                transform = boundsTransform,
                 duration = duration
             });
         }
