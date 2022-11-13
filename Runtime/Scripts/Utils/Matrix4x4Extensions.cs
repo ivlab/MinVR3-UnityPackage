@@ -54,19 +54,19 @@ namespace IVLab.MinVR3.ExtensionMethods
             return scale;
         }
 
-        public static void SetPosition(this ref Matrix4x4 matrix, Vector3 position)
+        public static void SetTranslation(this ref Matrix4x4 matrix, Vector3 position)
         {
             matrix.SetTRS(position, matrix.GetRotationFast(), matrix.GetScaleFast());
         }
 
         public static void SetScale(this ref Matrix4x4 matrix, Vector3 scale)
         {
-            matrix.SetTRS(matrix.GetPosition(), matrix.GetRotationFast(), scale);
+            matrix.SetTRS(matrix.GetTranslationFast(), matrix.GetRotationFast(), scale);
         }
 
         public static void SetRotation(this ref Matrix4x4 matrix, Quaternion rotation)
         {
-            matrix.SetTRS(matrix.GetPosition(), rotation, matrix.GetScaleFast());
+            matrix.SetTRS(matrix.GetTranslationFast(), rotation, matrix.GetScaleFast());
         }
     }
 }

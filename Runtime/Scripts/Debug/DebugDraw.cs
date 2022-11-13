@@ -71,9 +71,9 @@ namespace IVLab.MinVR3
         /// </summary>
         public static void Axes(Matrix4x4 basis, float size = 0.1f, float duration = 0.0f, float thickness = 0.001f)
         {
-            DebugDrawing.Instance.DrawRay(basis.GetPosition(), basis.GetColumn(0) * size, Color.red, duration, thickness);
-            DebugDrawing.Instance.DrawRay(basis.GetPosition(), basis.GetColumn(1) * size, Color.green, duration, thickness);
-            DebugDrawing.Instance.DrawRay(basis.GetPosition(), basis.GetColumn(2) * size, Color.blue, duration, thickness);
+            DebugDrawing.Instance.DrawRay(basis.GetTranslationFast(), basis.GetColumn(0) * size, Color.red, duration, thickness);
+            DebugDrawing.Instance.DrawRay(basis.GetTranslationFast(), basis.GetColumn(1) * size, Color.green, duration, thickness);
+            DebugDrawing.Instance.DrawRay(basis.GetTranslationFast(), basis.GetColumn(2) * size, Color.blue, duration, thickness);
         }
     }
 

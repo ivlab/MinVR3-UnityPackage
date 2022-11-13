@@ -8,7 +8,7 @@ namespace IVLab.MinVR3.ExtensionMethods
         {
             transform.SetGlobalScale(matrix.GetScaleFast());
             transform.rotation = matrix.GetRotationFast();
-            transform.position = matrix.GetPosition();
+            transform.position = matrix.GetTranslationFast();
         }
         public static void SetGlobalScale(this Transform transform, Vector3 globalScale)
         {

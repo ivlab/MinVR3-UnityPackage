@@ -118,8 +118,8 @@ namespace IVLab.MinVR3
                 // Handle two-handed manipulation
                 if (m_FSM.currentStateID == m_FSM.GetStateID("GrabBoth") && !twoHandStarting)
                 {
-                    Vector3 cur0Pos = cursorStates[0].currentXform.GetPosition();
-                    Vector3 cur1Pos = cursorStates[1].currentXform.GetPosition();
+                    Vector3 cur0Pos = cursorStates[0].currentXform.GetTranslationFast();
+                    Vector3 cur1Pos = cursorStates[1].currentXform.GetTranslationFast();
                     float currentDistBetweenCursors = (cur1Pos - cur0Pos).magnitude;
                     float distRatio = currentDistBetweenCursors / initialDistBetweenCursors;
 
@@ -190,10 +190,10 @@ namespace IVLab.MinVR3
 
         private void InitializeTwoHandManipulation()
         {
-            initialDistBetweenCursors = (cursorStates[1].currentXform.GetPosition() - cursorStates[0].currentXform.GetPosition()).magnitude;
+            initialDistBetweenCursors = (cursorStates[1].currentXform.GetTranslationFast() - cursorStates[0].currentXform.GetTranslationFast()).magnitude;
             initialObjectScale = m_ManipulatingObj.transform.localScale;
-            Vector3 cur0Pos = cursorStates[0].currentXform.GetPosition();
-            Vector3 cur1Pos = cursorStates[1].currentXform.GetPosition();
+            Vector3 cur0Pos = cursorStates[0].currentXform.GetTranslationFast();
+            Vector3 cur1Pos = cursorStates[1].currentXform.GetTranslationFast();
             float currentDistBetweenCursors = (cur1Pos - cur0Pos).magnitude;
             float distRatio = currentDistBetweenCursors / initialDistBetweenCursors;
 
@@ -212,11 +212,11 @@ namespace IVLab.MinVR3
 
         private void UpdateCursorPosition(int cursorID, Vector3 pos)
         {
-            cursorStates[cursorID].currentXform.SetPosition(pos);
+            cursorStates[cursorID].currentXform.SetTranslation(pos);
             // Check if already initialized to avoid "snapping" back into place (initialize to first position on this move)
             if (!cursorStates[cursorID].lastPosInitialized)
             {
-                cursorStates[cursorID].lastXform.SetPosition(pos);
+                cursorStates[cursorID].lastXform.SetTranslation(pos);
             }
             cursorStates[cursorID].lastPosInitialized = true;
         }
