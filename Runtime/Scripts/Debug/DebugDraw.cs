@@ -138,7 +138,7 @@ namespace IVLab.MinVR3
             public Vector3 pos;
             public string text;
             public Color color;
-            public float eraseTime;
+            public float duration;
         }
 
         private Mesh cylinderMesh;
@@ -270,6 +270,7 @@ namespace IVLab.MinVR3
             rays = rays.Where(b => b.duration > float.Epsilon).ToList();
             circles = circles.Where(b => b.duration > float.Epsilon).ToList();
             spheres = spheres.Where(s => s.duration > float.Epsilon).ToList();
+
         }
 
         public void OnDrawGizmos()
@@ -284,7 +285,9 @@ namespace IVLab.MinVR3
                 UnityEditor.Handles.color = color;
                 UnityEditor.Handles.Label(stringpair.pos, stringpair.text, style);
 #endif
+                stringpair.duration -= Time.deltaTime;
             }
+            textList = textList.Where(s => s.duration > float.Epsilon).ToList();
         }
 
         public void DrawRay(Vector3 start, Vector3 direction, Color color, float duration, float radius)
@@ -336,15 +339,7 @@ namespace IVLab.MinVR3
 
         public void DrawText(Vector3 pos, string text, Color color, float duration)
         {
-            textList.Add(new Debug2String() { text = text, color = color, pos = pos, eraseTime = Time.time + duration, });
-            List<Debug2String> toBeRemoved = new List<Debug2String>();
-            foreach (var item in textList)
-            {
-                if (item.eraseTime <= Time.time)
-                    toBeRemoved.Add(item);
-            }
-            foreach (var rem in toBeRemoved)
-                textList.Remove(rem);
+            textList.Add(new Debug2String() { text = text, color = color, pos = pos, duration = duration, });
         }
     }
 }
