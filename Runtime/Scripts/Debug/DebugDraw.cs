@@ -269,6 +269,7 @@ namespace IVLab.MinVR3
             boundsList = boundsList.Where(b => b.duration > float.Epsilon).ToList();
             rays = rays.Where(b => b.duration > float.Epsilon).ToList();
             circles = circles.Where(b => b.duration > float.Epsilon).ToList();
+            spheres = spheres.Where(s => s.duration > float.Epsilon).ToList();
         }
 
         public void OnDrawGizmos()
