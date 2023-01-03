@@ -75,6 +75,18 @@ namespace IVLab.MinVR3
             DebugDrawing.Instance.DrawRay(basis.GetTranslationFast(), basis.GetColumn(1) * size, Color.green, duration, thickness);
             DebugDrawing.Instance.DrawRay(basis.GetTranslationFast(), basis.GetColumn(2) * size, Color.blue, duration, thickness);
         }
+
+        /// <summary>
+        /// Draw some text to the screen at a specified position
+        /// </summary>
+        /// <remarks>
+        /// > [!NOTE]
+        /// > The <see cref="Text"/> method only works in the Unity Editor and only displays in scene view.
+        /// </remarks>
+        public static void Text(Vector3 position, string text, Color color, float duration = 0.0f)
+        {
+            DebugDrawing.Instance.DrawText(position, text, color, duration);
+        }
     }
 
     internal class DebugDrawing : Singleton<DebugDrawing>
@@ -83,6 +95,7 @@ namespace IVLab.MinVR3
         private List<Circle> circles = new List<Circle>();
         private List<Sphere> spheres = new List<Sphere>();
         private List<BoundsWithColor> boundsList = new List<BoundsWithColor>();
+        private List<Debug2String> textList = new List<Debug2String>();
 
         private struct RayWithMagnitude
         {
@@ -117,6 +130,15 @@ namespace IVLab.MinVR3
             public float thickness;
             public Matrix4x4 transform;
             public float duration;
+        }
+
+        // Source: http://answers.unity.com/answers/1357176/view.html
+        private class Debug2String
+        {
+            public Vector3 pos;
+            public string text;
+            public Color color;
+            public float eraseTime;
         }
 
         private Mesh cylinderMesh;
@@ -249,6 +271,21 @@ namespace IVLab.MinVR3
             circles = circles.Where(b => b.duration > float.Epsilon).ToList();
         }
 
+        public void OnDrawGizmos()
+        {
+            foreach (var stringpair in textList)
+            {
+                GUIStyle style = new GUIStyle();
+                Color color = stringpair.color;
+                style.normal.textColor = color;
+                style.alignment = TextAnchor.MiddleCenter;
+#if UNITY_EDITOR
+                UnityEditor.Handles.color = color;
+                UnityEditor.Handles.Label(stringpair.pos, stringpair.text, style);
+#endif
+            }
+        }
+
         public void DrawRay(Vector3 start, Vector3 direction, Color color, float duration, float radius)
         {
             rays.Add(new RayWithMagnitude()
@@ -294,6 +331,19 @@ namespace IVLab.MinVR3
                 transform = boundsTransform,
                 duration = duration
             });
+        }
+
+        public void DrawText(Vector3 pos, string text, Color color, float duration)
+        {
+            textList.Add(new Debug2String() { text = text, color = color, pos = pos, eraseTime = Time.time + duration, });
+            List<Debug2String> toBeRemoved = new List<Debug2String>();
+            foreach (var item in textList)
+            {
+                if (item.eraseTime <= Time.time)
+                    toBeRemoved.Add(item);
+            }
+            foreach (var rem in toBeRemoved)
+                textList.Remove(rem);
         }
     }
 }
