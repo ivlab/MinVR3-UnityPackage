@@ -36,27 +36,18 @@ namespace IVLab.MinVR3
                 propRect.width = position.width - propRect.width;
                 VREventPrototypeAny any = new VREventPrototypeAny();
                 var dataTypeNames = any.AllEventPrototypes.Keys.ToList();
-                var dataTypeNamesList = dataTypeNames.ToList();
-                int blankIndex = dataTypeNamesList.FindIndex(t => t.Length == 0);
-                if (blankIndex >= 0) {
-                    dataTypeNamesList[blankIndex] = "(none)";
-                }
-                var displayNames = dataTypeNamesList
-                    .Select(t => new GUIContent(t))
+                var displayNames = dataTypeNames
+                    .Select(t =>
+                    {
+                        if (t.ToString().Length > 0)
+                            return new GUIContent(t);
+                        else
+                            return new GUIContent("(none)");
+                    })
                     .ToArray();
 
-                int selected = -1;
-                for (int i = 0; i < dataTypeNamesList.Count; i++) {
-                    dataTypeNames[i] = dataTypeNamesList[i];
-                    if (dataTypeNamesList[i] == "") {
-                        displayNames[i] = new GUIContent("(none)");
-                    } else {
-                        displayNames[i] = new GUIContent(dataTypeNamesList[i]);
-                    }
-                    if (dataTypeNames[i] == dataTypeNameProp.stringValue) {
-                        selected = i;
-                    }
-                }
+                int selected = dataTypeNames.FindIndex(0, dataTypeNames.Count(), (t) => t == dataTypeNameProp.stringValue);
+
                 EditorGUI.BeginChangeCheck();
                 selected = EditorGUI.Popup(propRect, selected, displayNames);
                 if (EditorGUI.EndChangeCheck()) {
