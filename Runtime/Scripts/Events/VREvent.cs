@@ -96,6 +96,8 @@ namespace IVLab.MinVR3
                         break;
                     case "string":
                         var stringValue = builtinTypeRegex.Match(eventJson).Groups[1].ToString();
+                        // remove start/end quotes
+                        stringValue = stringValue.Substring(1, stringValue.Length - 2);
                         evt = new VREventString(evt.name, stringValue);
                         break;
                     default:
