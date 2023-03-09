@@ -79,6 +79,10 @@ namespace IVLab.MinVR3
                     string eventName = VREventManager.GetUniqueEventPrototypeName("MyDevice/MyEvent");
                     VREventPrototypeAny newProto = VREventPrototypeAny.Create(eventName);
                     newProto.SetDefineNewPrototypeInEditor(true);
+                    if (script.eventPrototypes == null)
+                    {
+                        script.eventPrototypes = new List<VREventPrototypeAny>();
+                    }
                     script.eventPrototypes.Add(newProto);
                 }
 

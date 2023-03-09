@@ -66,6 +66,10 @@ namespace IVLab.MinVR3
                 }
 
                 if (GUILayout.Button("+")) {
+                    if (script.sendList == null)
+                    {
+                        script.sendList = new List<VREventPrototypeAny>();
+                    }
                     script.sendList.Add(VREventPrototypeAny.Create(""));
                 }
             }

@@ -59,8 +59,11 @@ namespace IVLab.MinVR3
         public List<IVREventPrototype> GetEventPrototypes()
         {
             List<IVREventPrototype> eventsProduced = new List<IVREventPrototype>();
-            foreach (var p in m_EventPrototypes) {
-                eventsProduced.Add(p);
+            if (m_EventPrototypes != null)
+            {
+                foreach (var p in m_EventPrototypes) {
+                    eventsProduced.Add(p);
+                }
             }
             return eventsProduced;
         }
