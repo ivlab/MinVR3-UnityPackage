@@ -7,7 +7,7 @@ using UnityEngine;
 /// A grid of GameObjects, where the grid can be defined different ways (e.g., on a plane,
 /// on the surface of a spherical dome, ...)
 /// </summary>
-public class Grid : MonoBehaviour
+public class GridOfObjects : MonoBehaviour
 {
     // applies to all grids
     public List<GameObject> m_Objects;
