@@ -66,6 +66,9 @@ namespace IVLab.MinVR3
                 // There may be a better way to do this, but at least a switch is fast.
                 // Alternative would be to use reflection to convert the type
                 // using the s_AvailableDataTypes dictionary.
+                //
+                // Some ugliness for parsing built-in types here due to Unity not
+                // supporting .NET 7 yet, which has an `IParsable<>` interface.
                 switch (evt.GetDataTypeName())
                 {
                     case "Vector2":
@@ -83,14 +86,19 @@ namespace IVLab.MinVR3
                     case "GameObject":
                         evt = JsonUtility.FromJson<VREventGameObject>(eventJson);
                         break;
-                    case "float":
-                        evt = JsonUtility.FromJson<VREventFloat>(eventJson);
+                    case "Single":
+                        var floatValue = builtinTypeRegex.Match(eventJson).Groups[1].ToString();
+                        evt = new VREventFloat(evt.name, Single.Parse(floatValue));
                         break;
-                    case "int":
-                        evt = JsonUtility.FromJson<VREventInt>(eventJson);
+                    case "Int32":
+                        var intValue = builtinTypeRegex.Match(eventJson).Groups[1].ToString();
+                        evt = new VREventInt(evt.name, Int32.Parse(intValue));
                         break;
                     case "string":
-                        evt = JsonUtility.FromJson<VREventString>(eventJson);
+                        var stringValue = builtinTypeRegex.Match(eventJson).Groups[1].ToString();
+                        // remove start/end quotes
+                        stringValue = stringValue.Substring(1, stringValue.Length - 2);
+                        evt = new VREventString(evt.name, stringValue);
                         break;
                     default:
                         break;
@@ -157,6 +165,8 @@ namespace IVLab.MinVR3
             { typeof(string).Name, typeof(VREventString) },
             { typeof(GameObject).Name, typeof(GameObject) },
         };
+
+        private static System.Text.RegularExpressions.Regex builtinTypeRegex = new System.Text.RegularExpressions.Regex(@"""m_Data"":{""value"":([\s\S]+)}}");
     }
 
 } // namespace
