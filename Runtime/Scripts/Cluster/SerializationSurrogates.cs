@@ -1,4 +1,4 @@
-﻿using System.Runtime.Serialization;
+using System.Runtime.Serialization;
 using UnityEngine;
 
 sealed class Vector2SerializationSurrogate : ISerializationSurrogate

@@ -1,4 +1,4 @@
-﻿// This functionality is only available in projects using Unity's New Input System
+// This functionality is only available in projects using Unity's New Input System
 #if ENABLE_INPUT_SYSTEM || BUILDING_DOCS
 
 using System.Collections.Generic;

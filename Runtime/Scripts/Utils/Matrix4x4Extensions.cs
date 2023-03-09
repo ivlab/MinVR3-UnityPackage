@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 namespace IVLab.MinVR3.ExtensionMethods
 {
