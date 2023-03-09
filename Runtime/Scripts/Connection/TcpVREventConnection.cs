@@ -38,7 +38,7 @@ namespace IVLab.MinVR3
             return true;
         }
 
-        public IVREventConnection.OnVREventReceivedDelegate OnVREventReceived { get; set; }
+        public OnVREventReceived.OnVREventReceivedDelegate OnVREventReceived { get; set; }
 
 
 

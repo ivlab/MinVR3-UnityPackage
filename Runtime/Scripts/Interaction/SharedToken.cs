@@ -59,7 +59,7 @@ public class SharedToken : MonoBehaviour
     public void AddAvailabilityListener(UnityAction<bool> callback)
     {
         if (m_OnTokenAvailabilityChange == null) {
-            m_OnTokenAvailabilityChange = new UnityEvent<bool>();
+            m_OnTokenAvailabilityChange = new TokenEvent();
         }
         m_OnTokenAvailabilityChange.AddListener(callback);
     }
@@ -70,6 +70,8 @@ public class SharedToken : MonoBehaviour
     }
 
     [SerializeField] private string m_TokenName = "Shared Token";
-    [SerializeField] private UnityEvent<bool> m_OnTokenAvailabilityChange;
+    [SerializeField] private TokenEvent m_OnTokenAvailabilityChange;
     private MonoBehaviour m_CurrentOwner;
+
+    private class TokenEvent : UnityEvent<bool> { }
 }

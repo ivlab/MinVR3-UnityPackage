@@ -17,29 +17,32 @@ namespace IVLab.MinVR3
         /// <summary>
         /// Returns true if the VREventConnection supports sending VREvents.
         /// </summary>
-        public bool CanSend();
+        bool CanSend();
 
         /// <summary>
         /// Send a VR event to the other end of this "connection"
         /// </summary>
-        public void Send(in VREvent evt);
+        void Send(in VREvent evt);
 
 
         /// <summary>
         /// Returns true if the VREventConnection supports receiving VREvents.
         /// </summary>
-        public bool CanReceive();
-
-        /// <summary>
-        /// Delagate to define the structure for OnVREventReceived callbacks.
-        /// </summary>
-        public delegate void OnVREventReceivedDelegate(VREvent evt);
+        bool CanReceive();
 
         /// <summary>
         /// Subscribe to OnVREventReceived to recieve a callback whenever a VREvent is
         /// received over the network "connection",
         /// </summary>
-        public OnVREventReceivedDelegate OnVREventReceived { get; set; }
+        OnVREventReceived.OnVREventReceivedDelegate OnVREventReceived { get; set; }
+    }
+
+    public static class OnVREventReceived
+    {
+        /// <summary>
+        /// Delagate to define the structure for OnVREventReceived callbacks.
+        /// </summary>
+        public delegate void OnVREventReceivedDelegate(VREvent evt);
     }
 
 
