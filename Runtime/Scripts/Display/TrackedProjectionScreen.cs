@@ -180,9 +180,9 @@ namespace IVLab.MinVR3 {
             rm[1, 2] = vu.z;
             rm[1, 3] = 0.0f;
 
-            rm[2, 0] = -vn.x;
-            rm[2, 1] = -vn.y;
-            rm[2, 2] = -vn.z;
+            rm[2, 0] = vn.x;
+            rm[2, 1] = vn.y;
+            rm[2, 2] = vn.z;
             rm[2, 3] = 0.0f;
 
             rm[3, 0] = 0.0f;
@@ -271,17 +271,17 @@ namespace IVLab.MinVR3 {
 
                 p[1, 0] = 0.0f;
                 p[1, 1] = 2.0f * n / (t - b);
-                p[1, 2] = (t + b) / (b - t);
+                p[1, 2] = (t + b) / (t - b);
                 p[1, 3] = 0.0f;
 
                 p[2, 0] = 0.0f;
                 p[2, 1] = 0.0f;
-                p[2, 2] = f / (f - n);
-                p[2, 3] = n * f / (n - f);
+                p[2, 2] = (f + n) / (n - f);
+                p[2, 3] = 2.0f * n * f / (n - f);
 
                 p[3, 0] = 0.0f;
                 p[3, 1] = 0.0f;
-                p[3, 2] = 1.0f;
+                p[3, 2] = -1.0f;
                 p[3, 3] = 0.0f;
             }
             else { // parallel projection
