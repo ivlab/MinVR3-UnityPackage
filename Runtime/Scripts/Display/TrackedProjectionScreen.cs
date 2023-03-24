@@ -40,6 +40,9 @@ namespace IVLab.MinVR3 {
             "projection screen.  These must form a rectangle.")]
         public ScreenCorners trackingSpaceCorners;
 
+        [Tooltip("Use world space for tracking corners")]
+        public bool useWorldSpaceForCorners = true;
+
         [Tooltip("To apply the projection and view matrices to a camera other than the main camera, attach it here.")]
         public Camera cam;
 
@@ -97,15 +100,15 @@ namespace IVLab.MinVR3 {
                     c = new Color(1.0f, 0.0275f, 1.0f);
                 }
 
-                Debug.DrawLine(trackingSpaceCorners.topLeft, trackingSpaceCorners.topRight, c);
-                Debug.DrawLine(trackingSpaceCorners.topRight, trackingSpaceCorners.bottomRight, c);
-                Debug.DrawLine(trackingSpaceCorners.bottomRight, trackingSpaceCorners.bottomLeft, c);
-                Debug.DrawLine(trackingSpaceCorners.bottomLeft, trackingSpaceCorners.topLeft, c);
+                Debug.DrawLine(GetTopLeftCorner(), GetTopRightCorner(), c);
+                Debug.DrawLine(GetTopRightCorner(), GetBottomRightCorner(), c);
+                Debug.DrawLine(GetBottomRightCorner(), GetBottomLeftCorner(), c);
+                Debug.DrawLine(GetBottomLeftCorner(), GetTopLeftCorner(), c);
 
-                Debug.DrawLine(cam.transform.position, trackingSpaceCorners.topRight, c);
-                Debug.DrawLine(cam.transform.position, trackingSpaceCorners.bottomRight, c);
-                Debug.DrawLine(cam.transform.position, trackingSpaceCorners.bottomLeft, c);
-                Debug.DrawLine(cam.transform.position, trackingSpaceCorners.topLeft, c);
+                Debug.DrawLine(cam.transform.position, GetTopRightCorner(), c);
+                Debug.DrawLine(cam.transform.position, GetBottomRightCorner(), c);
+                Debug.DrawLine(cam.transform.position, GetBottomLeftCorner(), c);
+                Debug.DrawLine(cam.transform.position, GetTopLeftCorner(), c);
             }
         }
 
@@ -322,19 +325,31 @@ namespace IVLab.MinVR3 {
 
 
         public Vector3 GetTopLeftCorner() {
-            return trackingSpaceCorners.topLeft;
+            if (useWorldSpaceForCorners)
+                return trackingSpaceCorners.topLeft;
+            else
+                return transform.localToWorldMatrix.MultiplyPoint3x4(trackingSpaceCorners.topLeft);
         }
 
         public Vector3 GetTopRightCorner() {
-            return trackingSpaceCorners.topRight;
+            if (useWorldSpaceForCorners)
+                return trackingSpaceCorners.topRight;
+            else
+                return transform.localToWorldMatrix.MultiplyPoint3x4(trackingSpaceCorners.topRight);
         }
 
         public Vector3 GetBottomRightCorner() {
-            return trackingSpaceCorners.bottomRight;
+            if (useWorldSpaceForCorners)
+                return trackingSpaceCorners.bottomRight;
+            else
+                return transform.localToWorldMatrix.MultiplyPoint3x4(trackingSpaceCorners.bottomRight);
         }
 
         public Vector3 GetBottomLeftCorner() {
-            return trackingSpaceCorners.bottomLeft;
+            if (useWorldSpaceForCorners)
+                return trackingSpaceCorners.bottomLeft;
+            else
+                return transform.localToWorldMatrix.MultiplyPoint3x4(trackingSpaceCorners.bottomLeft);
         }
 
 
