@@ -55,6 +55,11 @@ namespace IVLab.MinVR3
 
             EditorGUILayout.PropertyField(m_DefaultConfigFilesProp);
 
+            if (GUILayout.Button("Go to Startup VRConfig GameObject"))
+            {
+                Selection.activeGameObject = availableConfigs[selected].gameObject;
+            }
+
             serializedObject.ApplyModifiedProperties();
         }
 
