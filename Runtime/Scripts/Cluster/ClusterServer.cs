@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 using System.Net; 
 using System.Net.Sockets;
 using System.Threading;
@@ -76,7 +77,6 @@ namespace IVLab.MinVR3 {
         }
 
         public void SynchronizeInputEventsAcrossAllNodes(ref List<VREvent> inputEvents) {
-
             // 1. FOR EACH CLIENT, RECEIVE A LIST OF INPUT EVENTS GENERATED ON THE CLIENT
             // AND ADD THEM TO THE SERVER'S INPUTEVENTS LIST
 
@@ -86,34 +86,33 @@ namespace IVLab.MinVR3 {
             // that is ready to send data, then continue looping until we have read from all.
 
             // initialize list to include all streams in the list to read from
-            List<int> toRead = new List<int>(clients.Count);
-            for (int i = 0; i < clients.Count; i++) {
-                toRead.Add(i);
-            }
+            List<bool> receivedFromClients = Enumerable.Repeat(false, clients.Count).ToList();
+
 
             // loop until the list of streams to read from is empty
             System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
             stopwatch.Start();
-            while (toRead.Count > 0) {
-                int i = 0;
-                while (i < toRead.Count) {
-                    if (clients[toRead[i]].GetStream().DataAvailable) {
-                        // if ready to read, read data and remove from the list of streams to read from
-                        TcpClient c = clients[toRead[i]];
+
+            // Loop through until we have data for all clients
+            while (receivedFromClients.Any(d => !d))
+            {
+                for (int i = 0; i < clients.Count; i++)
+                {
+                    if (clients[i].GetStream().DataAvailable)
+                    {
+                        // if ready to read, read data and mark the client as successfully received
+                        TcpClient c = clients[i];
                         NetUtils.ReceiveEventData(ref c, ref inputEvents, true);
-                        toRead.RemoveAt(i);
-                    }
-                    else {
-                        // this stream not ready to read, move on to the next
-                        i++;
-                    }
-                    if (stopwatch.Elapsed.TotalSeconds > 5) {
-                        NetUtils.BrokenConnectionError(true);
-                        return;
+                        receivedFromClients[i] = true;
                     }
                 }
-            }
 
+                if (stopwatch.Elapsed.TotalSeconds > 5)
+                {
+                    NetUtils.BrokenConnectionError(true, "Cluster server timed out synchronizing events");
+                    return;
+                }
+            }
 
             // 2. SEND THE COMBINED INPUT EVENTS LIST OUT TO ALL CLIENTS
             for (int i = 0; i < clients.Count; i++) {
@@ -121,13 +120,11 @@ namespace IVLab.MinVR3 {
                 //Debug.Log("Sending input events " + inputEvents.Count);
                 NetUtils.SendEventData(ref c, in inputEvents, true);
             }
-            
         }
 
 
 
         public void SynchronizeSwapBuffersAcrossAllNodes() {
-
             // 1. WAIT FOR A SWAP BUFFERS REQUEST MESSAGE FROM ALL CLIENTS
 
             // the following section implements something similar to a socket select statement.
@@ -136,34 +133,32 @@ namespace IVLab.MinVR3 {
             // that is ready to send data, then continue looping until we have read from all.
 
             // initialize list to include all streams in the list to read from
-            List<int> toRead = new List<int>(clients.Count);
-            for (int i = 0; i < clients.Count; i++) {
-                toRead.Add(i);
-            }
+            List<bool> receivedFromClients = Enumerable.Repeat(false, clients.Count).ToList();
 
             // loop until the list of streams to read from is empty
             System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
             stopwatch.Start();
-            while (toRead.Count > 0) {
-                int i = 0;
-                while (i < toRead.Count) {
-                    if (clients[toRead[i]].GetStream().DataAvailable) {
+
+            // Loop through until we have data for all clients
+            while (receivedFromClients.Any(d => !d))
+            {
+                for (int i = 0; i < clients.Count; i++)
+                {
+                    if (clients[i].GetStream().DataAvailable)
+                    {
                         // if ready to read, read data and remove from the list of streams to read from
-                        TcpClient c = clients[toRead[i]];
+                        TcpClient c = clients[i];
                         NetUtils.ReceiveSwapBuffersRequest(ref c, true);
-                        toRead.RemoveAt(i);
-                    }
-                    else {
-                        // this stream not ready to read, move on to the next
-                        i++;
-                    }
-                    if (stopwatch.Elapsed.TotalSeconds > 5) {
-                        NetUtils.BrokenConnectionError(true);
-                        return;
+                        receivedFromClients[i] = true;
                     }
                 }
-            }
 
+                if (stopwatch.Elapsed.TotalSeconds > 5)
+                {
+                    NetUtils.BrokenConnectionError(true, "Cluster server timed out syncing swap buffers");
+                    return;
+                }
+            }
 
             // 2. SEND A SWAP BUFFERS NOW MESSAGE TO ALL CLIENTS
             for (int i = 0; i < clients.Count; i++) {

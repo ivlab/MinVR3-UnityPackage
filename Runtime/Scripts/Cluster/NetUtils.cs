@@ -84,7 +84,7 @@ namespace IVLab.MinVR3 {
             } catch (Exception e) {
                 Debug.Log(String.Format("Exception: {0}", e));
                 Console.WriteLine("Exception: {0}", e);
-                BrokenConnectionError(quitOnError);
+                BrokenConnectionError(quitOnError, "Closing TCP client: " + e);
             }
         }
 
@@ -100,7 +100,7 @@ namespace IVLab.MinVR3 {
 
         public static void SendOneByteMessage(ref TcpClient client, byte[] message, bool quitOnError) {
             if (!client.Connected) {
-                BrokenConnectionError(quitOnError);
+                BrokenConnectionError(quitOnError, "Send one byte message: client no longer connected");
                 return;
             }
             // this message consists only of a 1-byte header
@@ -109,7 +109,7 @@ namespace IVLab.MinVR3 {
             }
             catch (Exception e) {
                 Console.WriteLine("Exception: {0}", e);
-                BrokenConnectionError(quitOnError);
+                BrokenConnectionError(quitOnError, "Sent one byte message: " + e);
             }
         }
 
@@ -131,7 +131,7 @@ namespace IVLab.MinVR3 {
             while (received[0] != message[0]) {
                 int status = -1;
                 if (!client.Connected) {
-                    BrokenConnectionError(quitOnError);
+                    BrokenConnectionError(quitOnError, "Receive one byte message: Client no longer connected");
                     return;
                 }
                 try {
@@ -139,7 +139,7 @@ namespace IVLab.MinVR3 {
                 }
                 catch (Exception e) {
                     Console.WriteLine("Exception: {0}", e);
-                    BrokenConnectionError(quitOnError);
+                    BrokenConnectionError(quitOnError, "Receive one byte message: " + e);
                     return;
                 }
                 if (status == -1) {
@@ -150,8 +150,8 @@ namespace IVLab.MinVR3 {
                     Console.WriteLine("WaitForAndReceiveMessageHeader error: expected {0} got {1}", message[0], received[0]);
                     return;
                 }
-                if (stopwatch.Elapsed.TotalSeconds > 5) {
-                    BrokenConnectionError(quitOnError);
+                if (stopwatch.Elapsed.TotalSeconds > 30) {
+                    BrokenConnectionError(quitOnError, "Receive one byte message: connection timed out");
                     return;
                 }
             }
@@ -176,20 +176,20 @@ namespace IVLab.MinVR3 {
 
             // 1. send 1-byte message header
             if (!client.Connected) {
-                BrokenConnectionError(quitOnError);
+                BrokenConnectionError(quitOnError, "Sending event data: client no longer connected");
                 return;
             }
             try {
                 client.GetStream().Write(NetUtils.INPUT_EVENTS_MSG, 0, 1);
             } catch (Exception e) {
                 Console.WriteLine("Exception: {0}", e);
-                BrokenConnectionError(quitOnError);
+                BrokenConnectionError(quitOnError, "Sending event data: " + e);
             }
 
 
             // 2. send event data
             if (!client.Connected) {
-                BrokenConnectionError(quitOnError);
+                BrokenConnectionError(quitOnError, "Sending event data: client no longer connected");
                 return;
             }
             try {
@@ -203,7 +203,7 @@ namespace IVLab.MinVR3 {
                 }
             } catch (Exception e) {
                 Console.WriteLine("Exception: {0}", e);
-                BrokenConnectionError(quitOnError);
+                BrokenConnectionError(quitOnError, "Sending event data: " + e);
             }
         }
 
@@ -233,7 +233,7 @@ namespace IVLab.MinVR3 {
             catch (Exception e) {
                 Debug.Log("Exception: " + e);
                 Console.WriteLine("Exception: {0}", e);
-                BrokenConnectionError(quitOnError);
+                BrokenConnectionError(quitOnError, "Receiving event data: " + e);
             }
         }
 
@@ -251,7 +251,7 @@ namespace IVLab.MinVR3 {
             stopwatch.Start();
             while (total < len) {
                 if (!client.Connected) {
-                    BrokenConnectionError(quitOnError);
+                    BrokenConnectionError(quitOnError, "Receiving all: client no longer connected");
                     return -1;
                 }
                 try {
@@ -261,11 +261,11 @@ namespace IVLab.MinVR3 {
                 }
                 catch (Exception e) {
                     Console.WriteLine("Exception: {0}", e);
-                    BrokenConnectionError(quitOnError);
+                    BrokenConnectionError(quitOnError, "Receiving all: " + e);
                     return -1;
                 }
                 if (stopwatch.Elapsed.TotalSeconds > 5) {
-                    BrokenConnectionError(quitOnError);
+                    BrokenConnectionError(quitOnError, "Receiving all: timeout");
                     return -1;                        
                 }
             }
@@ -279,7 +279,7 @@ namespace IVLab.MinVR3 {
             }
             byte[] buf = BitConverter.GetBytes(i);
             if (!client.Connected) {
-                BrokenConnectionError(quitOnError);
+                BrokenConnectionError(quitOnError, "Writing int32: client no longer connected");
                 return;
             }
             try {
@@ -287,7 +287,7 @@ namespace IVLab.MinVR3 {
             }
             catch (Exception e) {
                 Console.WriteLine("Exception: {0}", e);
-                BrokenConnectionError(quitOnError);
+                BrokenConnectionError(quitOnError, "Writing int32: " + e);
             }
         }
 
@@ -314,9 +314,8 @@ namespace IVLab.MinVR3 {
         }
 
 
-        public static void BrokenConnectionError(bool quit) {
-            Debug.Log("Network connection broken.");
-            Console.WriteLine("Network connection broken.");
+        public static void BrokenConnectionError(bool quit, string info="") {
+            Debug.LogError("Network connection broken: " + info);
             if (quit) {
 #if UNITY_EDITOR
                 UnityEditor.EditorApplication.isPlaying = false;
