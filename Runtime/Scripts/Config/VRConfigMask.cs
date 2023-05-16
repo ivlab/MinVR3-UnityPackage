@@ -30,6 +30,16 @@ namespace IVLab.MinVR3
             return false;
         }
 
+        public void AddEnabledConfig(VRConfig config)
+        {
+            m_EnabledConfigsList.Add(config);
+        }
+
+        public void RemoveEnabledConfig(VRConfig config)
+        {
+            m_EnabledConfigsList.Remove(config);
+        }
+
 
         private void Reset()
         {

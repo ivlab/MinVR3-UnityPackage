@@ -1,6 +1,5 @@
 {
     "name": "IVLab.MinVR3.Runtime",
-    "rootNamespace": "",
     "references": [
         "Unity.TextMeshPro",
         "Unity.InputSystem"

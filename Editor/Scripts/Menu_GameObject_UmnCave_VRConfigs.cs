@@ -21,11 +21,18 @@ namespace IVLab.MinVR3
         private const string HeadPositionEventName = "Head/Position";
         private const string HeadRotationEventName = "Head/Rotation";
 
-        private const int SingleWindowPositionX = -1280; // Assumes "primary" projector is front top from viewer's perspective
-        private const int SingleWindowPositionY = 0;
+        private const int WindowOffsetX = 0; // Assumes "primary" projector is left top from viewer's perspective
+        private const int WindowOffsetY = 0;
         private const int SingleWindowWidth = 5120;
         private const int SingleWindowHeight = 1280; // technically CAVE height is 1440px but bottom 200 or so px are cut off
+        private const int MultiWindowWidth = 1280;
+        private const int MultiWindowHeight = 1280; // technically CAVE height is 1440px but bottom 200 or so px are cut off
+        private const float StereoSeparation = 0.06f; // 6cm IPD by default
         private const bool ShowWindowBorders = false;
+        private const float CameraNearPlane = 0.01f;
+
+        private const string ClusterServerIP = "127.0.0.1";
+        private const int ClusterServerPort = 3490;
 
         [MenuItem("GameObject/MinVR/VRConfig/VRConfig_UMN CAVE 3-Wall (Single Window)", false, MenuHelpers.vrConfigSec1Priority)]
         public static void CreateVRConfig3WallCaveSingleWindow(MenuCommand command)
@@ -85,8 +92,8 @@ namespace IVLab.MinVR3
             GameObject windowConfiguration = new GameObject("Window Configuration");
             windowConfiguration.transform.SetParent(config.transform);
             WindowSettings wcfg = windowConfiguration.AddComponent<WindowSettings>();
-            wcfg.upperLeftX = SingleWindowPositionX;
-            wcfg.upperLeftY = SingleWindowPositionY;
+            wcfg.upperLeftX = WindowOffsetX;
+            wcfg.upperLeftY = WindowOffsetY;
             wcfg.width = SingleWindowWidth;
             wcfg.height = SingleWindowHeight;
             wcfg.showWindowBorders = ShowWindowBorders;
@@ -141,6 +148,7 @@ namespace IVLab.MinVR3
                 wall.transform.SetParent(displayDevices.transform);
                 var cam = wall.AddComponent<Camera>();
                 cam.rect = new Rect(camWidth * i, 0, camWidth, 1.0f);
+                cam.stereoSeparation = StereoSeparation;
 
                 // avoid a bunch of C floating point errors when camera is on the floor
                 if (wallNameList[i].Contains("Floor"))
@@ -160,63 +168,29 @@ namespace IVLab.MinVR3
             
         }
 
+        // set up a 4 wall, 4-window cave
+        [MenuItem("GameObject/MinVR/VRConfig/VRConfig_UMN CAVE 4-Wall (4-Window, Default)", false, MenuHelpers.vrConfigSec1Priority)]
 
-        private static void CreateCaveConfigClustered(int walls, MenuCommand command)
+        private static void CreateCaveConfigClustered(MenuCommand command)
         {
-            if (walls != 3 && walls != 4)
-            {
-                Debug.LogError("Only able to create a 3 or 4 wall CAVE");
-                return;
-            }
-
             MenuHelpers.CreateVREngineIfNeeded();
             MenuHelpers.CreateRoomSpaceOriginIfNeeded();
 
+            const int NumWalls = 4;
+
+            // Create root object
             GameObject parentObject = command.context as GameObject;
-            GameObject config = new GameObject("VRConfig_UMNCave-" + walls + "Wall");
-            config.AddComponent<VRConfig>();
+            GameObject caveRoot = new GameObject("UMNCave-4Wall");
+
             if (parentObject != null)
             {
-                config.transform.SetParent(parentObject.transform);
+                caveRoot.transform.SetParent(parentObject.transform);
             }
 
-            GameObject inputDevices = new GameObject("Input Devices");
-            inputDevices.transform.SetParent(config.transform);
 
-            // version defined in IVLab.MinVR3.UmnCave.Editor.asmdef
-#if MINVR3_HAS_VRPN_PLUGIN
-            VRPNTracker trackerHead = MenuHelpers.CreateAndPlaceGameObject("VRPN Tracker 'head'", inputDevices, typeof(VRPNTracker)).GetComponent<VRPNTracker>();
-
-            // Motive tracking is right-handed y-up
-            trackerHead.incomingCoordinateSystem = new CoordConversion.CoordSystem
-            (
-                CoordConversion.CoordSystem.Handedness.RightHanded,
-                CoordConversion.CoordSystem.Axis.PosY,
-                CoordConversion.CoordSystem.Axis.NegZ
-            );
-            trackerHead.minVR3PositionEventName = HeadPositionEventName;
-            trackerHead.minVR3RotationEventName = HeadRotationEventName;
-            trackerHead.vrpnDevice = HeadVrpnDeviceName;
-            trackerHead.vrpnServer = MotiveServerIp;
-#else
-            Debug.LogWarning("MinVR3 VRPN plugin not found. Please install the plugin or select a different source for the perspective tracking events.");
-#endif
-
-            // Window configuration (set position, width, height, window borders)
-            GameObject windowConfiguration = new GameObject("Window Configuration");
-            windowConfiguration.transform.SetParent(config.transform);
-            WindowSettings wcfg = windowConfiguration.AddComponent<WindowSettings>();
-            wcfg.upperLeftX = SingleWindowPositionX;
-            wcfg.upperLeftY = SingleWindowPositionY;
-            wcfg.width = SingleWindowWidth;
-            wcfg.height = SingleWindowHeight;
-            wcfg.showWindowBorders = ShowWindowBorders;
-
-            GameObject displayDevices = new GameObject("Display Devices");
-            displayDevices.transform.SetParent(config.transform);
-
+            // Define stuff needed for walls (dimensions, etc)
             var wallNameList = new string[] { "Left", "Front", "Right", "Floor" };
-            var wallColorList = new Color[wallNameList.Length];
+            var wallColorList = new Color[NumWalls];
             var cornerList = new TrackedProjectionScreen.ScreenCorners[]
             {
                 // left wall
@@ -253,15 +227,53 @@ namespace IVLab.MinVR3
                 }
             };
 
-            float camWidth = 1.0f / (float)wallNameList.Length;
-            for (int i = 0; i < walls; i++)
+            GameObject[] walls = new GameObject[NumWalls];
+            for (int i = 0; i < NumWalls; i++)
             {
-                GameObject wall = new GameObject(wallNameList[i] + " Wall");
-                var corners = cornerList[i];
+                string wallName = wallNameList[i] + " Wall";
 
-                wall.transform.SetParent(displayDevices.transform);
+                // first one is the server
+                if (i != 0)
+                {
+                    wallName += " (Client)";
+                }
+                else
+                {
+                    wallName += " (Server)";
+                }
+
+                GameObject wall = new GameObject(wallName);
+                wall.AddComponent<VRConfig>();
+                wall.transform.SetParent(caveRoot.transform);
+
+                // Add cluster setup
+                if (i != 0)
+                {
+                    ClusterClient client = wall.AddComponent<ClusterClient>();
+                    client.serverIPAddress = ClusterServerIP;
+                    client.serverPort = ClusterServerPort;
+                }
+                else
+                {
+                    ClusterServer server = wall.AddComponent<ClusterServer>();
+                    server.serverPort = ClusterServerPort;
+                    server.numClients = NumWalls - 1;
+                }
+
+                // Set up window settings
+                WindowSettings wcfg = wall.AddComponent<WindowSettings>();
+                wcfg.upperLeftX = WindowOffsetX + MultiWindowWidth * i;
+                wcfg.upperLeftY = WindowOffsetY;
+                wcfg.width = MultiWindowWidth;
+                wcfg.height = MultiWindowHeight;
+                wcfg.showWindowBorders = ShowWindowBorders;
+                wcfg.windowTitle = wallName;
+
+                // Setup camera
                 var cam = wall.AddComponent<Camera>();
-                cam.rect = new Rect(camWidth * i, 0, camWidth, 1.0f);
+                cam.rect = new Rect(0.0f, 0.0f, 1.0f, 1.0f);
+                cam.stereoSeparation = StereoSeparation;
+                cam.nearClipPlane = CameraNearPlane;
 
                 // avoid a bunch of C floating point errors when camera is on the floor
                 if (wallNameList[i].Contains("Floor"))
@@ -269,15 +281,41 @@ namespace IVLab.MinVR3
                     cam.transform.position = new Vector3(0, 0.001f, 0);
                 }
 
+                // Setup tracked projection screen (off axis projection)
                 var tps = wall.AddComponent<TrackedProjectionScreen>();
-                tps.trackingSpaceCorners = corners;
+                tps.trackingSpaceCorners = cornerList[i];
                 tps.debugColor = Color.Lerp(Color.white, Color.green, i / (float)wallNameList.Length);
 
 #if MINVR3_HAS_VRPN_PLUGIN
                 tps.headTrackingPosEvent = VREventPrototypeVector3.Create(HeadPositionEventName);
                 tps.headTrackingRotEvent = VREventPrototypeQuaternion.Create(HeadRotationEventName);
 #endif
+
+                walls[i] = wall;
             }
+
+            // Server (wall 0) needs the input devices attached
+            GameObject inputDevices = new GameObject("Input Devices");
+            inputDevices.transform.SetParent(walls[0].transform);
+
+            // version defined in IVLab.MinVR3.UmnCave.Editor.asmdef
+#if MINVR3_HAS_VRPN_PLUGIN
+            VRPNTracker trackerHead = MenuHelpers.CreateAndPlaceGameObject("VRPN Tracker 'head'", inputDevices, typeof(VRPNTracker)).GetComponent<VRPNTracker>();
+
+            // Motive tracking is right-handed y-up
+            trackerHead.incomingCoordinateSystem = new CoordConversion.CoordSystem
+            (
+                CoordConversion.CoordSystem.Handedness.RightHanded,
+                CoordConversion.CoordSystem.Axis.PosY,
+                CoordConversion.CoordSystem.Axis.NegZ
+            );
+            trackerHead.minVR3PositionEventName = HeadPositionEventName;
+            trackerHead.minVR3RotationEventName = HeadRotationEventName;
+            trackerHead.vrpnDevice = HeadVrpnDeviceName;
+            trackerHead.vrpnServer = MotiveServerIp;
+#else
+            Debug.LogWarning("MinVR3 VRPN plugin not found. Please install the plugin or select a different source for the perspective tracking events.");
+#endif
 
         }
 

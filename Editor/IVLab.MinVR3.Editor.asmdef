@@ -1,9 +1,9 @@
 {
     "name": "IVLab.MinVR3.Editor",
-    "rootNamespace": "",
     "references": [
         "IVLab.MinVR3.Runtime",
-        "Unity.InputSystem"
+        "Unity.InputSystem",
+        "IVLab.MinVR3.VRPN.Runtime"
     ],
     "includePlatforms": [
         "Editor"
@@ -14,6 +14,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "edu.umn.cs.ivlab.minvr3.vrpn",
+            "expression": "0",
+            "define": "MINVR3_HAS_VRPN_PLUGIN"
+        }
+    ],
     "noEngineReferences": false
 }
