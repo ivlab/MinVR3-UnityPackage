@@ -29,7 +29,9 @@ namespace IVLab.MinVR3
         private const int MultiWindowHeight = 1280; // technically CAVE height is 1440px but bottom 200 or so px are cut off
         private const float StereoSeparation = 0.06f; // 6cm IPD by default
         private const bool ShowWindowBorders = false;
+
         private const float CameraNearPlane = 0.01f;
+        private const string CameraTag = "MainCamera";
 
         private const string ClusterServerIP = "127.0.0.1";
         private const int ClusterServerPort = 3490;
@@ -274,6 +276,7 @@ namespace IVLab.MinVR3
                 cam.rect = new Rect(0.0f, 0.0f, 1.0f, 1.0f);
                 cam.stereoSeparation = StereoSeparation;
                 cam.nearClipPlane = CameraNearPlane;
+                cam.tag = CameraTag;
 
                 // avoid a bunch of C floating point errors when camera is on the floor
                 if (wallNameList[i].Contains("Floor"))
