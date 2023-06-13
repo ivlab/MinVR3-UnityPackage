@@ -8,9 +8,13 @@ namespace IVLab.MinVR3
     public class WindowSettings : MonoBehaviour
     {
         [Header("Window Configuration Options")]
+        [SerializeField]
+        public bool setWindowTitle = true;
         [SerializeField, Tooltip("Set the title for this window")]
         public string windowTitle = "MinVR3 Window";
 
+        [SerializeField]
+        public bool setWindowPositionAndSize = true;
         [SerializeField, Tooltip("Upper left x-coordinate of the window, in pixels")]
         public int upperLeftX = 0;
         [SerializeField, Tooltip("Upper left y-coordinate of the window, in pixels")]
@@ -21,6 +25,8 @@ namespace IVLab.MinVR3
         [SerializeField, Tooltip("Window height, in pixels")]
         public int height = 1080;
 
+        [SerializeField]
+        public bool setShowBorders = true;
         [SerializeField, Tooltip("Show the window decorations or not")]
         public bool showWindowBorders = true;
 
@@ -81,15 +87,24 @@ namespace IVLab.MinVR3
         private void ApplyWindowConfig()
         {
 #if UNITY_STANDALONE_WIN || UNITY_EDITOR
-            // set the window position and size
-            WindowUtility.SetPosition(upperLeftX, upperLeftY, width, height);
-            Debug.LogFormat("Set window position to {0}, {1}, resolution {2}x{3}", upperLeftX, upperLeftY, width, height);
+            if (setWindowPositionAndSize)
+            {
+                // set the window position and size
+                WindowUtility.SetPosition(upperLeftX, upperLeftY, width, height);
+                Debug.LogFormat("Set window position to {0}, {1}, resolution {2}x{3}", upperLeftX, upperLeftY, width, height);
+            }
 
-            WindowUtility.ShowWindowBorders(showWindowBorders);
-            Debug.Log("Show window borders: " + showWindowBorders);
+            if (setShowBorders)
+            {
+                WindowUtility.ShowWindowBorders(showWindowBorders);
+                Debug.Log("Show window borders: " + showWindowBorders);
+            }
 
-            WindowUtility.SetWindowTitle(windowTitle);
-            Debug.Log("Set window title to `" + windowTitle + "`");
+            if (setWindowTitle)
+            {
+                WindowUtility.SetWindowTitle(windowTitle);
+                Debug.Log("Set window title to `" + windowTitle + "`");
+            }
 #endif
             
         }
