@@ -12,6 +12,7 @@ namespace IVLab.MinVR3
     /// (formerly ConnectionVREventListener)
     /// </summary>
     [RequireComponent(typeof(IVREventConnection))]
+    [AddComponentMenu("MinVR/Connection/VREventConnectionSender")]
     public class VREventConnectionSender : MonoBehaviour, IVREventListener
     {
         public List<VREventPrototypeAny> sendList {
@@ -33,7 +34,14 @@ namespace IVLab.MinVR3
 
         void Start()
         {
-            m_Connection = this.GetComponent<IVREventConnection>();
+            // find the first attached component that implements IVREventConnection AND is enabled
+            IVREventConnection[] connections = this.GetComponents<IVREventConnection>();
+            m_Connection = connections[0];
+            int i = 0;
+            while ((i < connections.Length) && (!((MonoBehaviour)m_Connection).isActiveAndEnabled)) {
+                i++;
+                m_Connection = connections[i];
+            }
         }
 
 

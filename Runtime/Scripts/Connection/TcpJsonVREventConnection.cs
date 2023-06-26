@@ -8,9 +8,8 @@ using System.Net.Sockets;
 
 namespace IVLab.MinVR3
 {
-
-    [AddComponentMenu("MinVR/Connection/TcpVREventConnection")]
-    public class TcpVREventConnection : MonoBehaviour, IVREventConnection
+    [AddComponentMenu("MinVR/Connection/TcpJsonVREventConnection")]
+    public class TcpJsonVREventConnection : MonoBehaviour, IVREventConnection
     {
         public bool CanSend()
         {
@@ -19,16 +18,13 @@ namespace IVLab.MinVR3
 
         public void Send(in VREvent evt)
         {
-            List<VREvent> events = new List<VREvent>();
-            events.Add(evt);
-
             if ((m_ServerConnection != null) && (m_ServerConnection.Connected)) {
-                NetUtils.SendEventData(ref m_ServerConnection, in events, false);
+                NetUtils.SendEventAsJson(ref m_ServerConnection, evt, false);
             }
             for (int i = 0; i < m_AcceptedConnections.Count; i++) {
                 TcpClient client = m_AcceptedConnections[i];
                 if (client.Connected) {
-                    NetUtils.SendEventData(ref client, in events, false);
+                    NetUtils.SendEventAsJson(ref client, evt, false);
                 }
             }
         }
@@ -105,7 +101,8 @@ namespace IVLab.MinVR3
             // receive any messages coming our way from the server
             if ((m_ServerConnection != null) && (m_ServerConnection.Connected)) {
                 while (m_ServerConnection.GetStream().DataAvailable) {
-                    NetUtils.ReceiveEventData(ref m_ServerConnection, ref events, false);
+                    VREvent evt = NetUtils.ReceiveEventAsJson(ref m_ServerConnection, false);
+                    events.Add(evt);
                 }
             }
 
@@ -113,7 +110,8 @@ namespace IVLab.MinVR3
             for (int i = 0; i < m_AcceptedConnections.Count; i++) {
                 TcpClient client = m_AcceptedConnections[i];
                 while (client.GetStream().DataAvailable) {
-                    NetUtils.ReceiveEventData(ref client, ref events, false);
+                    VREvent evt = NetUtils.ReceiveEventAsJson(ref client, false);
+                    events.Add(evt);
                 }
             }
 
@@ -144,7 +142,6 @@ namespace IVLab.MinVR3
         private TcpListener m_Listener;
         private List<TcpClient> m_AcceptedConnections;
         private TcpClient m_ServerConnection;
-
     }
 
 }

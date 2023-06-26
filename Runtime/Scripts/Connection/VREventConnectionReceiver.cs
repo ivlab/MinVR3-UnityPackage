@@ -28,6 +28,7 @@ namespace IVLab.MinVR3
     /// </summary>
     [RequireComponent(typeof(IVREventConnection))]
     [ExecuteInEditMode]
+    [AddComponentMenu("MinVR/Connection/VREventConnectionReceiver")]
     public class VREventConnectionReceiver : MonoBehaviour, IVREventProducer
     {
         [SerializeField, Tooltip("Events will be received over this connection.")]

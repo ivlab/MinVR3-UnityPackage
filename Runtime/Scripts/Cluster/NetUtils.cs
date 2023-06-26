@@ -55,15 +55,15 @@ namespace IVLab.MinVR3 {
                     Console.WriteLine("Exception: {0}", e);
                 }
                 if (!success) {
-                    Debug.Log($"Having trouble connecting to {serverIP}:{serverPort}.  Trying again ({retries})...");
-                    Console.WriteLine($"Having trouble connecting to {serverIP}:{serverPort}.  Trying again ({retries})...");
+                    Debug.Log($"NetUtils.ConnectToTcpServer(): Trouble connecting to {serverIP}:{serverPort}.  Trying again ({retries})...");
+                    Console.WriteLine($"NetUtils.ConnectToTcpServer(): Trouble connecting to {serverIP}:{serverPort}.  Trying again ({retries})...");
                     Thread.Sleep(500);
                     retries++;
                 }
 
                 if (retries >= 120) {
-                    Debug.Log("Giving up after trying for 1 minute.");
-                    Console.WriteLine("Giving up after trying for 1 minute.");
+                    Debug.Log("NetUtils.ConnectToTcpServer(): Giving up after trying for 1 minute.");
+                    Console.WriteLine("NetUtils.ConnectToTcpServer(): Giving up after trying for 1 minute.");
                     #if UNITY_EDITOR
                     UnityEditor.EditorApplication.isPlaying = false;
                     #else
@@ -84,7 +84,7 @@ namespace IVLab.MinVR3 {
             } catch (Exception e) {
                 Debug.Log(String.Format("Exception: {0}", e));
                 Console.WriteLine("Exception: {0}", e);
-                BrokenConnectionError(quitOnError, "Closing TCP client: " + e);
+                BrokenConnectionError(quitOnError, "NetUtils.CloseTcpClient(): " + e);
             }
         }
 
@@ -100,7 +100,7 @@ namespace IVLab.MinVR3 {
 
         public static void SendOneByteMessage(ref TcpClient client, byte[] message, bool quitOnError) {
             if (!client.Connected) {
-                BrokenConnectionError(quitOnError, "Send one byte message: client no longer connected");
+                BrokenConnectionError(quitOnError, "NetUtils.SendOneByteMessage(): Client no longer connected");
                 return;
             }
             // this message consists only of a 1-byte header
@@ -109,7 +109,7 @@ namespace IVLab.MinVR3 {
             }
             catch (Exception e) {
                 Console.WriteLine("Exception: {0}", e);
-                BrokenConnectionError(quitOnError, "Sent one byte message: " + e);
+                BrokenConnectionError(quitOnError, "NetUtils.SendOneByteMessage(): " + e);
             }
         }
 
@@ -131,7 +131,7 @@ namespace IVLab.MinVR3 {
             while (received[0] != message[0]) {
                 int status = -1;
                 if (!client.Connected) {
-                    BrokenConnectionError(quitOnError, "Receive one byte message: Client no longer connected");
+                    BrokenConnectionError(quitOnError, "NetUtils.ReceiveOneByteMessage(): Client no longer connected");
                     return;
                 }
                 try {
@@ -139,19 +139,19 @@ namespace IVLab.MinVR3 {
                 }
                 catch (Exception e) {
                     Console.WriteLine("Exception: {0}", e);
-                    BrokenConnectionError(quitOnError, "Receive one byte message: " + e);
+                    BrokenConnectionError(quitOnError, "NetUtils.ReceiveOneByteMessage(): " + e);
                     return;
                 }
                 if (status == -1) {
-                    Console.WriteLine("WaitForAndReceiveMessageHeader failed");
+                    Console.WriteLine("NetUtils.ReceiveOneByteMessage(): WaitForAndReceiveMessageHeader failed");
                     return;
                 }
                 else if ((status == 1) && (received[0] != message[0])) {
-                    Console.WriteLine("WaitForAndReceiveMessageHeader error: expected {0} got {1}", message[0], received[0]);
+                    Console.WriteLine("NetUtils.ReceiveOneByteMessage(): WaitForAndReceiveMessageHeader error: expected {0} got {1}", message[0], received[0]);
                     return;
                 }
                 if (stopwatch.Elapsed.TotalSeconds > 30) {
-                    BrokenConnectionError(quitOnError, "Receive one byte message: connection timed out");
+                    BrokenConnectionError(quitOnError, "NetUtils.ReceiveOneByteMessage(): Connection timed out");
                     return;
                 }
             }
@@ -169,27 +169,27 @@ namespace IVLab.MinVR3 {
 
 
 
-        // PART 2:  LARGER MESSAGES FOR SYNCING INPUT EVENTS
+        // PART 2a:  LARGER MESSAGES FOR SYNCING INPUT EVENTS (USING BINARY FORMATTER FOR CLUSTER MODE)
 
         public static void SendEventData(ref TcpClient client, in List<VREvent> inputEvents, bool quitOnError) {
             // Debug.Log("SendInputEvents");
 
             // 1. send 1-byte message header
             if (!client.Connected) {
-                BrokenConnectionError(quitOnError, "Sending event data: client no longer connected");
+                BrokenConnectionError(quitOnError, "NetUtils.SendEventData(): Client no longer connected");
                 return;
             }
             try {
                 client.GetStream().Write(NetUtils.INPUT_EVENTS_MSG, 0, 1);
             } catch (Exception e) {
                 Console.WriteLine("Exception: {0}", e);
-                BrokenConnectionError(quitOnError, "Sending event data: " + e);
+                BrokenConnectionError(quitOnError, "NetUtils.SendEventData(): " + e);
             }
 
 
             // 2. send event data
             if (!client.Connected) {
-                BrokenConnectionError(quitOnError, "Sending event data: client no longer connected");
+                BrokenConnectionError(quitOnError, "NetUtils.SendEventData(): Client no longer connected");
                 return;
             }
             try {
@@ -203,7 +203,7 @@ namespace IVLab.MinVR3 {
                 }
             } catch (Exception e) {
                 Console.WriteLine("Exception: {0}", e);
-                BrokenConnectionError(quitOnError, "Sending event data: " + e);
+                BrokenConnectionError(quitOnError, "NetUtils.SendEventData(): " + e);
             }
         }
 
@@ -220,7 +220,7 @@ namespace IVLab.MinVR3 {
                 byte[] bytes = new byte[dataSize];
                 int status = ReceiveAll(ref client, ref bytes, dataSize, quitOnError);
                 if (status == -1) {
-                    Console.WriteLine("ReceiveEventData error reading data");
+                    Console.WriteLine("NetUtils.ReceiveEventData(): error reading data");
                     return;
                 }
                 
@@ -233,10 +233,22 @@ namespace IVLab.MinVR3 {
             catch (Exception e) {
                 Debug.Log("Exception: " + e);
                 Console.WriteLine("Exception: {0}", e);
-                BrokenConnectionError(quitOnError, "Receiving event data: " + e);
+                BrokenConnectionError(quitOnError, "NetUtils.ReceiveEventData(): " + e);
             }
         }
 
+
+        // PART 2b:  LARGER MESSAGES FOR SYNCING INPUT EVENTS (USING JSON SERIALIZATION FOR CONNECTION MODE)
+        public static void SendEventAsJson(ref TcpClient client, in VREvent evt, bool quitOnError)
+        {
+            WriteString(ref client, JsonUtility.ToJson(evt), quitOnError);
+        }
+
+
+        public static VREvent ReceiveEventAsJson(ref TcpClient client, bool quitOnError)
+        {
+            return JsonUtility.FromJson<VREvent>(ReadString(ref client, quitOnError));
+        }
 
 
 
@@ -251,7 +263,7 @@ namespace IVLab.MinVR3 {
             stopwatch.Start();
             while (total < len) {
                 if (!client.Connected) {
-                    BrokenConnectionError(quitOnError, "Receiving all: client no longer connected");
+                    BrokenConnectionError(quitOnError, "NetUtils.ReceiveAll(): client no longer connected");
                     return -1;
                 }
                 try {
@@ -261,11 +273,11 @@ namespace IVLab.MinVR3 {
                 }
                 catch (Exception e) {
                     Console.WriteLine("Exception: {0}", e);
-                    BrokenConnectionError(quitOnError, "Receiving all: " + e);
+                    BrokenConnectionError(quitOnError, "NetUtils.ReceiveAll(): " + e);
                     return -1;
                 }
                 if (stopwatch.Elapsed.TotalSeconds > 5) {
-                    BrokenConnectionError(quitOnError, "Receiving all: timeout");
+                    BrokenConnectionError(quitOnError, "NetUtils.ReceiveAll(): timeout");
                     return -1;                        
                 }
             }
@@ -273,13 +285,46 @@ namespace IVLab.MinVR3 {
         }
 
 
+        public static void WriteUInt32(ref TcpClient client, UInt32 i, bool quitOnError)
+        {
+            if (!BitConverter.IsLittleEndian) {
+                i = SwapEndianness(i);
+            }
+            byte[] buf = BitConverter.GetBytes(i);
+            if (!client.Connected) {
+                BrokenConnectionError(quitOnError, "NetUtils.WriteUInt32(): client no longer connected");
+                return;
+            }
+            try {
+                client.GetStream().Write(buf, 0, 4);
+            } catch (Exception e) {
+                Console.WriteLine("Exception: {0}", e);
+                BrokenConnectionError(quitOnError, "NetUtils.WriteUInt32(): " + e);
+            }
+        }
+
+        public static UInt32 ReadUInt32(ref TcpClient client, bool quitOnError)
+        {
+            byte[] buf = new byte[4];
+            int status = ReceiveAll(ref client, ref buf, 4, quitOnError);
+            if (status == -1) {
+                Console.WriteLine("NetUtils.ReadUInt32(): error reading data");
+                return 0;
+            }
+            UInt32 i = BitConverter.ToUInt32(buf, 0);
+            if (!BitConverter.IsLittleEndian) {
+                i = SwapEndianness(i);
+            }
+            return i;
+        }
+
         public static void WriteInt32(ref TcpClient client, Int32 i, bool quitOnError) {
             if (!BitConverter.IsLittleEndian) {
                 i = SwapEndianness(i);
             }
             byte[] buf = BitConverter.GetBytes(i);
             if (!client.Connected) {
-                BrokenConnectionError(quitOnError, "Writing int32: client no longer connected");
+                BrokenConnectionError(quitOnError, "NetUtils.WriteInt32(): Client no longer connected");
                 return;
             }
             try {
@@ -287,7 +332,7 @@ namespace IVLab.MinVR3 {
             }
             catch (Exception e) {
                 Console.WriteLine("Exception: {0}", e);
-                BrokenConnectionError(quitOnError, "Writing int32: " + e);
+                BrokenConnectionError(quitOnError, "NetUtils.WriteInt32(): " + e);
             }
         }
 
@@ -295,7 +340,7 @@ namespace IVLab.MinVR3 {
             byte[] buf = new byte[4];
             int status = ReceiveAll(ref client, ref buf, 4, quitOnError);
             if (status == -1) {
-                Console.WriteLine("ReadInt32() error reading data");
+                Console.WriteLine("NetUtils.ReadInt32(): error reading data");
                 return 0;
             }
             Int32 i = BitConverter.ToInt32(buf, 0);
@@ -303,6 +348,38 @@ namespace IVLab.MinVR3 {
                 i = SwapEndianness(i);
             }
             return i;
+        }
+
+        public static void WriteString(ref TcpClient client, String s, bool quitOnError)
+        {
+            if (!client.Connected) {
+                BrokenConnectionError(quitOnError, "NetUtils.WriteString(): Client no longer connected");
+                return;
+            }
+            try {
+                // 1. send an unsigned int with the size of the string
+                WriteUInt32(ref client, (UInt32)s.Length, quitOnError);
+                // 3. send the raw bytes string
+                byte[] bytes = Encoding.ASCII.GetBytes(s);
+                client.GetStream().Write(bytes, 0, bytes.Length);
+            } catch (Exception e) {
+                Console.WriteLine("Exception: {0}", e);
+                BrokenConnectionError(quitOnError, "NetUtils.WriteString(): " + e);
+            }
+        }
+
+        public static String ReadString(ref TcpClient client, bool quitOnError)
+        {
+            // 1. read an unsigned int with the size of the string
+            int size = (int)ReadUInt32(ref client, quitOnError);
+            // 2. read raw bytes of the string
+            byte[] buf = new byte[size];
+            int status = ReceiveAll(ref client, ref buf, size, quitOnError);
+            if (status == -1) {
+                Console.WriteLine("NetUtils.ReadString(): error reading data");
+                return "";
+            }
+            return Encoding.ASCII.GetString(buf);
         }
 
         public static Int32 SwapEndianness(Int32 value) {
@@ -313,6 +390,14 @@ namespace IVLab.MinVR3 {
             return b1 << 24 | b2 << 16 | b3 << 8 | b4 << 0;
         }
 
+        public static UInt32 SwapEndianness(UInt32 value)
+        {
+            var b1 = (value >> 0) & 0xff;
+            var b2 = (value >> 8) & 0xff;
+            var b3 = (value >> 16) & 0xff;
+            var b4 = (value >> 24) & 0xff;
+            return b1 << 24 | b2 << 16 | b3 << 8 | b4 << 0;
+        }
 
         public static void BrokenConnectionError(bool quit, string info="") {
             Debug.LogError("Network connection broken: " + info);
