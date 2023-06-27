@@ -94,6 +94,11 @@ namespace IVLab.MinVR3
         private void ApplyWindowConfig()
         {
 #if UNITY_STANDALONE_WIN || UNITY_EDITOR
+            if (setFullscreenMode)
+            {
+                Screen.SetResolution(width, height, fullScreenMode, refreshRate);
+            }
+
             if (setWindowPositionAndSize)
             {
                 // set the window position and size
@@ -111,11 +116,6 @@ namespace IVLab.MinVR3
             {
                 WindowUtility.SetWindowTitle(windowTitle);
                 Debug.Log("Set window title to `" + windowTitle + "`");
-            }
-
-            if (setFullscreenMode)
-            {
-                Screen.SetResolution(width, height, fullScreenMode, refreshRate);
             }
 #endif
             

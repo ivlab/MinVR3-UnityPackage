@@ -302,6 +302,7 @@ START ""Floor Wall"" {Application.productName}.exe -vrmode stereo -vrconfig ""Fl
                 wcfg.height = MultiWindowHeight;
                 wcfg.showWindowBorders = ShowWindowBorders;
                 wcfg.windowTitle = wallName;
+                wcfg.fullScreenMode = FullScreenMode.Windowed;
 
                 // Setup camera
                 var cam = wall.AddComponent<Camera>();
