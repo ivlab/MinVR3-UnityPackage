@@ -52,7 +52,18 @@ namespace IVLab.MinVR3
         private const string ClusterServerIP = "127.0.0.1";
         private const int ClusterServerPort = 3490;
 
-        //[MenuItem("GameObject/MinVR/VRConfig/VRConfig_UMN CAVE 3-Wall (Single Window)", false, MenuHelpers.vrConfigSec1Priority)]
+        private const string LauncherScriptName = "LaunchCave4Wall.bat";
+        private static string LauncherScript { get => $@"@rem Start one graphics program per wall
+START ""Left Wall"" {Application.productName}.exe -vrmode stereo -vrconfig ""Left Wall (Server)"" -logFile .\left.log
+TIMEOUT /t 5
+START ""Front Wall"" {Application.productName}.exe -vrmode stereo -vrconfig ""Front Wall (Client)""  -logFile .\front.log
+TIMEOUT /t 5
+START ""Right Wall"" {Application.productName}.exe -vrmode stereo -vrconfig ""Right Wall (Client)"" -logFile .\right.log
+TIMEOUT /t 5
+START ""Floor Wall"" {Application.productName}.exe -vrmode stereo -vrconfig ""Floor Wall (Client)"" -logFile .\floor.log
+"; }
+
+        // [MenuItem("GameObject/MinVR/VRConfig/VRConfig_UMN CAVE 3-Wall (Single Window)", false, MenuHelpers.vrConfigSec1Priority)]
         public static void CreateVRConfig3WallCaveSingleWindow(MenuCommand command)
         {
             CreateCaveConfigSingleWindow(3, command);
@@ -188,7 +199,6 @@ namespace IVLab.MinVR3
 
         // set up a 4 wall, 4-window cave
         [MenuItem("GameObject/MinVR/VRConfig/VRConfig_UMN CAVE 4-Wall (4-Window, Default)", false, MenuHelpers.vrConfigSec1Priority)]
-
         private static void CreateCaveConfigClustered(MenuCommand command)
         {
             MenuHelpers.CreateVREngineIfNeeded();
@@ -199,6 +209,12 @@ namespace IVLab.MinVR3
             // Create root object
             GameObject parentObject = command.context as GameObject;
             GameObject caveRoot = new GameObject("UMNCave-4Wall");
+
+            // Add launcher script copyer
+            CreateTextFileOnPostBuild buildScript = caveRoot.AddComponent<CreateTextFileOnPostBuild>();
+            buildScript.settings.copyLocation = CreateTextFileOnPostBuild.PostBuildCopyLocation.BuildFolder;
+            buildScript.settings.fileName = LauncherScriptName;
+            buildScript.settings.fileText = LauncherScript;
 
             if (parentObject != null)
             {

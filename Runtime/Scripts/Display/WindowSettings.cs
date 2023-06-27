@@ -30,6 +30,13 @@ namespace IVLab.MinVR3
         [SerializeField, Tooltip("Show the window decorations or not")]
         public bool showWindowBorders = true;
 
+        [SerializeField]
+        public bool setFullscreenMode = true;
+        [SerializeField, Tooltip("Control the fullscreen mode of the application")]
+        public FullScreenMode fullScreenMode;
+        [SerializeField, Tooltip("Control the desired refresh rate of the application (0 = default / max)")]
+        public int refreshRate = 0;
+
         [Header("When to Apply Window Configuration")]
         [SerializeField, Tooltip("When in the MonoBehaviour lifecycle to apply the configuration specified above")]
         public ApplyConfigTiming applyConfigTiming = ApplyConfigTiming.OnEnable;
@@ -104,6 +111,11 @@ namespace IVLab.MinVR3
             {
                 WindowUtility.SetWindowTitle(windowTitle);
                 Debug.Log("Set window title to `" + windowTitle + "`");
+            }
+
+            if (setFullscreenMode)
+            {
+                Screen.SetResolution(width, height, fullScreenMode, refreshRate);
             }
 #endif
             
