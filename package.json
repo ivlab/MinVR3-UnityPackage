@@ -39,6 +39,11 @@
             "displayName": "TcpConnectionTest",
             "description": "A simple example of using VREventConnections to share some VREvents generated in one MinVR app with other MinVR apps.  Shows how one VR user can be the 'driver', in control of an application, and other users running their own instances of the app can receive input from the 'driver's' hands.",
             "path": "Samples~/TcpConnectionTest"
+        },
+        {
+            "displayName": "UMNCaveCalibration",
+            "description": "A test app to ensure all parts of the UMN CAVE are working correctly -- tracking, button presses, and sound",
+            "path": "Samples~/UMNCaveCalibration"
         }
     ]
 }
