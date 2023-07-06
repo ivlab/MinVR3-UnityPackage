@@ -27,7 +27,7 @@ public class TestSpatialAudio : MonoBehaviour
                 // Make sure is initialized
                 SpatialAudioClient.GetInstance();
 
-                // # EXAMPLE 1: TESTING THE SIMPLE API
+                Debug.Log("# EXAMPLE 1: TESTING THE SIMPLE API");
                 // # start a background sound on loop
                 SpatialAudioClient.GetInstance().LoopSimple("testloop.wav");
 
@@ -49,7 +49,7 @@ public class TestSpatialAudio : MonoBehaviour
                 SpatialAudioClient.Instance.StopSimple("testloop.wav");
 
 
-                // # EXAMPLE 2: USE THE SPATIAL API WITH A MOVING LISTENER AND STATIONARY SOURCE (SHOULD SOUND LIKE BEEP MOVES FROM RIGHT TO LEFT)
+                Debug.Log("# EXAMPLE 2: USE THE SPATIAL API WITH A MOVING LISTENER AND STATIONARY SOURCE (SHOULD SOUND LIKE BEEP MOVES FROM RIGHT TO LEFT)");
                 // # move listener to -10,0,0
                 Vector3 pos = new Vector3(-10, 0, 0);
                 SpatialAudioClient.Instance.SetListenerPosition(pos);
@@ -69,6 +69,55 @@ public class TestSpatialAudio : MonoBehaviour
                 SpatialAudioClient.Instance.StopSource(11);
                 // # deleting the source (will also stop it, so prev command is not technically necessary here)
                 SpatialAudioClient.Instance.DeleteSource(11);
+
+
+
+                Debug.Log("# EXAMPLE 3: USE THE SPATIAL API WITH A MOVING SOURCE, SET VELOCITY TO GET DOPPLER EFFECT (SHOULD SOUND LIKE BEEP MOVES LEFT TO RIGHT)");
+
+                // # move listener to 0,0,0
+                SpatialAudioClient.Instance.SetListenerPosition(Vector3.zero);
+
+                // # create a repeating beep that moves from left to right with a velocity of 1 unit for every 0.1 seconds
+                pos = new Vector3(-10, 0, 0);
+                SpatialAudioClient.Instance.CreateSource(10, "beep-02.wav", pos, true);
+
+                // # move it from left to right 
+                while (pos.x < 10.0f)
+                {
+                    SpatialAudioClient.Instance.SetSourcePosition(10, pos);
+                    pos.x += 1.0f;
+                    Thread.Sleep(100);
+                }
+
+                
+                // # stop the source
+                SpatialAudioClient.Instance.StopSource(10);
+
+                // # delete the source (will also stop it, so prev command is not technically necessary here)
+                SpatialAudioClient.Instance.DeleteSource(10);
+
+
+                Debug.Log("# EXAMPLE 4: CHANGE SOURCE PARAMETERS, LIKE PITCH");
+
+                // # create a repeating beep
+                SpatialAudioClient.Instance.CreateSource(12, "beep-01.wav");
+
+                // # change pitch
+                float p = 0.5f;
+                for (int i = 0; i < 10; i++)
+                {
+                    SpatialAudioClient.Instance.SetSourcePitch(12, p);
+                    Thread.Sleep(100);
+                    p += 0.1f;
+                }
+
+                // # stop the source
+                SpatialAudioClient.Instance.StopSource(12);
+
+                // # delete the source (will also stop it, so prev command is not technically necessary here)
+                SpatialAudioClient.Instance.DeleteSource(12);
+
+                Debug.Log("Finished testing audio");
             }
             catch (System.Exception e)
             {

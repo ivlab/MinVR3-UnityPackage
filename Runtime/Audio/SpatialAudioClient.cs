@@ -42,7 +42,7 @@ namespace IVLab.MinVR3
         private void MakeAudioRequest(string target, Dictionary<string, string> parameters)
         {
             string[] parameterPairs = parameters.Select(kv => kv.Key + "=" + kv.Value).ToArray();
-            string parameterString = string.Join("?", parameterPairs);
+            string parameterString = string.Join("&", parameterPairs);
             Task t = Task.Run(() => client.GetAsync(target + "?" + parameterString));
             t.Wait();
         }
@@ -50,7 +50,7 @@ namespace IVLab.MinVR3
         private void MakeAudioRequest(string target, Dictionary<string, float> parameters)
         {
             string[] parameterPairs = parameters.Select(kv => kv.Key + "=" + kv.Value).ToArray();
-            string parameterString = string.Join("?", parameterPairs);
+            string parameterString = string.Join("&", parameterPairs);
             Task t = Task.Run(() => client.GetAsync(target + "?" + parameterString));
             t.Wait();
         }
@@ -115,9 +115,6 @@ namespace IVLab.MinVR3
 #endregion
 
 #region Source Methods
-        // TODO: Source methods not working:
-        // server gives "Missing id parameter"
-
         public void CreateSource(int sourceID, string soundFile)
         {
             MakeAudioRequest("create_source", new Dictionary<string, string>
