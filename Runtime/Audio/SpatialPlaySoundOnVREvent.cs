@@ -32,15 +32,8 @@ namespace IVLab.MinVR3
 
         void OnDisable()
         {
-            Debug.Log("Disable spatial sound vrevent " + Time.frameCount);
             VREngine.Instance?.eventManager?.RemoveEventListener(this);
-            Debug.Log(audioClient);
             audioClient.DeleteSource(sourceID);
-        }
-
-        void OnDestroy()
-        {
-            Debug.Log("Destroy spatial sound vrevent + " + Time.frameCount);
         }
 
         void Start()

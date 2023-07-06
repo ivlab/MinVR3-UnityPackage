@@ -20,6 +20,9 @@ namespace IVLab.MinVR3
         [SerializeField, Tooltip("Spatial audio server address to connect to (sound_server.py)")]
         public string serverAddress = "http://localhost:8000";
 
+        [SerializeField, Tooltip("Reset the audio server on startup")]
+        public bool resetServerOnStartup = true;
+
         public const int ScriptPriority = VREngine.ScriptPriority + 1;
 
 
@@ -39,18 +42,13 @@ namespace IVLab.MinVR3
                 {
                     Debug.Log("Connected to spatial audio server " + serverAddress + $" (status {response.Result.StatusCode})");
                     clientInitialized = true;
+
+                    if (resetServerOnStartup)
+                    {
+                        ResetAudio();
+                    }
                 }
             );
-        }
-
-        void OnDisable()
-        {
-            Debug.Log("OnDisable " + this.GetType().Name);
-        }
-
-        void OnDestroy()
-        {
-            Debug.Log("OnDestroy " + this.GetType().Name);
         }
 
         /// <summary>
