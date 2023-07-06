@@ -11,14 +11,16 @@ namespace IVLab.MinVR3 {
         [Tooltip("Prefab of axes geometry to use as a cursor.  If the GameObject has a TextMesh component, the text will be set to the tracker name.")]
         public GameObject cursorPrefab;
 
+        public float cursorSize = 0.1f;
+
         [Serializable]
         public class TrackerDescription {
             public TrackerDescription()
             {
                 displayName = "Unknown Tracker (" + counter + ")";
                 counter++;
-                positionEvent = new VREventPrototypeVector3();
-                rotationEvent = new VREventPrototypeQuaternion();
+                positionEvent = VREventPrototypeVector3.Create("(none)");
+                rotationEvent = VREventPrototypeQuaternion.Create("(none)");
             }
             public string displayName;
             public VREventPrototypeVector3 positionEvent;
@@ -29,13 +31,22 @@ namespace IVLab.MinVR3 {
         [Tooltip("Add an entry for each tracker you wish to display.")]
         public List<TrackerDescription> trackers;
 
+        void Reset()
+        {
+            trackers = new List<TrackerDescription>();
+
+            TrackerDescription example = new TrackerDescription();
+            trackers.Add(example);
+        }
         
         private void OnEnable()
         {
+            VREngine.Instance.eventManager.AddEventListener(this);
         }
 
         private void OnDisable()
         {
+            VREngine.Instance?.eventManager?.RemoveEventListener(this);
         }
 
         public void OnVREvent(VREvent vrEvent)
@@ -44,6 +55,7 @@ namespace IVLab.MinVR3 {
                 if ((vrEvent.Matches(t.positionEvent)) || (vrEvent.Matches(t.rotationEvent))) {
                     if (!cursors.ContainsKey(t.displayName)) {
                         GameObject newCursorObj = Instantiate(cursorPrefab);
+                        newCursorObj.transform.localScale = Vector3.one * cursorSize;
                         TextMesh label = newCursorObj.GetComponentInChildren<TextMesh>();
                         if (label != null) {
                             label.text = t.displayName;
@@ -60,21 +72,12 @@ namespace IVLab.MinVR3 {
             }
         }
 
-        public bool IsListening()
-        {
-            return m_Listening;
-        }
-
         public void StartListening()
         {
-            VREngine.Instance.eventManager.AddEventListener(this);
-            m_Listening = true;
         }
 
         public void StopListening()
         {
-            VREngine.Instance?.eventManager?.RemoveEventListener(this);
-            m_Listening = false;
         }
 
 

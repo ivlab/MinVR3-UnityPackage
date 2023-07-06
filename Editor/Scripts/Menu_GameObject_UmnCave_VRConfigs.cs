@@ -305,20 +305,16 @@ START ""Floor Wall"" {Application.productName}.exe -vrmode stereo -vrconfig ""Fl
                 wcfg.fullScreenMode = FullScreenMode.Windowed;
 
                 // Setup camera
-                var cam = wall.AddComponent<Camera>();
+                GameObject dispDevices = new GameObject("Display Devices");
+                dispDevices.transform.SetParent(wall.transform);
+                var cam = dispDevices.AddComponent<Camera>();
                 cam.rect = new Rect(0.0f, 0.0f, 1.0f, 1.0f);
                 cam.stereoSeparation = StereoSeparation;
                 cam.nearClipPlane = CameraNearPlane;
                 cam.tag = CameraTag;
 
-                // avoid a bunch of C floating point errors when camera is on the floor
-                if (wallNameList[i].Contains("Floor"))
-                {
-                    cam.transform.position = new Vector3(0, 0.001f, 0);
-                }
-
                 // Setup tracked projection screen (off axis projection)
-                var tps = wall.AddComponent<TrackedProjectionScreen>();
+                var tps = dispDevices.AddComponent<TrackedProjectionScreen>();
                 tps.trackingSpaceCorners = cornerList[i];
                 tps.debugColor = Color.Lerp(Color.white, Color.green, i / (float)wallNameList.Length);
 

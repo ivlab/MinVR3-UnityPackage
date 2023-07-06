@@ -23,6 +23,16 @@ namespace IVLab.MinVR3
         [SerializeField, Tooltip("Reset the audio server on startup")]
         public bool resetServerOnStartup = true;
 
+
+        // NOTE: This is a guess based on what sounded right in the CAVE...
+        // a right-handed +y-up +z-forward coord system theoretically shouldn't exist though.
+        [SerializeField, Tooltip("Coordinate system to output sound coordinates to")]
+        public CoordConversion.CoordSystem outputCoordSystem = new CoordConversion.CoordSystem(
+            CoordConversion.CoordSystem.Handedness.RightHanded,
+            CoordConversion.CoordSystem.Axis.PosY,
+            CoordConversion.CoordSystem.Axis.PosZ
+        );
+
         public const int ScriptPriority = VREngine.ScriptPriority + 1;
 
 
@@ -92,6 +102,7 @@ namespace IVLab.MinVR3
 
         public void SetListenerPosition(Vector3 v)
         {
+            v = CoordConversion.FromUnity(v, outputCoordSystem);
             MakeAudioRequest("listener_param", new Dictionary<string, float>
             {
                 { "x", v.x },
@@ -102,6 +113,7 @@ namespace IVLab.MinVR3
 
         public void SetListenerVelocity(Vector3 v)
         {
+            v = CoordConversion.FromUnity(v, outputCoordSystem);
             MakeAudioRequest("listener_param", new Dictionary<string, float>
             {
                 { "vx", v.x },
@@ -112,6 +124,7 @@ namespace IVLab.MinVR3
 
         public void SetListenerFront(Vector3 v)
         {
+            v = CoordConversion.FromUnity(v, outputCoordSystem);
             MakeAudioRequest("listener_param", new Dictionary<string, float>
             {
                 { "frontx", v.x },
@@ -122,6 +135,7 @@ namespace IVLab.MinVR3
 
         public void SetListenerUp(Vector3 v)
         {
+            v = CoordConversion.FromUnity(v, outputCoordSystem);
             MakeAudioRequest("listener_param", new Dictionary<string, float>
             {
                 { "upx", v.x },
@@ -149,6 +163,7 @@ namespace IVLab.MinVR3
 
         public void CreateSource(int sourceID, string soundFile, Vector3 position)
         {
+            position = CoordConversion.FromUnity(position, outputCoordSystem);
             MakeAudioRequest("create_source", new Dictionary<string, string>
             {
                 { "id", sourceID.ToString() },
@@ -161,6 +176,7 @@ namespace IVLab.MinVR3
 
         public void CreateSource(int sourceID, string soundFile, Vector3 position, bool looping)
         {
+            position = CoordConversion.FromUnity(position, outputCoordSystem);
             MakeAudioRequest("create_source", new Dictionary<string, string>
             {
                 { "id", sourceID.ToString() },
@@ -174,6 +190,7 @@ namespace IVLab.MinVR3
 
         public void SetSourcePosition(int sourceID, Vector3 v)
         {
+            v = CoordConversion.FromUnity(v, outputCoordSystem);
             MakeAudioRequest("source_param", new Dictionary<string, float>
             {
                 { "id", sourceID },
@@ -185,6 +202,7 @@ namespace IVLab.MinVR3
 
         public void SetSourceVelocity(int sourceID, Vector3 v)
         {
+            v = CoordConversion.FromUnity(v, outputCoordSystem);
             MakeAudioRequest("source_param", new Dictionary<string, float>
             {
                 { "id", sourceID },
@@ -196,6 +214,7 @@ namespace IVLab.MinVR3
 
         public void SetSourceFront(int sourceID, Vector3 v)
         {
+            v = CoordConversion.FromUnity(v, outputCoordSystem);
             MakeAudioRequest("source_param", new Dictionary<string, float>
             {
                 { "id", sourceID },
@@ -207,6 +226,7 @@ namespace IVLab.MinVR3
 
         public void SetSourceUp(int sourceID, Vector3 v)
         {
+            v = CoordConversion.FromUnity(v, outputCoordSystem);
             MakeAudioRequest("source_param", new Dictionary<string, float>
             {
                 { "id", sourceID },
@@ -218,6 +238,7 @@ namespace IVLab.MinVR3
 
         public void SetSourceDirection(int sourceID, Vector3 v)
         {
+            v = CoordConversion.FromUnity(v, outputCoordSystem);
             MakeAudioRequest("source_param", new Dictionary<string, float>
             {
                 { "id", sourceID },

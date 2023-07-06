@@ -25,6 +25,8 @@ namespace IVLab.MinVR3
         private Vector3 sourcePosition;
         private SpatialAudioClient audioClient;
 
+        private static int SourceCount = 0;
+
         void OnEnable()
         {
             VREngine.Instance.eventManager.AddEventListener(this);
@@ -39,7 +41,8 @@ namespace IVLab.MinVR3
         void Start()
         {
             // Create the audio source.
-            sourceID = (int) System.DateTimeOffset.Now.ToUnixTimeSeconds();
+            sourceID = (int) System.DateTimeOffset.Now.ToUnixTimeSeconds() + SourceCount;
+            SourceCount += 1;
             audioClient = this.GetComponent<SpatialAudioClient>();
             Task.Run(() =>
             {
