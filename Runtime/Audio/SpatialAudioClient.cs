@@ -40,6 +40,9 @@ namespace IVLab.MinVR3
         private bool clientInitialized = false;
         public bool Initialized { get => clientInitialized; }
 
+        public Task WaitForInitialized() { return waitForInitialized; }
+        private Task waitForInitialized;
+
         protected void Awake()
         {
             client = new HttpClient
@@ -47,15 +50,24 @@ namespace IVLab.MinVR3
                 BaseAddress = new System.Uri(serverAddress)
             };
 
-            client.GetAsync("").ContinueWith(
-                (response) =>
+            waitForInitialized = client.GetAsync("").ContinueWith(
+                (prevTask) =>
                 {
-                    Debug.Log("Connected to spatial audio server " + serverAddress + $" (status {response.Result.StatusCode})");
-                    clientInitialized = true;
-
-                    if (resetServerOnStartup)
+                    try
                     {
-                        ResetAudio();
+                        var response = prevTask.Result;
+
+                        Debug.Log("Connected to spatial audio server " + serverAddress + $" (status {response.StatusCode})");
+                        clientInitialized = true;
+
+                        if (resetServerOnStartup)
+                        {
+                            ResetAudio();
+                        }
+                    }
+                    catch (System.Exception e)
+                    {
+                        Debug.LogError("Unable to connect to spatial audio server " + serverAddress + $" ({e.InnerException.Message})");
                     }
                 }
             );
@@ -64,28 +76,30 @@ namespace IVLab.MinVR3
         /// <summary>
         /// Make a request to the server
         /// </summary>
-        private void MakeAudioRequest(string target, Dictionary<string, string> parameters)
+        private bool MakeAudioRequest(string target, Dictionary<string, string> parameters)
         {
             if (!clientInitialized)
             {
-                throw new System.Exception("Spatial audio client not initialized");
+                return false;
             }
             string[] parameterPairs = parameters.Select(kv => kv.Key + "=" + kv.Value).ToArray();
             string parameterString = string.Join("&", parameterPairs);
             Task t = Task.Run(() => client.GetAsync(target + "?" + parameterString));
             t.Wait();
+            return true;
         }
 
-        private void MakeAudioRequest(string target, Dictionary<string, float> parameters)
+        private bool MakeAudioRequest(string target, Dictionary<string, float> parameters)
         {
             if (!clientInitialized)
             {
-                throw new System.Exception("Spatial audio client not initialized");
+                return false;
             }
             string[] parameterPairs = parameters.Select(kv => kv.Key + "=" + kv.Value).ToArray();
             string parameterString = string.Join("&", parameterPairs);
             Task t = Task.Run(() => client.GetAsync(target + "?" + parameterString));
             t.Wait();
+            return true;
         }
 
         private void MakeAudioRequest(string target)

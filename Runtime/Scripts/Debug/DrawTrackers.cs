@@ -11,6 +11,9 @@ namespace IVLab.MinVR3 {
         [Tooltip("Prefab of axes geometry to use as a cursor.  If the GameObject has a TextMesh component, the text will be set to the tracker name.")]
         public GameObject cursorPrefab;
 
+        [Tooltip("Display the tracking info (position and rotation) on the text box")]
+        public bool showTrackingInfo = false;
+
         public float cursorSize = 0.1f;
 
         [Serializable]
@@ -56,10 +59,6 @@ namespace IVLab.MinVR3 {
                     if (!cursors.ContainsKey(t.displayName)) {
                         GameObject newCursorObj = Instantiate(cursorPrefab);
                         newCursorObj.transform.localScale = Vector3.one * cursorSize;
-                        TextMesh label = newCursorObj.GetComponentInChildren<TextMesh>();
-                        if (label != null) {
-                            label.text = t.displayName;
-                        }
                         cursors[t.displayName] = newCursorObj;
                     }
                     GameObject cursorObj = cursors[t.displayName];
@@ -68,22 +67,30 @@ namespace IVLab.MinVR3 {
                     } else if (vrEvent.Matches(t.rotationEvent)) {
                         cursorObj.transform.rotation = vrEvent.GetData<Quaternion>();
                     }
+                    TextMesh label = cursorObj.GetComponentInChildren<TextMesh>();
+                    if (label != null) {
+                        if (!showTrackingInfo)
+                        {
+                            label.text = t.displayName;
+                        }
+                        else
+                        {
+                            label.text = "name: " + t.displayName;
+                            label.text += "\nposition: " + cursorObj.transform.position.ToString("F3");
+                            label.text += "\nrotation: " + cursorObj.transform.rotation.eulerAngles.ToString("F0");
+                        }
+                    }
                 }
             }
         }
 
-        public void StartListening()
-        {
-        }
+        public void StartListening() { }
 
-        public void StopListening()
-        {
-        }
+        public void StopListening() { }
 
 
         // map tracker names to game objects
         [NonSerialized] private Dictionary<string, GameObject> cursors = new Dictionary<string, GameObject>();
-        [NonSerialized] private bool m_Listening = false;
     }
 
 } // namespace

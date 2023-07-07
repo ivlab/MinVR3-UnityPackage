@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace IVLab.MinVR3
 {
@@ -24,6 +25,8 @@ namespace IVLab.MinVR3
         private Vector3 listenerPosition;
         private Vector3 sourcePosition;
         private SpatialAudioClient audioClient;
+        private Task connectionTask;
+        private CancellationTokenSource connectTaskTokenSource;
 
         private static int SourceCount = 0;
 
@@ -36,6 +39,7 @@ namespace IVLab.MinVR3
         {
             VREngine.Instance?.eventManager?.RemoveEventListener(this);
             audioClient.DeleteSource(sourceID);
+            connectTaskTokenSource.Cancel();
         }
 
         void Start()
@@ -44,16 +48,21 @@ namespace IVLab.MinVR3
             sourceID = (int) System.DateTimeOffset.Now.ToUnixTimeSeconds() + SourceCount;
             SourceCount += 1;
             audioClient = this.GetComponent<SpatialAudioClient>();
-            Task.Run(() =>
-            {
-                // wait for client to initialize
-                while (!audioClient.Initialized)
-                {
-                    System.Threading.Thread.Sleep(10);
-                }
 
-                audioClient.CreateSource(sourceID, soundFileName);
-            });
+            connectTaskTokenSource = new CancellationTokenSource();
+            Task.Run(async () =>
+            {
+                try
+                {
+                    await audioClient.WaitForInitialized();
+
+                    audioClient.CreateSource(sourceID, soundFileName);
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogError(e);
+                }
+            }, connectTaskTokenSource.Token);
         }
 
         public void OnVREvent(VREvent evt)
