@@ -28,14 +28,15 @@
           "api/**.yml",
           "api/**.md",
           "manual/**.yml",
-          "manual/**.md",
+          "manual/**.md"
         ]
-      },
+      }
     ],
     "resource": [
       {
         "files": [
-          "resources/**"
+          "resources/**",
+          "manual/resources/**"
         ]
       }
     ],

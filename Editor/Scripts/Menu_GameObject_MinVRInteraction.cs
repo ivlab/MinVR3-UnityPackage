@@ -76,6 +76,32 @@ namespace IVLab.MinVR3
             Selection.activeGameObject = cursorRoot;
         }
 
+        [MenuItem("GameObject/MinVR Interaction/Cursors/Small Cone (Dominant Hand)", false, MenuHelpers.mvriItemPriority)]
+        public static void CreateInteractionCone(MenuCommand command)
+        {
+            MenuHelpers.CreateVREngineIfNeeded();
+            MenuHelpers.CreateRoomSpaceOriginIfNeeded();
+
+            // unless user has explicitly parented to another object, Cursors should be parented
+            // to the Room Space Origin, since tracking data are provided in that coordiante frame.
+            GameObject parent = command.context as GameObject;
+            if (parent == null) {
+                // find RoomSpaceOrigin should never fail here since we create it if needed above
+                parent = FindObjectOfType<RoomSpaceOrigin>().gameObject;
+            }
+
+            GameObject cursorRoot = MenuHelpers.CreateAndPlaceGameObject("Small Cone (Dominant Hand)", parent, typeof(TrackedPoseDriver));
+            TrackedPoseDriver poseDriver = cursorRoot.GetComponent<TrackedPoseDriver>();
+            poseDriver.positionEvent = VREventPrototypeVector3.Create("DH/Position");
+            poseDriver.rotationEvent = VREventPrototypeQuaternion.Create("DH/Rotation");
+
+            GameObject coneObj = Instantiate(Resources.Load<GameObject>("Models/cone"));
+            coneObj.transform.SetParent(cursorRoot.transform);
+            coneObj.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
+
+            Selection.activeGameObject = cursorRoot;
+        }
+
         [MenuItem("GameObject/MinVR Interaction/Cursors/Small Cube (Non-Dominant Hand)", false, MenuHelpers.mvriItemPriority)]
         public static void CreateInteractionSmallCubeCursor(MenuCommand command)
         {
@@ -96,6 +122,7 @@ namespace IVLab.MinVR3
             poseDriver.rotationEvent = VREventPrototypeQuaternion.Create("NDH/Rotation");
 
             GameObject cubeObj = MenuHelpers.CreateAndPlacePrimitive("Cube Model", cursorRoot, PrimitiveType.Cube);
+            DestroyImmediate(cubeObj.GetComponentInChildren<BoxCollider>());
             cubeObj.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
 
             Selection.activeGameObject = cursorRoot;

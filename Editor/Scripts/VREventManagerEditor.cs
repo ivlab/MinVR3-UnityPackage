@@ -36,23 +36,32 @@ namespace IVLab.MinVR3
                     MessageType.Info
                 );
 
-                MonoBehaviour[] eventProducers = Resources.FindObjectsOfTypeAll<MonoBehaviour>().Where(m => m.GetComponent<IVREventProducer>() != null).ToArray();
+                GameObject[] eventProducerObjects = Resources.FindObjectsOfTypeAll<MonoBehaviour>()
+                    .Where(m => m.GetComponent<IVREventProducer>() != null)
+                    .Select(m => m.gameObject).ToArray();
 
-                var objectEventLists = new Dictionary<GameObject, List<IVREventPrototype>>();
-                foreach (var producer in eventProducers) {
-                    var expectedFromThisSource = producer.GetComponent<IVREventProducer>().GetEventPrototypes();
-                    if (objectEventLists.ContainsKey(producer.gameObject))
-                    {
-                        objectEventLists[producer.gameObject].AddRange(expectedFromThisSource);
-                    }
-                    else
-                    {
-                        objectEventLists[producer.gameObject] = expectedFromThisSource;
-                    }
+                HashSet<GameObject> eventProducerObjectsUnique = new HashSet<GameObject>(eventProducerObjects);
 
-                    if (!gameObjectToggles.ContainsKey(producer.gameObject))
+                // Unique event lists per GameObject
+                var objectEventLists = new Dictionary<GameObject, HashSet<IVREventPrototype>>();
+                foreach (var producerObject in eventProducerObjectsUnique) {
+                    var producers = producerObject.GetComponents<IVREventProducer>();
+                    foreach (var producer in producers)
                     {
-                        gameObjectToggles[producer.gameObject] = false;
+                        var expectedFromThisSource = producer.GetEventPrototypes();
+                        if (objectEventLists.ContainsKey(producerObject.gameObject))
+                        {
+                            objectEventLists[producerObject.gameObject].UnionWith(expectedFromThisSource);
+                        }
+                        else
+                        {
+                            objectEventLists[producerObject.gameObject] = new HashSet<IVREventPrototype>(expectedFromThisSource);
+                        }
+
+                        if (!gameObjectToggles.ContainsKey(producerObject.gameObject))
+                        {
+                            gameObjectToggles[producerObject.gameObject] = false;
+                        }
                     }
                 }
 

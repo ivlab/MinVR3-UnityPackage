@@ -2,6 +2,8 @@
   href: 01-intro.md
 - name: Installation
   href: 02-install.md
+- name: Tutorial - Basic Bimanual Manipulation
+  href: tutorial-basic-bimanual-manipulation.md
 - name: Optional Plugin Packages
   href: 03-plugin-packages.md
 - name: VR Coordinate Spaces

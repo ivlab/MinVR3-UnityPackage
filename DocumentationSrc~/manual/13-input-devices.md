@@ -16,7 +16,7 @@ Classes that connect to hardware input devices or their software drivers to capt
 #### 6-DOF Trackers, XR Controllers
 @IVLab.MinVR3.UnityXR - Converts tracking, button, and axis data from devices supported by Unity's XRInputSubsystem into VREvents.
 
-VRPN [Requires VRPN Plugin Package] - Support is planned for VRPN; it exists in MinVR2 and just needs to be ported over.
+VRPN [Requires VRPN Plugin Package](03-plugin-packages.md) - Connect to Virtual Reality Peripheral Network (VRPN) devices -- trackers, buttons, and analogs.
 
 @IVLab.MinVR3.zSpace [Requires zSpace Plugin Package, which runs on Unity2019 only] - Support for the zSpace Device.  Converts tracking data for the head and tracking and button data for the 3D pen to VREvents.
 
