@@ -19,6 +19,7 @@ namespace IVLab.MinVR3
         public void Send(in VREvent evt)
         {
             if ((m_ServerConnection != null) && (m_ServerConnection.Connected)) {
+                //Debug.Log("Sending event");
                 NetUtils.SendEventAsJson(ref m_ServerConnection, evt, false);
             }
             for (int i = 0; i < m_AcceptedConnections.Count; i++) {
@@ -101,8 +102,11 @@ namespace IVLab.MinVR3
             // receive any messages coming our way from the server
             if ((m_ServerConnection != null) && (m_ServerConnection.Connected)) {
                 while (m_ServerConnection.GetStream().DataAvailable) {
+                    //Debug.Log("Receiving event");
                     VREvent evt = NetUtils.ReceiveEventAsJson(ref m_ServerConnection, false);
-                    events.Add(evt);
+                    if (evt != null) {
+                        events.Add(evt);
+                    }
                 }
             }
 
@@ -110,14 +114,17 @@ namespace IVLab.MinVR3
             for (int i = 0; i < m_AcceptedConnections.Count; i++) {
                 TcpClient client = m_AcceptedConnections[i];
                 while (client.GetStream().DataAvailable) {
+                    //Debug.Log("Receiving event");
                     VREvent evt = NetUtils.ReceiveEventAsJson(ref client, false);
-                    events.Add(evt);
+                    if (evt != null) {
+                        events.Add(evt);
+                    }
                 }
             }
 
             // invoke the callback from the interface for each new event received
             foreach (var evt in events) {
-                OnVREventReceived.Invoke(evt);
+                OnVREventReceived?.Invoke(evt);
             }
         }
 

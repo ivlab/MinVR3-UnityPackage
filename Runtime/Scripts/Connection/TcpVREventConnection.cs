@@ -119,7 +119,7 @@ namespace IVLab.MinVR3
 
             // invoke the callback from the interface for each new event received
             foreach (var evt in events) {
-                OnVREventReceived.Invoke(evt);
+                OnVREventReceived?.Invoke(evt);
             }
         }
 
