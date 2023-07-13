@@ -17,6 +17,11 @@ namespace IVLab.MinVR3
         {
             m_DataTypeName = ""; // by default, there is no data in a VREvent
         }
+        
+        public bool ReceivedFromNetwork {
+            get => m_ReceivedFromNetwork;
+            set => m_ReceivedFromNetwork = value;
+        }
 
         public string name {
             get => m_Name;
@@ -165,6 +170,8 @@ namespace IVLab.MinVR3
             { typeof(string).Name, typeof(VREventString) },
             { typeof(GameObject).Name, typeof(GameObject) },
         };
+
+        protected bool m_ReceivedFromNetwork = false;
 
         private static System.Text.RegularExpressions.Regex builtinTypeRegex = new System.Text.RegularExpressions.Regex(@"""m_Data"":{""value"":([\s\S]+)}}");
     }

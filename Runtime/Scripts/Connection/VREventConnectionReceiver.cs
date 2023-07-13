@@ -71,6 +71,7 @@ namespace IVLab.MinVR3
 
         private void VREventHandler(VREvent evt)
         {
+            evt.ReceivedFromNetwork = true;
             VREngine.Instance.eventManager.QueueEvent(evt);
         }
 

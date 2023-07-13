@@ -87,7 +87,7 @@ namespace IVLab.MinVR3
                     return;
                 } else if ((UsingSendList()) && (!InSendList(evt))) {
                     return;
-                } else {
+                } else if (!evt.ReceivedFromNetwork) {
                     m_Connection.Send(evt);
                 }
             }
