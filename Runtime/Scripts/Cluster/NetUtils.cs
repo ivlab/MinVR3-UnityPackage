@@ -241,13 +241,29 @@ namespace IVLab.MinVR3 {
         // PART 2b:  LARGER MESSAGES FOR SYNCING INPUT EVENTS (USING JSON SERIALIZATION FOR CONNECTION MODE)
         public static void SendEventAsJson(ref TcpClient client, in VREvent evt, bool quitOnError)
         {
+            Debug.Log("Sending: " + JsonUtility.ToJson(evt));
             WriteString(ref client, JsonUtility.ToJson(evt), quitOnError);
         }
 
 
         public static VREvent ReceiveEventAsJson(ref TcpClient client, bool quitOnError)
         {
-            return JsonUtility.FromJson<VREvent>(ReadString(ref client, quitOnError));
+            string eventJson = ReadString(ref client, quitOnError);
+            // VREvent vrEvent = JsonUtility.FromJson<VREvent>(eventJson);
+            //
+            // Type t = Type.GetType("System."+vrEvent.GetDataTypeName());
+            // Debug.Log(t.ToString());
+            // Type typeOfVREventT = typeof(VREventT<>);
+            // Type typeOfVREventTWithGenericArgument = typeOfVREventT.MakeGenericType(t);
+            //
+            // VREvent instanceOfGenericVREvent = (VREvent)Activator.Crea(typeOfVREventTWithGenericArgument, );
+            //
+            //
+            
+            //Debug.Log(ReadString(ref client, quitOnError));
+            Debug.Log(eventJson);
+           // Debug.Log(JsonUtility.ToJson((JsonUtility.FromJson<VREvent>(eventJson) as VREventT<string>)));
+            return JsonUtility.FromJson<VREvent>( eventJson) as VREventT<string>;
         }
 
 
