@@ -248,22 +248,7 @@ namespace IVLab.MinVR3 {
 
         public static VREvent ReceiveEventAsJson(ref TcpClient client, bool quitOnError)
         {
-            string eventJson = ReadString(ref client, quitOnError);
-            // VREvent vrEvent = JsonUtility.FromJson<VREvent>(eventJson);
-            //
-            // Type t = Type.GetType("System."+vrEvent.GetDataTypeName());
-            // Debug.Log(t.ToString());
-            // Type typeOfVREventT = typeof(VREventT<>);
-            // Type typeOfVREventTWithGenericArgument = typeOfVREventT.MakeGenericType(t);
-            //
-            // VREvent instanceOfGenericVREvent = (VREvent)Activator.Crea(typeOfVREventTWithGenericArgument, );
-            //
-            //
-            
-            //Debug.Log(ReadString(ref client, quitOnError));
-            Debug.Log(eventJson);
-           // Debug.Log(JsonUtility.ToJson((JsonUtility.FromJson<VREvent>(eventJson) as VREventT<string>)));
-            return JsonUtility.FromJson<VREvent>( eventJson) as VREventT<string>;
+            return VREvent.CreateFromJson(ReadString(ref client, quitOnError));
         }
 
 
