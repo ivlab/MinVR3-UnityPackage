@@ -11,10 +11,12 @@ namespace IVLab.MinVR3
     {
         public void OnEnable()
         {
-            m_VREventFilteringStrategyProp = serializedObject.FindProperty("m_VREventFilteringStrategy");
+            m_UseSendListProp = serializedObject.FindProperty("m_UseSendList");
             m_SendListPrototypesProp = serializedObject.FindProperty("m_SendListPrototypes");
-            m_NoSendListPrototypesProp = serializedObject.FindProperty("m_NoSendListPrototypes");
             m_SendListStartsWithStringsProp = serializedObject.FindProperty("m_SendListStartsWithStrings");
+
+            m_UseNoSendListProp = serializedObject.FindProperty("m_UseNoSendList");
+            m_NoSendListPrototypesProp = serializedObject.FindProperty("m_NoSendListPrototypes");
             m_NoSendListStartsWithStringsProp = serializedObject.FindProperty("m_NoSendListStartsWithStrings");
         }
 
@@ -41,20 +43,20 @@ namespace IVLab.MinVR3
                 return;
             }
 
-            EditorGUILayout.LabelField("Filtering Strategy", EditorStyles.boldLabel);
+            EditorGUILayout.HelpBox(new GUIContent("You can send only a subset of VREvents by specifying a " +
+                "Send-List and/or a No-Send-List."));
 
-            EditorGUILayout.HelpBox(new GUIContent("For convenience, there are several different ways you can specify the VREvents to send over the connection.  1: Send everything, 2: Send only the events that match the criteria you specify, 3: Send all events *except* those that match the criteria you specify."));
+            EditorGUILayout.PropertyField(m_UseSendListProp);
+            EditorGUILayout.PropertyField(m_UseNoSendListProp);
 
-            EditorGUILayout.PropertyField(m_VREventFilteringStrategyProp);
+            if ((!m_UseSendListProp.boolValue) && (!m_UseNoSendListProp.boolValue)) {
+                EditorGUILayout.Space();
+                EditorGUILayout.HelpBox(new GUIContent("Sending ALL VREvents"));
+            }
 
-            
+            if (m_UseSendListProp.boolValue) {
 
-            if (m_VREventFilteringStrategyProp.enumValueIndex == 0) {
-
-                // nothing
-                
-            } else if (m_VREventFilteringStrategyProp.enumValueIndex == 1) {
-                
+                EditorGUILayout.Space();
                 EditorGUILayout.Space();
                 EditorGUILayout.HelpBox(new GUIContent("The event-matching criteria can be specified in two " +
                     "ways using the two lists below.  The first list uses VREventPrototypes and this is good for " +
@@ -96,8 +98,10 @@ namespace IVLab.MinVR3
 
                 EditorGUILayout.PropertyField(m_SendListStartsWithStringsProp);
 
-            } else if (m_VREventFilteringStrategyProp.enumValueIndex == 2) {
+            }
 
+            if (m_UseNoSendListProp.boolValue) {
+                EditorGUILayout.Space();
                 EditorGUILayout.Space();
                 EditorGUILayout.HelpBox(new GUIContent("The event-matching criteria can be specified in two " +
                     "ways using the two lists below.  The first list uses VREventPrototypes and this is good for " +
@@ -108,6 +112,7 @@ namespace IVLab.MinVR3
                 m_ShowFoldoutNoSend = EditorGUILayout.BeginFoldoutHeaderGroup(m_ShowFoldoutNoSend, "No Send List VREvent Prototypes");
 
                 if (m_ShowFoldoutNoSend) {
+
                     List<int> idxToDelete = new List<int>();
 
                     for (int evtNum = 0; evtNum < m_NoSendListPrototypesProp.arraySize; evtNum++) {
@@ -142,11 +147,14 @@ namespace IVLab.MinVR3
 
         bool m_ShowFoldoutSend = true;
         bool m_ShowFoldoutNoSend = true;
+
+        SerializedProperty m_UseSendListProp;
         SerializedProperty m_SendListPrototypesProp;
         SerializedProperty m_SendListStartsWithStringsProp;
+
+        SerializedProperty m_UseNoSendListProp;
         SerializedProperty m_NoSendListPrototypesProp;
         SerializedProperty m_NoSendListStartsWithStringsProp;
-        SerializedProperty m_VREventFilteringStrategyProp;
 
     }
 

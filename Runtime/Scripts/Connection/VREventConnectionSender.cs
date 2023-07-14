@@ -15,15 +15,10 @@ namespace IVLab.MinVR3
     [AddComponentMenu("MinVR/Connection/VREventConnectionSender")]
     public class VREventConnectionSender : MonoBehaviour, IVREventListener
     {
-        public enum VREventFilteringStrategy {
-            SendAllVREvents,
-            SendAllThatMatchCriteria,
-            SendAllThatDoNotMatchCritera
-        }
 
-        public VREventFilteringStrategy vrEventFilteringStrategy {
-            get { return m_VREventFilteringStrategy; }
-            set { m_VREventFilteringStrategy = value; }
+        public bool useSendList {
+            get { return m_UseSendList; }
+            set { m_UseSendList = value; }
         }
 
         public List<VREventPrototypeAny> sendListPrototypes {
@@ -34,6 +29,12 @@ namespace IVLab.MinVR3
         public List<string> sendListStartsWithStrings {
             get { return m_SendListStartsWithStrings; }
             set { m_SendListStartsWithStrings = value; }
+        }
+
+
+        public bool useNoSendList {
+            get { return m_UseNoSendList; }
+            set { m_UseNoSendList = value; }
         }
 
         public List<VREventPrototypeAny> noSendListPrototypes {
@@ -67,12 +68,6 @@ namespace IVLab.MinVR3
         }
 
 
-        public bool UsingSendList()
-        {
-            return ((m_SendListPrototypes != null) && (m_SendListPrototypes.Count > 0)) ||
-                ((m_SendListStartsWithStrings != null) && (m_SendListStartsWithStrings.Count > 0));
-        }
-
         public bool InSendList(VREvent evt)
         {
             // check the list of complete event prototypes for a match
@@ -93,12 +88,6 @@ namespace IVLab.MinVR3
             }
 
             return false;
-        }
-
-        public bool UsingNoSendList()
-        {
-            return ((m_NoSendListPrototypes != null) && (m_NoSendListPrototypes.Count > 0)) ||
-                ((m_NoSendListStartsWithStrings != null) && (m_NoSendListStartsWithStrings.Count > 0));
         }
 
         public bool InNoSendList(VREvent evt)
@@ -126,17 +115,36 @@ namespace IVLab.MinVR3
 
         public void OnVREvent(VREvent evt)
         {
-            Debug.Assert(!(UsingSendList() && UsingNoSendList()),
-                "Either use the send list or the no-send list, not both.");
-
             if (m_Connection != null) {
-                if ((UsingNoSendList()) && (InNoSendList(evt))) {
-                    return;
-                } else if ((UsingSendList()) && (!InSendList(evt))) {
-                    return;
-                } else {
+
+                // case 0: not using either list, send all events
+                if ((!m_UseSendList) && (!m_UseNoSendList)) {
                     m_Connection.Send(evt);
                 }
+
+                // case 1: using the send list
+                else if (m_UseSendList) {
+                    if (InSendList(evt)) {
+                        // case 1a: also using nosend list, only send if evt is not in the nosend list
+                        if (m_UseNoSendList) {
+                            if (!InNoSendList(evt)) {
+                                m_Connection.Send(evt);
+                            }
+                        }
+                        // case 1b: not using nosend, ok to send
+                        else {
+                            m_Connection.Send(evt);
+                        }
+                    }
+                }
+
+                // case 2: using the nosend list (and if we reach here we know we are not using the send list)
+                else if (m_UseNoSendList) {
+                    if (!InNoSendList(evt)) {
+                        m_Connection.Send(evt);
+                    }
+                }
+
             }
         }
 
@@ -158,10 +166,11 @@ namespace IVLab.MinVR3
             VREngine.Instance?.eventManager?.RemoveEventListener(this);
         }
 
-
-        [SerializeField] private VREventFilteringStrategy m_VREventFilteringStrategy;
+        [SerializeField] private bool m_UseSendList;
         [SerializeField] private List<VREventPrototypeAny> m_SendListPrototypes;
         [SerializeField] private List<string> m_SendListStartsWithStrings;
+
+        [SerializeField] private bool m_UseNoSendList;
         [SerializeField] private List<VREventPrototypeAny> m_NoSendListPrototypes;
         [SerializeField] private List<string> m_NoSendListStartsWithStrings;
 
