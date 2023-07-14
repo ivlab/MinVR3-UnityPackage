@@ -8,7 +8,13 @@ using System.Net.Sockets;
 
 namespace IVLab.MinVR3
 {
-
+    /// <summary>
+    /// This class uses Tcp sockets to implement the IVREventConnection interface with C# binary serialization
+    /// of events.  This style of serialization is not particularly portable -- i.e., it requires the other
+    /// end of the connection to also be implemented using C# binary serialization.  Use the
+    /// TcpJsonVREventConnection instead when there is a need to connect to a server written in some other
+    /// language.
+    /// </summary>
     [AddComponentMenu("MinVR/Connection/TcpVREventConnection")]
     public class TcpVREventConnection : MonoBehaviour, IVREventConnection
     {
@@ -124,7 +130,8 @@ namespace IVLab.MinVR3
         }
 
 
-        [Header("Request Connection")]
+        [Header("Act as a Client")]
+        [InfoBox("This connection can act as a client that connects to a server, a server that accepts connections from clients, or both.")]
         [Tooltip("Set to true to request a Tcp VREventConnection with a server listening on a specific IP and port.")]
         [SerializeField] private bool m_ConnectToServer;
         [Tooltip("Connect to a server at this IP.")]
@@ -133,9 +140,9 @@ namespace IVLab.MinVR3
         [SerializeField] private int m_ConnectToServerPort;
 
 
-        [Header("Connection Requests")]
+        [Header("Act as a Server")]
         [Tooltip("Set to true if this connection should act as a server, accepting Tcp connection " +
-            "requests from others.")]
+                    "requests from others.")]
         [SerializeField] private bool m_ListenForConnections;
         [Tooltip("Listen for connection requests on this port.")]
         [SerializeField] private int m_ListenForConnectionsPort;

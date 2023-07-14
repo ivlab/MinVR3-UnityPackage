@@ -15,21 +15,43 @@ namespace IVLab.MinVR3
     [AddComponentMenu("MinVR/Connection/VREventConnectionSender")]
     public class VREventConnectionSender : MonoBehaviour, IVREventListener
     {
-        public List<VREventPrototypeAny> sendList {
-            get { return m_SendList; }
-            set { m_SendList = value; }
+        public enum VREventFilteringStrategy {
+            SendAllVREvents,
+            SendAllThatMatchCriteria,
+            SendAllThatDoNotMatchCritera
         }
 
-        public List<VREventPrototypeAny> noSendList {
-            get { return m_NoSendList; }
-            set { m_NoSendList = value; }
+        public VREventFilteringStrategy vrEventFilteringStrategy {
+            get { return m_VREventFilteringStrategy; }
+            set { m_VREventFilteringStrategy = value; }
         }
 
+        public List<VREventPrototypeAny> sendListPrototypes {
+            get { return m_SendListPrototypes; }
+            set { m_SendListPrototypes = value; }
+        }
+
+        public List<string> sendListStartsWithStrings {
+            get { return m_SendListStartsWithStrings; }
+            set { m_SendListStartsWithStrings = value; }
+        }
+
+        public List<VREventPrototypeAny> noSendListPrototypes {
+            get { return m_NoSendListPrototypes; }
+            set { m_NoSendListPrototypes = value; }
+        }
+
+        public List<string> noSendListStartsWithStrings {
+            get { return m_NoSendListStartsWithStrings; }
+            set { m_NoSendListStartsWithStrings = value; }
+        }
 
         void Reset()
         {
-            m_SendList = null;
-            m_NoSendList = null;
+            m_SendListPrototypes = null;
+            m_NoSendListPrototypes = null;
+            m_SendListStartsWithStrings = null;
+            m_NoSendListStartsWithStrings = null;
         }
 
         void Start()
@@ -47,41 +69,66 @@ namespace IVLab.MinVR3
 
         public bool UsingSendList()
         {
-            return (m_SendList != null) && (m_SendList.Count > 0);
+            return ((m_SendListPrototypes != null) && (m_SendListPrototypes.Count > 0)) ||
+                ((m_SendListStartsWithStrings != null) && (m_SendListStartsWithStrings.Count > 0));
         }
 
         public bool InSendList(VREvent evt)
         {
-            if ((m_SendList != null) || (m_SendList.Count > 0)) {
-                foreach (var p in m_SendList) {
+            // check the list of complete event prototypes for a match
+            if ((m_SendListPrototypes != null) && (m_SendListPrototypes.Count > 0)) {
+                foreach (var p in m_SendListPrototypes) {
                     if (evt.Matches(p)) {
                         return true;
                     }
                 }
             }
+            // also check the list of starts-with strings for a match
+            if ((m_SendListStartsWithStrings != null) && (m_SendListStartsWithStrings.Count > 0)) {
+                foreach (string s in m_SendListStartsWithStrings) {
+                    if (evt.GetName().StartsWith(s)) {
+                        return true;
+                    }
+                }
+            }
+
             return false;
         }
 
         public bool UsingNoSendList()
         {
-            return (m_NoSendList != null) && (m_NoSendList.Count > 0);
+            return ((m_NoSendListPrototypes != null) && (m_NoSendListPrototypes.Count > 0)) ||
+                ((m_NoSendListStartsWithStrings != null) && (m_NoSendListStartsWithStrings.Count > 0));
         }
 
         public bool InNoSendList(VREvent evt)
         {
-            if ((m_NoSendList != null) || (m_NoSendList.Count > 0)) {
-                foreach (var p in m_NoSendList) {
+            // check the list of complete event prototypes for a match
+            if ((m_NoSendListPrototypes != null) && (m_NoSendListPrototypes.Count > 0)) {
+                foreach (var p in m_NoSendListPrototypes) {
                     if (evt.Matches(p)) {
                         return true;
                     }
                 }
             }
+            // also check the list of starts-with strings for a match
+            if ((m_NoSendListStartsWithStrings != null) && (m_NoSendListStartsWithStrings.Count > 0)) {
+                foreach (string s in m_NoSendListStartsWithStrings) {
+                    if (evt.GetName().StartsWith(s)) {
+                        return true;
+                    }
+                }
+            }
+
             return false;
         }
 
 
         public void OnVREvent(VREvent evt)
         {
+            Debug.Assert(!(UsingSendList() && UsingNoSendList()),
+                "Either use the send list or the no-send list, not both.");
+
             if (m_Connection != null) {
                 if ((UsingNoSendList()) && (InNoSendList(evt))) {
                     return;
@@ -112,8 +159,11 @@ namespace IVLab.MinVR3
         }
 
 
-        [SerializeField] private List<VREventPrototypeAny> m_SendList;
-        [SerializeField] private List<VREventPrototypeAny> m_NoSendList;
+        [SerializeField] private VREventFilteringStrategy m_VREventFilteringStrategy;
+        [SerializeField] private List<VREventPrototypeAny> m_SendListPrototypes;
+        [SerializeField] private List<string> m_SendListStartsWithStrings;
+        [SerializeField] private List<VREventPrototypeAny> m_NoSendListPrototypes;
+        [SerializeField] private List<string> m_NoSendListStartsWithStrings;
 
         private IVREventConnection m_Connection;
     }

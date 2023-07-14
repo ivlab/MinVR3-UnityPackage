@@ -42,7 +42,11 @@ namespace IVLab.MinVR3
                     "you expect to receive over the connection.  Note: If a new prototype would duplicate one " +
                     "already defined elsewhere in the scene, it is not technically necessary to redefine it here; " +
                     "however, there is no harm in redefining it (as long as the data types match), and this " +
-                    "may sometimes be useful to make it extra clear what events are expected via the connection.",
+                    "may sometimes be useful to make it extra clear what events are expected via the connection. " +
+                    "If a VREvent with no pre-defined prototype is received, it will still be correctly received " +
+                    "and processed by the event manager at runtime.  However, a prototype is needed if you want " +
+                    "to access the event in the Unity Editor, for example, if you want to be able to select it " +
+                    "from a drop-down menu in a VREventListener.",
                     MessageType.None);
 
             string msg = $"Connection defines ({m_EventPrototypesProp.arraySize}) new VREventPrototpyes"; 
