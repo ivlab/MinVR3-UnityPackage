@@ -247,7 +247,7 @@ namespace IVLab.MinVR3 {
 
         public static VREvent ReceiveEventAsJson(ref TcpClient client, bool quitOnError)
         {
-            return JsonUtility.FromJson<VREvent>(ReadString(ref client, quitOnError));
+            return VREvent.CreateFromJson(ReadString(ref client, quitOnError));
         }
 
 
