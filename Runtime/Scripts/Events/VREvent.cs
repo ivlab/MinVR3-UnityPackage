@@ -93,7 +93,7 @@ namespace IVLab.MinVR3
                             break;
                         }
                         // try to parse, assuming data value is in a simple name/value pair
-                        matchGroups = builtinTypeRegexForData.Match(eventJson).Groups;
+                        matchGroups = dataRegexForIntOrFloat.Match(eventJson).Groups;
                         if ((matchGroups[0].Success) && (matchGroups[1].Value != String.Empty)) {
                             evt = new VREventFloat(evt.name, Single.Parse(matchGroups[1].Value));
                             break;
@@ -109,7 +109,7 @@ namespace IVLab.MinVR3
                             break;
                         }
                         // try to parse, assuming data value is in a simple name/value pair
-                        matchGroups = builtinTypeRegexForData.Match(eventJson).Groups;
+                        matchGroups = dataRegexForIntOrFloat.Match(eventJson).Groups;
                         if ((matchGroups[0].Success) && (matchGroups[1].Value != String.Empty)) {
                             evt = new VREventInt(evt.name, Int32.Parse(matchGroups[1].Value));
                             break;
@@ -126,12 +126,20 @@ namespace IVLab.MinVR3
                             break;
                         }
                         // try to parse, assuming data value is in a simple name/value pair
-                        matchGroups = builtinTypeRegexForData.Match(eventJson).Groups;
+                        matchGroups = dataRegexForQuotedString.Match(eventJson).Groups;
                         if ((matchGroups[0].Success) && (matchGroups[1].Value != String.Empty)) {
-                            // remove start/end quotes
-                            String stringValue = matchGroups[1].Value.Substring(1, matchGroups[1].Value.Length - 2);
-                            evt = new VREventString(evt.name, stringValue);
-                            break;
+                            if (matchGroups[1].Value[0] != '{') {
+                                // normal quoted string
+                                evt = new VREventString(evt.name, stringValue);
+                                break;
+                            } else {
+                                // string starts with { so assume we have a json string and we need a more complex regex to get it all
+                                matchGroups = dataRegexForQuotedJson.Match(eventJson).Groups;
+                                if ((matchGroups[0].Success) && (matchGroups[1].Value != String.Empty)) {
+                                    evt = new VREventString(evt.name, stringValue);
+                                    break;
+                                }
+                            }
                         }
                         Debug.Log("Problem extracting data from serialized VREvent.");
                         break;
@@ -205,8 +213,17 @@ namespace IVLab.MinVR3
         private static System.Text.RegularExpressions.Regex builtinTypeRegexForDataInsideObject = new System.Text.RegularExpressions.Regex(@"""m_Data"":{""value"":([\s\S]+)}}");
 
         // the JsonUtility used in this class as well as the jsoncpp package used in the forceserver serialize m_Data as a simple name/value pair
-        // i.e., "m_Data":"datavalue".  The following regex works for that case.
-        private static System.Text.RegularExpressions.Regex builtinTypeRegexForData = new System.Text.RegularExpressions.Regex(@"""m_Data"":(.*?)[,}]");
+        // i.e., "m_Data":datavalue.  The following regex works for datavalues followed by a , or a }, which is good for ints and floats.
+        private static System.Text.RegularExpressions.Regex dataRegexForIntOrFloat = new System.Text.RegularExpressions.Regex(@"""m_Data"":(.*?)[,}]");
+        
+        // extracts the string inside quotes that comes after "m_Data": handling any escaped quotes within the string
+        private static System.Text.RegularExpressions.Regex dataRegexForQuotedString = new System.Text.RegularExpressions.Regex(@"""m_Data"":""((?:[^""\\]|\\.)*)""");
+        
+        // extracts the largest sequence of matched {} inside the quoted string that comes after "m_Data":
+        private static System.Text.RegularExpressions.Regex dataRegexForQuotedJson = new System.Text.RegularExpressions.Regex(@"""m_Data"":""(\{(?>[^}{]+|(?<c>)\{|(?<-c>)})+})""");
+        
+        
+        
     }
 
 } // namespace
