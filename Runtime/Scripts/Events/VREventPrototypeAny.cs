@@ -55,12 +55,12 @@ namespace IVLab.MinVR3
             if (dataType != null) {
                 name = dataType.Name;
             }
-            return m_AllEventPrototypes.ContainsKey(name);
+            return s_AllEventPrototypes.ContainsKey(name);
         }
 
         public bool SupportsDataType(string dataTypeName)
         {
-            return m_AllEventPrototypes.ContainsKey(dataTypeName);
+            return s_AllEventPrototypes.ContainsKey(dataTypeName);
         }
 
         public string GetEventName()
@@ -84,13 +84,13 @@ namespace IVLab.MinVR3
             if (eventDataType != null) {
                 name = eventDataType.Name;
             }
-            Debug.Assert(m_AllEventPrototypes.ContainsKey(name), "No event prototype available for type " + name);
+            Debug.Assert(s_AllEventPrototypes.ContainsKey(name), "No event prototype available for type " + name);
             m_DataTypeName = name;
         }
 
         public void SetEventDataType(string eventDataTypeName)
         {
-            Debug.Assert(m_AllEventPrototypes.ContainsKey(eventDataTypeName),
+            Debug.Assert(s_AllEventPrototypes.ContainsKey(eventDataTypeName),
                 "No event prototype available for type " + eventDataTypeName);
             m_DataTypeName = eventDataTypeName;
         }
@@ -132,12 +132,17 @@ namespace IVLab.MinVR3
         //    you are creating an event producer and want to define prototypes for the events it produces.
         [SerializeField] private bool m_DefineNewPrototypeInEditor = false;
 
-        [NonSerialized] private Dictionary<string, IVREventPrototype> m_AllEventPrototypes;
+        [NonSerialized] private static Dictionary<string, IVREventPrototype> s_AllEventPrototypes;
 
 
         private void InitAllEventPrototypes()
         {
-            m_AllEventPrototypes = new Dictionary<string, IVREventPrototype>();
+            if (s_AllEventPrototypes != null)
+            {
+                return;
+            }
+
+            s_AllEventPrototypes = new Dictionary<string, IVREventPrototype>();
 
             // Get all the VREventPrototype classes from Reflection. This is
             // SLOW, but that's okay because InitAllEventPrototypes is only
@@ -171,12 +176,12 @@ namespace IVLab.MinVR3
                 IVREventPrototype protoInstance = protoInstances.First(p => p?.GetEventDataTypeName() == kv.Key);
                 if (protoInstance != null)
                 {
-                    m_AllEventPrototypes.Add(kv.Key, protoInstance);
+                    s_AllEventPrototypes.Add(kv.Key, protoInstance);
                 }
             }
         }
 
-        public Dictionary<string, IVREventPrototype> AllEventPrototypes { get => m_AllEventPrototypes; }
+        public Dictionary<string, IVREventPrototype> AllEventPrototypes { get => s_AllEventPrototypes; }
     }
 
 } // namespace

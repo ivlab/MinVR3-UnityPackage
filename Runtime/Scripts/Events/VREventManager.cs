@@ -210,23 +210,22 @@ namespace IVLab.MinVR3
             } else {
                 eventProducers = FindObjectsOfType<MonoBehaviour>().OfType<IVREventProducer>().ToArray();
             }
+            HashSet<IVREventProducer> eventProducersUnique = new HashSet<IVREventProducer>(eventProducers);
 
-            var expectedEvents = new List<IVREventPrototype>();
-            foreach (var producer in eventProducers) {
+            // Get unique events that have been defined across the scene
+            var uniqueEvents = new HashSet<IVREventPrototype>();
+            foreach (IVREventProducer producer in eventProducersUnique) {
                 var expectedFromThisSource = producer.GetEventPrototypes();
-                foreach (IVREventPrototype e in expectedFromThisSource) {
-                    if ((e.GetEventDataTypeName() == dataTypeName) || (dataTypeName == "*")) {
-                        foreach (IVREventPrototype e2 in expectedEvents) {
-                            if ((e.GetEventName() == e2.GetEventName()) && (e.GetEventDataTypeName() != e2.GetEventDataTypeName())) {
-                                throw new Exception($"Two IVRInputDevices expect to produce an event named {e.GetEventName()} but the expected data types differ: '{e.GetEventDataTypeName()}' and '{e2.GetEventDataTypeName()}'");
-                            }
-                        }
-                        expectedEvents.Add(e);
+                foreach (IVREventPrototype prototype in expectedFromThisSource)
+                {
+                    if ((prototype.GetEventDataTypeName() == dataTypeName) || (dataTypeName == "*"))
+                    {
+                        uniqueEvents.Add(prototype);
                     }
                 }
             }
 
-            return expectedEvents;
+            return uniqueEvents.ToList();
 #else
             throw new Exception("VREventManager.GetMatchingEventPrototypes() should only be called from within the Unity Editor.");
 #endif
