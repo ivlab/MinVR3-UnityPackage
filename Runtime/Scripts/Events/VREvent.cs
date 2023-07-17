@@ -128,7 +128,7 @@ namespace IVLab.MinVR3
                         // try to parse, assuming data value is in a simple name/value pair
                         matchGroups = dataRegexForQuotedString.Match(eventJson).Groups;
                         if ((matchGroups[0].Success) && (matchGroups[1].Value != String.Empty)) {
-                            String stringValue = matchGroups[1].Value.Substring(1, matchGroups[1].Value.Length - 2);
+                            String stringValue = matchGroups[1].Value;
                             if (matchGroups[1].Value[0] != '{') {
                                 // normal quoted string
                                 evt = new VREventString(evt.name, stringValue);
