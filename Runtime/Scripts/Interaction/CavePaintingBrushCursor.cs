@@ -7,6 +7,7 @@ using UnityEngine;
 /// </summary>
 [ExecuteAlways]
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
+[AddComponentMenu("MinVR Interaction/Cursors/CavePainting Brush")]
 public class CavePaintingBrushCursor : MonoBehaviour
 {
     // Vertices that make up the brush geometry

@@ -14,14 +14,6 @@ namespace IVLab.MinVR3
 
         // ---- BUILDING BLOCKS ----
 
-        [MenuItem("GameObject/MinVR Interaction/Building Blocks/Tracked Pose Driver", false, MenuHelpers.gameObjectMenuPriority)]
-        public static void CreateInteractionTrackedPoseDriver(MenuCommand command)
-        {
-            MenuHelpers.CreateVREngineIfNeeded();
-            MenuHelpers.CreateRoomSpaceOriginIfNeeded();
-            MenuHelpers.CreateAndPlaceGameObject("Tracked Pose Driver", command.context as GameObject, typeof(TrackedPoseDriver));
-        }
-
         [MenuItem("GameObject/MinVR Interaction/Building Blocks/Simple Event Listener", false, MenuHelpers.mvriItemPriority)]
         public static void CreateInteractionSimpleEventListener(MenuCommand command)
         {
@@ -51,6 +43,15 @@ namespace IVLab.MinVR3
 
 
         // ---- CURSORS -----
+
+
+        [MenuItem("GameObject/MinVR Interaction/Cursors/Tracked Pose Driver", false, MenuHelpers.gameObjectMenuPriority)]
+        public static void CreateInteractionTrackedPoseDriver(MenuCommand command)
+        {
+            MenuHelpers.CreateVREngineIfNeeded();
+            MenuHelpers.CreateRoomSpaceOriginIfNeeded();
+            MenuHelpers.CreateAndPlaceGameObject("Tracked Pose Driver", command.context as GameObject, typeof(TrackedPoseDriver));
+        }
 
         [MenuItem("GameObject/MinVR Interaction/Cursors/CavePainting Brush (Dominant Hand)", false, MenuHelpers.mvriItemPriority)]
         public static void CreateInteractionCavePaintingBrush(MenuCommand command)
@@ -175,7 +176,7 @@ namespace IVLab.MinVR3
 
         // ---- NAVIGATION AND MANIPULATION ----
 
-        [MenuItem("GameObject/MinVR Interaction/Navigation and Manipulation/Smart Scene", false, MenuHelpers.mvriItemPriority)]
+        [MenuItem("GameObject/MinVR Interaction/Navigation & Manipulation/Smart Scene", false, MenuHelpers.mvriItemPriority)]
         public static void CreateInteractionSmartScene(MenuCommand command)
         {
             MenuHelpers.CreateVREngineIfNeeded();
@@ -183,7 +184,7 @@ namespace IVLab.MinVR3
             MenuHelpers.CreateAndPlaceGameObject("Smart Scene", command.context as GameObject, typeof(SmartScene));
         }
 
-        [MenuItem("GameObject/MinVR Interaction/Navigation and Manipulation/Bimanual Object Manipulation", false, MenuHelpers.mvriItemPriority)]
+        [MenuItem("GameObject/MinVR Interaction/Navigation & Manipulation/Bimanual Object Manipulation", false, MenuHelpers.mvriItemPriority)]
         public static void CreateInteractionBimanualObjectManipulator(MenuCommand command)
         {
             MenuHelpers.CreateVREngineIfNeeded();
@@ -205,9 +206,21 @@ namespace IVLab.MinVR3
             MenuHelpers.CreateAndPlaceGameObject("Trackball Camera", command.context as GameObject, typeof(TrackballCamera));
         }
 
+        [MenuItem("GameObject/MinVR Interaction/Desktop/UniCam", false, MenuHelpers.mvriItemPriority)]
+        public static void CreateInteractionUniCam(MenuCommand command)
+        {
+            MenuHelpers.CreateVREngineIfNeeded();
+            MenuHelpers.CreateRoomSpaceOriginIfNeeded();
+            MenuHelpers.CreateAndPlaceGameObject("UniCam", command.context as GameObject, typeof(UniCam));
+        }
 
-
-
+        [MenuItem("GameObject/MinVR Interaction/Desktop/Mouse-Object Manipulator", false, MenuHelpers.mvriItemPriority)]
+        public static void CreateInteractionMouseObjectManipulator(MenuCommand command)
+        {
+            MenuHelpers.CreateVREngineIfNeeded();
+            MenuHelpers.CreateRoomSpaceOriginIfNeeded();
+            MenuHelpers.CreateAndPlaceGameObject("Mouse-Object Manipulator", command.context as GameObject, typeof(MouseObjectManipulator));
+        }
     } // end class
 
 } // end namespace

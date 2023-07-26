@@ -9,7 +9,17 @@ namespace IVLab.MinVR3
     /// Clickable and draggable camera for trackball camera movement in Unity. Can
     /// optionally enable "acceleration" to avoid users getting sick in situations
     /// like a planetarium.
+    ///
+    /// TODO: @bridger: It seems like this class only works properly if the hierarchy
+    /// is setup in a certain way.  It seems this script must be on an object
+    /// under another object that is the "trackball parent" -- does that mean it
+    /// contains all of the geometry that should be rotated by the trackball?
+    /// And, the camera must be a child of the gameobject this script is attached to?
+    /// Can you add documentation on how the hierarchy must be arranged?  And, for
+    /// the GameObject menu, when you add one of these to the scene, it would be
+    /// useful if it could create the required mini-hierarchy for you.
     /// </summary>
+    [AddComponentMenu("MinVR Interaction/Desktop/TrackballCamera")]
     public class TrackballCamera : MonoBehaviour
     {
         [Header("Click checkbox to reset view")]

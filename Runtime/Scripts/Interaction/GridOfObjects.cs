@@ -7,6 +7,7 @@ using UnityEngine;
 /// A grid of GameObjects, where the grid can be defined different ways (e.g., on a plane,
 /// on the surface of a spherical dome, ...)
 /// </summary>
+[AddComponentMenu("MinVR Interaction/Building Blocks/Grid of Objects")]
 public class GridOfObjects : MonoBehaviour
 {
     // applies to all grids

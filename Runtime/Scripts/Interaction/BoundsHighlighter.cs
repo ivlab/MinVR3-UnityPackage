@@ -5,7 +5,7 @@ using UnityEngine;
 namespace IVLab.MinVR3
 {
 
-    [AddComponentMenu("MinVR/Interaction/Bounds Highlighter")]
+    [AddComponentMenu("MinVR Interaction/Selection/Bounds Highlighter")]
     public class BoundsHighlighter : MonoBehaviour, IVREventListener
     {
 

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace IVLab.MinVR3
 {
 
-    [AddComponentMenu("MinVR/Interaction/Basic Object Selector")]
+    [AddComponentMenu("MinVR Interaction/Selection/Basic Object Selector")]
     public class BasicObjectSelector : MonoBehaviour, IVREventProducer
     {
         public Transform CursorTransform { get => m_CursorTransform; set => m_CursorTransform = value; }

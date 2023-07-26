@@ -10,7 +10,7 @@ namespace IVLab.MinVR3
     /// inside the titlebar or box that holds each menu item and then clicking.
     /// </summary>
     [ExecuteAlways]
-    [AddComponentMenu("MinVR/Interaction/Floating Menu")]
+    [AddComponentMenu("MinVR Interaction/Widgets/Menus/Floating Menu")]
     public class FloatingMenu : MonoBehaviour, IVREventListener, IVREventProducer
     {
         /// <summary>

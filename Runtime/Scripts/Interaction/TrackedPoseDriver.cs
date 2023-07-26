@@ -19,7 +19,7 @@ namespace IVLab.MinVR3
     /// The TrackedPoseDriver component applies the current Pose value of a tracked device to the transform of the GameObject.
     /// TrackedPoseDriver can track multiple types of devices including XR HMDs, controllers, and remotes.
     /// </summary>
-    [AddComponentMenu("MinVR/Interaction/Tracked Pose Driver")]
+    [AddComponentMenu("MinVR Interaction/Cursors/Tracked Pose Driver")]
     public class TrackedPoseDriver : MonoBehaviour, IVREventListener
     {
         public enum TrackingType

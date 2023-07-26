@@ -5,14 +5,15 @@ using UnityEngine;
 namespace IVLab.MinVR3
 {
 
-    /// <summary>
-    /// Partial implmentation of the classic bimanual UI in MultiGen's SmartScene
-    /// application (1997-ish), originally developed for use with pinch gloves.  The
-    /// technique is actually rather similar to modern multi-Cursor gestures but works
-    /// in 3D to translate, rotate, and scale a scene using two hands in combination.
-    /// Demo of the original 3DUI: https://www.youtube.com/watch?v=q4XmprH1S0s
-    /// </summary>
-    public class SmartScene : MonoBehaviour
+	/// <summary>
+	/// Partial implmentation of the classic bimanual UI in MultiGen's SmartScene
+	/// application (1997-ish), originally developed for use with pinch gloves.  The
+	/// technique is actually rather similar to modern multi-Cursor gestures but works
+	/// in 3D to translate, rotate, and scale a scene using two hands in combination.
+	/// Demo of the original 3DUI: https://www.youtube.com/watch?v=q4XmprH1S0s
+	/// </summary>
+	[AddComponentMenu("MinVR Interaction/Navigation & Manipulation/SmartScene")]
+	public class SmartScene : MonoBehaviour
     {
 
 		public void Reset()

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace IVLab.MinVR3
 {
 
-    [AddComponentMenu("MinVR/Interaction/Basic Highlighter")]
+    [AddComponentMenu("MinVR Interaction/Selection/Basic Highlighter")]
     public class BasicHighlighter : MonoBehaviour, IVREventListener
     {
 

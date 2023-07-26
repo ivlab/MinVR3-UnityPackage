@@ -16,7 +16,7 @@ namespace IVLab.MinVR3
     /// useful, for example, to coordinate between FSMs to determine which should have
     /// focus.
     /// </summary>
-    [AddComponentMenu("MinVR/Interaction/Condition")]
+    [AddComponentMenu("MinVR Interaction/Building Blocks/Condition")]
     public class Condition : MonoBehaviour
     {
         public bool isTrue {

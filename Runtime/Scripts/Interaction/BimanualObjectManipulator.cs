@@ -10,6 +10,7 @@ namespace IVLab.MinVR3
     /// Interactive Tables (Mendes / Fonesca / Araujo 2014), but similar
     /// techniques exist prior to that paper as well.
     /// </summary>
+    [AddComponentMenu("MinVR Interaction/Navigation & Manipulation/Bimanual Object Manipulator")]
     public class BimanualObjectManipulator : MonoBehaviour
     {
         [SerializeField] private VREventPrototype m_Cursor0DownEvent;

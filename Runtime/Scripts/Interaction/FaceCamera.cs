@@ -5,7 +5,7 @@ namespace IVLab.MinVR3
     /// <summary>
     /// Rotates an object to always face the camera (billboard-style)
     /// </summary>
-    [AddComponentMenu("MinVR Interaction/Navigation and Manipulation/Object Face Camera")]
+    [AddComponentMenu("MinVR Interaction/Building Blocks/Object Face Camera")]
     public class FaceCamera : MonoBehaviour
     {
         [SerializeField, Tooltip("Camera to mirror the rotation of (will default to MainCamera tag if empty)")]

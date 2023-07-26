@@ -5,7 +5,7 @@ using System;
 
 namespace IVLab.MinVR3
 {
-    [AddComponentMenu("MinVR/Interaction/FSM (State Machine)")]
+    [AddComponentMenu("MinVR Interaction/Building Blocks/FSM (State Machine)")]
     public class FSM : MonoBehaviour, IVREventListener
     {
         private void Reset()

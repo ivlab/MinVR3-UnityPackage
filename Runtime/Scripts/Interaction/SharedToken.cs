@@ -8,7 +8,7 @@ using UnityEngine.Events;
 /// system with multiple widgets, this can be used to control which widget has the current
 /// input focus.
 /// </summary>
-[AddComponentMenu("MinVR/Interaction/Shared Token")]
+[AddComponentMenu("MinVR Interaction/Building Blocks/Shared Token")]
 public class SharedToken : MonoBehaviour
 {
     public MonoBehaviour currentOwner {

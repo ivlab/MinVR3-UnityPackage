@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace IVLab.MinVR3
 {
-    [AddComponentMenu("MinVR/Interaction/Simple Event Listener")]
+    [AddComponentMenu("MinVR Interaction/Building Blocks/Simple Event Listener")]
     public class SimpleEventListener : MonoBehaviour
     {
         public VREventCallbackAny onVREvent {
