@@ -142,7 +142,13 @@ namespace IVLab.MinVR3
             MenuHelpers.CreateAndPlaceGameObject("Floating Menu", command.context as GameObject, typeof(FloatingMenu));
         }
 
-
+        [MenuItem("GameObject/MinVR Interaction/Widgets/Color Picker (CavePainting Syle)", false, MenuHelpers.mvriItemPriority)]
+        public static void CreateInteractionColorPicker(MenuCommand command)
+        {
+            MenuHelpers.CreateVREngineIfNeeded();
+            MenuHelpers.CreateRoomSpaceOriginIfNeeded();
+            MenuHelpers.CreateAndPlaceGameObject("Color Picker", command.context as GameObject, typeof(ColorPicker));
+        }
 
 
         // ---- SELECTION ----
