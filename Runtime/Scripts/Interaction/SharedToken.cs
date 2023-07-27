@@ -38,6 +38,12 @@ public class SharedToken : MonoBehaviour
         }
     }
 
+    public void ForceRequestToken(MonoBehaviour requester)
+    {
+        m_CurrentOwner = requester;
+        m_OnTokenAvailabilityChange?.Invoke(false);
+    }
+
     public bool ReleaseToken(MonoBehaviour owner)
     {
         if (m_CurrentOwner == owner) {
