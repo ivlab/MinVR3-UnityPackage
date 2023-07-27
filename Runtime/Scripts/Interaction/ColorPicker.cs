@@ -37,10 +37,8 @@ namespace IVLab.MinVR3
 
         void Start()
         {
-            m_InitialColor = Color.gray;
+            m_InitialColor = new Color(0.75f, 0.75f, 0.75f);
  
-            
-
             GameObject topSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             topSphere.transform.SetParent(this.transform, false);
             topSphere.transform.localPosition = m_Radius * Vector3.up;
