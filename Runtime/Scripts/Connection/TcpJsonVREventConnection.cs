@@ -43,9 +43,7 @@ namespace IVLab.MinVR3
         public OnVREventReceived.OnVREventReceivedDelegate OnVREventReceived { get; set; }
 
 
-
-        // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
             m_AcceptedConnections = new List<TcpClient>();
             m_Listener = null;
