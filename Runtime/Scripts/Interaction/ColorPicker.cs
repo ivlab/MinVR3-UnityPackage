@@ -11,7 +11,7 @@ namespace IVLab.MinVR3
      * - fade to 50% when outside bounding sphere for the 'cancel' operation
      */
     [AddComponentMenu("MinVR Interaction/Widgets/Color Picker (CavePainting Style)")]
-    public class ColorPicker : MonoBehaviour, IVREventListener
+    public class ColorPicker : MonoBehaviour, IVREventListener, IVREventProducer
     {
         public Color initialColor {
             get { return m_InitialColor; }
@@ -294,6 +294,14 @@ namespace IVLab.MinVR3
             VREngine.Instance?.eventManager?.RemoveEventListener(this);
         }
 
+        public List<IVREventPrototype> GetEventPrototypes()
+        {
+            List<IVREventPrototype> eventPrototypes = new List<IVREventPrototype>();
+            eventPrototypes.Add(VREventPrototypeVector4.Create("ColorPicker/ColorModified"));
+            eventPrototypes.Add(VREventPrototypeVector4.Create("ColorPicker/ColorSelected"));
+            eventPrototypes.Add(VREventPrototypeVector4.Create("ColorPicker/ColorCancelled"));
+            return eventPrototypes;
+        }
 
         [SerializeField] private VREventPrototype m_CursorDownEvent;
         [SerializeField] private VREventPrototypeVector3 m_CursorPosEvent;

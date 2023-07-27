@@ -1340,7 +1340,7 @@ Transform:
   m_Children:
   - {fileID: 1887753106}
   m_Father: {fileID: 1308896952}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &426030695
 MonoBehaviour:
@@ -1502,6 +1502,9 @@ MonoBehaviour:
       m_CallbackVector3:
         m_PersistentCalls:
           m_Calls: []
+      m_CallbackVector4:
+        m_PersistentCalls:
+          m_Calls: []
       m_CallbackQuaternion:
         m_PersistentCalls:
           m_Calls: []
@@ -1565,6 +1568,9 @@ MonoBehaviour:
       m_CallbackVector3:
         m_PersistentCalls:
           m_Calls: []
+      m_CallbackVector4:
+        m_PersistentCalls:
+          m_Calls: []
       m_CallbackQuaternion:
         m_PersistentCalls:
           m_Calls: []
@@ -1593,89 +1599,7 @@ MonoBehaviour:
     m_DataTypeName: Vector3
   m_ProximityThreshold: 0.3
   m_BaseEventName: HandsProximity
---- !u!21 &465066220
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Legacy Shaders/Diffuse
-  m_Shader: {fileID: 7, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats: []
-    m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-  m_BuildTextureStacks: []
---- !u!1 &495904438
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 495904439}
-  - component: {fileID: 495904440}
-  m_Layer: 0
-  m_Name: VRPN Tracker 'pen'
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &495904439
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 495904438}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 727823036}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &495904440
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 495904438}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4433d2d5ef2d09447adbfdf10bf77b2d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  vrpnDevice: pen
-  vrpnServer: localhost
-  vrpnSensor: 0
-  minVR3PositionEventName: _Brush/Position
-  minVR3RotationEventName: _Brush/Rotation
-  incomingCoordinateSystem:
-    handedness: 1
-    upAxis: 1
-    forwardAxis: 5
-  calibrationPositionOffset: {x: 0, y: 0, z: 0}
-  calibrationRotationOffset: {x: 0, y: 0, z: 0}
-  threadingMode: 1
---- !u!43 &525188633
+--- !u!43 &442959251
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1839,6 +1763,173 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!1 &465829835
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 465829836}
+  - component: {fileID: 465829837}
+  - component: {fileID: 465829838}
+  m_Layer: 0
+  m_Name: ColorPicker Widget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &465829836
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 465829835}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1308896952}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &465829837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 465829835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f988e68e8ff644fec87d337f2af1f8e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_CursorDownEvent:
+    m_EventName: Keyboard/Space/Down
+    m_DataTypeName: 
+  m_CursorPosEvent:
+    m_EventName: _Hand/Position
+    m_DataTypeName: Vector3
+  m_CursorUpEvent:
+    m_EventName: Keyboard/Space/Up
+    m_DataTypeName: 
+  m_RequireToken: {fileID: 0}
+  m_Radius: 0.4
+  m_CancelRadius: 0.6
+  m_CursorRadius: 0.15
+  m_ColoredPointsRadius: 0.1
+--- !u!114 &465829838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 465829835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcc88d302b1a0486dbdf6aae4e637244, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OnVREvent:
+    m_VRCallback:
+      m_DataTypeName: Vector4
+      m_ShowDataTypeInEditor: 0
+      m_Callback:
+        m_PersistentCalls:
+          m_Calls: []
+      m_CallbackInt32:
+        m_PersistentCalls:
+          m_Calls: []
+      m_CallbackSingle:
+        m_PersistentCalls:
+          m_Calls: []
+      m_CallbackVector2:
+        m_PersistentCalls:
+          m_Calls: []
+      m_CallbackVector3:
+        m_PersistentCalls:
+          m_Calls: []
+      m_CallbackVector4:
+        m_PersistentCalls:
+          m_Calls:
+          - m_Target: {fileID: 1132910125}
+            m_TargetAssemblyTypeName: IVLab.MinVR3.MainPaintingAndReframingUI, Assembly-CSharp
+            m_MethodName: SetBrushColor
+            m_Mode: 0
+            m_Arguments:
+              m_ObjectArgument: {fileID: 0}
+              m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+              m_IntArgument: 0
+              m_FloatArgument: 0
+              m_StringArgument: 
+              m_BoolArgument: 0
+            m_CallState: 2
+      m_CallbackQuaternion:
+        m_PersistentCalls:
+          m_Calls: []
+    m_EventPrototype:
+      m_EventName: ColorPicker/ColorModified
+      m_DataTypeName: Vector4
+      m_DataTypeLocked: 0
+      m_DefineNewPrototypeInEditor: 0
+--- !u!1 &495904438
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 495904439}
+  - component: {fileID: 495904440}
+  m_Layer: 0
+  m_Name: VRPN Tracker 'pen'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &495904439
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 495904438}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 727823036}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &495904440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 495904438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4433d2d5ef2d09447adbfdf10bf77b2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vrpnDevice: pen
+  vrpnServer: localhost
+  vrpnSensor: 0
+  minVR3PositionEventName: _Brush/Position
+  minVR3RotationEventName: _Brush/Rotation
+  incomingCoordinateSystem:
+    handedness: 1
+    upAxis: 1
+    forwardAxis: 5
+  calibrationPositionOffset: {x: 0, y: 0, z: 0}
+  calibrationRotationOffset: {x: 0, y: 0, z: 0}
+  threadingMode: 1
 --- !u!1 &535917661
 GameObject:
   m_ObjectHideFlags: 0
@@ -1891,7 +1982,7 @@ Transform:
   m_Children:
   - {fileID: 872426306}
   m_Father: {fileID: 1308896952}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &620721662
 GameObject:
@@ -2001,6 +2092,9 @@ MonoBehaviour:
       m_CallbackVector3:
         m_PersistentCalls:
           m_Calls: []
+      m_CallbackVector4:
+        m_PersistentCalls:
+          m_Calls: []
       m_CallbackQuaternion:
         m_PersistentCalls:
           m_Calls: []
@@ -2025,6 +2119,9 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
       m_CallbackVector3:
+        m_PersistentCalls:
+          m_Calls: []
+      m_CallbackVector4:
         m_PersistentCalls:
           m_Calls: []
       m_CallbackQuaternion:
@@ -2432,9 +2529,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ArtworkParentTransform: {fileID: 422990450}
+  m_BrushCursorMeshRenderer: {fileID: 1887753108}
   m_BrushCursorTransform: {fileID: 426030694}
   m_HandCursorTransform: {fileID: 535917663}
   m_PaintMaterial: {fileID: 2100000, guid: 4c70c38b4ded945b6b1832984bcc9503, type: 2}
+  m_BrushColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!4 &1132910126
 Transform:
   m_ObjectHideFlags: 0
@@ -2606,6 +2705,9 @@ MonoBehaviour:
       m_CallbackVector3:
         m_PersistentCalls:
           m_Calls: []
+      m_CallbackVector4:
+        m_PersistentCalls:
+          m_Calls: []
       m_CallbackQuaternion:
         m_PersistentCalls:
           m_Calls: []
@@ -2632,6 +2734,9 @@ MonoBehaviour:
       m_CallbackVector3:
         m_PersistentCalls:
           m_Calls: []
+      m_CallbackVector4:
+        m_PersistentCalls:
+          m_Calls: []
       m_CallbackQuaternion:
         m_PersistentCalls:
           m_Calls: []
@@ -2656,6 +2761,9 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
       m_CallbackVector3:
+        m_PersistentCalls:
+          m_Calls: []
+      m_CallbackVector4:
         m_PersistentCalls:
           m_Calls: []
       m_CallbackQuaternion:
@@ -2684,6 +2792,9 @@ MonoBehaviour:
       m_CallbackVector3:
         m_PersistentCalls:
           m_Calls: []
+      m_CallbackVector4:
+        m_PersistentCalls:
+          m_Calls: []
       m_CallbackQuaternion:
         m_PersistentCalls:
           m_Calls: []
@@ -2708,6 +2819,9 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
       m_CallbackVector3:
+        m_PersistentCalls:
+          m_Calls: []
+      m_CallbackVector4:
         m_PersistentCalls:
           m_Calls: []
       m_CallbackQuaternion:
@@ -2736,6 +2850,9 @@ MonoBehaviour:
       m_CallbackVector3:
         m_PersistentCalls:
           m_Calls: []
+      m_CallbackVector4:
+        m_PersistentCalls:
+          m_Calls: []
       m_CallbackQuaternion:
         m_PersistentCalls:
           m_Calls: []
@@ -2762,6 +2879,9 @@ MonoBehaviour:
       m_CallbackVector3:
         m_PersistentCalls:
           m_Calls: []
+      m_CallbackVector4:
+        m_PersistentCalls:
+          m_Calls: []
       m_CallbackQuaternion:
         m_PersistentCalls:
           m_Calls: []
@@ -2786,6 +2906,9 @@ MonoBehaviour:
         m_PersistentCalls:
           m_Calls: []
       m_CallbackVector3:
+        m_PersistentCalls:
+          m_Calls: []
+      m_CallbackVector4:
         m_PersistentCalls:
           m_Calls: []
       m_CallbackQuaternion:
@@ -3420,6 +3543,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 270025812}
+  - {fileID: 465829836}
   - {fileID: 426030694}
   - {fileID: 535917663}
   m_Father: {fileID: 0}
@@ -3528,6 +3652,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c4d3b136308dbf43a1d7f5629a6d5ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!21 &1493334126
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Legacy Shaders/Diffuse
+  m_Shader: {fileID: 7, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats: []
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []
 --- !u!1 &1598010193
 GameObject:
   m_ObjectHideFlags: 0
@@ -4013,7 +4164,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 465066220}
+  - {fileID: 1493334126}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4042,7 +4193,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1887753105}
-  m_Mesh: {fileID: 525188633}
+  m_Mesh: {fileID: 442959251}
 --- !u!1 &1918016365
 GameObject:
   m_ObjectHideFlags: 0

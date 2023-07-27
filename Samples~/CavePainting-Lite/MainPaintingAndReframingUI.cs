@@ -7,6 +7,22 @@ namespace IVLab.MinVR3
 
     public class MainPaintingAndReframingUI : MonoBehaviour
     {
+        public Color brushColor {
+            get { return m_BrushColor; }
+            set { SetBrushColor(value); }
+        }
+
+        public void SetBrushColor(Color c)
+        {
+            m_BrushColor = c;
+            m_BrushCursorMeshRenderer.sharedMaterial.color = c;
+        }
+
+        public void SetBrushColor(Vector4 c)
+        {
+            SetBrushColor(new Color(c[0], c[1], c[2], c[3]));
+        }
+
         private void Reset()
         {
             m_ArtworkParentTransform = null;
@@ -18,6 +34,7 @@ namespace IVLab.MinVR3
         {
             Debug.Assert(m_ArtworkParentTransform != null);
             Debug.Assert(m_BrushCursorTransform != null);
+            Debug.Assert(m_BrushCursorMeshRenderer != null);
             Debug.Assert(m_HandCursorTransform != null);
             Debug.Assert(m_PaintMaterial != null);
 
@@ -40,8 +57,11 @@ namespace IVLab.MinVR3
             GameObject frontMeshObj = new GameObject("FrontMesh", typeof(MeshFilter), typeof(MeshRenderer));
             frontMeshObj.transform.SetParent(m_CurrentStrokeObj.transform, false);
             MeshRenderer frontMeshRenderer = frontMeshObj.GetComponent<MeshRenderer>();
-            frontMeshRenderer.sharedMaterial = m_PaintMaterial;
-            //frontMeshRenderer.sharedMaterial = new Material(Shader.Find("Standard"));
+            frontMeshRenderer.sharedMaterial = m_PaintMaterial;       // set shared base material
+            Material customizedMaterial = frontMeshRenderer.material; // clones base material
+            customizedMaterial.color = m_BrushColor;                  // customize the clone
+            frontMeshRenderer.sharedMaterial = customizedMaterial;    // set shared to customized
+
             m_CurrentStrokeFrontMesh = frontMeshRenderer.GetComponent<MeshFilter>().mesh;
             m_CurrentStrokeFrontMesh.MarkDynamic();
             m_CurrentStrokeFrontVertices = new List<Vector3>();
@@ -50,7 +70,7 @@ namespace IVLab.MinVR3
             GameObject backMeshObj = new GameObject("BackMesh", typeof(MeshFilter), typeof(MeshRenderer));
             backMeshObj.transform.SetParent(m_CurrentStrokeObj.transform, false);
             MeshRenderer backMeshRenderer = backMeshObj.GetComponent<MeshRenderer>();
-            backMeshRenderer.sharedMaterial = m_PaintMaterial; // new Material(Shader.Find("Standard"));
+            backMeshRenderer.sharedMaterial = customizedMaterial;
             m_CurrentStrokeBackMesh = backMeshRenderer.GetComponent<MeshFilter>().mesh;
             m_CurrentStrokeBackMesh.MarkDynamic();
             m_CurrentStrokeBackVertices = new List<Vector3>();
@@ -189,13 +209,18 @@ namespace IVLab.MinVR3
 
         [Tooltip("Parent Transform for any 3D geometry produced by painting.")]
         [SerializeField] private Transform m_ArtworkParentTransform;
+        [Tooltip("The brush cursor mesh renderer.")]
+        [SerializeField] private MeshRenderer m_BrushCursorMeshRenderer;
         [Tooltip("The transform of the brush cursor.")]
         [SerializeField] private Transform m_BrushCursorTransform;
         [Tooltip("The transform of the hand cursor.")]
         [SerializeField] private Transform m_HandCursorTransform;
 
-        [Tooltip("The transform of the hand cursor.")]
+        [Tooltip("The base material for the paint -- color is added to this.")]
         [SerializeField] private Material m_PaintMaterial;
+
+        [Tooltip("The current brush color.")]
+        [SerializeField] private Color m_BrushColor;
 
 
         // runtime only

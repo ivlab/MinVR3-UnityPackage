@@ -206,6 +206,9 @@ namespace IVLab.MinVR3
             m_CallbackVector3 = new VRCallbackVector3();
             m_AllCallbacks.Add(typeof(Vector3).Name, m_CallbackVector3);
 
+            m_CallbackVector4 = new VRCallbackVector4();
+            m_AllCallbacks.Add(typeof(Vector4).Name, m_CallbackVector4);
+
             m_CallbackQuaternion = new VRCallbackQuaternion();
             m_AllCallbacks.Add(typeof(Quaternion).Name, m_CallbackQuaternion);
 
@@ -217,6 +220,7 @@ namespace IVLab.MinVR3
         [SerializeField] private VRCallbackFloat m_CallbackSingle;
         [SerializeField] private VRCallbackVector2 m_CallbackVector2;
         [SerializeField] private VRCallbackVector3 m_CallbackVector3;
+        [SerializeField] private VRCallbackVector4 m_CallbackVector4;
         [SerializeField] private VRCallbackQuaternion m_CallbackQuaternion;
 
         // Location 2 of 2 to edit when adding a new event data type.
