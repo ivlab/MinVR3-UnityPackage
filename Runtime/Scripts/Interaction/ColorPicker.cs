@@ -27,15 +27,19 @@ namespace IVLab.MinVR3
             m_RequireToken = null;
 
             m_Radius = 0.4f;
-            m_CancelRadius = 1.5f * m_Radius;
-            m_CursorRadius = 0.05f * m_Radius;
-            m_ColoredPointsRadius = 0.04f * m_Radius;
+            m_CancelRadius = 0.5f;
+            m_CursorRadius = 0.1f;
+            m_ColoredPointsRadius = 0.05f;
+            m_LineWidth = 0.005f;
+            m_NumPointsOnColorWheel = 12;
         }
 
 
         void Start()
         {
             m_InitialColor = Color.gray;
+ 
+            
 
             GameObject topSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             topSphere.transform.SetParent(this.transform, false);
@@ -53,8 +57,13 @@ namespace IVLab.MinVR3
             botMat.color = Color.black;
             botSphere.GetComponent<MeshRenderer>().sharedMaterial = botMat;
 
-            for (float a = 0; a < 360; a += 12) {
+            Material lineMat = new Material(Shader.Find("Unlit/Color"));
+            lineMat.color = Color.white;
+
+            float aInc = 360.0f / (float)m_NumPointsOnColorWheel;
+            for (float a = 0; a < 360; a += aInc) {
                 Vector3 p = new Vector3(m_Radius * Mathf.Cos(Mathf.Deg2Rad * a), 0, m_Radius * Mathf.Sin(Mathf.Deg2Rad * a));
+
                 GameObject colSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                 colSphere.transform.SetParent(this.transform, false);
                 colSphere.transform.localPosition = p;
@@ -62,6 +71,20 @@ namespace IVLab.MinVR3
                 Material colMat = colSphere.GetComponent<MeshRenderer>().material;
                 colMat.color = PointToColor(p);
                 colSphere.GetComponent<MeshRenderer>().sharedMaterial = colMat;
+
+                GameObject colLine = new GameObject("Line", typeof(LineRenderer));
+                colLine.transform.SetParent(this.transform, false);
+                LineRenderer l = colLine.GetComponent<LineRenderer>();
+                l.sharedMaterial = lineMat;
+                List<Vector3> points = new List<Vector3>();
+                points.Add(m_Radius * Vector3.up);
+                points.Add(p);
+                points.Add(m_Radius * -Vector3.up);
+                l.startWidth = m_LineWidth;
+                l.endWidth = m_LineWidth;
+                l.positionCount = points.Count;
+                l.SetPositions(points.ToArray());
+                l.useWorldSpace = false;
             }
 
             m_CursorSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
@@ -313,6 +336,8 @@ namespace IVLab.MinVR3
         [SerializeField] private float m_CancelRadius;
         [SerializeField] private float m_CursorRadius;
         [SerializeField] private float m_ColoredPointsRadius;
+        [SerializeField] private float m_LineWidth;
+        [SerializeField] private int m_NumPointsOnColorWheel;
 
 
         // runtime
