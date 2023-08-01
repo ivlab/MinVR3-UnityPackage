@@ -65,10 +65,6 @@ namespace IVLab.MinVR3
                 // There may be a better way to do this, but at least a switch is fast.
                 // Alternative would be to use reflection to convert the type
                 // using the s_AvailableDataTypes dictionary.
-                //
-                // Some ugliness for parsing built-in types here due to Unity not
-                // supporting .NET 7 yet, which has an `IParsable<>` interface.
-                System.Text.RegularExpressions.GroupCollection matchGroups;
                 switch (evt.GetDataTypeName()) {
                     case "Vector2":
                         evt = JsonUtility.FromJson<VREventVector2>(eventJson);
@@ -86,63 +82,13 @@ namespace IVLab.MinVR3
                         evt = JsonUtility.FromJson<VREventGameObject>(eventJson);
                         break;
                     case "Single":
-                        // try to parse, assuming data value is inside an object under the field named "value"
-                        matchGroups = builtinTypeRegexForDataInsideObject.Match(eventJson).Groups;
-                        if ((matchGroups[0].Success) && (matchGroups[1].Value != String.Empty)) {
-                            evt = new VREventFloat(evt.name, Single.Parse(matchGroups[1].Value));
-                            break;
-                        }
-                        // try to parse, assuming data value is in a simple name/value pair
-                        matchGroups = dataRegexForIntOrFloat.Match(eventJson).Groups;
-                        if ((matchGroups[0].Success) && (matchGroups[1].Value != String.Empty)) {
-                            evt = new VREventFloat(evt.name, Single.Parse(matchGroups[1].Value));
-                            break;
-                        }
-
-                        Debug.LogError("Problem extracting float data from serialized VREvent.");
+                        evt = JsonUtility.FromJson<VREventFloat>(eventJson);
                         break;
                     case "Int32":
-                        // try to parse, assuming data value is inside an object under the field named "value"
-                        matchGroups = builtinTypeRegexForDataInsideObject.Match(eventJson).Groups;
-                        if ((matchGroups[0].Success) && (matchGroups[1].Value != String.Empty)) {
-                            evt = new VREventInt(evt.name, Int32.Parse(matchGroups[1].Value));
-                            break;
-                        }
-                        // try to parse, assuming data value is in a simple name/value pair
-                        matchGroups = dataRegexForIntOrFloat.Match(eventJson).Groups;
-                        if ((matchGroups[0].Success) && (matchGroups[1].Value != String.Empty)) {
-                            evt = new VREventInt(evt.name, Int32.Parse(matchGroups[1].Value));
-                            break;
-                        }
-                        Debug.LogError("Problem extracting int data from serialized VREvent.");
+                        evt = JsonUtility.FromJson<VREventInt>(eventJson);
                         break;
                     case "String":
-                        // try to parse, assuming data value is inside an object under the field named "value"
-                        matchGroups = builtinTypeRegexForDataInsideObject.Match(eventJson).Groups;
-                        if ((matchGroups[0].Success) && (matchGroups[1].Value != String.Empty)) {
-                            // remove start/end quotes
-                            String stringValue = matchGroups[1].Value.Substring(1, matchGroups[1].Value.Length - 2);
-                            evt = new VREventString(evt.name, stringValue);
-                            break;
-                        }
-                        // try to parse, assuming data value is in a simple name/value pair
-                        matchGroups = dataRegexForQuotedString.Match(eventJson).Groups;
-                        if ((matchGroups[0].Success) && (matchGroups[1].Value != String.Empty)) {
-                            String stringValue = matchGroups[1].Value;
-                            if (matchGroups[1].Value[0] != '{') {
-                                // normal quoted string
-                                evt = new VREventString(evt.name, stringValue);
-                                break;
-                            } else {
-                                // string starts with { so assume we have a json string and we need a more complex regex to get it all
-                                matchGroups = dataRegexForQuotedJson.Match(eventJson).Groups;
-                                if ((matchGroups[0].Success) && (matchGroups[1].Value != String.Empty)) {
-                                    evt = new VREventString(evt.name, stringValue);
-                                    break;
-                                }
-                            }
-                        }
-                        Debug.LogError("Problem extracting string data from serialized VREvent.");
+                        evt = JsonUtility.FromJson<VREventString>(eventJson);
                         break;
                     default:
                         break;
@@ -207,35 +153,6 @@ namespace IVLab.MinVR3
             { typeof(string).Name, typeof(VREventString) },
             { typeof(GameObject).Name, typeof(GameObject) },
         };
-
-        // dfk comments 7/14/23:
-        // this regex seems to expect the data to come in as an object with a field named value, i.e., "m_Data":{"value":"datavalue"}.  Is this what the 
-        // websocket json serializer generates?  it does not seem to be what is generated by the JsonUtility used in this class.
-        //
-        // bh comments 7/17/23:
-        // due to the way both JavaScript JSON serialize/deserialize and Unity's
-        // JsonUtility work, the "m_Data":{"value":"datavalue"} was used.
-        // Ideally we would have just a raw "m_Data":<some value> pairing, but
-        // this is difficult on both sides to have something that's not an
-        // object, so we made a compromise by using a object wrapper.
-        // For details, see:
-        // - minvr3.js: https://github.umn.edu/ivlab-cs/MinVR3Plugin-WebSocket/blob/master/MinVR3.js%7E/src/minvr3.js
-        // - VREvent serialization: https://github.umn.edu/ivlab-cs/MinVR3Plugin-WebSocket/blob/master/Runtime/MinVRPlugin/WebSocketVREventConnection.cs#L40
-        // - VREvent deserialization: https://github.umn.edu/ivlab-cs/MinVR3Plugin-WebSocket/blob/master/Runtime/MinVRPlugin/WebSocketVREventConnection.cs#L86
-        private static System.Text.RegularExpressions.Regex builtinTypeRegexForDataInsideObject = new System.Text.RegularExpressions.Regex(@"""m_Data"":{""value"":([\s\S]+)}}");
-
-        // the JsonUtility used in this class as well as the jsoncpp package used in the forceserver serialize m_Data as a simple name/value pair
-        // i.e., "m_Data":datavalue.  The following regex works for datavalues followed by a , or a }, which is good for ints and floats.
-        private static System.Text.RegularExpressions.Regex dataRegexForIntOrFloat = new System.Text.RegularExpressions.Regex(@"""m_Data"":(.*?)[,}]");
-        
-        // extracts the string inside quotes that comes after "m_Data": handling any escaped quotes within the string
-        private static System.Text.RegularExpressions.Regex dataRegexForQuotedString = new System.Text.RegularExpressions.Regex(@"""m_Data"":""((?:[^""\\]|\\.)*)""");
-        
-        // extracts the largest sequence of matched {} inside the quoted string that comes after "m_Data":
-        private static System.Text.RegularExpressions.Regex dataRegexForQuotedJson = new System.Text.RegularExpressions.Regex(@"""m_Data"":""(\{(?>[^}{]+|(?<c>)\{|(?<-c>)})+})""");
-        
-        
-        
     }
 
 } // namespace
