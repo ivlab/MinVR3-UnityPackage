@@ -12,16 +12,25 @@ namespace IVLab.MinVR3
     {
         private bool vrEventGeneratorToggle = false;
         private Dictionary<GameObject, bool> gameObjectToggles = new Dictionary<GameObject, bool>();
-        private string filterText = "";
+        private string prototypeFilterText = "";
 
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
 
+            EditorGUILayout.HelpBox(
+                "The VREventManager handles the MinVR3 event queue. " +
+                "Toggle 'Show Debugging Output' to print to console the events that MinVR3 is sending and receiving." + 
+                "Optionally, you can filter the debug output to only show certain event types. Regular expression syntax is allowed.",
+                MessageType.None
+            );
+
             // Basic output
-            bool debugMode = serializedObject.FindProperty("m_ShowDebuggingOutput").boolValue;
-            debugMode = EditorGUILayout.Toggle("Show Debugging Output", debugMode);
-            serializedObject.FindProperty("m_ShowDebuggingOutput").boolValue = debugMode;
+            SerializedProperty debugModeProp = serializedObject.FindProperty("m_ShowDebuggingOutput");
+            EditorGUILayout.PropertyField(debugModeProp);
+
+            SerializedProperty debugFilter = serializedObject.FindProperty("m_DebugOutputFilter");
+            EditorGUILayout.PropertyField(debugFilter);
 
             // Show all object that are currently registering VREvent prototypes
 #if UNITY_EDITOR
@@ -67,12 +76,12 @@ namespace IVLab.MinVR3
 
                 EditorGUILayout.BeginHorizontal();
                 EditorGUILayout.LabelField("Filter event names", EditorStyles.miniLabel);
-                filterText = EditorGUILayout.TextField(filterText);
+                prototypeFilterText = EditorGUILayout.TextField(prototypeFilterText);
                 EditorGUILayout.EndHorizontal();
 
                 foreach (var kv in objectEventLists)
                 {
-                    if (filterText == "" || kv.Value.Any(evt => evt.GetEventName().ToLower().Contains(filterText.ToLower())))
+                    if (prototypeFilterText == "" || kv.Value.Any(evt => evt.GetEventName().ToLower().Contains(prototypeFilterText.ToLower())))
                     {
                         gameObjectToggles[kv.Key] = EditorGUILayout.Foldout(gameObjectToggles[kv.Key], "GameObject: " + kv.Key.GetScenePath());
                         if (gameObjectToggles[kv.Key])

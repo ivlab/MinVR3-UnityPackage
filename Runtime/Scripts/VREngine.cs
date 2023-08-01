@@ -61,7 +61,7 @@ namespace IVLab.MinVR3 {
     [RequireComponent(typeof(VRConfigManager))]
     [RequireComponent(typeof(VREventManager))]
     [DefaultExecutionOrder(VREngine.ScriptPriority)] 
-    public class VREngine : Singleton<VREngine>
+    public class VREngine : Singleton<VREngine>, IVREventProducer
     {
         // In (almost?) all situations, this script should be the first one to run during each frame's
         // Update() phase.  This script must be run before all other MinVR scripts to make sure that
@@ -96,6 +96,38 @@ namespace IVLab.MinVR3 {
             }
         }
 
+        /// <summary>
+        /// Time event for delta time synchronization across nodes in a network.
+        /// Useful for implementing animations on a clustered setup where
+        /// `Time.deltaTime` may be different on individual nodes and it's
+        /// useful to have a "ground truth" timing event.
+        ///
+        /// By default, this gets sent in <see cref="VREngine.Update"/> for both
+        /// cluster and non-cluster setups.
+        /// </summary>
+        public static VREventFloat DeltaTimeEvent { get => new VREventFloat("MinVR3/DeltaTime", Time.deltaTime); }
+
+        /// <summary>
+        /// Shutdown event that gets sent when Unity is quitting. This event
+        /// gets sent when the user has pressed the play button to "unplay" the
+        /// app in editor, or quits the built application. See <see
+        /// cref="VREngine.SendShutdownEvent"/>.
+        /// </summary>
+        public static VREvent ShutdownEvent { get => new VREvent("MinVR3/Shutdown"); }
+
+        // Interrupt quit to send a shutdown event
+        [RuntimeInitializeOnLoadMethod]
+        static void RunOnStart()
+        {
+            Application.wantsToQuit += SendShutdownEvent;
+        }
+
+        static bool SendShutdownEvent()
+        {
+            // send a shutdown message
+            VREngine.Instance.eventManager.ProcessEvent(ShutdownEvent);
+            return true;
+        }
 
         // since the DefaultExecutionOrder makes this script run first, the Initialize function will be called before
         // any other script's Start() function.
@@ -192,10 +224,24 @@ namespace IVLab.MinVR3 {
             // GET NEW INPUT EVENTS FROM POLLED INPUT DEVICES
             eventManager.PollInputDevices();
 
+            // Insert the deltaTime event at the beginning of the queue (if not in cluster mode)
+            if (m_ClusterNode == null)
+            {
+                eventManager.QueueEvent(0, DeltaTimeEvent);
+            }
+
             // SYNCHRONIZE INPUT EVENTS SO EACH NODE WILL PROCESS AN IDENTICAL EVENTQUEUE DURING UPDATE()
-            if ((m_ClusterNode != null) && (m_ClusterComState == ClusterCommunicationState.SyncEventsNext)) {
+            if ((m_ClusterNode != null) && (m_ClusterComState == ClusterCommunicationState.SyncEventsNext))
+            {
                 List<VREvent> queue = eventManager.GetEventQueue();
                 m_ClusterNode.SynchronizeInputEventsAcrossAllNodes(ref queue);
+
+                // In cluster mode, only send delta time event if this node is the server
+                if (m_ClusterNode.GetType() == typeof(ClusterServer))
+                {
+                    queue.Insert(0, DeltaTimeEvent);
+                }
+
                 eventManager.SetEventQueue(queue);
                 m_ClusterComState = ClusterCommunicationState.SwapBuffersNext;
                 StartCoroutine(WaitForEndOfFrame());
@@ -221,6 +267,14 @@ namespace IVLab.MinVR3 {
             }
         }
 
+        public List<IVREventPrototype> GetEventPrototypes()
+        {
+            return new List<IVREventPrototype>()
+            {
+                VREventPrototype.Create(ShutdownEvent.GetName()),
+                VREventPrototypeFloat.Create(DeltaTimeEvent.GetName())
+            };
+        }
 
         // Can reference either a ClusterClient or a ClusterServer
         private IClusterNode m_ClusterNode;

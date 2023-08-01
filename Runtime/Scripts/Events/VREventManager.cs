@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -96,6 +97,13 @@ namespace IVLab.MinVR3
             }
         }
 
+        public void QueueEvent(int index, VREvent e)
+        {
+            lock (m_Queue) {
+                m_Queue.Insert(index, e);
+            }
+        }
+
         public void InsertInQueue(VREvent e)
         {
             m_DerivedQueue.Add(e);
@@ -151,11 +159,18 @@ namespace IVLab.MinVR3
             List<VREvent> filterResults = RunEventFilters(e);
 
             // send the results to all event listeners
-            foreach (VREvent eFiltered in filterResults) {
-                if (m_ShowDebuggingOutput) {
-                    Debug.Log("Processing event " + eFiltered.ToString());
+            foreach (VREvent eFiltered in filterResults)
+            {
+                if (m_ShowDebuggingOutput)
+                {
+                    Regex eventNamesToLog = new Regex(m_DebugOutputFilter);
+                    if (m_DebugOutputFilter.Length == 0 || eventNamesToLog.IsMatch(eFiltered.GetName()))
+                    {
+                        Debug.Log("Processing event " + eFiltered.ToString());
+                    }
                 }
-                foreach (Tuple<int, IVREventListener> listenerTuple in m_EventListeners.ToList()) {
+                foreach (Tuple<int, IVREventListener> listenerTuple in m_EventListeners.ToList())
+                {
                     listenerTuple.Item2.OnVREvent(eFiltered);
                 }
             }
@@ -266,6 +281,8 @@ namespace IVLab.MinVR3
 
         [Tooltip("Logs events to the console as they are processed")]
         public bool m_ShowDebuggingOutput = false;
+        [Tooltip("Logs events to the console as they are processed")]
+        public string m_DebugOutputFilter = "";
 
         // These lists are populated at runtime as other objects register with the manager
         [NonSerialized] private List<IPolledInputDevice> m_PolledInputDevices = new List<IPolledInputDevice>();
