@@ -13,6 +13,8 @@ namespace IVLab.MinVR3
     [AddComponentMenu("MinVR Interaction/Navigation & Manipulation/Bimanual Object Manipulator")]
     public class BimanualObjectManipulator : MonoBehaviour
     {
+        [SerializeField] private SharedToken m_RequireToken;
+
         [SerializeField] private VREventPrototype m_Cursor0DownEvent;
         [SerializeField] private VREventPrototypeVector3 m_Cursor0PosEvent;
         [SerializeField] private VREventPrototypeQuaternion m_Cursor0RotEvent;
@@ -71,15 +73,15 @@ namespace IVLab.MinVR3
             m_FSM.AddState("Grab1");
             m_FSM.AddState("GrabBoth");
 
-            m_FSM.AddArc("START", "Grab0", VREventCallbackAny.CreateRuntime(m_Cursor0DownEvent, () => InitManipulation(0)));
+            m_FSM.AddArc("START", "Grab0", VREventCallbackAny.CreateRuntime(m_Cursor0DownEvent, () => InitManipulation(0)), m_RequireToken);
             m_FSM.AddArc("Grab0", "GrabBoth", VREventCallbackAny.CreateRuntime(m_Cursor1DownEvent, StartTwoHandManipulation));
             m_FSM.AddArc("GrabBoth", "Grab0", VREventCallbackAny.CreateRuntime(m_Cursor1UpEvent));
-            m_FSM.AddArc("Grab0", "START", VREventCallbackAny.CreateRuntime(m_Cursor0UpEvent, CancelManipulation));
+            m_FSM.AddArc("Grab0", "START", VREventCallbackAny.CreateRuntime(m_Cursor0UpEvent, CancelManipulation), null, m_RequireToken);
 
-            m_FSM.AddArc("START", "Grab1", VREventCallbackAny.CreateRuntime(m_Cursor1DownEvent, () => InitManipulation(1)));
+            m_FSM.AddArc("START", "Grab1", VREventCallbackAny.CreateRuntime(m_Cursor1DownEvent, () => InitManipulation(1)), m_RequireToken);
             m_FSM.AddArc("Grab1", "GrabBoth", VREventCallbackAny.CreateRuntime(m_Cursor0DownEvent, StartTwoHandManipulation));
             m_FSM.AddArc("GrabBoth", "Grab1", VREventCallbackAny.CreateRuntime(m_Cursor0UpEvent));
-            m_FSM.AddArc("Grab1", "START", VREventCallbackAny.CreateRuntime(m_Cursor1UpEvent, CancelManipulation));
+            m_FSM.AddArc("Grab1", "START", VREventCallbackAny.CreateRuntime(m_Cursor1UpEvent, CancelManipulation), null, m_RequireToken);
 
             m_FSM.AddArc("Grab0", "Grab0", VREventCallbackAny.CreateRuntime(m_Cursor0PosEvent, pos => UpdateCursorPosition(0, pos)));
             m_FSM.AddArc("Grab0", "Grab0", VREventCallbackAny.CreateRuntime(m_Cursor0RotEvent, rot => UpdateCursorRotation(0, rot)));
