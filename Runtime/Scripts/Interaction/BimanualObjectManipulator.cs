@@ -124,6 +124,12 @@ namespace IVLab.MinVR3
                     Vector3 cur0Pos = cursorStates[0].currentXform.GetTranslationFast();
                     Vector3 cur1Pos = cursorStates[1].currentXform.GetTranslationFast();
                     float currentDistBetweenCursors = (cur1Pos - cur0Pos).magnitude;
+                    
+                    if (currentDistBetweenCursors == 0)
+                    {
+                        Debug.LogError("<b>" + gameObject.name + " - BimanualObjectManipulator</b>: Make sure your <b>Cursor 0 Pos Event</b> is set to a different tracker than <b>Cursor 1 Pos Event</b>");
+                    }
+
                     float distRatio = currentDistBetweenCursors / initialDistBetweenCursors;
 
                     Vector3 averagePos = (cur0Pos + cur1Pos) / 2;
