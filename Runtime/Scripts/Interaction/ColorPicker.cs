@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-using IVLab.MinVR3.ExtensionMethods;
-
 
 namespace IVLab.MinVR3
 {

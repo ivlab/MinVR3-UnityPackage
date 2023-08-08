@@ -4,8 +4,6 @@ using UnityEngine;
 using System;
 
 
-using IVLab.MinVR3.ExtensionMethods;
-
 namespace IVLab.MinVR3
 {
 

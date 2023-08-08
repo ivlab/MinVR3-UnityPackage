@@ -90,8 +90,8 @@ and renaming them.
 | @IVLab.MinVR3.IVREventFilter | Processes every event every frame and can modify and/or produce more events from an event. |
 | @IVLab.MinVR3.VREventAlias | Can rename or rename-clone an event. Useful for separating out "raw" input devices from "application-level" input. |
 | @IVLab.MinVR3.VREventManager.GetEventQueue | Get the current event queue for this frame |
-| @IVLab.MinVR3.VREventManager.QueueEvent | Insert an event in the queue |
-| @IVLab.MinVR3.VREventManager.InsertInQueue | Insert a derived event in the queue |
+| @IVLab.MinVR3.VREventManager.QueueEvent(IVLab.MinVR3.VREvent) | Insert an event in the queue |
+| @IVLab.MinVR3.VREventManager.InsertInQueue(IVLab.MinVR3.VREvent) | Insert a derived event in the queue |
 
 
 
@@ -167,8 +167,11 @@ Useful topics for working with clustered apps are below:
 
 ## Extension Methods
 
-Unity's built-in methods are sometimes lackluster (especially for the @UnityEngine.Transform class, for example). We have implemented a bunch of useful methods for the following builtin classes, located in the @IVLab.MinVR3.ExtensionMethods namespace:
+Unity's built-in methods are sometimes lackluster (especially for the @UnityEngine.Transform class, for example). We have implemented a bunch of useful methods for the following builtin classes. Check out:
 
-- @UnityEngine.GameObject
-- @UnityEngine.Transform
-- @UnityEngine.Matrix4x4
+- @IVLab.MinVR3.GameObjectExtensions
+- @IVLab.MinVR3.TransformExtensions
+- @IVLab.MinVR3.Matrix4x4Extensions
+
+
+Note that here we are taking the approach that MinVR extension methods are the "surpreme" extensions methods - i.e., they are at the top-level of the `IVLab.MinVR3` namespace. This ensures that the extensions methods are available whenever you do `using IVLab.MinVR3`. Before implementing or downloading your own extension methods for these classes, check if MinVR3 has one first!

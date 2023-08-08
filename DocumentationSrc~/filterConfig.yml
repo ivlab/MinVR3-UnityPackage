@@ -2,6 +2,3 @@ apiRules:
 - include:
     uidRegex: ^IVLab\.MinVR3
     type: Namespace
-- include:
-    uidRegex: ^IVLab\.MinVR3\.ExtensionMethods
-    type: Namespace
