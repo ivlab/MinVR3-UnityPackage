@@ -19,7 +19,15 @@
         "_appFooter": "<a href=\"https://ivlab.cs.umn.edu\">Interactive Visualization Lab</a><br>Copyright 2023, Regents of the University of Minnesota, All Rights Reserved",
         "_appLogoPath": "resources/logo.svg",
         "_appFaviconPath": "resources/favicon.ico",
-        "_enableSearch": true
+        "_enableSearch": true,
+        "_newFileRepository": {
+          "branch": "main"
+        },
+        "_gitContribute": {
+          "repo": "https://github.umn.edu/ivlab-cs/MinVR3-UnityPackage",
+          "branch": "main",
+          "apiSpecFolder": "Documentation~/apidocs-overrides"
+        }
     },
     "content": [
       {

@@ -16,8 +16,8 @@ using IVLab.MinVR3;
 /// </summary>
 
 
-namespace IVLab.MinVR3.TUIO11 {
-    public class sphereMove : MonoBehaviour, IVREventListener {
+namespace IVLab.MinVR3 {
+    public class SphereMove : MonoBehaviour, IVREventListener {
                
         public int distanceMultiplier;
         float m_Angle;
