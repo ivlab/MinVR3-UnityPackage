@@ -120,6 +120,8 @@ There are other language clients available as well, see the root of this package
 - MinVR3.cpp~
 - MinVR3.py~
 
+> [!NOTE]
+> See the [Remote Connections](xref:remote-connections.md) manual page for more information on remote connections.
 
 ## Cluster Connections
 
