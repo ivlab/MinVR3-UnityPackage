@@ -1,29 +1,29 @@
 ﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
-  
+
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>VREvent System | MinVR3 </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="VREvent System | MinVR3 ">
-    <meta name="generator" content="docfx 2.59.3.0">
-    
+    <meta name="generator" content="docfx ">
+  
     <link rel="shortcut icon" href="../resources/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
     <meta property="docfx:navrel" content="../toc">
     <meta property="docfx:tocrel" content="toc">
-    
-    <meta property="docfx:rel" content="../">
-    
+  
+  <meta property="docfx:rel" content="../">
+  
   </head>
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
-        
+
         <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
           <div class="container">
             <div class="navbar-header">
@@ -33,7 +33,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              
+
               <a class="navbar-brand" href="../index.html">
                 <img id="logo" class="svg" src="../resources/logo.svg" alt="">
               </a>
@@ -44,21 +44,21 @@
                   <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
                 </div>
               </form>
-                
+
                 <ul class="nav level1 navbar-nav">
                       <li>
                           <a href="../index.html" title="Home">Home</a>
                       </li>
                       <li>
-                          <a href="../manual/intro.md" title="Manual">Manual</a>
+                          <a href="../manual/01-intro.html" title="Manual">Manual</a>
                       </li>
                       <li>
                           <a href="../api/index.html" title="API Documentation">API Documentation</a>
                       </li>
-                </ul>    </div>
+                </ul>            </div>
           </div>
         </nav>
-        
+
         <div class="subnav navbar navbar-default">
           <div class="container hide-when-search" id="breadcrumb">
             <ul class="breadcrumb">
@@ -68,7 +68,7 @@
         </div>
       </header>
       <div class="container body-content">
-        
+
         <div id="search-results">
           <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
@@ -90,13 +90,16 @@
               </div>
               <div class="sidetoc">
                 <div class="toc" id="toc">
-                  
+
                   <ul class="nav level1">
                     <li class="">
                       <a href="01-intro.html" title="Introduction" class="">Introduction</a>
                     </li>
                     <li class="">
                       <a href="02-install.html" title="Installation" class="">Installation</a>
+                    </li>
+                    <li class="">
+                      <a href="tutorial-basic-bimanual-manipulation.html" title="Tutorial - Basic Bimanual Manipulation" class="">Tutorial - Basic Bimanual Manipulation</a>
                     </li>
                     <li class="">
                       <a href="03-plugin-packages.html" title="Optional Plugin Packages" class="">Optional Plugin Packages</a>
@@ -131,7 +134,7 @@
                     <li class="">
                       <a href="changelog.html" title="Change Log" class="">Change Log</a>
                     </li>
-                  </ul>        </div>
+                  </ul>                </div>
               </div>
             </div>
           </div>
@@ -159,18 +162,18 @@
 <ul>
 <li>example VREventType_GameObject</li>
 </ul>
-<h3 id="sending-vrevents-back-to-unitys-input-system">Sending VREvents (back) to Unity&#39;s Input System</h3>
-<p>This should only be done for input from devices that Unity does not already support.  One useful example is to combine VRPN tracking and button events (which cannot be read by Unity&#39;s input system) in a virtual, Unity-style XRController.  This makes it possible to use custom VR devices, like those used in the CAVE, with Unity&#39;s XR Interaction Toolkit, including it&#39;s built-in support for interacting with 2D UIs displayed on Unity world-space Canvases.  Support for this piping of VREvents (backwards) into the Unity Input System is only planned to be supported for the New Input System with the XR Interaction Toolkit.  Technically it is possible with the Legacy Input Module, but it is a fair amount of work, and it may be best to upgrade applications instead of diving into that work.</p>
+<h3 id="sending-vrevents-back-to-unitys-input-system">Sending VREvents (back) to Unity's Input System</h3>
+<p>This should only be done for input from devices that Unity does not already support.  One useful example is to combine VRPN tracking and button events (which cannot be read by Unity's input system) in a virtual, Unity-style XRController.  This makes it possible to use custom VR devices, like those used in the CAVE, with Unity's XR Interaction Toolkit, including it's built-in support for interacting with 2D UIs displayed on Unity world-space Canvases.  Support for this piping of VREvents (backwards) into the Unity Input System is only planned to be supported for the New Input System with the XR Interaction Toolkit.  Technically it is possible with the Legacy Input Module, but it is a fair amount of work, and it may be best to upgrade applications instead of diving into that work.</p>
 <ul>
-<li>Add Unity&#39;s XRInteraction Toolkit package to your project.  This defines the XRController base class.</li>
+<li>Add Unity's XRInteraction Toolkit package to your project.  This defines the XRController base class.</li>
 <li>Create a new GameObject and add a Runtime/Scripts/Input/MinVRToUnity/MinVRController.cs MinVRController  to it.  Adjust its properties to drive the position, rotation, and buttons of the controller using VREvents.</li>
 <li>Use input from this controller to drive interactions (grabbing, teleporting, etc.) supported out of the box with the XR Interaction Toolkit</li>
-<li>And/or, use it to drive interaction with Unity UI (canvases, physics raycasting).  For this, you need to add Unity&#39;s XRUIInputModule to a gameobject somewhere in your scene AND you need to add a TrackedDeviceRaycaster component to each Canvas that you wish to interact with.</li>
+<li>And/or, use it to drive interaction with Unity UI (canvases, physics raycasting).  For this, you need to add Unity's XRUIInputModule to a gameobject somewhere in your scene AND you need to add a TrackedDeviceRaycaster component to each Canvas that you wish to interact with.</li>
 </ul>
 <h3 id="adding-a-vrevent-type-that-carries-a-new-type-of-data">Adding a VREvent type that carries a new type of Data</h3>
 </article>
           </div>
-          
+
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <div class="contribution">
@@ -188,7 +191,7 @@
           </div>
         </div>
       </div>
-      
+
       <footer>
         <div class="grad-bottom"></div>
         <div class="footer">
@@ -196,13 +199,13 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            <a href="https://ivlab.cs.umn.edu">Interactive Visualization Lab</a><br>Copyright 2022, Regents of the University of Minnesota, All Rights Reserved
-            
+      <a href="https://ivlab.cs.umn.edu">Interactive Visualization Lab</a><br>Copyright 2023, Regents of the University of Minnesota, All Rights Reserved
+      
           </div>
         </div>
       </footer>
     </div>
-    
+
     <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
     <script type="text/javascript" src="../styles/docfx.js"></script>
     <script type="text/javascript" src="../styles/main.js"></script>

@@ -1,6 +1,6 @@
 {
   "homepages": [],
-  "source_base_path": "/Users/dfk/ivlab-code/Unity/MinVR3-Dev/Packages/MinVR3-UnityPackage/DocumentationSrc~",
+  "source_base_path": "C:/Users/herma582/dev/MinVR3Sandbox2/Packages/MinVR3-UnityPackage/DocumentationSrc~",
   "xrefmap": "xrefmap.yml",
   "files": [
     {
@@ -9,139 +9,16 @@
         "resource": {
           "relative_path": "index.json"
         }
-      },
-      "is_incremental": false
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/ES.FisheyeRenderer.Resolution.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/ES.FisheyeRenderer.Resolution.html",
-          "hash": "j/4i1HKQjM7Hz7ts3LVg7u88XldubkMZmIvsWDqcr3Q="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/ES.FisheyeRenderer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/ES.FisheyeRenderer.html",
-          "hash": "EtGrfzsKje8Nk4Nhee2VpqeeFRctjGllCfPTkVBaifM="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/ES.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/ES.html",
-          "hash": "2SduKb3aN/k5RoXXMx60pEkP9sANesfyFL0RwIu6uxI="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Global.CavePaintingBrushCursor.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Global.CavePaintingBrushCursor.html",
-          "hash": "fBNWyEjaZU+LFouvhdGJmUEiPsF6FRLaiVgAXSg28fM="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Global.Matrix4x4Extensions.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Global.Matrix4x4Extensions.html",
-          "hash": "F1hu8nhY2Z2JcXIW2r9IeqQnzNb4PPLzByXnCRqd6VA="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Global.SharedToken.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Global.SharedToken.html",
-          "hash": "z/9gBuzm718/cI0ttVXXpJMyvvTPN3FiomDmAoEib0M="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Global.TouchscreenState.TouchInputPhase.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Global.TouchscreenState.TouchInputPhase.html",
-          "hash": "dtRJzlAP/Ty2+7B0v6IL56FFB3bwXqKM3G8FrydbMcs="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Global.TouchscreenState.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Global.TouchscreenState.html",
-          "hash": "gkov++umVanWmh+n3eZ3rOA3oi79etLJLZ7rI9Pjeh4="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Global.TransformExtensions.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Global.TransformExtensions.html",
-          "hash": "2bPAnggIAR2cnDYltaoQiN/ZE87Xkgvsy+Idx4vR7fU="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Global.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Global.html",
-          "hash": "3XiRYvVMpv8/WLw6Wkgc1xWcKmEMeRZwGZ+EzBQVl+k="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
+      }
     },
     {
       "type": "ManagedReference",
       "source_relative_path": "api/IVLab.MinVR3.BasicHighlighter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.BasicHighlighter.html",
-          "hash": "mDEMLyNCg519c01yROmIi/YyQuXc98w3AgxSAqSmFSY="
+          "relative_path": "api/IVLab.MinVR3.BasicHighlighter.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -149,11 +26,9 @@
       "source_relative_path": "api/IVLab.MinVR3.BasicObjectSelector.SelectionMode.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.BasicObjectSelector.SelectionMode.html",
-          "hash": "84vCRazC5xxLz+3fmWqtqYc3D9DDvmUu9hXFWhO7RLM="
+          "relative_path": "api/IVLab.MinVR3.BasicObjectSelector.SelectionMode.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -161,11 +36,19 @@
       "source_relative_path": "api/IVLab.MinVR3.BasicObjectSelector.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.BasicObjectSelector.html",
-          "hash": "yv4QS1Jt8Ms0k2bnh4q86JO9KlLRNWaWbA4srnm8Drk="
+          "relative_path": "api/IVLab.MinVR3.BasicObjectSelector.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.BimanualObjectManipulator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.BimanualObjectManipulator.html"
+        }
+      },
       "version": ""
     },
     {
@@ -173,11 +56,19 @@
       "source_relative_path": "api/IVLab.MinVR3.BimanualObjectSelector.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.BimanualObjectSelector.html",
-          "hash": "n3dL+FoMFEnyzzCxV7F/utFkAtoP+70ABkNydiywTUM="
+          "relative_path": "api/IVLab.MinVR3.BimanualObjectSelector.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.BoundsHighlighter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.BoundsHighlighter.html"
+        }
+      },
       "version": ""
     },
     {
@@ -185,11 +76,19 @@
       "source_relative_path": "api/IVLab.MinVR3.CallableEventProducer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.CallableEventProducer.html",
-          "hash": "OcZ3RxFtU8aJXPDDx+Wdg3FqLRS7bejjGMjuA/I4ZF8="
+          "relative_path": "api/IVLab.MinVR3.CallableEventProducer.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.CavePaintingBrushCursor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.CavePaintingBrushCursor.html"
+        }
+      },
       "version": ""
     },
     {
@@ -197,11 +96,9 @@
       "source_relative_path": "api/IVLab.MinVR3.ClusterClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.ClusterClient.html",
-          "hash": "nZSPkQtkJPSDqqRj2wdcky0WNp3pgIMrvQV7CIhtTv4="
+          "relative_path": "api/IVLab.MinVR3.ClusterClient.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -209,11 +106,19 @@
       "source_relative_path": "api/IVLab.MinVR3.ClusterServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.ClusterServer.html",
-          "hash": "yzwvDftzzsKP7fbVdZEdDRYdCOgaPcN0Jti39QLyU5E="
+          "relative_path": "api/IVLab.MinVR3.ClusterServer.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.ColorPicker.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.ColorPicker.html"
+        }
+      },
       "version": ""
     },
     {
@@ -221,35 +126,19 @@
       "source_relative_path": "api/IVLab.MinVR3.Condition.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.Condition.html",
-          "hash": "QJPZu22jXoko0NmsestLlQqyheCYr6W0xJTceWM40LM="
+          "relative_path": "api/IVLab.MinVR3.Condition.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/IVLab.MinVR3.ConnectionVREventListener.yml",
+      "source_relative_path": "api/IVLab.MinVR3.ConfigVal.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.ConnectionVREventListener.html",
-          "hash": "oyVDgs9ZjGDafXAcIUCHeO3QUKmCD3H2adatbYu5do0="
+          "relative_path": "api/IVLab.MinVR3.ConfigVal.html"
         }
       },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/IVLab.MinVR3.ConnectionVREventProducer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/IVLab.MinVR3.ConnectionVREventProducer.html",
-          "hash": "uVbSuC/S6hNgrDwF1Lb2EKQ+WKqI2xm5qIVwnM5oups="
-        }
-      },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -257,11 +146,9 @@
       "source_relative_path": "api/IVLab.MinVR3.CoordConversion.CoordSystem.Axis.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.CoordConversion.CoordSystem.Axis.html",
-          "hash": "kFa6iDPgYfwEY1QNj/TCC5LVRdpkAFdkKMEpZtGjajM="
+          "relative_path": "api/IVLab.MinVR3.CoordConversion.CoordSystem.Axis.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -269,11 +156,9 @@
       "source_relative_path": "api/IVLab.MinVR3.CoordConversion.CoordSystem.Handedness.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.CoordConversion.CoordSystem.Handedness.html",
-          "hash": "gtL6P8T/5pHYCBUijdlfldfl3UpB1vq+eqsNBFoDBl0="
+          "relative_path": "api/IVLab.MinVR3.CoordConversion.CoordSystem.Handedness.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -281,11 +166,9 @@
       "source_relative_path": "api/IVLab.MinVR3.CoordConversion.CoordSystem.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.CoordConversion.CoordSystem.html",
-          "hash": "gww2PDxQc1Y52E5vqi+3IxZge6hJJqoICoHjCbuOcH4="
+          "relative_path": "api/IVLab.MinVR3.CoordConversion.CoordSystem.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -293,11 +176,19 @@
       "source_relative_path": "api/IVLab.MinVR3.CoordConversion.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.CoordConversion.html",
-          "hash": "gZ/9dIP4lf8pw8/imw9mzJoRXeD//NOMNrlnFZ3Zvg8="
+          "relative_path": "api/IVLab.MinVR3.CoordConversion.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.DebugDraw.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.DebugDraw.html"
+        }
+      },
       "version": ""
     },
     {
@@ -305,11 +196,9 @@
       "source_relative_path": "api/IVLab.MinVR3.DrawEyes.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.DrawEyes.html",
-          "hash": "shtd5fY1DeWTSzTyvXD4cNvZqjZY9VLc2xZyIeNWWT4="
+          "relative_path": "api/IVLab.MinVR3.DrawEyes.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -317,11 +206,9 @@
       "source_relative_path": "api/IVLab.MinVR3.DrawFPS.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.DrawFPS.html",
-          "hash": "xPVzkb2ZI1zUIfXMjeI303KcsKsFBmnmqQs6jmxiKH0="
+          "relative_path": "api/IVLab.MinVR3.DrawFPS.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -329,11 +216,9 @@
       "source_relative_path": "api/IVLab.MinVR3.DrawTrackers.TrackerDescription.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.DrawTrackers.TrackerDescription.html",
-          "hash": "LUPFeslELSO6VKG/9Jhb9v8c4UJNo9adB4NXm08rWxw="
+          "relative_path": "api/IVLab.MinVR3.DrawTrackers.TrackerDescription.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -341,11 +226,9 @@
       "source_relative_path": "api/IVLab.MinVR3.DrawTrackers.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.DrawTrackers.html",
-          "hash": "tAexWXe+zLsLGn93w67BzHh3Vpag1ewJBJYdLc/FHaE="
+          "relative_path": "api/IVLab.MinVR3.DrawTrackers.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -353,11 +236,29 @@
       "source_relative_path": "api/IVLab.MinVR3.FSM.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.FSM.html",
-          "hash": "qn8UrL9vY+n0rfegWoGTKGDBRq/mmVwMqDoD/jqHAFk="
+          "relative_path": "api/IVLab.MinVR3.FSM.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.FSMEditor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.FSMEditor.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.FaceCamera.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.FaceCamera.html"
+        }
+      },
       "version": ""
     },
     {
@@ -365,11 +266,9 @@
       "source_relative_path": "api/IVLab.MinVR3.FakeTrackers.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.FakeTrackers.html",
-          "hash": "No0S4wvPYKGlCi8DeiQp/OPVSv+djxL4Sluu6i6PQ1w="
+          "relative_path": "api/IVLab.MinVR3.FakeTrackers.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -377,23 +276,39 @@
       "source_relative_path": "api/IVLab.MinVR3.FloatingMenu.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.FloatingMenu.html",
-          "hash": "657R4ZdGOwBd2mMlBn6FoKtQIBnUPlWnPiDD4th4CkQ="
+          "relative_path": "api/IVLab.MinVR3.FloatingMenu.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/IVLab.MinVR3.HttpWebSocketVREventConnection.yml",
+      "source_relative_path": "api/IVLab.MinVR3.GameObjectExtensions.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.HttpWebSocketVREventConnection.html",
-          "hash": "rpgkipgwyJLsjAcHJb9F2v7reqkr7L5l8FVfTnL5UIc="
+          "relative_path": "api/IVLab.MinVR3.GameObjectExtensions.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.GridOfObjects.GridType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.GridOfObjects.GridType.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.GridOfObjects.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.GridOfObjects.html"
+        }
+      },
       "version": ""
     },
     {
@@ -401,11 +316,9 @@
       "source_relative_path": "api/IVLab.MinVR3.IClusterNode.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.IClusterNode.html",
-          "hash": "vehlZo8jH/dZs3aime7eUvAqqF71S6mCBVPtyjFuork="
+          "relative_path": "api/IVLab.MinVR3.IClusterNode.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -413,11 +326,9 @@
       "source_relative_path": "api/IVLab.MinVR3.IPolledInputDevice.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.IPolledInputDevice.html",
-          "hash": "vbj5RX7Otn0aCG7YOy0SZFxRaWPAcpC65AuCIirV6YY="
+          "relative_path": "api/IVLab.MinVR3.IPolledInputDevice.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -425,23 +336,9 @@
       "source_relative_path": "api/IVLab.MinVR3.IVRCallback.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.IVRCallback.html",
-          "hash": "CTydQpdBVH65cyQJBMHpe2IkAu+akc75YL9SUWSmOV0="
+          "relative_path": "api/IVLab.MinVR3.IVRCallback.html"
         }
       },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/IVLab.MinVR3.IVREventConnection.VREventReceivedDelegate.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/IVLab.MinVR3.IVREventConnection.VREventReceivedDelegate.html",
-          "hash": "Ty0u0vi9YAXJabbdE9WFxGutdOw/w0tbVwxV0HUK2kg="
-        }
-      },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -449,11 +346,9 @@
       "source_relative_path": "api/IVLab.MinVR3.IVREventConnection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.IVREventConnection.html",
-          "hash": "YUjgewW1P+CXBuTN/swJcGhNL0aV31HCoRaTul9/tVs="
+          "relative_path": "api/IVLab.MinVR3.IVREventConnection.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -461,11 +356,9 @@
       "source_relative_path": "api/IVLab.MinVR3.IVREventFilter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.IVREventFilter.html",
-          "hash": "T5J6ZC1Fwygu9zQOHYtCDmZnrmF0HBLWY2jxgpsxvmY="
+          "relative_path": "api/IVLab.MinVR3.IVREventFilter.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -473,11 +366,9 @@
       "source_relative_path": "api/IVLab.MinVR3.IVREventListener.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.IVREventListener.html",
-          "hash": "D0KfrHBKWtXDoZZDZcNis44fulxnlQQgFYzjpAtD5BY="
+          "relative_path": "api/IVLab.MinVR3.IVREventListener.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -485,11 +376,9 @@
       "source_relative_path": "api/IVLab.MinVR3.IVREventProducer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.IVREventProducer.html",
-          "hash": "4wVRA9CRkNLStoAREZSQ9dkKaSX6eQszj+bTdM6mTFw="
+          "relative_path": "api/IVLab.MinVR3.IVREventProducer.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -497,23 +386,29 @@
       "source_relative_path": "api/IVLab.MinVR3.IVREventPrototype.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.IVREventPrototype.html",
-          "hash": "kRmAlYXQFltc6eZStNioP7ZjZsw9uNyR/ohU9vg8lhk="
+          "relative_path": "api/IVLab.MinVR3.IVREventPrototype.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/IVLab.MinVR3.InputActionsToVREvents.yml",
+      "source_relative_path": "api/IVLab.MinVR3.InfoBoxAttribute.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.InputActionsToVREvents.html",
-          "hash": "/INkLx9rDsW3p7jnZLyh0CH2CTosY+6tAv6MBUE2q9k="
+          "relative_path": "api/IVLab.MinVR3.InfoBoxAttribute.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.InfoBoxAttributeDrawer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.InfoBoxAttributeDrawer.html"
+        }
+      },
       "version": ""
     },
     {
@@ -521,71 +416,69 @@
       "source_relative_path": "api/IVLab.MinVR3.KeyboardState.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.KeyboardState.html",
-          "hash": "f/duUuM7B3E0cL3VhiW6C3+jblZpW5cp6JzRci0te9k="
+          "relative_path": "api/IVLab.MinVR3.KeyboardState.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/IVLab.MinVR3.MinVRController.yml",
+      "source_relative_path": "api/IVLab.MinVR3.Matrix4x4Extensions.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.MinVRController.html",
-          "hash": "F/CiVG7LhxBasrA0+aJZ7cQzW26h4GDzrdVA3lVux7E="
+          "relative_path": "api/IVLab.MinVR3.Matrix4x4Extensions.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/IVLab.MinVR3.MinVRControllerButton.yml",
+      "source_relative_path": "api/IVLab.MinVR3.MenuHelpers.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.MinVRControllerButton.html",
-          "hash": "a6i47HqXmoGueV6LFXbECg1LyyWEHzH4XH22exoHP+4="
+          "relative_path": "api/IVLab.MinVR3.MenuHelpers.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/IVLab.MinVR3.MinVRControllerDevice.yml",
+      "source_relative_path": "api/IVLab.MinVR3.Menu_GameObject_MinVR.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.MinVRControllerDevice.html",
-          "hash": "RHRU6OFQCxPxjPjXd3aKMLB5agbWaRpfwHxFBHy4/6w="
+          "relative_path": "api/IVLab.MinVR3.Menu_GameObject_MinVR.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/IVLab.MinVR3.MinVRControllerState.yml",
+      "source_relative_path": "api/IVLab.MinVR3.Menu_GameObject_MinVRInteraction.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.MinVRControllerState.html",
-          "hash": "6k7BNiH8oDRFiCfpH0/eZsqHPVl/NsuGyg/bKBbML8I="
+          "relative_path": "api/IVLab.MinVR3.Menu_GameObject_MinVRInteraction.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/IVLab.MinVR3.MinVRInputLayoutLoader.yml",
+      "source_relative_path": "api/IVLab.MinVR3.Menu_GameObject_MinVR_VRConfigs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.MinVRInputLayoutLoader.html",
-          "hash": "FzJKYptRn7PTfwdQttsXEoZblKVecYZsqTwsy7iBN7c="
+          "relative_path": "api/IVLab.MinVR3.Menu_GameObject_MinVR_VRConfigs.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.Menu_GameObject_UmnCave_VRConfigs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.Menu_GameObject_UmnCave_VRConfigs.html"
+        }
+      },
       "version": ""
     },
     {
@@ -593,23 +486,19 @@
       "source_relative_path": "api/IVLab.MinVR3.MobileSensors.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.MobileSensors.html",
-          "hash": "n07Q5gBSPex7Ss8F1JeOIHHpNvu73bZalxuz9tn4tnw="
+          "relative_path": "api/IVLab.MinVR3.MobileSensors.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/IVLab.MinVR3.ModifiedEvent.yml",
+      "source_relative_path": "api/IVLab.MinVR3.ModifiedEventProducer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.ModifiedEvent.html",
-          "hash": "X2lOBgb3QMlxCkDej2qqJ+SGu7t9go7loXlvovrQkng="
+          "relative_path": "api/IVLab.MinVR3.ModifiedEventProducer.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -617,11 +506,9 @@
       "source_relative_path": "api/IVLab.MinVR3.MouseAndKeyboard.KeyToVREventName.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.MouseAndKeyboard.KeyToVREventName.html",
-          "hash": "zn4s2Az+WqO7PgcZOcAzxStgw0YLInIV0bzEfmSXiuU="
+          "relative_path": "api/IVLab.MinVR3.MouseAndKeyboard.KeyToVREventName.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -629,11 +516,19 @@
       "source_relative_path": "api/IVLab.MinVR3.MouseAndKeyboard.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.MouseAndKeyboard.html",
-          "hash": "rw17ISbWbomtW+8T/lwKxIg158hW9X89QqKgkL+I7Wg="
+          "relative_path": "api/IVLab.MinVR3.MouseAndKeyboard.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.MouseObjectManipulator.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.MouseObjectManipulator.html"
+        }
+      },
       "version": ""
     },
     {
@@ -641,11 +536,9 @@
       "source_relative_path": "api/IVLab.MinVR3.MouseState.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.MouseState.html",
-          "hash": "4bKOlqM8DEQ8ULxgecBq/61BJ0jWyOZpexifVE/mBcc="
+          "relative_path": "api/IVLab.MinVR3.MouseState.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -653,23 +546,79 @@
       "source_relative_path": "api/IVLab.MinVR3.NetUtils.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.NetUtils.html",
-          "hash": "Vz8CwmU8QxkDrKBh0S47cjSARKLFacEw+Vcg7mUKWJg="
+          "relative_path": "api/IVLab.MinVR3.NetUtils.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/IVLab.MinVR3.ProximityEvent.yml",
+      "source_relative_path": "api/IVLab.MinVR3.OnVREventReceived.OnVREventReceivedDelegate.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.ProximityEvent.html",
-          "hash": "ytKfmCkQr1ySVYz5V2LYVPO6Tn9IDB7JcAKSfFZ03ZY="
+          "relative_path": "api/IVLab.MinVR3.OnVREventReceived.OnVREventReceivedDelegate.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.OnVREventReceived.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.OnVREventReceived.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.PrintFPS.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.PrintFPS.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.ProximityEventProducer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.ProximityEventProducer.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.QuitOnEscapeKey.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.QuitOnEscapeKey.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.RoomSpaceOrigin.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.RoomSpaceOrigin.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.SharedToken.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.SharedToken.html"
+        }
+      },
       "version": ""
     },
     {
@@ -677,11 +626,19 @@
       "source_relative_path": "api/IVLab.MinVR3.SimpleEventListener.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.SimpleEventListener.html",
-          "hash": "iG7SRxflrKZFHa8BGvFKuishmBBXLqAD6v9Hqbv6owQ="
+          "relative_path": "api/IVLab.MinVR3.SimpleEventListener.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.SimplePlaySoundOnVREvent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.SimplePlaySoundOnVREvent.html"
+        }
+      },
       "version": ""
     },
     {
@@ -689,11 +646,9 @@
       "source_relative_path": "api/IVLab.MinVR3.Singleton-1.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.Singleton-1.html",
-          "hash": "6uFIQ6ZNWxNFr4zKOUP6u8Is3E4nXkdf9OtyK67tRFY="
+          "relative_path": "api/IVLab.MinVR3.Singleton-1.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -701,11 +656,89 @@
       "source_relative_path": "api/IVLab.MinVR3.SmartScene.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.SmartScene.html",
-          "hash": "uNmXEwQTxvytKvb3mZF4xaM6g1dgMA54ZzjPLZYFH3I="
+          "relative_path": "api/IVLab.MinVR3.SmartScene.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.SpatialAudioClient.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.SpatialAudioClient.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.SpatialPlaySoundOnVREvent.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.SpatialPlaySoundOnVREvent.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.SphereMove.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.SphereMove.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.SphericalCoordinate.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.SphericalCoordinate.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.SphericalDome.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.SphericalDome.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.TcpJsonVREventConnection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.TcpJsonVREventConnection.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.TcpVREventConnection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.TcpVREventConnection.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.TestSpatialAudio.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.TestSpatialAudio.html"
+        }
+      },
       "version": ""
     },
     {
@@ -713,35 +746,29 @@
       "source_relative_path": "api/IVLab.MinVR3.TouchBuiltin.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.TouchBuiltin.html",
-          "hash": "oNRET+gTRsEoQV7FC6sNhodSx8dv4pSrLnUnHfFCKZU="
+          "relative_path": "api/IVLab.MinVR3.TouchBuiltin.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/IVLab.MinVR3.TouchSensel.yml",
+      "source_relative_path": "api/IVLab.MinVR3.TouchscreenState.TouchInputPhase.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.TouchSensel.html",
-          "hash": "VrVKJEJm4B6Sb5R4gB3AzQtqBRWV/VixQb102qdQ6p0="
+          "relative_path": "api/IVLab.MinVR3.TouchscreenState.TouchInputPhase.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/IVLab.MinVR3.TouchTuio.yml",
+      "source_relative_path": "api/IVLab.MinVR3.TouchscreenState.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.TouchTuio.html",
-          "hash": "zgRJLIzfkDHQajEnd6HpbJix1C59eQtwMLrgSYdFqPw="
+          "relative_path": "api/IVLab.MinVR3.TouchscreenState.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -749,11 +776,9 @@
       "source_relative_path": "api/IVLab.MinVR3.TrackballCamera.TrackballState.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.TrackballCamera.TrackballState.html",
-          "hash": "HU1pMeZBfHLovnwuG/o82bUvZpHQ/rQ+l1YkHB8HwiQ="
+          "relative_path": "api/IVLab.MinVR3.TrackballCamera.TrackballState.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -761,11 +786,9 @@
       "source_relative_path": "api/IVLab.MinVR3.TrackballCamera.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.TrackballCamera.html",
-          "hash": "gJoopKDd+GKTqEJQk1IHBUZhCntLdF/3glvl+w7k9x8="
+          "relative_path": "api/IVLab.MinVR3.TrackballCamera.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -773,11 +796,9 @@
       "source_relative_path": "api/IVLab.MinVR3.TrackedDesktopCamera.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.TrackedDesktopCamera.html",
-          "hash": "7Y28FZuRHKBEfV33+8Py+W46akzwNulQOSXwfYLuzDQ="
+          "relative_path": "api/IVLab.MinVR3.TrackedDesktopCamera.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -785,11 +806,9 @@
       "source_relative_path": "api/IVLab.MinVR3.TrackedPoseDriver.TrackingType.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.TrackedPoseDriver.TrackingType.html",
-          "hash": "9CkK0Zhlk5golTwSrXgngPerxSi/N0xkq19lYVklJLs="
+          "relative_path": "api/IVLab.MinVR3.TrackedPoseDriver.TrackingType.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -797,11 +816,9 @@
       "source_relative_path": "api/IVLab.MinVR3.TrackedPoseDriver.UpdateType.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.TrackedPoseDriver.UpdateType.html",
-          "hash": "Mk0tRJB2vRnmY5hBogOotZtmrtZ+ugLqGNrpbEQzUg4="
+          "relative_path": "api/IVLab.MinVR3.TrackedPoseDriver.UpdateType.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -809,11 +826,9 @@
       "source_relative_path": "api/IVLab.MinVR3.TrackedPoseDriver.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.TrackedPoseDriver.html",
-          "hash": "+L7OxTvbP6MbwmSnoBpiMfSy+teyCniV8B9KVO7uA6Y="
+          "relative_path": "api/IVLab.MinVR3.TrackedPoseDriver.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -821,11 +836,9 @@
       "source_relative_path": "api/IVLab.MinVR3.TrackedProjectionScreen.ProjectionType.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.TrackedProjectionScreen.ProjectionType.html",
-          "hash": "IOab2lJ6YevU+gHzZvpxc8dhDWXQzhMJhA3Jmc39efc="
+          "relative_path": "api/IVLab.MinVR3.TrackedProjectionScreen.ProjectionType.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -833,11 +846,9 @@
       "source_relative_path": "api/IVLab.MinVR3.TrackedProjectionScreen.ScreenCorners.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.TrackedProjectionScreen.ScreenCorners.html",
-          "hash": "pXGmiKT+OWtG5xiFPjXJKYaYcaCubJaKAmGkFy631Gk="
+          "relative_path": "api/IVLab.MinVR3.TrackedProjectionScreen.ScreenCorners.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -845,23 +856,29 @@
       "source_relative_path": "api/IVLab.MinVR3.TrackedProjectionScreen.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.TrackedProjectionScreen.html",
-          "hash": "CtrfL9n4MQJLVbxAQ+XQPUE3grSNCoLaTh+IiaBZywk="
+          "relative_path": "api/IVLab.MinVR3.TrackedProjectionScreen.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/IVLab.MinVR3.UnityXR.yml",
+      "source_relative_path": "api/IVLab.MinVR3.TransformExtensions.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.UnityXR.html",
-          "hash": "k7knKTZ/I41xNs3iAzNCGx2seTAT8O5sqqH0FIKXyb4="
+          "relative_path": "api/IVLab.MinVR3.TransformExtensions.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.UniCam.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.UniCam.html"
+        }
+      },
       "version": ""
     },
     {
@@ -869,11 +886,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VRCallback.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VRCallback.html",
-          "hash": "bqZ/kdNG4HhxceQTt5hmpqkt4BDAItJX3tjepihRMQU="
+          "relative_path": "api/IVLab.MinVR3.VRCallback.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -881,11 +896,29 @@
       "source_relative_path": "api/IVLab.MinVR3.VRCallbackAny.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VRCallbackAny.html",
-          "hash": "gYgSb6qHk+grNgYI4bnkJFghUXC8hI3dXMe9npBqINE="
+          "relative_path": "api/IVLab.MinVR3.VRCallbackAny.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.VRCallbackAnyDrawer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.VRCallbackAnyDrawer.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.VRCallbackDrawer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.VRCallbackDrawer.html"
+        }
+      },
       "version": ""
     },
     {
@@ -893,11 +926,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VRCallbackFloat.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VRCallbackFloat.html",
-          "hash": "+s2iuD+uhwTJ2HtllMhBPoEF9/NRZ7KpmEkk9BO0oEI="
+          "relative_path": "api/IVLab.MinVR3.VRCallbackFloat.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -905,11 +936,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VRCallbackGameObject.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VRCallbackGameObject.html",
-          "hash": "GfM3DZHWxr1Lz+0aCqNDSd9GOy6NFNSmdLOtFPsCVu0="
+          "relative_path": "api/IVLab.MinVR3.VRCallbackGameObject.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -917,11 +946,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VRCallbackInt.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VRCallbackInt.html",
-          "hash": "mIdl3QkNstPCCLkv70LuInbWwooux5ukWTQ0ib4DEh0="
+          "relative_path": "api/IVLab.MinVR3.VRCallbackInt.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -929,11 +956,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VRCallbackQuaternion.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VRCallbackQuaternion.html",
-          "hash": "lhyv6CZkZAcsuup05kxEH5faSWfvCkLwDCteuTMpLag="
+          "relative_path": "api/IVLab.MinVR3.VRCallbackQuaternion.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -941,11 +966,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VRCallbackString.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VRCallbackString.html",
-          "hash": "KclepGX9gN0AyVEJDGuk9LxbAkgGk6kpdFwxzu4GSMI="
+          "relative_path": "api/IVLab.MinVR3.VRCallbackString.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -953,11 +976,19 @@
       "source_relative_path": "api/IVLab.MinVR3.VRCallbackT-1.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VRCallbackT-1.html",
-          "hash": "kDgqdGMZvLSWwn2Z1Hm6VdYjBXfI1Oy/9Xjn+S//GvA="
+          "relative_path": "api/IVLab.MinVR3.VRCallbackT-1.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.VRCallbackTDrawer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.VRCallbackTDrawer.html"
+        }
+      },
       "version": ""
     },
     {
@@ -965,11 +996,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VRCallbackVector2.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VRCallbackVector2.html",
-          "hash": "MhcgQbifNp/2Dlxi329h63t8stUpVHIdHur1NLIIZUk="
+          "relative_path": "api/IVLab.MinVR3.VRCallbackVector2.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -977,11 +1006,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VRCallbackVector3.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VRCallbackVector3.html",
-          "hash": "xEkOKXm0U6S8JKr0NXs9eatoiFYTWYcORmYU6xNDxxs="
+          "relative_path": "api/IVLab.MinVR3.VRCallbackVector3.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -989,23 +1016,59 @@
       "source_relative_path": "api/IVLab.MinVR3.VRCallbackVector4.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VRCallbackVector4.html",
-          "hash": "0QEc8f5AZlnMxJ4h/5sH8d0Jwe51FakW50oYcsa1YzY="
+          "relative_path": "api/IVLab.MinVR3.VRCallbackVector4.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/IVLab.MinVR3.VRConfigSelector.yml",
+      "source_relative_path": "api/IVLab.MinVR3.VRConfig.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VRConfigSelector.html",
-          "hash": "o2timNmJY55eApT0itmyxFJJ7bouZElgdbzq9Cjc30U="
+          "relative_path": "api/IVLab.MinVR3.VRConfig.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.VRConfigManager.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.VRConfigManager.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.VRConfigManagerEditor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.VRConfigManagerEditor.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.VRConfigMask.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.VRConfigMask.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.VRConfigMaskEditor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.VRConfigMaskEditor.html"
+        }
+      },
       "version": ""
     },
     {
@@ -1013,11 +1076,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VRConvert.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VRConvert.html",
-          "hash": "KvVKmSoZF1ASZ6mCwFvpDcSaX9jM/zgDZMcHg9YLJss="
+          "relative_path": "api/IVLab.MinVR3.VRConvert.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1025,11 +1086,19 @@
       "source_relative_path": "api/IVLab.MinVR3.VREngine.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREngine.html",
-          "hash": "+RTdmJ7ZCptSSQ3o/IqrJc2di04xOAV0eN/DQtOY+Vo="
+          "relative_path": "api/IVLab.MinVR3.VREngine.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.VREngineEditor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.VREngineEditor.html"
+        }
+      },
       "version": ""
     },
     {
@@ -1037,11 +1106,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREvent.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREvent.html",
-          "hash": "rgMVOvpf6LjSg+UYouFrSNcgo6AYxSeZa0r6OAvvlX8="
+          "relative_path": "api/IVLab.MinVR3.VREvent.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1049,11 +1116,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventAlias.AliasStrategy.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventAlias.AliasStrategy.html",
-          "hash": "2vUPMpPMa0Idbxy0+KC2QMqN+wjRF3xUVd9Cl96Styc="
+          "relative_path": "api/IVLab.MinVR3.VREventAlias.AliasStrategy.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1061,11 +1126,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventAlias.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventAlias.html",
-          "hash": "ePG416sVGGCLzPe9t3+m2gYimsw3dOi3LtuCk32Hkps="
+          "relative_path": "api/IVLab.MinVR3.VREventAlias.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1073,11 +1136,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventCallback.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventCallback.html",
-          "hash": "fQKBS8jWvxjXKakIH4/AMdOi3dJK5fbruxgj7Y0Bc64="
+          "relative_path": "api/IVLab.MinVR3.VREventCallback.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1085,11 +1146,29 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventCallbackAny.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventCallbackAny.html",
-          "hash": "SL+LsW8lw+8P9fPkmy+asgcHWtfUvDCTIH4t3QZv6R8="
+          "relative_path": "api/IVLab.MinVR3.VREventCallbackAny.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.VREventCallbackAnyDrawer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.VREventCallbackAnyDrawer.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.VREventCallbackDrawer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.VREventCallbackDrawer.html"
+        }
+      },
       "version": ""
     },
     {
@@ -1097,11 +1176,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventCallbackFloat.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventCallbackFloat.html",
-          "hash": "opvo9+fZTNhNTb+prC48eFWR/Ph7VMz9I3ZeAktVRFY="
+          "relative_path": "api/IVLab.MinVR3.VREventCallbackFloat.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1109,11 +1186,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventCallbackGameObject.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventCallbackGameObject.html",
-          "hash": "yLhmkYQXSfbHGjjw/zclgmN7SxHWXleiXw468noD6/k="
+          "relative_path": "api/IVLab.MinVR3.VREventCallbackGameObject.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1121,11 +1196,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventCallbackInt.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventCallbackInt.html",
-          "hash": "77Ui66KsKLWlaDQiFdYyxunG3HIX1b5gpW0V5ZXMmW4="
+          "relative_path": "api/IVLab.MinVR3.VREventCallbackInt.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1133,11 +1206,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventCallbackQuaternion.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventCallbackQuaternion.html",
-          "hash": "Ns2WDB2VO7W/j9CzI3mrfC9z1wbVHLJPU/K3EXeOEwk="
+          "relative_path": "api/IVLab.MinVR3.VREventCallbackQuaternion.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1145,11 +1216,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventCallbackString.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventCallbackString.html",
-          "hash": "GmnBD/DM/2wUC3g75MVkGn+LHitmeLAdaaVhyRdZiY4="
+          "relative_path": "api/IVLab.MinVR3.VREventCallbackString.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1157,11 +1226,19 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventCallbackT-1.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventCallbackT-1.html",
-          "hash": "wG4JYMFTPevq50tBUK4WugSFgTqRTmswPoePf/JOdfk="
+          "relative_path": "api/IVLab.MinVR3.VREventCallbackT-1.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.VREventCallbackTDrawer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.VREventCallbackTDrawer.html"
+        }
+      },
       "version": ""
     },
     {
@@ -1169,11 +1246,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventCallbackVector2.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventCallbackVector2.html",
-          "hash": "oDP56SQCHj7eUSsjoaiHNpOzd2ulDUCseE4Nt/OAOiA="
+          "relative_path": "api/IVLab.MinVR3.VREventCallbackVector2.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1181,11 +1256,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventCallbackVector3.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventCallbackVector3.html",
-          "hash": "MLfD8eIvGCoGI08nMuG8bye/2LUq1L+a9zBG4Kg2jVQ="
+          "relative_path": "api/IVLab.MinVR3.VREventCallbackVector3.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1193,11 +1266,49 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventCallbackVector4.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventCallbackVector4.html",
-          "hash": "rUMKppsRkPY3dS/zD5onfbINVKnYqBx09t54GGSY/3g="
+          "relative_path": "api/IVLab.MinVR3.VREventCallbackVector4.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.VREventConnectionReceiver.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.VREventConnectionReceiver.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.VREventConnectionReceiverEditor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.VREventConnectionReceiverEditor.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.VREventConnectionSender.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.VREventConnectionSender.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.VREventConnectionSenderEditor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.VREventConnectionSenderEditor.html"
+        }
+      },
       "version": ""
     },
     {
@@ -1205,11 +1316,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventFloat.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventFloat.html",
-          "hash": "mkbue0xOIo/eq0LlazUGaqX54x6O3Cx1NtoYdituJyI="
+          "relative_path": "api/IVLab.MinVR3.VREventFloat.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1217,11 +1326,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventGameObject.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventGameObject.html",
-          "hash": "0jRJxKpAyZJo1pX/5ETRShlHmRqsU9fh04+wABV76mg="
+          "relative_path": "api/IVLab.MinVR3.VREventGameObject.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1229,11 +1336,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventInt.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventInt.html",
-          "hash": "homuOnCnNd1izXkoPBYWNttHhOoVBsuOPtzMQemkaHo="
+          "relative_path": "api/IVLab.MinVR3.VREventInt.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1241,11 +1346,19 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventManager.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventManager.html",
-          "hash": "oCoAZyzU4dxYnFFFmHMd013qAcFYXiCZvbjvI5xbhDs="
+          "relative_path": "api/IVLab.MinVR3.VREventManager.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.VREventManagerEditor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.VREventManagerEditor.html"
+        }
+      },
       "version": ""
     },
     {
@@ -1253,11 +1366,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventPrototype.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventPrototype.html",
-          "hash": "QgZa7WhVERFjS28kVk0JSe2svlIoufLazghkz6EglWM="
+          "relative_path": "api/IVLab.MinVR3.VREventPrototype.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1265,11 +1376,29 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventPrototypeAny.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventPrototypeAny.html",
-          "hash": "TQtW7W+dafrgSIRJQ4r9rAsNM5WSKtxu6hD/iYpZlrc="
+          "relative_path": "api/IVLab.MinVR3.VREventPrototypeAny.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.VREventPrototypeAnyDrawer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.VREventPrototypeAnyDrawer.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.VREventPrototypeDrawer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.VREventPrototypeDrawer.html"
+        }
+      },
       "version": ""
     },
     {
@@ -1277,11 +1406,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventPrototypeFloat.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventPrototypeFloat.html",
-          "hash": "fExmM/7Gac5gjRUD0ukf1WJEuZ0BzBDFA9Wcqi1dUEQ="
+          "relative_path": "api/IVLab.MinVR3.VREventPrototypeFloat.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1289,11 +1416,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventPrototypeGameObject.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventPrototypeGameObject.html",
-          "hash": "hcTupIj9PYKnNbDfxKCFwQ0gSkT6phJqqUip80m4o5U="
+          "relative_path": "api/IVLab.MinVR3.VREventPrototypeGameObject.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1301,11 +1426,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventPrototypeInt.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventPrototypeInt.html",
-          "hash": "zwzZXrP2ljBq87WY3OK8q0V5cc01Ooc5PO+N3Khc7lk="
+          "relative_path": "api/IVLab.MinVR3.VREventPrototypeInt.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1313,11 +1436,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventPrototypeQuaternion.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventPrototypeQuaternion.html",
-          "hash": "tmEUUmnBXEGxRBm3Di6rP+uZIjXd8eA/o/EZsFdMoA4="
+          "relative_path": "api/IVLab.MinVR3.VREventPrototypeQuaternion.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1325,11 +1446,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventPrototypeString.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventPrototypeString.html",
-          "hash": "9R2rNkE6TteXMY8viCS8iyoBQ9HwKswNLuPRn3sEtiQ="
+          "relative_path": "api/IVLab.MinVR3.VREventPrototypeString.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1337,11 +1456,19 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventPrototypeT-1.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventPrototypeT-1.html",
-          "hash": "dAiCAaDK4sigARleMPGZA+Ljwi0Ps3mYPZjBzJSHNss="
+          "relative_path": "api/IVLab.MinVR3.VREventPrototypeT-1.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.VREventPrototypeTemplatedDrawer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.VREventPrototypeTemplatedDrawer.html"
+        }
+      },
       "version": ""
     },
     {
@@ -1349,11 +1476,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventPrototypeVector2.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventPrototypeVector2.html",
-          "hash": "f1Y/wQtjSX3R8UL5sm1K6T7+RK+mQcTNdMwaVoBE8XM="
+          "relative_path": "api/IVLab.MinVR3.VREventPrototypeVector2.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1361,11 +1486,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventPrototypeVector3.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventPrototypeVector3.html",
-          "hash": "pD8mRLZlh6WDmSZXQFpZLBZ2wtJwUWjy6mGM+DnDuYU="
+          "relative_path": "api/IVLab.MinVR3.VREventPrototypeVector3.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1373,11 +1496,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventPrototypeVector4.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventPrototypeVector4.html",
-          "hash": "YAsCuC4di6bh+2XycvubK1Nty1vAJvZJBvIPz0x3zVU="
+          "relative_path": "api/IVLab.MinVR3.VREventPrototypeVector4.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1385,11 +1506,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventQuaternion.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventQuaternion.html",
-          "hash": "amtDGixlYWS0+AZCKz9U28ogX8MKlwE+NPXLPrDVRWM="
+          "relative_path": "api/IVLab.MinVR3.VREventQuaternion.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1397,11 +1516,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventString.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventString.html",
-          "hash": "ojEh88KJHgt+3pPtJWM9Cjasj+qzxSDKemLJwCRe9AY="
+          "relative_path": "api/IVLab.MinVR3.VREventString.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1409,11 +1526,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventT-1.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventT-1.html",
-          "hash": "ffINEAsme9OTVd3+JJTQY98NXTUUVGlDQKSouiKAArE="
+          "relative_path": "api/IVLab.MinVR3.VREventT-1.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1421,11 +1536,19 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventTypeRepr.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventTypeRepr.html",
-          "hash": "vxZRKY66QTiqaH/SfM5rG0WsbIyt8FRxODy/yQpb7Qw="
+          "relative_path": "api/IVLab.MinVR3.VREventTypeRepr.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/IVLab.MinVR3.VREventTypeReprDrawer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/IVLab.MinVR3.VREventTypeReprDrawer.html"
+        }
+      },
       "version": ""
     },
     {
@@ -1433,11 +1556,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventVector2.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventVector2.html",
-          "hash": "gECFIs3GKlskG69L4LuOA64SmGF1hu8RYU3TSxr9SMs="
+          "relative_path": "api/IVLab.MinVR3.VREventVector2.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1445,11 +1566,9 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventVector3.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventVector3.html",
-          "hash": "CFg0rfqkEVz0KnF7bP2oT2YXBA1TOXTtJPABZIU7uBw="
+          "relative_path": "api/IVLab.MinVR3.VREventVector3.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1457,23 +1576,19 @@
       "source_relative_path": "api/IVLab.MinVR3.VREventVector4.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.VREventVector4.html",
-          "hash": "0lTw9EzI9rZZXz/7FPVprDsjyzs0uaXDvgCtXOE/8k8="
+          "relative_path": "api/IVLab.MinVR3.VREventVector4.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/IVLab.MinVR3.WebSocketVREventConnection.yml",
+      "source_relative_path": "api/IVLab.MinVR3.WindowSettings.ApplyConfigTiming.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.WebSocketVREventConnection.html",
-          "hash": "BHQVm0cCoHQRqaNSG9o4EoT7sap74e/7jN2WbJ4OCjY="
+          "relative_path": "api/IVLab.MinVR3.WindowSettings.ApplyConfigTiming.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1481,23 +1596,9 @@
       "source_relative_path": "api/IVLab.MinVR3.WindowSettings.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.WindowSettings.html",
-          "hash": "dZh0efQotCavFCyeO8Y0zs8krXQKmAQqX0Rq6K+0Bg8="
+          "relative_path": "api/IVLab.MinVR3.WindowSettings.html"
         }
       },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/IVLab.MinVR3.WindowUtils.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/IVLab.MinVR3.WindowUtils.html",
-          "hash": "aahw6797Bk3QYuaZbDpGuCsC9zvDiUNTLMlSIkMDtLk="
-        }
-      },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1505,11 +1606,9 @@
       "source_relative_path": "api/IVLab.MinVR3.XMLUtils.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.XMLUtils.html",
-          "hash": "VequO40jTVnTvUs+6ZCd32mraVOGuK3k62HlwbEaXoE="
+          "relative_path": "api/IVLab.MinVR3.XMLUtils.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1517,59 +1616,9 @@
       "source_relative_path": "api/IVLab.MinVR3.yml",
       "output": {
         ".html": {
-          "relative_path": "api/IVLab.MinVR3.html",
-          "hash": "w7+1LGI/rkbP+6kAhPJA26o+PweWFpcyqM/+tp/WXYo="
+          "relative_path": "api/IVLab.MinVR3.html"
         }
       },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/IVLab.MinVR3.zSpace.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/IVLab.MinVR3.zSpace.html",
-          "hash": "6h5EBdE0OXCgHDHScvXqS2+ZAhE6gZlia94fnMe2Fk8="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/MinVR.BlitFisheye.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/MinVR.BlitFisheye.html",
-          "hash": "WOj5uHJV/cZ2HZRxVV3G0Hm/KIyRDAF4jSa72QCOPyo="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/MinVR.FisheyeCameraSetup.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/MinVR.FisheyeCameraSetup.html",
-          "hash": "NeMFSqtsqm7sodfYX2W//FkXLatd++p35iXvnzpBqqs="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/MinVR.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/MinVR.html",
-          "hash": "y0TobL28NwAUjju7Zn/YkaDGX0Te6Yr5Vtqt/vJGMeA="
-        }
-      },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1577,11 +1626,9 @@
       "source_relative_path": "api/index.md",
       "output": {
         ".html": {
-          "relative_path": "api/index.html",
-          "hash": "x6jK0le1HDevx1BAaM30IZYyqR6Smy0DzRKSroK37Kg="
+          "relative_path": "api/index.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1589,11 +1636,9 @@
       "source_relative_path": "index.md",
       "output": {
         ".html": {
-          "relative_path": "index.html",
-          "hash": "uZtqRZnvQKCCnbuG5tzNhA8FVlUi0V9nav958qcJg+s="
+          "relative_path": "index.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1601,11 +1646,9 @@
       "source_relative_path": "manual/01-intro.md",
       "output": {
         ".html": {
-          "relative_path": "manual/01-intro.html",
-          "hash": "s43Vk3rgIQ4ehAdd5v+7/Z9gijnlHabjBL2OqW320cY="
+          "relative_path": "manual/01-intro.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1613,11 +1656,9 @@
       "source_relative_path": "manual/02-install.md",
       "output": {
         ".html": {
-          "relative_path": "manual/02-install.html",
-          "hash": "n6u5Actqi1IngNavOu1swtZeJ8vQ7R79HW1EPLrjQbs="
+          "relative_path": "manual/02-install.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1625,11 +1666,9 @@
       "source_relative_path": "manual/03-plugin-packages.md",
       "output": {
         ".html": {
-          "relative_path": "manual/03-plugin-packages.html",
-          "hash": "ons+ROCAMwjtFUqtZppe7O2jBuOjH38L94e43UYyfzU="
+          "relative_path": "manual/03-plugin-packages.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1637,11 +1676,9 @@
       "source_relative_path": "manual/10-vr-coord-spaces.md",
       "output": {
         ".html": {
-          "relative_path": "manual/10-vr-coord-spaces.html",
-          "hash": "6PX6NHUUftK9cnEwVOAbqO/y4udanT0TblFKm3vxuzU="
+          "relative_path": "manual/10-vr-coord-spaces.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1649,11 +1686,9 @@
       "source_relative_path": "manual/11-vrconfigs.md",
       "output": {
         ".html": {
-          "relative_path": "manual/11-vrconfigs.html",
-          "hash": "WpkHm+Fe8W9IWaKoFcUF2rbmoQauULc65oqSAnAibzU="
+          "relative_path": "manual/11-vrconfigs.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1661,11 +1696,9 @@
       "source_relative_path": "manual/12-vrevents.md",
       "output": {
         ".html": {
-          "relative_path": "manual/12-vrevents.html",
-          "hash": "cDja1RXF7koPIDTSHFzqxd+gEpPP9L1MmGklOsozoT8="
+          "relative_path": "manual/12-vrevents.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1673,11 +1706,9 @@
       "source_relative_path": "manual/13-input-devices.md",
       "output": {
         ".html": {
-          "relative_path": "manual/13-input-devices.html",
-          "hash": "M4bKX3aK2zvGeO6tNdbLLt0MUZ5CiyyJqsNw+x99ww8="
+          "relative_path": "manual/13-input-devices.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1685,11 +1716,9 @@
       "source_relative_path": "manual/14-display-devices.md",
       "output": {
         ".html": {
-          "relative_path": "manual/14-display-devices.html",
-          "hash": "/JCpvT+H9i0tnMBgt5RVqvubZV3hAMusX8nZNuK4lhQ="
+          "relative_path": "manual/14-display-devices.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1697,11 +1726,9 @@
       "source_relative_path": "manual/15-remote-connections.md",
       "output": {
         ".html": {
-          "relative_path": "manual/15-remote-connections.html",
-          "hash": "HfboS7mL0YVODqnaqbtGnhMLDVjlORphpTcYBfCS4Ys="
+          "relative_path": "manual/15-remote-connections.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1709,11 +1736,9 @@
       "source_relative_path": "manual/16-cluster.md",
       "output": {
         ".html": {
-          "relative_path": "manual/16-cluster.html",
-          "hash": "YjoP38mQ92B/GhhcSdjDG5MLKisYf0mg5PFM5ikbtFo="
+          "relative_path": "manual/16-cluster.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1721,11 +1746,9 @@
       "source_relative_path": "manual/20-interaction.md",
       "output": {
         ".html": {
-          "relative_path": "manual/20-interaction.html",
-          "hash": "TeE7XSC6BfI+kBCClAhSx2K7dI7ImAffNdnjvhSfpxQ="
+          "relative_path": "manual/20-interaction.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1733,11 +1756,9 @@
       "source_relative_path": "manual/changelog.md",
       "output": {
         ".html": {
-          "relative_path": "manual/changelog.html",
-          "hash": "oCAMX5t4uG8Gb7uELovdSArvRHIUESEBacg0UOizRlE="
+          "relative_path": "manual/changelog.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1745,11 +1766,149 @@
       "source_relative_path": "manual/license.md",
       "output": {
         ".html": {
-          "relative_path": "manual/license.html",
-          "hash": "xgXDGKeGmbWHsezfqVO8oNwsNrZAl8D11jcIVuchyaI="
+          "relative_path": "manual/license.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/remote-conn-client.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/remote-conn-client.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/remote-conn-server.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/remote-conn-server.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/tutorial-1-scene.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/tutorial-1-scene.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/tutorial-2-vrconfig.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/tutorial-2-vrconfig.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/tutorial-3-scene.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/tutorial-3-scene.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/tutorial-4-faketrackers.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/tutorial-4-faketrackers.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/tutorial-4-vrevent-types.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/tutorial-4-vrevent-types.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/tutorial-5-cursors.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/tutorial-5-cursors.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/tutorial-5-highlight.gif",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/tutorial-5-highlight.gif"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/tutorial-5-manipulator-events.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/tutorial-5-manipulator-events.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/tutorial-5-manipulator.gif",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/tutorial-5-manipulator.gif"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "manual/resources/tutorial-5-selector.png",
+      "output": {
+        "resource": {
+          "relative_path": "manual/resources/tutorial-5-selector.png"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/tutorial-basic-bimanual-manipulation.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/tutorial-basic-bimanual-manipulation.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "resources/UnityXrefMap.yml",
+      "output": {
+        "resource": {
+          "relative_path": "resources/UnityXrefMap.yml"
+        }
+      },
       "version": ""
     },
     {
@@ -1760,7 +1919,6 @@
           "relative_path": "resources/favicon.ico"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1771,7 +1929,6 @@
           "relative_path": "resources/logo.svg"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1782,56 +1939,7 @@
           "relative_path": "resources/minvr-teaser.png"
         }
       },
-      "is_incremental": false,
       "version": ""
-    }
-  ],
-  "incremental_info": [
-    {
-      "status": {
-        "can_incremental": true,
-        "incrementalPhase": "build",
-        "total_file_count": 0,
-        "skipped_file_count": 0
-      },
-      "processors": {
-        "ConceptualDocumentProcessor": {
-          "can_incremental": true,
-          "incrementalPhase": "build",
-          "total_file_count": 15,
-          "skipped_file_count": 14
-        },
-        "ManagedReferenceDocumentProcessor": {
-          "can_incremental": true,
-          "incrementalPhase": "build",
-          "total_file_count": 130,
-          "skipped_file_count": 130
-        },
-        "ResourceDocumentProcessor": {
-          "can_incremental": false,
-          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
-          "incrementalPhase": "build",
-          "total_file_count": 0,
-          "skipped_file_count": 0
-        },
-        "TocDocumentProcessor": {
-          "can_incremental": false,
-          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
-          "incrementalPhase": "build",
-          "total_file_count": 0,
-          "skipped_file_count": 0
-        }
-      }
-    },
-    {
-      "status": {
-        "can_incremental": false,
-        "details": "Cannot support incremental post processing, the reason is: should not trace intermediate info.",
-        "incrementalPhase": "postProcessing",
-        "total_file_count": 0,
-        "skipped_file_count": 0
-      },
-      "processors": {}
     }
   ],
   "version_info": {},

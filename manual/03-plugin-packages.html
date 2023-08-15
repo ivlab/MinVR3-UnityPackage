@@ -1,29 +1,29 @@
 ﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
 <html>
-  
+
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>MinVR3 Plugin Packages | MinVR3 </title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="MinVR3 Plugin Packages | MinVR3 ">
-    <meta name="generator" content="docfx 2.59.3.0">
-    
+    <meta name="generator" content="docfx ">
+  
     <link rel="shortcut icon" href="../resources/favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
     <meta property="docfx:navrel" content="../toc">
     <meta property="docfx:tocrel" content="toc">
-    
-    <meta property="docfx:rel" content="../">
-    
+  
+  <meta property="docfx:rel" content="../">
+  
   </head>
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
-        
+
         <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
           <div class="container">
             <div class="navbar-header">
@@ -33,7 +33,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              
+
               <a class="navbar-brand" href="../index.html">
                 <img id="logo" class="svg" src="../resources/logo.svg" alt="">
               </a>
@@ -44,21 +44,21 @@
                   <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
                 </div>
               </form>
-                
+
                 <ul class="nav level1 navbar-nav">
                       <li>
                           <a href="../index.html" title="Home">Home</a>
                       </li>
                       <li>
-                          <a href="../manual/intro.md" title="Manual">Manual</a>
+                          <a href="../manual/01-intro.html" title="Manual">Manual</a>
                       </li>
                       <li>
                           <a href="../api/index.html" title="API Documentation">API Documentation</a>
                       </li>
-                </ul>    </div>
+                </ul>            </div>
           </div>
         </nav>
-        
+
         <div class="subnav navbar navbar-default">
           <div class="container hide-when-search" id="breadcrumb">
             <ul class="breadcrumb">
@@ -68,7 +68,7 @@
         </div>
       </header>
       <div class="container body-content">
-        
+
         <div id="search-results">
           <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
@@ -90,13 +90,16 @@
               </div>
               <div class="sidetoc">
                 <div class="toc" id="toc">
-                  
+
                   <ul class="nav level1">
                     <li class="">
                       <a href="01-intro.html" title="Introduction" class="">Introduction</a>
                     </li>
                     <li class="">
                       <a href="02-install.html" title="Installation" class="">Installation</a>
+                    </li>
+                    <li class="">
+                      <a href="tutorial-basic-bimanual-manipulation.html" title="Tutorial - Basic Bimanual Manipulation" class="">Tutorial - Basic Bimanual Manipulation</a>
                     </li>
                     <li class="active">
                       <a href="03-plugin-packages.html" title="Optional Plugin Packages" class="active">Optional Plugin Packages</a>
@@ -131,7 +134,7 @@
                     <li class="">
                       <a href="changelog.html" title="Change Log" class="">Change Log</a>
                     </li>
-                  </ul>        </div>
+                  </ul>                </div>
               </div>
             </div>
           </div>
@@ -146,7 +149,8 @@
 2. Click the ```+``` button
 3. Select ```Add package from git URL```
 4. Paste ```git@github.umn.edu:ivlab-cs/PackageName-UnityPackage.git```, where &quot;PackageName&quot; will change for each package listed below.
-</code></pre><h2 id="available-packages">Available Packages</h2>
+</code></pre>
+<h2 id="available-packages">Available Packages</h2>
 <table>
 <thead>
 <tr>
@@ -157,37 +161,53 @@
 </thead>
 <tbody>
 <tr>
-<td>Sensel</td>
-<td>Reads data from a <a href="https://morph.sensel.com/">Sensel Morph</a> pressure-sensitive multi-touch devices and translates input to VREvents.</td>
-<td><code>git@github.umn.edu:ivlab-cs/Sensel-UnityPackage.git</code></td>
+<td>VRPN</td>
+<td>Provides bindings for Virtual Reality Peripheral Network (VRPN) connections (Trackers, Buttons, and Analogs). This is useful for connecting with input devices across the network; for example, an external tracking system like OptiTrack or input buttons like the Wixel.</td>
+<td><code>git@github.umn.edu:ivlab-cs/MinVR3Plugin-VRPN</code></td>
 </tr>
 <tr>
 <td>TUIO11</td>
 <td>Reads touch data sent over a network connection via the TUIO protocol.  <a href="https://www.tuio.org/?software">TUIO servers and simulators are available for many touch devices and platforms.</a></td>
-<td><code>git@github.umn.edu:ivlab-cs/TUIO11-UnityPackage.git</code></td>
+<td><code>git@github.umn.edu:ivlab-cs/MinVR3Plugin-TUIO11.git</code></td>
 </tr>
 <tr>
 <td>WebSocket</td>
 <td>Makes it possible to use the scripts in Scripts/Connection to make a MinVR Unity program talk (send/receive VREvents) with a webpage.</td>
-<td><code>git@github.umn.edu:ivlab-cs/WebSocket-UnityPackage.git</code></td>
+<td><code>git@github.umn.edu:ivlab-cs/MinVR3Plugin-WebSocket.git</code></td>
 </tr>
 <tr>
 <td>XR Interaction Toolkit</td>
-<td>Makes it possible to use Unity&#39;s XR Interaction Toolkit and New Event System side-by-side with MinVR.  VREvents can be combined into a MinVRController that implements the XRController interface that the XR Interaction Toolkit expects.  AND, input from any XRControllers that Unity knows about can also be converted into VREvents.</td>
-<td>Install the XR Interaction Toolkit package from Unity.</td>
+<td>Makes it possible to use Unity's XR Interaction Toolkit and New Event System side-by-side with MinVR.  VREvents can be combined into a MinVRController that implements the XRController interface that the XR Interaction Toolkit expects.  AND, input from any XRControllers that Unity knows about can also be converted into VREvents.</td>
+<td><code>git@github.umn.edu:ivlab-cs/MinVR3Plugin-XRIToolkit</code></td>
+</tr>
+<tr>
+<td>Sensel</td>
+<td>Reads data from a <a href="https://morph.sensel.com/">Sensel Morph</a> pressure-sensitive multi-touch devices and translates input to VREvents.</td>
+<td><code>git@github.umn.edu:ivlab-cs/MinVR3Plugin-Sensel.git</code></td>
 </tr>
 <tr>
 <td>zCore6</td>
-<td>Provides support for zSpace input and display devices via their zCore 6.0 API.  Note: The API (and hence this support) only works on Unity 2019.</td>
-<td><code>git@github.umn.edu:ivlab-cs/zCore6-UnityPackage.git</code></td>
+<td>Provides support for zSpace input and display devices via their zCore 6.0 API.</td>
+<td><code>git@github.umn.edu:ivlab-cs/MinVR3Plugin-zCore6.git</code></td>
+</tr>
+<tr>
+<td>NDI</td>
+<td>Enables graphics streaming via the NDI protocol (<a href="https://ndi.com">https://ndi.com</a>)</td>
+<td><code>git@github.umn.edu:ivlab-cs/MinVR3Plugin-NDI</code></td>
+</tr>
+<tr>
+<td>DigiStar</td>
+<td>Provides a means to render Unity content into the <a href="https://www.es.com/digistar/">DigiStar</a> software used at the Bell Museum planetarium. THIS PACKAGE CONTAINS PROPRIETARY CODE, DO NOT SHARE OUTSIDE THE LAB.</td>
+<td><code>git@github.umn.edu:ivlab-cs/MinVR3Plugin-DigiStar</code></td>
 </tr>
 </tbody>
 </table>
 <h2 id="under-the-hood">Under the Hood</h2>
+<p>TODO 2023-07-10: This section is out of date but still a cool feature in Unity</p>
 <p>Some key logic for making these packages &quot;optional&quot; is contained in the MinVR3/Runtime/IVLab.MinVR3.Runtime.asmdef file, which you can see/edit within the Unity editor by clicking on the filename in the Project view.  Notice that each of the packages is listed as what we will call a &quot;soft-dependency&quot; of the main Runtime package.  Also, notice the rules toward the bottom of the asmdef file.  When Unity finds that a the package is available, it sets a #define of the form PACKAGENAME_PRESENT.  If the package is not found, PACKAGENAME_PRESENT is left undefined.  Code inside the main MinVR3 package can then be compiled conditionally depending upon the presence of a certain package by placing it inside an #if PACKAGENAME_PRESENT ... #endif block.  In this way, the main MinVR package compiles regardless of whether any of the optional packages are present, but functionality is limited to the features supported by installed packages.</p>
 </article>
           </div>
-          
+
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <div class="contribution">
@@ -205,7 +225,7 @@
           </div>
         </div>
       </div>
-      
+
       <footer>
         <div class="grad-bottom"></div>
         <div class="footer">
@@ -213,13 +233,13 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            <a href="https://ivlab.cs.umn.edu">Interactive Visualization Lab</a><br>Copyright 2022, Regents of the University of Minnesota, All Rights Reserved
-            
+      <a href="https://ivlab.cs.umn.edu">Interactive Visualization Lab</a><br>Copyright 2023, Regents of the University of Minnesota, All Rights Reserved
+      
           </div>
         </div>
       </footer>
     </div>
-    
+
     <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
     <script type="text/javascript" src="../styles/docfx.js"></script>
     <script type="text/javascript" src="../styles/main.js"></script>

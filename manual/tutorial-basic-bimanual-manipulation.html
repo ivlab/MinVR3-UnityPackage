@@ -1,0 +1,324 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>MinVR3 Tutorial: Basic Bimanual Manipulation | MinVR3 </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="MinVR3 Tutorial: Basic Bimanual Manipulation | MinVR3 ">
+    <meta name="generator" content="docfx ">
+  
+    <link rel="shortcut icon" href="../resources/favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc">
+    <meta property="docfx:tocrel" content="toc">
+  
+  <meta property="docfx:rel" content="../">
+  
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../resources/logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+
+                <ul class="nav level1 navbar-nav">
+                      <li>
+                          <a href="../index.html" title="Home">Home</a>
+                      </li>
+                      <li>
+                          <a href="../manual/01-intro.html" title="Manual">Manual</a>
+                      </li>
+                      <li>
+                          <a href="../api/index.html" title="API Documentation">API Documentation</a>
+                      </li>
+                </ul>            </div>
+          </div>
+        </nav>
+
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div class="container body-content">
+
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div>
+              <div class="sidefilter">
+                <form class="toc-filter">
+                  <span class="glyphicon glyphicon-filter filter-icon"></span>
+                  <input type="text" id="toc_filter_input" placeholder="Enter here to filter..." onkeypress="if(event.keyCode==13) {return false;}">
+                </form>
+              </div>
+              <div class="sidetoc">
+                <div class="toc" id="toc">
+
+                  <ul class="nav level1">
+                    <li class="">
+                      <a href="01-intro.html" title="Introduction" class="">Introduction</a>
+                    </li>
+                    <li class="">
+                      <a href="02-install.html" title="Installation" class="">Installation</a>
+                    </li>
+                    <li class="active">
+                      <a href="tutorial-basic-bimanual-manipulation.html" title="Tutorial - Basic Bimanual Manipulation" class="active">Tutorial - Basic Bimanual Manipulation</a>
+                    </li>
+                    <li class="">
+                      <a href="03-plugin-packages.html" title="Optional Plugin Packages" class="">Optional Plugin Packages</a>
+                    </li>
+                    <li class="">
+                      <a href="10-vr-coord-spaces.html" title="VR Coordinate Spaces" class="">VR Coordinate Spaces</a>
+                    </li>
+                    <li class="">
+                      <a href="11-vrconfigs.html" title="VRConfigs for Multi-Platform Dev" class="">VRConfigs for Multi-Platform Dev</a>
+                    </li>
+                    <li class="">
+                      <a href="12-vrevents.html" title="VREvents in Detail" class="">VREvents in Detail</a>
+                    </li>
+                    <li class="">
+                      <a href="13-input-devices.html" title="Input Devices" class="">Input Devices</a>
+                    </li>
+                    <li class="">
+                      <a href="14-display-devices.html" title="Display Devices" class="">Display Devices</a>
+                    </li>
+                    <li class="">
+                      <a href="15-remote-connections.html" title="Remote Connections" class="">Remote Connections</a>
+                    </li>
+                    <li class="">
+                      <a href="16-cluster.html" title="Cluster Synchronization" class="">Cluster Synchronization</a>
+                    </li>
+                    <li class="">
+                      <a href="20-interaction.html" title="Interaction Techniques" class="">Interaction Techniques</a>
+                    </li>
+                    <li class="">
+                      <a href="license.html" title="License" class="">License</a>
+                    </li>
+                    <li class="">
+                      <a href="changelog.html" title="Change Log" class="">Change Log</a>
+                    </li>
+                  </ul>                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="minvr3-tutorial-basic-bimanual-manipulation">MinVR3 Tutorial: Basic Bimanual Manipulation</h1>
+
+<p>In this page, we'll go over a brief tutorial for using MinVR3 to create a
+portable app that enables a user to translate, rotate, and scale an object using
+MinVR3 events across multiple devices and build targets. In the course of this
+tutorial, we will cover basic terminology of MinVR3 (VREvents, VRConfigs, and
+more), as well as how to use the building blocks provided in this library.</p>
+<h2 id="0-prerequisites">0. Prerequisites</h2>
+<p>This tutorial assumes a working knowledge of the Unity game engine, C#
+scripting, and git version control.</p>
+<p>It also assumes you have <a href="02-install.html">installed the MinVR3 Package</a>.</p>
+<h2 id="1-setting-up-a-minvr3-scene">1. Setting up a MinVR3 Scene</h2>
+<p>The two key &quot;root&quot; gameobjects for any MinVR3 scene are the VREngine and the
+Room Space. The VREngine is the main &quot;guts&quot; of MinVR3 that makes it all tick;
+this GameObject is a singleton and persists when new scenes are loaded. The Room
+Space gameobject represents the &quot;Room Space&quot; relative to the app's user(s). Read
+more about coordinate spaces in the <a href="10-vr-coord-spaces.html">Coordinate Spaces</a>
+chapter of the manual.</p>
+<p>Let's start by creating a blank scene in Unity: create a new scene and delete
+any objects (cameras, lights, etc) that show up by default. Then open the MinVR3
+Menu and create the Room Space Origin and VREngine (<em>GameObject &gt; MinVR &gt;
+Getting Started &gt; Create &quot;VREngine&quot; and &quot;Room Space Origin&quot; GameObjects</em>).</p>
+<p>After adding these GameObjects, the scene looks like this:</p>
+<p><img src="resources/tutorial-1-scene.png" alt="VREngine and Room Space gameobjects in Unity Scene"></p>
+<p>Now, let's make the scene a little more exciting! Add a few 3D objects to the
+scene and scale them / rotate them however you wish; add these objects in the
+Room Space. Just make sure you have at least one cube with a box collider
+attached and one light in the scene. Our tutorial scene looks like this:</p>
+<p><img src="resources/tutorial-3-scene.png" alt="Our scene includes a directional light, 3 cubes, and a floor (also a cube)"></p>
+<h2 id="2-adding-your-first-vrconfig">2. Adding your first VRConfig</h2>
+<p>Now, that's obviously not very exciting since there are no input or output
+devices in the scene yet. Let's fix that by adding our first <strong>VRConfig</strong>: a
+configuration of input and output devices for specific hardware setup. Peruse
+the already-existing VRConfigs at <em>GameObject &gt; MinVR &gt; VRConfig</em> - you'll
+notice there are lots of them!</p>
+<p>In the scene, generally VRConfigs should be a child of the &quot;Room Space&quot;
+gameobject - after all, the user is providing input and receiving output in this
+space. As a general rule of thumb, we can create a GameObject named &quot;VRConfigs&quot;
+underneath the Room Space gameobject and add all of the VRConfigs as children.</p>
+<p>Now, let's create the first VRConfig: a basic VR simulator! This simulator
+enables us to develop applications without having any specialized hardware
+present - it uses the keyboard and mouse to emulate spatial interactions like
+head tracking, and bimanual (two-handed) input devices.</p>
+<p>Click on the VRConfigs GameObject you created underneath Room Space, then go to
+<em>GameObject &gt; MinVR &gt; VRConfigs &gt; VRConfig_BasicVRSimulator</em>.</p>
+<p>Select the VREngine GameObject and set the &quot;Startup VRConfig&quot; under the VR
+Config Manager to the BasicVRSimulator you just created.</p>
+<p>At the end of this section your scene should look like this:</p>
+<p><img src="resources/tutorial-2-vrconfig.png" alt="MinVR3 Scene including VREngine and one VRConfig"></p>
+<h2 id="3-adding-some-interactivity-with-vrevents">3. Adding some interactivity with VREvents</h2>
+<p>The core of MinVR3 interactivity is based on the concept of <a href="12-vrevents.html">VREvents</a>.</p>
+<p>With the VR simulator VRConfig we just added to the scene, a number of new
+VREvent types have been made available in the scene. Select the VREngine
+GameObject and twirl down the &quot;VR Event prototypes in this scene&quot; section, and
+twirl down any of the GameObjects listed to see what VREvents it can produce.
+For example, the Event Aliases GameObject produces <code>Head/Position</code> and
+<code>Head/Rotation</code>, which represent the head tracking position and rotation,
+respectively. Notice also under the Input Devices GameObject that
+<code>FakeTrackers/Head/Position</code> and <code>FakeTrackers/Head/Rotation</code> are listed here.</p>
+<p><img src="resources/tutorial-4-vrevent-types.png" alt="VR event prototypes in the scene">
+<img src="resources/tutorial-4-faketrackers.png" alt="FakeTrackers also produces Head events"></p>
+<p>What's up with this multiple <code>Head</code>s thing?</p>
+<p>In general, it's best to provide a layer of separation between the raw input (in
+this case, <code>FakeTrackers/Head</code>) and the application level meaning (<code>Head</code>). This
+makes it possible to handle different input devices and have them control the
+same part of the application under different VRConfigs. For example, under the
+VR Simulator, head tracking data is supplied by mouse and keyboard, whereas on
+the Oculus Quest the head tracking is supplied by UnityXR.</p>
+<p>So, long story short: create a series of VREvent Aliases to rename (or rename +
+clone) your events so they have a canonical, application-level meaning and
+maintain this separately from the incoming, raw input device data.</p>
+<p>With this in mind, let's add some interactivity to the scene now with VREvents!
+MinVR has several powerful tools that can be used to create spatial
+interactions, this tutorial just shows one of the many possibilities. The key
+building blocks for adding a simple bimanual interaction (e.g., grabbing with a
+button press) are as follows:</p>
+<ul>
+<li>Defining the VREvents for both hands (already done above - see VREvents <code>DH/*</code>
+and <code>NDH/*</code>: these are the position and rotation events for the Dominant and
+Non-Dominant hands).</li>
+<li>Adding cursors to the scene to show each hand</li>
+<li>Adding required scripts
+<ul>
+<li>Bimanual object selector</li>
+<li>Bounds highlighter</li>
+<li>Bimanual object manipulator</li>
+</ul>
+</li>
+</ul>
+<h3 id="adding-cursors">Adding Cursors</h3>
+<p>MinVR3 has a couple handy cursors that already exist. You can add them to the
+scene under Room Space by going to <em>GameObject &gt; MinVR Interaction &gt; Cursors</em>.
+Add one for the Dominant and Non-Dominant hands.</p>
+<p>Here we've added a CavePainting brush and a Small Cube Cursor. We rescaled the Brush Model in the CavePainting to be smaller (0.1).</p>
+<p><img src="resources/tutorial-5-cursors.png" alt="Added cursors for Dominant and Non-Dominant hands"></p>
+<h3 id="adding-required-scripts">Adding required scripts</h3>
+<p>The Bimanual Object Selector enables us to select objects with one or both hands.</p>
+<ol>
+<li>Create a new GameObject (in Room Space) named &quot;Bimanual Interactions&quot;</li>
+<li>Add a new Bimanual Object Selector component to the GameObject</li>
+<li>Drag and drop / select the cursors you added in the previous section to the
+&quot;Cursor Transform&quot; and &quot;Cursor Transform 2&quot; of the Bimanual Object Selector
+script.</li>
+</ol>
+<p>Now, VREvents &quot;Select&quot; and &quot;Deselect&quot; will be fired every time either cursor
+comes close to an object with a collider (any collider).</p>
+<p><img src="resources/tutorial-5-selector.png" alt="Added bimanual object selector"></p>
+<p>To visualize selections, we can add a Basic Highlighter component to the
+Bimanual Interactions GameObject.</p>
+<p>In your project, create a new Material and make it a memorable color, then drag
+and drop this material into the &quot;Highlight Material&quot; slot for the Basic
+Highlighter. Choose the Select and Deselect events too.</p>
+<p>When you press play, your scene should now behave something like this:</p>
+<p>(use 1 and 2 keys to switch between DH and NDH tracker)</p>
+<p><img src="resources/tutorial-5-highlight.gif" alt="Added basic highlighter"></p>
+<p>Lastly, after you've verified selection and highlighting are working correctly,
+add a &quot;Bimanual Object Manipulator&quot; component to the Bimanual Interactions
+GameObject.</p>
+<p>Set the event slots as follows (this enables the script to react to VREvents
+when the DH and NDH move, rotate, or have buttons pressed, or an object is
+selected):</p>
+<p><img src="resources/tutorial-5-manipulator-events.png" alt="Added manipulator"></p>
+<p>Now, when you press play, you should be able to move the objects in the scene around, rotate them, and scale them:</p>
+<p><img src="resources/tutorial-5-manipulator.gif" alt="Added manipulator"></p>
+<p>Okay, that's it for the basics! Now, it's time to make our app portable between devices.</p>
+<h2 id="4-adding-a-minvr3-plugin">4. Adding a MinVR3 Plugin</h2>
+<p>So far, we've only used input from the keyboard and mouse. But, what if we
+wanted to use a spatial tracker, touch screen, or other custom input device?
+MinVR has us covered for this. In this section, we will add a <a href="03-plugin-packages.html">MinVR3
+Plugin</a> to connect to Virtual Reality Peripheral
+Network (VRPN) devices - this will enable us to interface with the lab's
+high-resolution optical tracking system (OptiTrack Tracking Tools / Motive).</p>
+<p>TODO</p>
+<h2 id="5-adding-more-vrconfigs">5. Adding more VRConfigs</h2>
+<p>The real power of MinVR3 is that it enables your app to support multiple target
+platforms without changing the core structure of your app. This is achieved
+through VRConfigs.</p>
+<p>We've already added one VRConfig to the scene: the Basic VR Simulator. Now,
+let's say we want to deploy our app to the CAVE.</p>
+<p>TODO</p>
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.umn.edu/ivlab-cs/MinVR3-UnityPackage/blob/main/DocumentationSrc~/manual/tutorial-basic-bimanual-manipulation.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      <a href="https://ivlab.cs.umn.edu">Interactive Visualization Lab</a><br>Copyright 2023, Regents of the University of Minnesota, All Rights Reserved
+      
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>
