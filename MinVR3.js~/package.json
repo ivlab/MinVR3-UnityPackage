@@ -1,0 +1,31 @@
+{
+  "name": "minvr3.js",
+  "version": "1.1.0",
+  "description": "JavaScript companion for MinVR3",
+  "main": "dist/minvr3.cjs.js",
+  "module": "dist/minvr3.esm.js",
+  "browser": "dist/minvr3.umd.js",
+  "scripts": {
+    "build": "rollup -c",
+    "test": "node test/spec",
+    "pretest": "npm run build"
+  },
+  "keywords": [
+    "Virtual",
+    "reality"
+  ],
+  "author": "UMN Interactive Visualization Lab",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "@babel/core": "^7.21.0",
+    "@babel/preset-env": "^7.20.2",
+    "rollup": "^2.79.1",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
+  },
+  "files": [
+    "dist",
+    "src"
+  ]
+}
