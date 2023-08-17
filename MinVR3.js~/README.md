@@ -8,7 +8,7 @@ software, etc.).
 
 Check the package out on npm:
 
-[![MinVR3 JavaScript package on NPM](https://badgen.net/npm/v/minvr3)](https://npmjs.com/package/minvr3)
+[![MinVR3 JavaScript package on NPM](https://badgen.net/npm/v/minvr3.js)](https://npmjs.com/package/minvr3.js)
 
 
 ## Prerequisites
