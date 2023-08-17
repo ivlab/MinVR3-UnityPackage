@@ -1,0 +1,4 @@
+HOST = '127.0.0.1'
+PORT = 9034
+SEND_EVENT_COUNT = 100
+STRING_CONST = 'I am a string'

@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "minvr3"
+version = "0.0.2"
+authors = [
+  { name="UMN Interactive Visualization Lab", email="ivlab-admin@umn.edu" },
+]
+description = "Python client and server for MinVR3"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://ivlab.cs.umn.edu"
+
+[project.scripts]
+relay_server = "minvr3.apps.relay_server:main"
+
+[tool.setuptools.packages.find]
+include = ['minvr3']
