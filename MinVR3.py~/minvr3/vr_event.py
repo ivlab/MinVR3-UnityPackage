@@ -1,3 +1,14 @@
+'''
+vr_event.py
+
+Python version of MinVR3 event communication. Compatible with VREvent.cs, and
+should implement all the types that are shown in the type mapping
+`AvailableDataTypes`.
+
+Copyright (C) 2023, University of Minnesota
+Authors: Bridger Herman <herma582@umn.edu>
+'''
+
 import json
 
 class UnityObjectEncoder(json.JSONEncoder):

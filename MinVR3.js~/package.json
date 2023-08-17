@@ -1,6 +1,6 @@
 {
   "name": "minvr3.js",
-  "version": "1.1.0",
+  "version": "2023.8.0",
   "description": "JavaScript companion for MinVR3",
   "main": "dist/minvr3.cjs.js",
   "module": "dist/minvr3.esm.js",

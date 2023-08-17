@@ -6,6 +6,10 @@ other examples exist (Node.js servers, other apps written in React Native,
 custom JavaScript implementations like that used in Digistar planetarium
 software, etc.).
 
+Check the package out on npm:
+
+[![MinVR3 JavaScript package on NPM](https://badgen.net/npm/v/minvr3)](https://npmjs.com/package/minvr3)
+
 
 ## Prerequisites
 

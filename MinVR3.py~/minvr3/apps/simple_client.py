@@ -11,7 +11,7 @@ for count in range(10, 20):
     c = minvr3_net.receive_uint32(server)
     print('got', c, 'expected', count)
 
-for count in range(0, 20):
+for count in range(0, 10):
     minvr3_net.send_uint32(server, count)
     print('sent', count)
 

@@ -1,3 +1,15 @@
+'''
+minvr3_net.py
+
+Network utilities for communicating with MinVR3 via sockets. This file provides
+a minimal interface for connecting to sockets, and sending/receiving data from
+them. Only implementations for sending/receiving integers and strings are
+provided.
+
+Copyright (C) 2023, University of Minnesota
+Authors: Bridger Herman <herma582@umn.edu>
+'''
+
 import socket
 import sys
 import time

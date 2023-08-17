@@ -13,7 +13,7 @@ Check the package out on PyPI:
 [![MinVR3 Python Library on PyPI](https://badgen.net/pypi/v/minvr3/)](https://pypi.org/project/minvr3)
 
 
-## Installation (normal)
+## Installation
 
 You can install the `minvr3` Python package from the Python package index using the following command:
 
@@ -22,9 +22,15 @@ python3 -m pip install --user minvr3
 ```
 
 
-## Included scripts/funtionality
+## Getting Started
 
-The Python MinVR3 client can function as a client or server. Look below for simple examples of running a MinVR3 client and server. Check out the `apps` folder for more complete examples.
+The Python MinVR3 client can function as a client or server. Look below for
+simple examples of running a MinVR3 client and server. Check out the `apps`
+folder for more complete examples.
+
+Both the server and client implementation are compatible with the
+`TcpJsonVREventConnection` provided by the MinVR3-UnityPackage. You can have a
+Python server connect with a Unity client, and vice versa.
 
 
 ### Server code
