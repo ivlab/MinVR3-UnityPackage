@@ -2,16 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Creates a mesh for the 3D Brush cursor used in the original CavePainting, 2001 paper.
-/// </summary>
-[ExecuteAlways]
-[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
-[AddComponentMenu("MinVR Interaction/Cursors/CavePainting Brush")]
-public class CavePaintingBrushCursor : MonoBehaviour
+namespace IVLab.MinVR3
 {
-    // Vertices that make up the brush geometry
-    public static Vector3[] origVertices = new [] {
+    /// <summary>
+    /// Creates a mesh for the 3D Brush cursor used in the original CavePainting, 2001 paper.
+    /// </summary>
+    [ExecuteAlways]
+    [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
+    [AddComponentMenu("MinVR Interaction/Cursors/CavePainting Brush")]
+    public class CavePaintingBrushCursor : MonoBehaviour
+    {
+        // Vertices that make up the brush geometry
+        public static Vector3[] origVertices = new[] {
         new Vector3( 0.5f,   0.0f,   -0.0f),  // 0
         new Vector3(-0.5f,   0.0f,   -0.0f),  // 1
         
@@ -37,8 +39,8 @@ public class CavePaintingBrushCursor : MonoBehaviour
     };
 
 
-    // Vertex indices arranged into triangles (clockwise ordering)
-    public static int[] origIndices = new [] {
+        // Vertex indices arranged into triangles (clockwise ordering)
+        public static int[] origIndices = new[] {
         // top
         0, 2, 1,
         1, 2, 3,
@@ -96,37 +98,40 @@ public class CavePaintingBrushCursor : MonoBehaviour
         7, 18, 16,
         18, 7, 9,
 
-        9, 10, 18,        
+        9, 10, 18,
     };
 
 
-    void Start()
-    {
-        // vertices and indices defined above are for a flat shaded model.  to use with modern shaders
-        // that assume smooth shading, we just make the mesh a bit bigger by duplicating vertices so that
-        // each triangle has 3 unique vertices and when the normals are calculated, the normals will be the
-        // same for all 3 vertices of each triangle, and we'll get flat shading.
+        void Start()
+        {
+            // vertices and indices defined above are for a flat shaded model.  to use with modern shaders
+            // that assume smooth shading, we just make the mesh a bit bigger by duplicating vertices so that
+            // each triangle has 3 unique vertices and when the normals are calculated, the normals will be the
+            // same for all 3 vertices of each triangle, and we'll get flat shading.
 
-        vertices = new Vector3[origIndices.Length];
-        for (int i = 0; i < vertices.Length; i++) {
-            vertices[i] = origVertices[origIndices[i]];
+            vertices = new Vector3[origIndices.Length];
+            for (int i = 0; i < vertices.Length; i++)
+            {
+                vertices[i] = origVertices[origIndices[i]];
+            }
+
+            indices = new int[origIndices.Length];
+            for (int i = 0; i < indices.Length; i++)
+            {
+                indices[i] = i;
+            }
+
+            m_Mesh = new Mesh();
+            m_Mesh.name = "Brush";
+            m_Mesh.vertices = vertices;
+            m_Mesh.triangles = indices;
+            m_Mesh.RecalculateNormals();
+            GetComponent<MeshFilter>().sharedMesh = m_Mesh;
+            GetComponent<MeshRenderer>().material = new Material(Shader.Find("Diffuse"));
         }
 
-        indices = new int[origIndices.Length];
-        for (int i = 0; i < indices.Length; i++) {
-            indices[i] = i;
-        }
-
-        m_Mesh = new Mesh();
-        m_Mesh.name = "Brush";
-        m_Mesh.vertices = vertices;
-        m_Mesh.triangles = indices;
-        m_Mesh.RecalculateNormals();
-        GetComponent<MeshFilter>().sharedMesh = m_Mesh;
-        GetComponent<MeshRenderer>().material = new Material(Shader.Find("Diffuse"));
+        public Vector3[] vertices;
+        public int[] indices;
+        private Mesh m_Mesh;
     }
-
-    public Vector3[] vertices;
-    public int[] indices;
-    private Mesh m_Mesh;
 }

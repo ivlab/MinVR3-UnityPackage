@@ -16,7 +16,7 @@ namespace IVLab.MinVR3
     /// object since the trackball effect requires intersecting with a bounding sphere.  When the mouse button is
     /// released, the temporary collider is removed and the original is reenabled.
     ///
-    /// Created by Dan, Morgan, & Sean 2/10/21
+    /// Created by Dan, Morgan, &amp; Sean 2/10/21
     /// </summary>
     [AddComponentMenu("MinVR Interaction/Desktop/Mouse-Object Manipulator")]
     public class MouseObjectManipulator : MonoBehaviour

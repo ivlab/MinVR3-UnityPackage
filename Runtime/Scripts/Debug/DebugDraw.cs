@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using IVLab.MinVR3.ExtensionMethods;
 
 namespace IVLab.MinVR3
 {

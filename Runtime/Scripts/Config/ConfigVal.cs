@@ -41,7 +41,7 @@ namespace IVLab.MinVR3
     /// MY_QUOTED_STRING = "  Hello my \"MinVR friends\"  "
     ///
     /// # Values for Vector, Quaternion, and Matrix types must be separated by commas.  Optionally,
-    /// # the values can be enclosed in (), <>, or [] brackets.
+    /// # the values can be enclosed in (), &lt;&gt;, or [] brackets.
     /// MY_VECTOR2 = (4.0, 4.0)
     /// MY_VECTOR3 = (5.0, 5.0, 5.0)
     /// MY_VECTOR4 = (6.0, 6.0, 6.0, 6.0)

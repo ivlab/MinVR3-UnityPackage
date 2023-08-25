@@ -29,7 +29,7 @@ namespace IVLab.MinVR3 {
     /// unloads and is not destroyed until the application quits.  You should access this single
     /// instance of the VREngine class via the static `instance` variable, like this:
     /// ```
-    /// VREngine.instace
+    /// VREngine.instance
     /// ```
     /// From there, you can access the key classes that VREngine uses to manage the application.  For
     /// example:
@@ -96,6 +96,7 @@ namespace IVLab.MinVR3 {
             }
         }
 
+        private const string DeltaTimeEventName = "MinVR3/DeltaTime";
         /// <summary>
         /// Time event for delta time synchronization across nodes in a network.
         /// Useful for implementing animations on a clustered setup where
@@ -105,15 +106,34 @@ namespace IVLab.MinVR3 {
         /// By default, this gets sent in <see cref="VREngine.Update"/> for both
         /// cluster and non-cluster setups.
         /// </summary>
-        public static VREventFloat DeltaTimeEvent { get => new VREventFloat("MinVR3/DeltaTime", Time.deltaTime); }
+        private static VREventFloat DeltaTimeEvent { get => new VREventFloat(DeltaTimeEventName, Time.deltaTime); }
 
+        /// <summary>
+        /// Time event for delta time synchronization across nodes in a network.
+        /// Useful for implementing animations on a clustered setup where
+        /// `Time.deltaTime` may be different on individual nodes and it's
+        /// useful to have a "ground truth" timing event.
+        ///
+        /// By default, this gets sent in <see cref="VREngine.Update"/> for both
+        /// cluster and non-cluster setups.
+        /// </summary>
+        public static VREventPrototypeFloat DeltaTimeEventPrototype { get => VREventPrototypeFloat.Create(DeltaTimeEventName); }
+
+        private const string ShutdownEventName = "MinVR3/Shutdown";
         /// <summary>
         /// Shutdown event that gets sent when Unity is quitting. This event
         /// gets sent when the user has pressed the play button to "unplay" the
         /// app in editor, or quits the built application. See <see
         /// cref="VREngine.SendShutdownEvent"/>.
         /// </summary>
-        public static VREvent ShutdownEvent { get => new VREvent("MinVR3/Shutdown"); }
+        private static VREvent ShutdownEvent { get => new VREvent(ShutdownEventName); }
+        
+        /// <summary>
+        /// Shutdown event that gets sent when Unity is quitting. This event
+        /// gets sent when the user has pressed the play button to "unplay" the
+        /// app in editor, or quits the built application.
+        /// </summary>
+        public static VREventPrototype ShutdownEventPrototype { get => VREventPrototype.Create(ShutdownEventName); }
 
         // Interrupt quit to send a shutdown event
         [RuntimeInitializeOnLoadMethod]

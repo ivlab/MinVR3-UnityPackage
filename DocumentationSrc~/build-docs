@@ -106,10 +106,18 @@ if [[ "$buildMode" == "--clean" ]]; then
   exe find $docSrcDir/api -type f -name "*.yml" -delete
   exe find $docSrcDir/api -type f -name ".manifest" -delete
   exe find $apiSrcDir -type d -name "obj" -exec /bin/rm -rf "{}" +
+  exe rm -rf $scriptDir/../../../obj
   exit
 elif [[ "$buildMode" == "--publish" ]]; then
+  # CD into root of package
   cd $scriptDir/..
-  exe git subtree push --prefix Documentation\~ origin gh-pages
+  # Avoid git subtree method because it requires committing the whole
+  # Documentation~ folder, causing no end of pain (100,000s of lines of HTML - ew).
+  # exe git subtree push --prefix Documentation\~ origin gh-pages
+  # Instead, use a 3rd party script:
+  # https://github.com/X1011/git-directory-deploy
+  # GIT_DEPLOY_DIR is an env variable used by deploy-gh-pages.sh.
+  GIT_DEPLOY_DIR=./Documentation~ ./DocumentationSrc~/deploy-gh-pages.sh
   exit
 fi
 
@@ -148,6 +156,8 @@ echo "</ItemGroup>" >> $tmpProjFile
 # being set.  A no target error is produced if the next line is absent.
 echo "<Import Project=\"\$(MSBuildToolsPath)\Microsoft.CSharp.targets\" />" >> $tmpProjFile
 echo "</Project>" >> $tmpProjFile
+
+# cp $scriptDir/../../../IVLab.MinVR3.*.csproj $scriptDir
 
 
 # Clean the output directory so there are no lingering files from a previous

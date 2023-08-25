@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace IVLab.MinVR3.ExtensionMethods
+namespace IVLab.MinVR3
 {
     public static class Matrix4x4Extensions
     {

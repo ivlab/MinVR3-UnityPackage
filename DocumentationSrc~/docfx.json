@@ -3,6 +3,7 @@
     {
       "src": [
         {
+          "cwd": "../../../",
           "files": [
             "*.csproj"
           ]
@@ -15,10 +16,18 @@
   ],
   "build": {
     "globalMetadata": {
-        "_appFooter": "<a href=\"https://ivlab.cs.umn.edu\">Interactive Visualization Lab</a><br>Copyright 2022, Regents of the University of Minnesota, All Rights Reserved",
+        "_appFooter": "<a href=\"https://ivlab.cs.umn.edu\">Interactive Visualization Lab</a><br>Copyright 2023, Regents of the University of Minnesota, All Rights Reserved",
         "_appLogoPath": "resources/logo.svg",
         "_appFaviconPath": "resources/favicon.ico",
-        "_enableSearch": true
+        "_enableSearch": true,
+        "_newFileRepository": {
+          "branch": "main"
+        },
+        "_gitContribute": {
+          "repo": "https://github.umn.edu/ivlab-cs/MinVR3-UnityPackage",
+          "branch": "main",
+          "apiSpecFolder": "Documentation~/apidocs-overrides"
+        }
     },
     "content": [
       {
@@ -46,6 +55,12 @@
           "apidocs-edits/*.md"
         ]
       }
+    ],
+    "xref": [
+      "resources/UnityXrefMap.yml"
+    ],
+    "xrefService": [
+      "https://xref.docs.microsoft.com/query?uid={uid}"
     ],
     "template": "templates/statictoc-with-github-umn-edu",
     "globalMetadataFiles": "projectMetadata.json",

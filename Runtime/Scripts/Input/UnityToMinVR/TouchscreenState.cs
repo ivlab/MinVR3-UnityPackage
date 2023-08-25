@@ -7,10 +7,12 @@ using UnityEngine.InputSystem;
 #endif
 
 
-public static class TouchscreenState
+namespace IVLab.MinVR3
 {
-    public static int GetTouchCount(bool forceLegacy)
+    public static class TouchscreenState
     {
+        public static int GetTouchCount(bool forceLegacy)
+        {
 #if ENABLE_INPUT_SYSTEM
         if (!forceLegacy) {
             return Touchscreen.current.touches.Count;
@@ -20,11 +22,11 @@ public static class TouchscreenState
 #else
             return Input.touchCount;
 #endif
-    }
+        }
 
 
-    public static int GetTouchID(int touchIndex, bool forceLegacy)
-    {
+        public static int GetTouchID(int touchIndex, bool forceLegacy)
+        {
 #if ENABLE_INPUT_SYSTEM
         if (!forceLegacy) {
             return Touchscreen.current.touches[touchIndex].touchId.ReadValue();
@@ -34,21 +36,21 @@ public static class TouchscreenState
 #else
             return Input.touches[touchIndex].fingerId;
 #endif
-    }
+        }
 
 
-    public enum TouchInputPhase
-    {
-        None,
-        Began,
-        Moved,
-        Ended,
-        Canceled,
-        Stationary
-    }
+        public enum TouchInputPhase
+        {
+            None,
+            Began,
+            Moved,
+            Ended,
+            Canceled,
+            Stationary
+        }
 
-    public static TouchInputPhase GetTouchPhase(int touchIndex, bool forceLegacy)
-    {
+        public static TouchInputPhase GetTouchPhase(int touchIndex, bool forceLegacy)
+        {
 #if ENABLE_INPUT_SYSTEM
         if (!forceLegacy) {
             switch (Touchscreen.current.touches[touchIndex].phase.ReadValue()) {
@@ -69,7 +71,8 @@ public static class TouchscreenState
             }
         }
 #else
-            switch (Input.touches[touchIndex].phase) {
+            switch (Input.touches[touchIndex].phase)
+            {
                 case UnityEngine.TouchPhase.Began: return TouchInputPhase.Began;
                 case UnityEngine.TouchPhase.Moved: return TouchInputPhase.Moved;
                 case UnityEngine.TouchPhase.Stationary: return TouchInputPhase.Stationary;
@@ -77,12 +80,12 @@ public static class TouchscreenState
                 case UnityEngine.TouchPhase.Canceled: return TouchInputPhase.Canceled;
             }
 #endif
-        return TouchInputPhase.None;
-    }
+            return TouchInputPhase.None;
+        }
 
 
-    public static Vector2 GetTouchPosition(int touchIndex, bool forceLegacy)
-    {
+        public static Vector2 GetTouchPosition(int touchIndex, bool forceLegacy)
+        {
 #if ENABLE_INPUT_SYSTEM
         if (!forceLegacy) {
             return Touchscreen.current.touches[touchIndex].position.ReadValue();
@@ -92,10 +95,10 @@ public static class TouchscreenState
 #else
             return Input.touches[touchIndex].position;
 #endif
-    }
+        }
 
-    public static float GetTouchPressure(int touchIndex, bool forceLegacy)
-    {
+        public static float GetTouchPressure(int touchIndex, bool forceLegacy)
+        {
 #if ENABLE_INPUT_SYSTEM
         if (!forceLegacy) {
             return Touchscreen.current.touches[touchIndex].pressure.ReadValue();
@@ -105,6 +108,9 @@ public static class TouchscreenState
 #else
             return Input.touches[touchIndex].pressure / Input.touches[touchIndex].maximumPossiblePressure;
 #endif
+        }
+
     }
+
 
 }
