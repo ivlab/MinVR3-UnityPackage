@@ -159,6 +159,7 @@ namespace IVLab.MinVR3
 
         void Update()
         {
+            MaterialPropertyBlock block = new MaterialPropertyBlock();
             // Draw rays
             for (int r = 0; r < rays.Count; r++)
             {
@@ -168,7 +169,6 @@ namespace IVLab.MinVR3
                 var up = ray.directionWithMagnitude.normalized;
                 Matrix4x4 m = Matrix4x4.TRS(position, Quaternion.FromToRotation(Vector3.up, up), localScale);
 
-                MaterialPropertyBlock block = new MaterialPropertyBlock();
                 block.SetColor("_Color", rays[r].color);
                 Graphics.DrawMesh(cylinderMesh, m, debugMaterial, 0, null, 0, properties: block);
 
@@ -186,7 +186,6 @@ namespace IVLab.MinVR3
                 var up = c.normal;
                 Matrix4x4 m = Matrix4x4.TRS(position, Quaternion.FromToRotation(Vector3.up, up), localScale);
 
-                MaterialPropertyBlock block = new MaterialPropertyBlock();
                 block.SetColor("_Color", c.color);
                 Graphics.DrawMesh(cylinderMesh, m, debugMaterial, 0, null, 0, properties: block);
 
@@ -202,7 +201,6 @@ namespace IVLab.MinVR3
                 var position = s.center;
                 Matrix4x4 m = Matrix4x4.TRS(position, Quaternion.identity, localScale);
 
-                MaterialPropertyBlock block = new MaterialPropertyBlock();
                 block.SetColor("_Color", s.color);
                 Graphics.DrawMesh(sphereMesh, m, debugMaterial, 0, null, 0, properties: block);
 
@@ -244,7 +242,6 @@ namespace IVLab.MinVR3
                 var t22 = Matrix4x4.Translate(new Vector3(0.0f, b.bounds.extents.y, -b.bounds.extents.z));
                 var t23 = Matrix4x4.Translate(new Vector3(0.0f, -b.bounds.extents.y, -b.bounds.extents.z));
 
-                MaterialPropertyBlock block = new MaterialPropertyBlock();
                 block.SetColor("_Color", b.color);
                 Graphics.DrawMesh(cylinderMesh, tf * bT * t00 * s0 * r0, debugMaterial, 0, null, 0, properties: block);
                 Graphics.DrawMesh(cylinderMesh, tf * bT * t01 * s0 * r0, debugMaterial, 0, null, 0, properties: block);

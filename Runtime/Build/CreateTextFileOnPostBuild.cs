@@ -58,11 +58,15 @@ namespace IVLab.MinVR3
         void Update()
         {
 #if UNITY_EDITOR
-            // Write settings to file
-            string settingsJson = JsonUtility.ToJson(settings);
-            using (StreamWriter writer = new StreamWriter(SettingsPath))
+            // only write if we're not in play mode...
+            if (!Application.isPlaying)
             {
-                writer.Write(settingsJson);
+                // Write settings to file
+                string settingsJson = JsonUtility.ToJson(settings);
+                using (StreamWriter writer = new StreamWriter(SettingsPath))
+                {
+                    writer.Write(settingsJson);
+                }
             }
 #endif
         }
