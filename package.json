@@ -44,6 +44,12 @@
             "displayName": "UMNCaveCalibration",
             "description": "A test app to ensure all parts of the UMN CAVE are working correctly -- tracking, button presses, and sound",
             "path": "Samples~/UMNCaveCalibration"
+        },
+        {
+            "displayName": "ABRCaveDemo",
+            "description": "A demo to show ABR in the CAVE. Install ABR first to use it.",
+            "path": "Samples~/ABRCaveDemo"
         }
+
     ]
 }
