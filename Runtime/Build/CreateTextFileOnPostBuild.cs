@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using System.IO;
+using System.Linq;
 
 namespace IVLab.MinVR3
 {
@@ -36,11 +37,13 @@ namespace IVLab.MinVR3
 
         public int callbackOrder { get { return 0; } }
 
-        private string SettingsPath { get => Path.Combine(Application.persistentDataPath, typeof(CreateTextFileOnPostBuildSettings).Name + ".json"); }
+        private static string SettingsFilePrefix = typeof(CreateTextFileOnPostBuildSettings).Name + "_";
+
+        private string SettingsPath { get => Path.Combine(Application.persistentDataPath, SettingsFilePrefix + this.name + ".json"); }
 
         void OnEnable()
         {
-            // Read settings from file
+            // Read settings from file (this is so we can persist data between regular editor mode and when the build is happening)
             if (File.Exists(SettingsPath))
             {
                 using (StreamReader reader = new StreamReader(SettingsPath))
@@ -57,7 +60,6 @@ namespace IVLab.MinVR3
 
         void Update()
         {
-#if UNITY_EDITOR
             // only write if we're not in play mode...
             if (!Application.isPlaying)
             {
@@ -68,45 +70,52 @@ namespace IVLab.MinVR3
                     writer.Write(settingsJson);
                 }
             }
-#endif
         }
 
         public void OnPostprocessBuild(BuildReport report)
         {
-            // Read settings from file
-            using (StreamReader reader = new StreamReader(SettingsPath))
+            // See what settings files exist
+            string[] settingsFiles = Directory.GetFiles(Application.persistentDataPath, SettingsFilePrefix + "*.json");
+
+            Debug.Log("CreateTextFileOnPostBuild: Found files:\n- " + string.Join("\n- ", settingsFiles));
+
+            foreach (string settingsFile in settingsFiles)
             {
-                string settingsJson = reader.ReadToEnd();
-                CreateTextFileOnPostBuildSettings settingsInstance = JsonUtility.FromJson<CreateTextFileOnPostBuildSettings>(settingsJson);
-
-                string buildFolder = Directory.GetParent(report.summary.outputPath).FullName;
-                // DirectoryInfo streamingAssetsFolder = new DirectoryInfo(Application.streamingAssetsPath);
-                // DirectoryInfo persistentDataFolder = new DirectoryInfo(Application.persistentDataPath);
-
-                // DirectoryInfo destinationFolder;
-                string destinationFolder;
-                switch (settingsInstance.copyLocation)
+                // Load individual settings file
+                string settingsPath = Path.Combine(Application.persistentDataPath, settingsFile);
+                using (StreamReader reader = new StreamReader(settingsPath))
                 {
-                    case PostBuildCopyLocation.StreamingAssetsFolder:
-                        destinationFolder = Application.streamingAssetsPath;
-                        break;
-                    case PostBuildCopyLocation.PersistentDataFolder:
-                        destinationFolder = Application.persistentDataPath;
-                        break;
-                    case PostBuildCopyLocation.BuildFolder:
-                    default:
-                        destinationFolder = buildFolder;
-                        break;
+                    string settingsJson = reader.ReadToEnd();
+                    CreateTextFileOnPostBuildSettings settingsInstance = JsonUtility.FromJson<CreateTextFileOnPostBuildSettings>(settingsJson);
+
+                    string buildFolder = Directory.GetParent(report.summary.outputPath).FullName;
+                    // DirectoryInfo streamingAssetsFolder = new DirectoryInfo(Application.streamingAssetsPath);
+                    // DirectoryInfo persistentDataFolder = new DirectoryInfo(Application.persistentDataPath);
+
+                    // DirectoryInfo destinationFolder;
+                    string destinationFolder;
+                    switch (settingsInstance.copyLocation)
+                    {
+                        case PostBuildCopyLocation.StreamingAssetsFolder:
+                            destinationFolder = Application.streamingAssetsPath;
+                            break;
+                        case PostBuildCopyLocation.PersistentDataFolder:
+                            destinationFolder = Application.persistentDataPath;
+                            break;
+                        case PostBuildCopyLocation.BuildFolder:
+                        default:
+                            destinationFolder = buildFolder;
+                            break;
+                    }
+
+
+                    string outPath = Path.Combine(destinationFolder, settingsInstance.fileName);
+
+                    // File.Copy(assetPath, outPath);
+                    File.WriteAllText(outPath, settingsInstance.fileText);
+                    Debug.Log("CopyFileOnPostBuild.cs: wrote file to " + outPath);
                 }
-
-
-                string outPath = Path.Combine(destinationFolder, settingsInstance.fileName);
-
-                // File.Copy(assetPath, outPath);
-                File.WriteAllText(outPath, settingsInstance.fileText);
-                Debug.Log("CopyFileOnPostBuild.cs: wrote file to " + outPath);
             }
-
         }
     }
 }
