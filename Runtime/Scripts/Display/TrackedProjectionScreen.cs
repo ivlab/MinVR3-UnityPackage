@@ -36,6 +36,7 @@ namespace IVLab.MinVR3 {
             public Vector3 bottomLeft = new Vector3(-4f, -4f, 4f);
         }
 
+        [Header("Physical Setup")]
         [Tooltip("Positions in the physical tracking space coordinate system for the four corners of the " +
             "projection screen.  These must form a rectangle.")]
         public ScreenCorners trackingSpaceCorners;
@@ -43,16 +44,29 @@ namespace IVLab.MinVR3 {
         [Tooltip("Use world space for tracking corners")]
         public bool useWorldSpaceForCorners = true;
 
-        [Tooltip("To apply the projection and view matrices to a camera other than the main camera, attach it here.")]
-        public Camera cam;
+        [Header("Camera Option #1")]
+        [Tooltip("Set this camera to render to single camera that should render both eyes using Unity's built-in " +
+            "support for that.  This class will access Camera.stereoTargetEye to determine which eye is currently " +
+            "and Camera.stereoSeparation to determine the interocular distance.")]
+        public Camera stereoCam;
 
+        [Header("Camera Option #2")]
+        [Tooltip("Set these two cameras and the interocular distance to use two different cameras, one per eye.")]
+        public Camera leftCam;
+        public Camera rightCam;
+        [Tooltip("Distance between the eyes in meters.  Same idea as Unity's Camera.stereoSeparation property.")]
+        public float interOcularDistance;
+
+        [Header("Tracking")]
         [Tooltip("The VREvent that provides head tracking position updates.")]
         public VREventPrototypeVector3 headTrackingPosEvent;
 
         [Tooltip("The VREvent that provides head tracking rotation updates.")]
         public VREventPrototypeQuaternion headTrackingRotEvent;
         
-        public enum ProjectionType { Perspective, Parallel }; 
+        public enum ProjectionType { Perspective, Parallel };
+
+        [Header("Misc")]
         [Tooltip("Perspective projection is typically (always?) used for head tracked displays.")]
         public ProjectionType projectionType = ProjectionType.Perspective;
 
@@ -62,6 +76,10 @@ namespace IVLab.MinVR3 {
 
         void Reset()
         {
+            stereoCam = null;
+            leftCam = null;
+            rightCam = null;
+            interOcularDistance = 0.063f; // 63mm on average for adults
             trackingSpaceCorners = new ScreenCorners();
             headTrackingPosEvent = null;
             headTrackingRotEvent = null;
@@ -84,12 +102,8 @@ namespace IVLab.MinVR3 {
 
         void Start()
         {
-            if (cam == null) {
-                cam = gameObject.GetComponent<Camera>();
-                if (cam == null) {
-                    cam = Camera.main;
-                }
-            }
+            Camera cam = stereoCam ? stereoCam : leftCam;
+            Debug.Assert(cam, "Set either the stereoTargetCam OR the leftCam and rightCam");
         }
         
         void Update() {
@@ -105,6 +119,7 @@ namespace IVLab.MinVR3 {
                 Debug.DrawLine(GetBottomRightCorner(), GetBottomLeftCorner(), c);
                 Debug.DrawLine(GetBottomLeftCorner(), GetTopLeftCorner(), c);
 
+                Camera cam = stereoCam ? stereoCam : leftCam;
                 Debug.DrawLine(cam.transform.position, GetTopRightCorner(), c);
                 Debug.DrawLine(cam.transform.position, GetBottomRightCorner(), c);
                 Debug.DrawLine(cam.transform.position, GetBottomLeftCorner(), c);
@@ -134,22 +149,39 @@ namespace IVLab.MinVR3 {
 
             // set matrices: projection and view matrices
 
-            /// for cyclops...        
-            cam.projectionMatrix = GetStereoProjectionMatrix(cam.transform.position, vr, vu, vn);
-            cam.worldToCameraMatrix = GetStereoViewMatrix(cam.transform.position, vr, vu, vn);
+            if (stereoCam) {
+                // Using a single camera with a stereoTargetEye flag.
 
-            //// for left eye...
-            if (cam.stereoTargetEye == StereoTargetEyeMask.Both || cam.stereoTargetEye == StereoTargetEyeMask.Left) {
-                Vector3 pe = GetLeftEyePosition(); // eye position
-                cam.SetStereoProjectionMatrix(Camera.StereoscopicEye.Left, GetStereoProjectionMatrix(pe, vr, vu, vn));
-                cam.SetStereoViewMatrix(Camera.StereoscopicEye.Left, GetStereoViewMatrix(pe, vr, vu, vn));
+                /// for cyclops...        
+                stereoCam.projectionMatrix = GetStereoProjectionMatrix(stereoCam.transform.position, vr, vu, vn, stereoCam.nearClipPlane, stereoCam.farClipPlane);
+                stereoCam.worldToCameraMatrix = GetStereoViewMatrix(stereoCam.transform.position, vr, vu, vn);
+
+                //// for left eye...
+                if (stereoCam.stereoTargetEye == StereoTargetEyeMask.Both || stereoCam.stereoTargetEye == StereoTargetEyeMask.Left) {
+                    Vector3 pe = GetLeftEyePosition(); // eye position
+                    stereoCam.SetStereoProjectionMatrix(Camera.StereoscopicEye.Left, GetStereoProjectionMatrix(pe, vr, vu, vn, stereoCam.nearClipPlane, stereoCam.farClipPlane));
+                    stereoCam.SetStereoViewMatrix(Camera.StereoscopicEye.Left, GetStereoViewMatrix(pe, vr, vu, vn));
+                }
+                //// for right eye...
+                if (stereoCam.stereoTargetEye == StereoTargetEyeMask.Both || stereoCam.stereoTargetEye == StereoTargetEyeMask.Right) {
+                    Vector3 pe = GetRightEyePosition(); // eye position
+                    stereoCam.SetStereoProjectionMatrix(Camera.StereoscopicEye.Right, GetStereoProjectionMatrix(pe, vr, vu, vn, stereoCam.nearClipPlane, stereoCam.farClipPlane));
+                    stereoCam.SetStereoViewMatrix(Camera.StereoscopicEye.Right, GetStereoViewMatrix(pe, vr, vu, vn));
+                }
+            } else {
+                // Separate Left and Right Cameras
+
+                // left camera
+                Vector3 lEyePos = GetLeftEyePosition(); // eye position
+                leftCam.projectionMatrix = GetStereoProjectionMatrix(lEyePos, vr, vu, vn, leftCam.nearClipPlane, leftCam.farClipPlane);
+                leftCam.worldToCameraMatrix = GetStereoViewMatrix(lEyePos, vr, vu, vn);
+
+                // right camera
+                Vector3 rEyePos = GetLeftEyePosition(); // eye position
+                rightCam.projectionMatrix = GetStereoProjectionMatrix(rEyePos, vr, vu, vn, rightCam.nearClipPlane, rightCam.farClipPlane);
+                rightCam.worldToCameraMatrix = GetStereoViewMatrix(rEyePos, vr, vu, vn);
             }
-            //// for right eye...
-            if (cam.stereoTargetEye == StereoTargetEyeMask.Both || cam.stereoTargetEye == StereoTargetEyeMask.Right) {
-                Vector3 pe = GetRightEyePosition(); // eye position
-                cam.SetStereoProjectionMatrix(Camera.StereoscopicEye.Right, GetStereoProjectionMatrix(pe, vr, vu, vn));
-                cam.SetStereoViewMatrix(Camera.StereoscopicEye.Right, GetStereoViewMatrix(pe, vr, vu, vn));
-            }
+
 
             // The original paper puts everything into the projection  matrix (i.e. sets it to p * rm * tm and the other 
             // matrix to the identity), but this doesn't appear to work with Unity's shadow maps.
@@ -159,10 +191,8 @@ namespace IVLab.MinVR3 {
             // we have not implemented this here: seems to work fine for now and VR Tracker Listener might be rotating the camera. 
 
             // TODO check if stereo convergence is needed.
-            Plane plane = new Plane(GetTopLeftCorner(), GetTopRightCorner(), GetBottomRightCorner());
-            cam.stereoConvergence = plane.GetDistanceToPoint(cam.transform.position);
-
-
+            //Plane plane = new Plane(GetTopLeftCorner(), GetTopRightCorner(), GetBottomRightCorner());
+            //cam.stereoConvergence = plane.GetDistanceToPoint(cam.transform.position);
 
         }
 
@@ -223,10 +253,7 @@ namespace IVLab.MinVR3 {
         // Vector3 vr; // right axis of screen
         // Vector3 vu; // up axis of screen
         // Vector3 vn; // normal vector of screen
-        private Matrix4x4 GetStereoProjectionMatrix(Vector3 pe, Vector3 vr, Vector3 vu, Vector3 vn) {
-            float n = cam.nearClipPlane;
-            float f = cam.farClipPlane;
-
+        private Matrix4x4 GetStereoProjectionMatrix(Vector3 pe, Vector3 vr, Vector3 vu, Vector3 vn, float n, float f) {
             // screen corners in world space
             Vector3 bl = GetBottomLeftCorner();
             Vector3 br = GetBottomRightCorner();
@@ -311,14 +338,25 @@ namespace IVLab.MinVR3 {
 
         public Vector3 GetLeftEyePosition() {
             // offset to the left by 1/2 the interocular distance
-            Vector3 offset = cam.transform.TransformVector(new Vector3(-cam.stereoSeparation / 2f, 0f, 0f));
-            return cam.transform.position + offset;
+            if (stereoCam) {
+                Vector3 offset = stereoCam.transform.TransformVector(new Vector3(-stereoCam.stereoSeparation / 2f, 0f, 0f));
+                return stereoCam.transform.position + offset;
+
+            } else {
+                Vector3 offset = leftCam.transform.TransformVector(new Vector3(-interOcularDistance / 2f, 0f, 0f));
+                return leftCam.transform.position + offset;
+            }
         }
 
         public Vector3 GetRightEyePosition() {
             // offset to the right by 1/2 the interocular distance
-            Vector3 offset = cam.transform.TransformVector(new Vector3(cam.stereoSeparation / 2f, 0f, 0f));
-            return cam.transform.position + offset;
+            if (stereoCam) {
+                Vector3 offset = stereoCam.transform.TransformVector(new Vector3(stereoCam.stereoSeparation / 2f, 0f, 0f));
+                return stereoCam.transform.position + offset;
+            } else {
+                Vector3 offset = rightCam.transform.TransformVector(new Vector3(interOcularDistance / 2f, 0f, 0f));
+                return rightCam.transform.position + offset;
+            }
         }
  
 
@@ -380,9 +418,19 @@ namespace IVLab.MinVR3 {
         public void OnVREvent(VREvent vrEvent)
         {
             if (vrEvent.Matches(headTrackingPosEvent)) {
-                cam.transform.position = vrEvent.GetData<Vector3>();
+                if (stereoCam) {
+                    stereoCam.transform.position = vrEvent.GetData<Vector3>();
+                } else {
+                    leftCam.transform.position = vrEvent.GetData<Vector3>();
+                    rightCam.transform.position = vrEvent.GetData<Vector3>();
+                }
             } else if (vrEvent.Matches(headTrackingRotEvent)) {
-                cam.transform.rotation = vrEvent.GetData<Quaternion>();
+                if (stereoCam) {
+                    stereoCam.transform.rotation = vrEvent.GetData<Quaternion>();
+                } else {
+                    leftCam.transform.rotation = vrEvent.GetData<Quaternion>();
+                    rightCam.transform.rotation = vrEvent.GetData<Quaternion>();
+                }
             }
         }
 

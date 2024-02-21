@@ -107,6 +107,14 @@ namespace IVLab.MinVR3
         }
 
         /// <summary>
+        /// True if the GameObject is a child of the MinVR Room Space Origin.
+        /// </summary>
+        public static bool IsUnderRoomSpace(GameObject go)
+        {
+            return go.GetComponentInParent<RoomSpaceOrigin>() != null;
+        }
+
+        /// <summary>
         /// MinVR requires one object in the scene to be identified as the Room Space Origin.  This routine
         /// creates that object at the root of the hierarchy if it is not already found in the hierarchy.
         /// </summary>
