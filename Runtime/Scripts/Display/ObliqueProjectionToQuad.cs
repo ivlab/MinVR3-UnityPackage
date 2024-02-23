@@ -19,7 +19,6 @@ namespace IVLab.MinVR3
 	 * 
 	 * To make the camera update with head tracking info, add a TrackedPoseDriver component to the camera.
      */
-    [ExecuteInEditMode]
     public class ObliqueProjectionToQuad : MonoBehaviour
     {
         [Header("Frustum")]
@@ -29,11 +28,11 @@ namespace IVLab.MinVR3
         public float minNearClipDistance = 0.0001f;
         public float nearClipDistanceOffset = -0.01f;
 
-        [Header("Stereo")]
+        [Header("Tracking and Stereo")]
+        public TrackedHeadPoseDriver trackedHeadPoseDriver;
         public bool applyStereoEyeOffset = true;
         public enum Eye { LeftEye, RightEye};
         public Eye whichEye = Eye.LeftEye;
-        public float interpupillaryDistance = 0.063f;
 
 
         private Camera cameraComponent;
@@ -41,7 +40,7 @@ namespace IVLab.MinVR3
         void OnPreCull()
         {
             cameraComponent = GetComponent<Camera>();
-            if (null != projectionScreenQuad && null != cameraComponent) {
+            if (null != projectionScreenQuad && null != cameraComponent && null != trackedHeadPoseDriver) {
                 // lower left corner in world coordinates
                 Vector3 pa = projectionScreenQuad.transform.TransformPoint(new Vector3(-0.5f, -0.5f, 0.0f));
                 // lower right corner
@@ -49,15 +48,16 @@ namespace IVLab.MinVR3
                 // upper left corner
                 Vector3 pc = projectionScreenQuad.transform.TransformPoint(new Vector3(-0.5f, 0.5f, 0.0f));
 
-                // eye position in world coordinates
-                Vector3 pe = transform.position;
-
-                // adjust the eyepoint for stereo separation
-                if (applyStereoEyeOffset) {
-                    float sign = (whichEye == Eye.LeftEye) ? -1 : 1;
-                    Vector3 toEyeInCameraLocalSpace = new Vector3(sign * interpupillaryDistance / 2.0f, 0, 0);
-                    Vector3 toEyeInWorldSpace = transform.LocalVectorToWorldSpace(toEyeInCameraLocalSpace);
-                    pe = pe + toEyeInWorldSpace;
+                Vector3 pe;
+                if (!applyStereoEyeOffset)
+                {
+                    pe = trackedHeadPoseDriver.GetHeadPositionInWorldSpace();
+                } else if (whichEye == Eye.LeftEye)
+                {
+                    pe = trackedHeadPoseDriver.GetLeftEyePositionInWorldSpace();
+                } else
+                {
+                    pe = trackedHeadPoseDriver.GetRightEyePositionInRoomSpace();
                 }
 
                 // distance of near clipping plane

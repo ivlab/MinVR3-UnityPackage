@@ -14,7 +14,8 @@ namespace IVLab.MinVR3
     {
         public Color m_TextColor = Color.white;
         public int m_FontSize = 10;
-        public Rect m_Position = new Rect(0, 5, 40, 20);
+        public TextAnchor m_TextAnchor = TextAnchor.MiddleRight;
+        public Rect m_Position = new Rect(0, 0, 40, 20);
 
         void OnGUI()
         {
@@ -22,7 +23,7 @@ namespace IVLab.MinVR3
             string text = string.Format("{0:0.} fps", fps);
 
             GUIStyle style = new GUIStyle();
-            style.alignment = TextAnchor.UpperRight;
+            style.alignment = m_TextAnchor;
             style.fontSize = m_FontSize;
             style.normal.textColor = m_TextColor;
 

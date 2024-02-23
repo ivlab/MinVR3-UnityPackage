@@ -91,6 +91,28 @@ namespace IVLab.MinVR3
             set { m_CalibrationTranslation = value; }
         }
 
+
+        public Vector3 GetPositionInRoomSpace()
+        {
+            return transform.LocalPointToRoomSpace(Vector3.zero);
+        }
+
+        public Vector3 GetPositionInWorldSpace()
+        {
+            return transform.LocalPointToWorldSpace(Vector3.zero);
+        }
+
+        public Vector3 GetForwardDirInRoomSpace()
+        {
+            return Vector3.Normalize(transform.LocalVectorToRoomSpace(Vector3.forward));
+        }
+
+        public Vector3 GetForwardDirInWorldSpace()
+        {
+            return Vector3.Normalize(transform.LocalVectorToWorldSpace(Vector3.forward));
+        }
+
+
         public void OnVREvent(VREvent vrEvent)
         {
             if (vrEvent.Matches(m_PositionEvent)) {
@@ -213,6 +235,7 @@ namespace IVLab.MinVR3
         {
             VREngine.Instance?.eventManager?.RemoveEventListener(this);
         }
+
     }
 
 } // end namespace

@@ -91,7 +91,7 @@ namespace IVLab.MinVR3
                 parent = FindObjectOfType<RoomSpaceOrigin>().gameObject;
             }
 
-            GameObject cursorRoot = MenuHelpers.CreateAndPlaceGameObject("Small Cone (Dominant Hand)", parent, typeof(TrackedPoseDriver));
+            GameObject cursorRoot = MenuHelpers.CreateAndPlaceGameObject("Small Cone Cursor (Dominant Hand)", parent, typeof(TrackedPoseDriver));
             TrackedPoseDriver poseDriver = cursorRoot.GetComponent<TrackedPoseDriver>();
             poseDriver.positionEvent = VREventPrototypeVector3.Create("DH/Position");
             poseDriver.rotationEvent = VREventPrototypeQuaternion.Create("DH/Rotation");
@@ -99,6 +99,8 @@ namespace IVLab.MinVR3
             GameObject coneObj = Instantiate(Resources.Load<GameObject>("Models/cone"));
             coneObj.transform.SetParent(cursorRoot.transform);
             coneObj.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
+            coneObj.transform.localRotation = Quaternion.AngleAxis(90, Vector3.right);
+            coneObj.transform.localPosition = new Vector3(0, 0, -0.05f);
 
             Selection.activeGameObject = cursorRoot;
         }
@@ -122,7 +124,7 @@ namespace IVLab.MinVR3
             poseDriver.positionEvent = VREventPrototypeVector3.Create("NDH/Position");
             poseDriver.rotationEvent = VREventPrototypeQuaternion.Create("NDH/Rotation");
 
-            GameObject cubeObj = MenuHelpers.CreateAndPlacePrimitive("Cube Model", cursorRoot, PrimitiveType.Cube);
+            GameObject cubeObj = MenuHelpers.CreateAndPlacePrimitive("Cube", cursorRoot, PrimitiveType.Cube);
             DestroyImmediate(cubeObj.GetComponentInChildren<BoxCollider>());
             cubeObj.transform.localScale = new Vector3(0.05f, 0.05f, 0.05f);
 

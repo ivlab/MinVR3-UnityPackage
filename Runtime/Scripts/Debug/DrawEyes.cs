@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace IVLab.MinVR3
 {
-    
+
     /// <summary>
     /// This is useful for debugging displays that use off-axis projection, like the walls of a Cave of a fishtank VR
     /// or Powerwall display.  The position of each eye (as reported via head tracking) is projected onto the plane of
@@ -15,12 +15,24 @@ namespace IVLab.MinVR3
     /// </summary>
     [AddComponentMenu("MinVR/Debug/Draw Eyes")]
     public class DrawEyes : MonoBehaviour
-	{
-        public TrackedProjectionScreen screen;
+    {
         public float sphereScale = 0.05f;
 
+        [Header("Option 1: Tracked Head Pose Driver and Oblique Projectino to Quad")]
+        [Tooltip("MinVR3 has two ways to update the projection matrices for tracked projection screens. " +
+            "Set the fields below if using the TrackedHeadPoseDriver.cs and ObliqueProjectionToQuad.cs scripts.")]
+        public TrackedHeadPoseDriver headPoseDriver;
+        [Tooltip("The same Quad gameobject that is passed to the ObliqueProjectionToQuad script.")]
+        public GameObject projectionScreenQuad;
+
+        [Header("Option 2: Tracked Projection Screen")]
+        [Tooltip("MinVR3 has two ways to update the projection matrices for tracked projection screens. " +
+            "Set the field below if using the TrackedProjectionScreen.cs script.")]
+        public TrackedProjectionScreen screen;
+
         // Start is called before the first frame update
-        void Start() {
+        void Start()
+        {
             leftObj = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             leftObj.transform.localScale = new Vector3(sphereScale, sphereScale, sphereScale);
             leftObj.GetComponent<Renderer>().material.color = Color.red;
@@ -33,12 +45,25 @@ namespace IVLab.MinVR3
         // Update is called once per frame
         void Update()
         {
-            Plane p = new Plane(screen.GetTopLeftCorner(), screen.GetTopRightCorner(), screen.GetBottomRightCorner());
+            Vector3 lp = Vector3.zero;
+            Vector3 rp = Vector3.zero;
 
-            Vector3 lp = p.ClosestPointOnPlane(screen.GetLeftEyePosition());
+            if (screen != null)
+            {
+                Plane p = new Plane(screen.GetTopLeftCorner(), screen.GetTopRightCorner(), screen.GetBottomRightCorner());
+                lp = p.ClosestPointOnPlane(screen.GetLeftEyePosition());
+                rp = p.ClosestPointOnPlane(screen.GetRightEyePosition());
+            }
+            else if ((headPoseDriver != null) && (projectionScreenQuad != null))
+            {
+                Plane p1 = new Plane(-projectionScreenQuad.transform.forward, projectionScreenQuad.transform.position);
+                lp = p1.ClosestPointOnPlane(headPoseDriver.GetLeftEyePositionInWorldSpace());
+
+                Plane p2 = new Plane(-projectionScreenQuad.transform.forward, projectionScreenQuad.transform.position);
+                rp = p2.ClosestPointOnPlane(headPoseDriver.GetRightEyePositionInWorldSpace());
+            }
+
             leftObj.transform.position = lp;
-
-            Vector3 rp = p.ClosestPointOnPlane(screen.GetRightEyePosition());
             rightObj.transform.position = rp;
         }
 
