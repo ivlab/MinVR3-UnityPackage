@@ -29,9 +29,10 @@ namespace IVLab.MinVR3
             PositionOnly
         }
 
-
+        [Header("Tracking")]
         [SerializeField]
         TrackingType m_TrackingType;
+
         /// <summary>
         /// The tracking type being used by the tracked pose driver
         /// </summary>
@@ -46,6 +47,7 @@ namespace IVLab.MinVR3
             Update,
             BeforeRender,
         }
+
 
         [SerializeField]
         UpdateType m_UpdateType = UpdateType.UpdateAndBeforeRender;
@@ -73,13 +75,11 @@ namespace IVLab.MinVR3
             set { m_RotationEvent = value; }
         }
 
-        Vector3 m_CurrentPosition = Vector3.zero;
-        Quaternion m_CurrentRotation = Quaternion.identity;
 
-
+        [Header("Calibration")]
         [SerializeField]
-        Quaternion m_CalibrationRotation;
-        public Quaternion calibrationRotation {
+        Vector3 m_CalibrationRotation;
+        public Vector3 calibrationRotation {
             get { return m_CalibrationRotation; }
             set { m_CalibrationRotation = value; }
         }
@@ -90,6 +90,11 @@ namespace IVLab.MinVR3
             get { return m_CalibrationTranslation; }
             set { m_CalibrationTranslation = value; }
         }
+
+
+        Vector3 m_CurrentPosition;
+        Quaternion m_CurrentRotation;
+
 
 
         public Vector3 GetPositionInRoomSpace()
@@ -112,14 +117,16 @@ namespace IVLab.MinVR3
             return Vector3.Normalize(transform.LocalVectorToWorldSpace(Vector3.forward));
         }
 
-
         public void OnVREvent(VREvent vrEvent)
         {
-            if (vrEvent.Matches(m_PositionEvent)) {
-                m_CurrentPosition = vrEvent.GetData<Vector3>(); // + m_CalibrationTranslation;
+            if (vrEvent.Matches(m_RotationEvent))
+            {
+                m_CurrentRotation = vrEvent.GetData<Quaternion>() * Quaternion.Euler(m_CalibrationRotation);
             }
-            if (vrEvent.Matches(m_RotationEvent)) {
-                m_CurrentRotation = vrEvent.GetData<Quaternion>(); // * m_CalibrationRotation;
+
+            if (vrEvent.Matches(m_PositionEvent)) {
+                Vector3 rotatedPositionOffset = m_CurrentRotation * m_CalibrationTranslation;
+                m_CurrentPosition = vrEvent.GetData<Vector3>() + rotatedPositionOffset;
             }
         }
 
@@ -138,6 +145,14 @@ namespace IVLab.MinVR3
                 UnityEngine.XR.XRDevice.DisableAutoXRCameraTracking(GetComponent<Camera>(), true);
             }
 #endif
+        }
+
+        private void Start()
+        {
+            // sets current to whatever is stored in the transform so the transform can be used to set
+            // a default pos/rot for the tracker.
+            m_CurrentPosition = transform.localPosition;
+            m_CurrentRotation = transform.localRotation;
         }
 
         protected void OnEnable()
