@@ -6,6 +6,7 @@ namespace IVLab.MinVR3
     /// <summary>
     /// 
     /// </summary>
+    [AddComponentMenu("MinVR Interaction/Display/Stamp Texture on Screen")]
     public class StampTextureOnScreen : MonoBehaviour
     {
         public RenderTexture stampTexture;

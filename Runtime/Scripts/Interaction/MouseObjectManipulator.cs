@@ -267,7 +267,6 @@ namespace IVLab.MinVR3
         }
 
         UIState m_State = UIState.Idle;
-        bool m_MouseDown = false;
         Vector3 m_LastMousePosition; // 2D mouse position from the previous frame
         SphereCollider m_BoundingSphereCollider; // this is the one we use to calculate the rotation
         Collider m_OrigCollider; // if not a sphere, we disable this one, add a spherecollider, and reenable later

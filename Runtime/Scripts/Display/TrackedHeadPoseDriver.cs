@@ -4,8 +4,14 @@ using UnityEngine;
 
 namespace IVLab.MinVR3
 {
+    /// <summary>
+    /// Nearly identical to the basic TrackedPoseDriver but adds a property to store the separation
+    /// distance between the eyes and methods to quickly access left and right eye positions, etc.
+    /// </summary>
+    [AddComponentMenu("MinVR Interaction/Display/Tracked Head Pose Driver")]
     public class TrackedHeadPoseDriver : TrackedPoseDriver
     {
+        [Header("Stereo Eye Separation")]
         [Tooltip("Distance between the eyes; default to 63mm for the average adult.")]
         public float interpupillaryDistance = 0.063f;
 
@@ -43,7 +49,6 @@ namespace IVLab.MinVR3
             Vector3 rightEyeInLocalSpace = new Vector3(0.5f * interpupillaryDistance, 0, 0);
             return transform.LocalPointToWorldSpace(rightEyeInLocalSpace);
         }
-
 
         public Vector3 GetLookDirInRoomSpace()
         {

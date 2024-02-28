@@ -19,6 +19,7 @@ namespace IVLab.MinVR3
 	 * 
 	 * To make the camera update with head tracking info, add a TrackedPoseDriver component to the camera.
      */
+    [AddComponentMenu("MinVR Interaction/Display/Oblique Projection to Quad")]
     public class ObliqueProjectionToQuad : MonoBehaviour
     {
         [Header("Frustum")]
@@ -57,8 +58,12 @@ namespace IVLab.MinVR3
                     pe = trackedHeadPoseDriver.GetLeftEyePositionInWorldSpace();
                 } else
                 {
-                    pe = trackedHeadPoseDriver.GetRightEyePositionInRoomSpace();
+                    pe = trackedHeadPoseDriver.GetRightEyePositionInWorldSpace();
                 }
+
+                // set the camera's position
+                transform.position = pe;
+
 
                 // distance of near clipping plane
                 float n = cameraComponent.nearClipPlane;

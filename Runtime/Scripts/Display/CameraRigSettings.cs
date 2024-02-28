@@ -7,6 +7,7 @@ namespace IVLab.MinVR3
     /// Provides a shortcut for more easily setting the properties of many child cameras that should have
     /// several settings in common.
     /// </summary>
+    [AddComponentMenu("MinVR Interaction/Display/Camera Rig Settings")]
     public class CameraRigSettings : MonoBehaviour
     {
         // common properties of child cameras
