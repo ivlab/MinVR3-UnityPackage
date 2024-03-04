@@ -85,13 +85,15 @@ namespace IVLab.MinVR3
                 RightHanded
             }
 
+            // note: no PosX or NegX becuase our convert RH <-> LH strategy negates the X coord, and not 100%
+            // sure that the rotations will work correctly if the Forward or Up dirs are in the +/-X direction.
+            // It would be great to add these after some testing (and adding special cases as needed) to make
+            // sure they work.
             public enum Axis
             {
-                PosX,
                 PosY,
-                PosZ,
-                NegX,
                 NegY,
+                PosZ,
                 NegZ
             }
 
@@ -116,12 +118,10 @@ namespace IVLab.MinVR3
 
             private Vector3 AxisToVector(Axis a)
             {
-                if (a == Axis.PosX) return new Vector3(1, 0, 0);
-                else if (a == Axis.PosY) return new Vector3(0, 1, 0);
+                if (a == Axis.PosY) return new Vector3(0, 1, 0);
                 else if (a == Axis.PosZ) return new Vector3(0, 0, 1);
-                else if (a == Axis.NegX) return new Vector3(-1, 0, 0);
                 else if (a == Axis.NegY) return new Vector3(0, -1, 0);
-                else return new Vector3(0, 0, -1);  // Accounts for the "a == Axis.NegZ" case
+                else /*if (a == Axis.NegZ)*/ return new Vector3(0, 0, -1);
             }
         }
 
@@ -154,6 +154,17 @@ namespace IVLab.MinVR3
         {
             Quaternion q = origQuat;
 
+            // First swap the handedness of the quaternion if needed.
+            if (origCS.handedness != CoordSystem.Handedness.LeftHanded) {
+                Vector3 axis;
+                float angle;
+                q.ToAngleAxis(out angle, out axis);
+                angle = -angle;
+                axis = ToUnity(axis, origCS);
+                q = Quaternion.AngleAxis(angle, axis);
+            }
+
+            /*
             // First swap the handedness of the quaternion if needed.  Reference for how to do this:
             // https://gamedev.stackexchange.com/questions/129204/switch-axes-and-handedness-of-a-quaternion
             if (origCS.handedness != CoordSystem.Handedness.LeftHanded) {
@@ -170,7 +181,7 @@ namespace IVLab.MinVR3
             // Unity's convention of up = +Y and forward = +Z.
             if ((origCS.upAxis != CoordSystem.Axis.PosY) || (origCS.forwardAxis != CoordSystem.Axis.PosZ)) {
                 q = Quaternion.Inverse(Quaternion.LookRotation(origCS.forwardVector, origCS.upVector)) * q;
-            }
+            }*/
             return q;
         }
 
@@ -186,7 +197,6 @@ namespace IVLab.MinVR3
             Matrix4x4 newMatrix = Matrix4x4.identity;
             newMatrix.SetTRS(newTrans, newRot, Vector3.one);
             return newMatrix;
-            // Previously: return new Matrix4x4(newRot, newTrans);
         }
 
 
@@ -219,7 +229,18 @@ namespace IVLab.MinVR3
         {
             Quaternion q = unityQuat;
 
-            // First swap the handedness of the quaternion if needed.  Reference for how to do this:
+            // First swap the handedness of the quaternion if needed.
+            if (newCS.handedness != CoordSystem.Handedness.LeftHanded) {
+                Vector3 axis;
+                float angle;
+                q.ToAngleAxis(out angle, out axis);
+                angle = -angle;
+                axis = FromUnity(axis, newCS);
+                q = Quaternion.AngleAxis(angle, axis);
+            }
+
+            /**
+            // Reference for how to do this:
             // https://gamedev.stackexchange.com/questions/129204/switch-axes-and-handedness-of-a-quaternion
             if (newCS.handedness != CoordSystem.Handedness.LeftHanded) {
                 // Extract the axis (imaginary part) of the quaternion and use the negate x convention as
@@ -235,7 +256,7 @@ namespace IVLab.MinVR3
             // axes with Unity's convention of up = +Y and forward = +Z.
             if ((newCS.upAxis != CoordSystem.Axis.PosY) || (newCS.forwardAxis != CoordSystem.Axis.PosZ)) {
                 q = Quaternion.LookRotation(newCS.forwardVector, newCS.upVector) * q;
-            }
+            }*/
             return q;
         }
 
@@ -250,19 +271,21 @@ namespace IVLab.MinVR3
             Matrix4x4 newMatrix = Matrix4x4.identity;
             newMatrix.SetTRS(newTrans, newRot, Vector3.one);
             return newMatrix;
-            // Previously: return new Matrix4x4(newRot, newTrans);
         }
 
 
         /// <summary>
         /// Utility to convert the rotational component (upper 3x3) of a transformation matrix to a
-        /// quaternion.
+        /// quaternion.  Assumes this is a simple matrix with no non-uniform scale so extracting the
+        /// rotation is a simple operation.
         /// </summary>
         public static Quaternion GetRotation(Matrix4x4 m)
         {
             // column 2 is the Z axis, which is the Forward dir
             // column 1 is the Y axis, which is the Up dir
-            return Quaternion.LookRotation(m.GetColumn(2), m.GetColumn(1));
+            Vector3 forward = new Vector3(m.GetColumn(2).x, m.GetColumn(2).y, m.GetColumn(2).z).normalized;
+            Vector3 up = new Vector3(m.GetColumn(1).x, m.GetColumn(1).y, m.GetColumn(1).z).normalized;
+            return Quaternion.LookRotation(forward, up);
         }
 
         /// <summary>
