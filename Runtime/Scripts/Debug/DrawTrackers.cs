@@ -75,9 +75,14 @@ namespace IVLab.MinVR3 {
                         }
                         else
                         {
+                            float angle;
+                            Vector3 axis;
+                            cursorObj.transform.rotation.ToAngleAxis(out angle, out axis);
                             label.text = "name: " + t.displayName;
-                            label.text += "\nposition: " + cursorObj.transform.position.ToString("F3");
-                            label.text += "\nrotation: " + cursorObj.transform.rotation.eulerAngles.ToString("F0");
+                            label.text += "\npos: " + cursorObj.transform.position.ToString("F3");
+                            label.text += "\nrot (quat): " + cursorObj.transform.rotation.ToString("F3");
+                            label.text += "\nrot (angle+axis): " + angle.ToString("F2") + " " + axis.ToString("F3");
+                            label.text += "\nrot (euler): " + cursorObj.transform.rotation.eulerAngles.ToString("F0");
                         }
                     }
                 }

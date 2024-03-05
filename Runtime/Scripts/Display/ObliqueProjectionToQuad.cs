@@ -42,28 +42,30 @@ namespace IVLab.MinVR3
         {
             cameraComponent = GetComponent<Camera>();
             if (null != projectionScreenQuad && null != cameraComponent && null != trackedHeadPoseDriver) {
+
+                // set the camera's position, which depends on which eye the camera represents
+                Vector3 pe;
+                if (!applyStereoEyeOffset)
+                {
+                    pe = trackedHeadPoseDriver.GetHeadPositionInWorldSpace();
+                }
+                else if (whichEye == Eye.LeftEye)
+                {
+                    pe = trackedHeadPoseDriver.GetLeftEyePositionInWorldSpace();
+                }
+                else
+                {
+                    pe = trackedHeadPoseDriver.GetRightEyePositionInWorldSpace();
+                }
+                transform.position = pe;
+
+
                 // lower left corner in world coordinates
                 Vector3 pa = projectionScreenQuad.transform.TransformPoint(new Vector3(-0.5f, -0.5f, 0.0f));
                 // lower right corner
                 Vector3 pb = projectionScreenQuad.transform.TransformPoint(new Vector3(0.5f, -0.5f, 0.0f));
                 // upper left corner
                 Vector3 pc = projectionScreenQuad.transform.TransformPoint(new Vector3(-0.5f, 0.5f, 0.0f));
-
-                Vector3 pe;
-                if (!applyStereoEyeOffset)
-                {
-                    pe = trackedHeadPoseDriver.GetHeadPositionInWorldSpace();
-                } else if (whichEye == Eye.LeftEye)
-                {
-                    pe = trackedHeadPoseDriver.GetLeftEyePositionInWorldSpace();
-                } else
-                {
-                    pe = trackedHeadPoseDriver.GetRightEyePositionInWorldSpace();
-                }
-
-                // set the camera's position
-                transform.position = pe;
-
 
                 // distance of near clipping plane
                 float n = cameraComponent.nearClipPlane;
@@ -91,6 +93,7 @@ namespace IVLab.MinVR3
 
                 // are we looking at the backface of the plane object?
                 if (Vector3.Dot(-Vector3.Cross(va, vc), vb) < 0.0f) {
+                    Debug.Log("Back");
                     // mirror points along the x axis (most users 
                     // probably expect the y axis to stay fixed)
                     vr = -vr;

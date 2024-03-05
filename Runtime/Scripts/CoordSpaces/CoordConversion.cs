@@ -153,8 +153,8 @@ namespace IVLab.MinVR3
         public static Quaternion ToUnity(Quaternion origQuat, CoordSystem origCS)
         {
             Quaternion q = origQuat;
-
-            // First swap the handedness of the quaternion if needed.
+        
+            // Strategy 2:
             if (origCS.handedness != CoordSystem.Handedness.LeftHanded) {
                 Vector3 axis;
                 float angle;
@@ -162,9 +162,13 @@ namespace IVLab.MinVR3
                 angle = -angle;
                 axis = ToUnity(axis, origCS);
                 q = Quaternion.AngleAxis(angle, axis);
+            } else {
+                q = Quaternion.Inverse(Quaternion.LookRotation(origCS.forwardVector, origCS.upVector)) * q;
             }
 
-            /*
+            /* Strategy 1:  I think this works, but Strategy 2 above might be more robust because it uses
+               the ToUnity(Vector3) routine.
+
             // First swap the handedness of the quaternion if needed.  Reference for how to do this:
             // https://gamedev.stackexchange.com/questions/129204/switch-axes-and-handedness-of-a-quaternion
             if (origCS.handedness != CoordSystem.Handedness.LeftHanded) {
@@ -229,7 +233,7 @@ namespace IVLab.MinVR3
         {
             Quaternion q = unityQuat;
 
-            // First swap the handedness of the quaternion if needed.
+            // Strategy 2:
             if (newCS.handedness != CoordSystem.Handedness.LeftHanded) {
                 Vector3 axis;
                 float angle;
@@ -237,10 +241,14 @@ namespace IVLab.MinVR3
                 angle = -angle;
                 axis = FromUnity(axis, newCS);
                 q = Quaternion.AngleAxis(angle, axis);
+            } else {
+                q = Quaternion.LookRotation(newCS.forwardVector, newCS.upVector) * q;
             }
 
-            /**
-            // Reference for how to do this:
+            /*  Strategy 1:  I think this works, but Strategy 2 above might be more robust because it uses
+                the FromUnity(Vector3) routine.
+
+            // First swap the handedness of the quaternion if needed.  Reference for how to do this:
             // https://gamedev.stackexchange.com/questions/129204/switch-axes-and-handedness-of-a-quaternion
             if (newCS.handedness != CoordSystem.Handedness.LeftHanded) {
                 // Extract the axis (imaginary part) of the quaternion and use the negate x convention as
