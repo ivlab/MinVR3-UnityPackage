@@ -130,6 +130,35 @@ namespace IVLab.MinVR3
             }
         }
 
+        public bool connectToServer
+        {
+            get => m_ConnectToServer;
+            set => m_ConnectToServer = value;
+        }
+
+        public string connectToServerIP
+        {
+            get => m_ConnectToServerIP;
+            set => m_ConnectToServerIP = value;
+        }
+
+        public int connectToServerPort
+        {
+            get => m_ConnectToServerPort;
+            set => m_ConnectToServerPort = value;
+        }
+
+        public bool listenForConnections
+        {
+            get => m_ListenForConnections;
+            set => m_ListenForConnections = value;
+        }
+
+        public int listenForConnectionsPort
+        {
+            get => m_ListenForConnectionsPort;
+            set => m_ListenForConnectionsPort = value;
+        }
 
         [Header("Act as a Client")]
         [InfoBox("This connection can act as a client that connects to a server, a server that accepts connections from clients, or both.")]

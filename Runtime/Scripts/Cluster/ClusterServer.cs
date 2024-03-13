@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Linq;
@@ -14,17 +13,28 @@ namespace IVLab.MinVR3 {
     public class ClusterServer : MonoBehaviour, IClusterNode
     {
         [Tooltip("The number of clients that should connect to the server.")]
-        public int numClients = 1;
+        public int numClients;
 
         [Tooltip("The port the server should run on.")]
-        public int serverPort = 3490;
+        public int serverPort;
+
+        [Tooltip("Number of seconds to wait on startup for all clients to connect.")]
+        public int secondsToWaitForClientsToConnect;
 
 
         TcpListener server;
-        List<TcpClient> clients = new List<TcpClient>();
+        List<TcpClient> clients;
+        System.Diagnostics.Stopwatch connectionStopwatch;
+
+        public void Reset()
+        {
+            numClients = 1;
+            serverPort = 3490;
+            secondsToWaitForClientsToConnect = 30;
+        }
 
         public void Initialize() {
-
+            clients = new List<TcpClient>();
             string hostname = "localhost";
             IPHostEntry host = Dns.GetHostEntry(hostname);
 
@@ -42,6 +52,8 @@ namespace IVLab.MinVR3 {
 
             Debug.Log("Server waiting for " + numClients + " connection(s)...");
             Console.WriteLine("Server waiting for " + numClients + " connection(s)...");
+            connectionStopwatch = new System.Diagnostics.Stopwatch();
+            connectionStopwatch.Start();
             while (clients.Count < numClients) {
                 if (server.Pending()) {
                     try {
@@ -64,6 +76,17 @@ namespace IVLab.MinVR3 {
                         return;
                     }
                 } else {
+                    if (connectionStopwatch.ElapsedMilliseconds > secondsToWaitForClientsToConnect * 1000) {
+                        Debug.Log("Timed out waiting for client(s) to connect.");
+                        Console.WriteLine("Timed out waiting for client(s) to connect.");
+                        Shutdown();
+#if UNITY_EDITOR
+                        UnityEditor.EditorApplication.isPlaying = false;
+#else
+                        Application.Quit();
+#endif
+                        return;
+                    }
                     Thread.Sleep(50);
                 }
             }

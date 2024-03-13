@@ -1,12 +1,7 @@
 using UnityEngine;
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Net;
 using System.Net.Sockets;
-using System.IO;
-using System.Text;
-using System.Threading;
+
 
 
 namespace IVLab.MinVR3 {
@@ -16,17 +11,34 @@ namespace IVLab.MinVR3 {
     public class ClusterClient : MonoBehaviour, IClusterNode {
 
         [Tooltip("The ip address of the server to connect to.")]
-        public string serverIPAddress = "127.0.0.1";
+        public string serverIPAddress;
 
         [Tooltip("The port the server is running on.")]
-        public int serverPort = 3490;
+        public int serverPort;
+
+        [Tooltip("If initial connection to the server fails, will retry every 0.5 seconds until this timeout.")]
+        public int secondsToWaitTryingToConnectToServer;
 
         TcpClient client;
 
+        void Reset() {
+            serverIPAddress = "127.0.0.1";
+            serverPort = 3490;
+            secondsToWaitTryingToConnectToServer = 30;
+        }
+
 	    public void Initialize() {
-            client = NetUtils.ConnectToTcpServer(serverIPAddress, serverPort);
-	    }
-	  
+            client = NetUtils.ConnectToTcpServer(serverIPAddress, serverPort, 
+                secondsToWaitTryingToConnectToServer * 1000);
+            if (client == null) {
+#if UNITY_EDITOR
+                UnityEditor.EditorApplication.isPlaying = false;
+#else
+                Application.Quit();
+#endif
+            }
+        }
+
         public void Shutdown() {
             NetUtils.CloseTcpClient(client, true);
         }

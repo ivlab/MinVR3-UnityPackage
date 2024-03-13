@@ -1,3 +1,6 @@
+/* THIS FUNCTIONALITY HAS MOVED TO THE MinVR3Plugin-Spout PACKAGE BASED ON
+ * THE NEW CAVE CONFIGURATION SPRING 2024.
+
 using UnityEditor;
 using UnityEngine;
 using IVLab.MinVR3;
@@ -387,3 +390,4 @@ START ""Floor Wall"" {Application.productName}.exe -vrmode stereo -vrconfig ""Fl
     } // end class
 
 } // end namespace
+*/

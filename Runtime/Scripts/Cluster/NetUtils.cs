@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -35,12 +34,15 @@ namespace IVLab.MinVR3 {
 
 
         /// <summary>
-        /// Block and keep trying to connect until the connection succeeds; quit after 1 minute of unsuccessful attempts.
+        /// Block and keep trying every 500ms to connect until the connection succeeds; quit and
+        /// return null after timeoutMS of unsuccessful attempts.
         /// </summary>
-        public static TcpClient ConnectToTcpServer(string serverIP, int serverPort)
+        public static TcpClient ConnectToTcpServer(string serverIP, int serverPort, int timeoutMS)
         {
             TcpClient client = null;
-            // continue trying to connect until we have success
+            // continue trying to connect until we have success or timeout
+            System.Diagnostics.Stopwatch connectionStopwatch = new System.Diagnostics.Stopwatch();
+            connectionStopwatch.Start();
             bool success = false;
             int retries = 0;
             while (!success) {
@@ -61,14 +63,9 @@ namespace IVLab.MinVR3 {
                     retries++;
                 }
 
-                if (retries >= 120) {
-                    Debug.Log("NetUtils.ConnectToTcpServer(): Giving up after trying for 1 minute.");
-                    Console.WriteLine("NetUtils.ConnectToTcpServer(): Giving up after trying for 1 minute.");
-                    #if UNITY_EDITOR
-                    UnityEditor.EditorApplication.isPlaying = false;
-                    #else
-                    Application.Quit();
-                    #endif
+                if (connectionStopwatch.ElapsedMilliseconds > timeoutMS) {
+                    Debug.Log($"NetUtils.ConnectToTcpServer(): Giving up after trying for {timeoutMS}ms.");
+                    Console.WriteLine($"NetUtils.ConnectToTcpServer(): Giving up after trying for {timeoutMS}ms.");
                     return null;
                 }
             }
@@ -372,11 +369,16 @@ namespace IVLab.MinVR3 {
         {
             // 1. read an unsigned int with the size of the string
             int size = (int)ReadUInt32(ref client, quitOnError);
+            if (size <= 0)
+            {
+                Console.WriteLine("NetUtils.ReadString(): error reading size");
+                return "";
+            }
             // 2. read raw bytes of the string
             byte[] buf = new byte[size];
             int status = ReceiveAll(ref client, ref buf, size, quitOnError);
             if (status == -1) {
-                Console.WriteLine("NetUtils.ReadString(): error reading data");
+                Console.WriteLine("NetUtils.ReadString(): error reading chars");
                 return "";
             }
             return Encoding.ASCII.GetString(buf);
@@ -400,6 +402,7 @@ namespace IVLab.MinVR3 {
         }
 
         public static void BrokenConnectionError(bool quit, string info="") {
+            Console.WriteLine("Network connection broken: " + info);
             Debug.LogError("Network connection broken: " + info);
             if (quit) {
 #if UNITY_EDITOR

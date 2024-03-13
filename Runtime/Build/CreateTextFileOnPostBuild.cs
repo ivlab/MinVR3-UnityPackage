@@ -1,4 +1,5 @@
 #if UNITY_EDITOR
+
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -10,7 +11,14 @@ using System.Linq;
 namespace IVLab.MinVR3
 {
     /// <summary>
-    /// Copy files to a destination on build
+    /// Creates a text file (e.g., a shell script to run the application) whenever
+    /// Unity does a Build.
+    /// 
+    /// IMPORTANT: This script will not work and is not even compiled outside of the
+    /// UNITY EDITOR, so the GameObject it is attached to must be tagged with EditorOnly.
+    /// If not, an error or warning will occur when building because the script will be
+    /// referenced by the GameObject but will not be able to be found.
+    /// 
     /// </summary>
     [ExecuteInEditMode]
     public class CreateTextFileOnPostBuild : MonoBehaviour, IPostprocessBuildWithReport
@@ -20,7 +28,7 @@ namespace IVLab.MinVR3
         {
             public string fileName;
 
-            [TextArea(10, 10)]
+            [TextArea(10, 20)]
             public string fileText;
 
             public PostBuildCopyLocation copyLocation = PostBuildCopyLocation.BuildFolder;
@@ -117,6 +125,8 @@ namespace IVLab.MinVR3
                 }
             }
         }
+
     }
 }
+
 #endif
