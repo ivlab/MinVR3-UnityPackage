@@ -133,6 +133,9 @@ namespace IVLab.MinVR3
                 Check2DAxis(lHandDev, UnityEngine.XR.CommonUsages.secondary2DAxis, m_DeviceIdString + "LeftHand/Secondary2DAxis/Value", ref m_LastLeftSecondary2DAxis, ref eventQueue);
                 CheckVector3(lHandDev, UnityEngine.XR.CommonUsages.devicePosition, m_DeviceIdString + "LeftHand/Position", ref m_LastLeftPosition, ref eventQueue);
                 CheckQuaternion(lHandDev, UnityEngine.XR.CommonUsages.deviceRotation, m_DeviceIdString + "LeftHand/Rotation", ref m_LastLeftRotation, ref eventQueue);
+                CheckVector3(lHandDev, UnityEngine.XR.CommonUsages.devicePosition, m_DeviceIdString + "LeftHand/PointerPosition", ref m_LastLeftPosition, ref eventQueue);
+                CheckQuaternion(lHandDev, new UnityEngine.XR.InputFeatureUsage<Quaternion>("PointerRotation"), m_DeviceIdString + "LeftHand/Pointer/Rotation", ref m_LastLeftPointerRotation, ref eventQueue);
+                CheckVector3(lHandDev, new UnityEngine.XR.InputFeatureUsage<Vector3>("PointerPosition"), m_DeviceIdString + "LeftHand/Pointer/Position", ref m_LastLeftPointerPosition, ref eventQueue);
             }
 
             UnityEngine.XR.InputDevice rHandDev;
@@ -151,6 +154,8 @@ namespace IVLab.MinVR3
                 Check2DAxis(rHandDev, UnityEngine.XR.CommonUsages.secondary2DAxis, m_DeviceIdString + "RightHand/Secondary2DAxis/Value", ref m_LastRightSecondary2DAxis, ref eventQueue);
                 CheckVector3(rHandDev, UnityEngine.XR.CommonUsages.devicePosition, m_DeviceIdString + "RightHand/Position", ref m_LastRightPosition, ref eventQueue);
                 CheckQuaternion(rHandDev, UnityEngine.XR.CommonUsages.deviceRotation, m_DeviceIdString + "RightHand/Rotation", ref m_LastRightRotation, ref eventQueue);
+                CheckQuaternion(rHandDev, new UnityEngine.XR.InputFeatureUsage<Quaternion>("PointerRotation"), m_DeviceIdString + "RightHand/Pointer/Rotation", ref m_LastRightPointerRotation, ref eventQueue);
+                CheckVector3(rHandDev, new UnityEngine.XR.InputFeatureUsage<Vector3>("PointerPosition"), m_DeviceIdString + "RightHand/Pointer/Position", ref m_LastRightPointerPosition, ref eventQueue);
             }
 
             UnityEngine.XR.InputDevice headDev;
@@ -182,6 +187,8 @@ namespace IVLab.MinVR3
             eventsProduced.Add(VREventPrototypeVector2.Create(m_DeviceIdString + "LeftHand/Secondary2DAxis/Value"));
             eventsProduced.Add(VREventPrototypeVector3.Create(m_DeviceIdString + "LeftHand/Position"));
             eventsProduced.Add(VREventPrototypeQuaternion.Create(m_DeviceIdString + "LeftHand/Rotation"));
+            eventsProduced.Add(VREventPrototypeVector3.Create(m_DeviceIdString + "LeftHand/Pointer/Position"));
+            eventsProduced.Add(VREventPrototypeQuaternion.Create(m_DeviceIdString + "LeftHand/Pointer/Rotation"));
 
             eventsProduced.Add(VREventPrototype.Create(m_DeviceIdString + "RightHand/Trigger/Down"));
             eventsProduced.Add(VREventPrototype.Create(m_DeviceIdString + "RightHand/Trigger/Up"));
@@ -197,6 +204,8 @@ namespace IVLab.MinVR3
             eventsProduced.Add(VREventPrototypeVector2.Create(m_DeviceIdString + "RightHand/Secondary2DAxis/Value"));
             eventsProduced.Add(VREventPrototypeVector3.Create(m_DeviceIdString + "RightHand/Position"));
             eventsProduced.Add(VREventPrototypeQuaternion.Create(m_DeviceIdString + "RightHand/Rotation"));
+            eventsProduced.Add(VREventPrototypeVector3.Create(m_DeviceIdString + "RightHand/Pointer/Position"));
+            eventsProduced.Add(VREventPrototypeQuaternion.Create(m_DeviceIdString + "RightHand/Pointer/Rotation"));
 
             eventsProduced.Add(VREventPrototypeVector3.Create(m_DeviceIdString + "Head/Position"));
             eventsProduced.Add(VREventPrototypeQuaternion.Create(m_DeviceIdString + "Head/Rotation"));
@@ -218,7 +227,9 @@ namespace IVLab.MinVR3
         private Vector2 m_LastLeftPrimary2DAxis;
         private Vector2 m_LastLeftSecondary2DAxis;
         private Vector3 m_LastLeftPosition;
+        private Vector3 m_LastLeftPointerPosition;
         private Quaternion m_LastLeftRotation;
+        private Quaternion m_LastLeftPointerRotation;
 
         private bool m_LastRightTriggerButton;
         private bool m_LastRightGripButton;
@@ -229,7 +240,9 @@ namespace IVLab.MinVR3
         private Vector2 m_LastRightPrimary2DAxis;
         private Vector2 m_LastRightSecondary2DAxis;
         private Vector3 m_LastRightPosition;
+        private Vector3 m_LastRightPointerPosition;
         private Quaternion m_LastRightRotation;
+        private Quaternion m_LastRightPointerRotation;
 
         private Vector3 m_LastHeadPosition;
         private Quaternion m_LastHeadRotation;
