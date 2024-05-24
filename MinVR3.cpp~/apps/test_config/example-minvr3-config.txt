@@ -1,0 +1,26 @@
+
+start_pos = (1.0, 4.5, 3)
+WINDOW_X = 100
+WINDOW_Y = 0
+WINDOW_WIDTH = 1024
+
+# This is a comment
+# Comment after a comment
+# This is another comment
+
+MY_BOOLEAN = false
+MY_INT = 5
+MY_FLOAT = 4.354
+MY_DOUBLE = 10.11111
+
+MY_STRING = Hello my MinVR friends
+MY_QUOTED_STRING = "  Hello my \"MinVR friends\"  "
+
+
+MY_INT_ARRAY = (1, 2, 3, 4,5,6, 7)
+
+MY_FLOAT_ARRAY = [1.1, 2.2, 3.3, 4.4]
+
+MY_BOOL_ARRAY = (false, true, false, true)
+
+MY_STRING_ARRAY = "One", "Two Three", "Four Five Six", "a b c d \"e\" f", "done"
