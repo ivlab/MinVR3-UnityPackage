@@ -56,8 +56,9 @@ namespace IVLab.MinVR3
             botMat.color = Color.black;
             botSphere.GetComponent<MeshRenderer>().sharedMaterial = botMat;
 
-            Material lineMat = new Material(Shader.Find("Unlit/Color"));
-            lineMat.color = Color.white;
+            //Material lineMat = new Material(Shader.Find("Unlit/Color"));
+            Material lineMat = topMat;
+
 
             float aInc = 360.0f / (float)m_NumPointsOnColorWheel;
             for (float a = 0; a < 360; a += aInc) {
@@ -84,6 +85,7 @@ namespace IVLab.MinVR3
                 l.positionCount = points.Count;
                 l.SetPositions(points.ToArray());
                 l.useWorldSpace = false;
+                
             }
 
             m_CursorSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
