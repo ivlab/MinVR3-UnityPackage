@@ -1,39 +1,60 @@
-# MinVR3 Package
+# MinVR3 for Unity
+This is the main MinVR3 library for Unity distributed as a Unity package.
 
 
+# Installation
 
-# To install MinVR3 in a Unity Project
+## Use Unity's package manager to add MinVR3 to your project
+1. Open your Unity project.
+2. Go to Window -> Package Manager.
+3. Click the ```+``` button
+4. Select ```Add package from git URL```
+5. Paste ```[https://github.com/ivlab/MinVR3-UnityPackage.git](https://github.com/ivlab/MinVR3-UnityPackage.git)``` for the latest package
+6. Repeat steps 2-4 for any MinVR3 Plugins IF you would like to use the functionality they provide.
 
-## To use the package in a read-only mode, the same way you would for packages downloaded directly from Unity
-1. In Unity, open Window -> Package Manager.
-2. Click the ```+``` button
-3. Select ```Add package from git URL```
-4. Paste ```[https://github.com/ivlab/MinVR3-UnityPackage.git](https://github.com/ivlab/MinVR3-UnityPackage.git)``` for the latest package
-5. Repeat steps 2-4 for any of these optional dependencies IF you would like to use the functionality they provide.  Note: The logic for these optional dependencies is contained in the MinVR3/Runtime/IVLab.MinVR3.Runtime.asmdef file, which you can see/edit within the Unity editor by clicking on the filename in the Project view.  If MinVR finds the optional packages within the solution, it sets a #define of the form PACKAGENAME_PRESENT.  All of the MinVR code that relates to the package is written inside #if PACKAGENAME_PRESENT ... #endif blocks.  This is a nice way to implement optional dependencies in that MinVR automatically compiles and works without the optional functionality when the package is not found, and MinVR automatically includes the functionality that depends on the package whenever the package is installed.
+## Additional functionality from plugins
+MinVR3 provides support for special input/output devices and other functionality that requires external dependencies with separate add-on libraries that we call "MinVR3Plugins".  Technically, these are just additional Unity packages.  Conceptually, we think of them as plugins because they all depend upon and add functionality to this main MinVR3 library.  
 
-| Package Name | Functionality / Notes | git repo |
-|--------------|-----------------------|----------|
-| Sensel       | Reads data from a [Sensel Morph](https://morph.sensel.com/) pressure-sensitive multi-touch devices and translates input to VREvents. | ```git@github.umn.edu:ivlab-cs/Sensel-UnityPackage.git``` |
-| TUIO11       | Reads touch data sent over a network connection via the TUIO protocol.  [TUIO servers and simulators are available for many touch devices and platforms.](https://www.tuio.org/?software) | ```git@github.umn.edu:ivlab-cs/TUIO11-UnityPackage.git``` |
-| WebSocket    | Makes it possible to use the scripts in Scripts/Connection to make a MinVR Unity program talk (send/receive VREvents) with a webpage. | ```git@github.umn.edu:ivlab-cs/WebSocket-UnityPackage.git``` |
-| XR Interaction Toolkit | Makes it possible to use Unity's XR Interaction Toolkit and New Event System side-by-side with MinVR.  VREvents can be combined into a MinVRController that implements the XRController interface that the XR Interaction Toolkit expects.  AND, input from any XRControllers that Unity knows about can also be converted into VREvents. | Install the XR Interaction Toolkit package from Unity. | 
-| zCore6       | Provides support for zSpace input and display devices via their zCore 6.0 API.  Note: The API (and hence this support) only works on Unity 2019. | ```git@github.umn.edu:ivlab-cs/zCore6-UnityPackage.git``` |
+The best way to find the current list of available plugins is to bookmark this URL, which will search github for repos in the IV/LAB organization that include MinVR3 in their name:
+[MinVR3 Plugins on GitHub.com](https://github.com/orgs/ivlab/repositories?q=MinVR3).
+
+If you are a member of the IV/LAB, you may also be able to access some non-public MinVR3 plugins via this link, which searches our organization on UMN's Enterprise version of GitHub:
+[MinVR3 Plugins on github.umn.edu](https://github.umn.edu/orgs/ivlab-cs/repositories?q=minvr3&type=all&language=&sort=).
 
 
-## To switch to development mode so you can edit code within the package
-Note: Collectively, the lab now recommends a development process where you start by adding the package to your project in read-only mode, as described above.  This way, your Unity project files will always maintain a link to download the latest version of the package from git whenever the project is loaded, and all users of the package will be including it the same way.  If/when you have a need to edit the package, the process is then to "temporarily" switch into development mode by cloning a temporary copy of the package, then edit the source as needed, test your edits for as long as you like, etc.  Finally, when you get to a good stopping point, commit and push the changes to github.  Once the latest version of your package is on github, you can then switch out of development mode.  This will cause Unity to revert to using the read-only version of the package, and since Unity knows where to access this on github, it is easy to tell Unity to use the latest available version.
+# Modifying / Adding to this main MinVR3 library
 
-0. Follow the read-only mode steps above.
+## Switch to development mode so you can edit code within the package
+Important Background: Collectively, the lab now recommends a development process where you start by adding the package to your project in read-only mode, as described above.  This way, your Unity project files will always maintain a link to download the latest version of the package from github whenever the project is loaded, and both users and developers of the package will include it the same way.  If/when you have a need to edit the package, the process is then to "temporarily" switch into development mode by cloning a temporary copy of the package, then edit the source as needed, test your edits for as long as you like, etc.  Finally, when you get to a good stopping point, commit and push the changes to github.  Once the latest version of your package is on github, you can then switch out of development mode.  This will cause Unity to return to using the read-only version of the package available on github, and we can easily tell Unity to re-download the latest version of the package.
+
+After installing the library as described in the Installation section, follow this process:
+
 1. Navigate your terminal or Git tool into your Unity project's main folder and clone this repository into the packages folder, e.g., ```cd Packages; [git clone git@github.umn.edu:ivlab-cs/MinVR3-UnityPackage.git MinVR3](https://github.com/ivlab/MinVR3-UnityPackage.git)```.  This will create a MinVR3-UnityPackage folder that contains all the sourcecode in the package.
-2. Go for it.  Edit the source you just checked out; add files, etc.  However, BE VERY CAREFUL NOT TO ADD THE MinVR3-UnityPackage FOLDER TO YOUR PROJECT'S GIT REPO.  We are essentially cloning one git repo inside another here, but we do not want to add the package repo as a submodule or subdirectory of the project's repo, we just want to temporarily work with the source.
+2. Go for it.  Edit the source you just checked out; add files, etc.  However, BE VERY CAREFUL NOT TO ADD THE MinVR3-UnityPackage FOLDER TO YOUR PROJECT'S GIT REPO.  We are cloning one git repo inside another here, but we do NOT want to add the package repo as a submodule or subdirectory of the project's repo, we just want to temporarily work with the source.  If you like, you can help prevent yourself from accidentally doing this by editing your project's .gitignore file.  You can add specific directories to ignore or adding this line will tell it to ignore all subdirs of Packages: ```/[Pp]ackages/*/```. 
 3. When you are ready to commit and push changes to the package repo, go for it.  JUST MAKE SURE YOU DO THIS FROM WITHIN THE Packages/MinVR3-UnityPackage DIRECTORY!  
 4. Once these changes are up on github, you can switch out of "development mode" by simply deleting the MinVR3-UnityPackage directory.  The presence of that directory is like a temporary override.  Once it is gone, Unity will revert back to using the cached version of MinVR3 that it originally downloaded from git.
-5. The final step is to force a refresh of the package cache so that you can pull in the new version of the package you just saved to github.  To do this, simply delete the [package-lock.json](https://docs.unity3d.com/Manual/upm-conflicts-auto.html) file inside your project's Packages folder.
+5. The final step is to force a refresh of the package cache to pull in the new version of the package you just saved to github.  To do this, simply delete the [package-lock.json](https://docs.unity3d.com/Manual/upm-conflicts-auto.html) file from your project's Packages folder, open or return to an already open Unity Editor window, and wait for Unity to compile the new source.
 
 
+# Modifying / Writing a new MinVR3 Plugin
+
+## When to create a plugin vs. adding to the main library?
+The logic here is simple.  Trules for this repository, which is the "main" MinVR3 library are:
+
+1. It should be able to be added to a new Unity project without requiring additional packages to be installed.
+2. The code in this repository should be written entirely by MinVR3 project contributors and maintainers for MinVR3, not including portions or copies of other open source projects.
+3. The code should work on Unity versions ranging from 2019 to current.
+
+If your contribution would not violate any of these rules, then add it directly to this main MinVR3 library.  If it would violate any of the rules, then create a plugin.
+
+## How to create a plugin?
+The IV/LAB has created a [github template repo for creating new UnityPackages](https://github.com/ivlab/Template-UnityPackage).  This main repo and all of the MinVR3 plugins started from this template.  Creating a new repo from this template is probably the best way to start.  Then, you may want to look at or copy example files from other MinVR3 plugins that demonstrate how the plugin can add items to the MinVR3 GameObject and Component menus.  TODO: It would be great to create a second github template repo that is specific for MinVR3 plugins--it would only have minor changes relative to the general unitypackage template, but still useful to setup as a template.
+
+## Is there any way for the main MinVR3 library to know whether a particular plugin has been installed?
+Try to avoid this if possible, but if it is absolutely necessary, there is a way to make code in the main MinVR3 library function differently depending on whether a particular plugin is available or not.   To implement this logic, you need to examine the MinVR3/Runtime/IVLab.MinVR3.Runtime.asmdef file, which you can see/edit within the Unity editor by clicking on the filename in the Project view.  Here, you can add identify another ".asm assembly bundle" (the C# code bundle from some other package) as an optional dependency and add a C# compiler definition of the form #define PACKAGENAME_PRESENT whenever that assembly bundle is available.  Then, all of the MinVR code that requires this optional dependency can be added to the main library as long as it is contained entirely within #if PACKAGENAME_PRESENT ... #endif blocks.
 
 
-# MinVR's Event System
+# MinVR's Design Philosophy
 
 ## Guiding Principles and Observations:
 
@@ -50,7 +71,9 @@ Note: Collectively, the lab now recommends a development process where you start
 5. However, make it possible for our system to co-exist with the packages Unity developers continue to improve, like Unity UI and Unity XR Toolkit, so we do not miss out on those developments when they are useful.  A programmer may wish, for example, to code "more traditional" parts of an applications user interface using Unity's XR Interaction Toolkit or to include menus created using Unity's Canvas and UI support, and to mix this with "more research" parts of the application that they prefer to write using MinVR's VREvent system.
 6. To use Unity's UI capabilities while still supporting input from custom devices that Unity does not support, use virtual input devices (e.g., MinVR XRController) to feed input from MinVR into Unity's UI system.  This should make it possible for any VREvents MinVR knows about to also be used with native Unity UI widgets (e.g., canvases) and techniques (e.g., XRTK teleport).
 
-## How To:
+
+
+# Tips for Working with VREvents
 
 ### Generate VREvents from the input devices Unity already supports
 XR Tracking and Controller Input:
