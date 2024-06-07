@@ -18,6 +18,7 @@ namespace IVLab.MinVR3
         void Reset()
         {
             m_DeviceIdString = "UnityXR/";
+            m_ReportEventsInRoomspace = false;
         }
 
         protected void OnEnable()
@@ -56,8 +57,8 @@ namespace IVLab.MinVR3
 
             m_LastHeadPosition = new Vector3();
             m_LastHeadRotation = Quaternion.identity;
+            
         }
-
 
         void CheckButton(UnityEngine.XR.InputDevice device, UnityEngine.XR.InputFeatureUsage<bool> buttonUsage, string eventName, ref bool lastButtonState, ref List<VREvent> eventQueue)
         {
@@ -97,6 +98,10 @@ namespace IVLab.MinVR3
         {
             Vector3 value;
             if (device.TryGetFeatureValue(usage, out value)) {
+                if (m_ReportEventsInRoomspace) {
+                    IVLab.MinVR3.RoomSpaceOrigin roomSpaceOrigin = IVLab.MinVR3.VREngine.instance.roomSpaceOrigin;
+                    value = roomSpaceOrigin.WorldPointToRoomSpace(value);
+                }
                 if (value != lastValue) {
                     eventQueue.Add(new VREventVector3(eventName, value));
                     lastValue = value;
@@ -108,6 +113,10 @@ namespace IVLab.MinVR3
         {
             Quaternion value;
             if (device.TryGetFeatureValue(usage, out value)) {
+                if (m_ReportEventsInRoomspace) {
+                    IVLab.MinVR3.RoomSpaceOrigin roomSpaceOrigin = IVLab.MinVR3.VREngine.instance.roomSpaceOrigin;
+                    value = Quaternion.Inverse(roomSpaceOrigin.transform.localRotation) * value;
+                }
                 if (value != lastValue) {
                     eventQueue.Add(new VREventQuaternion(eventName, value));
                     lastValue = value;
@@ -217,6 +226,12 @@ namespace IVLab.MinVR3
         [Tooltip("Prepended to the name of each VREvent produced")]
         [SerializeField] private string m_DeviceIdString = "UnityXR/";
 
+        [Space(10)]
+        [Header("Event Coordinate Space")]
+        [Tooltip("If checked, events will have the roomspaceorigin gameobject transform applied to the position/rotation events"+
+        " before they are added to the event queue. ")]
+        [SerializeField] private bool m_ReportEventsInRoomspace = false;
+
         // RUNTIME STATE INFO
         private bool m_LastLeftTriggerButton;
         private bool m_LastLeftGripButton;
@@ -246,6 +261,7 @@ namespace IVLab.MinVR3
 
         private Vector3 m_LastHeadPosition;
         private Quaternion m_LastHeadRotation;
+
     }
 
 
