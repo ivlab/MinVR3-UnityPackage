@@ -1,22 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+#if UNITY_EDITOR
+    using UnityEditor;
+#endif
 
 namespace IVLab.MinVR3
 {
-    /**
-     * TODO list:
-     * - use material (e.g., like from skyvr) that includes an alpha fade parameter
-     * - fade in and fade out on activate/deactivate
-     * - fade to 50% when outside bounding sphere for the 'cancel' operation
-     */
     [AddComponentMenu("MinVR Interaction/Widgets/Color Picker (CavePainting Style)")]
     public class ColorPicker : MonoBehaviour, IVREventListener, IVREventProducer
     {
         public Color initialColor {
             get { return m_InitialColor; }
             set { m_InitialColor = value; }
+        }
+
+        public Color currentColor {
+            get { return m_CurrentColor; }
         }
 
         void Reset()
@@ -27,37 +27,52 @@ namespace IVLab.MinVR3
 
             m_RequireToken = null;
 
+            m_ColorModifiedEventName = "ColorPicker/ColorModified";
+            m_ColorSelectedEventName = "ColorPicker/ColorSelected";
+            m_ColorCancelledEventName = "ColorPicker/ColorCancelled";
+
+#if UNITY_EDITOR
+            m_BaseMaterial = AssetDatabase.GetBuiltinExtraResource<Material>("Default-Diffuse.mat");
+#endif
             m_Radius = 0.4f;
             m_CancelRadius = 0.5f;
+            m_CancelModeAlpha = 0.25f;
             m_CursorRadius = 0.1f;
             m_ColoredPointsRadius = 0.05f;
             m_LineWidth = 0.005f;
             m_NumPointsOnColorWheel = 12;
+            m_FadeDuration = 0.5f;
         }
 
 
         void Start()
         {
             m_InitialColor = new Color(0.75f, 0.75f, 0.75f);
- 
+            m_CurrentColor = new Color(0.75f, 0.75f, 0.75f);
+
+            m_AllRenderers = new List<Renderer>();
+
             GameObject topSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             topSphere.transform.SetParent(this.transform, false);
             topSphere.transform.localPosition = m_Radius * Vector3.up;
             topSphere.transform.localScale = m_ColoredPointsRadius * Vector3.one;
-            Material topMat = topSphere.GetComponent<MeshRenderer>().material;
-            topMat.color = Color.white;
-            topSphere.GetComponent<MeshRenderer>().sharedMaterial = topMat;
+            topSphere.GetComponent<MeshRenderer>().sharedMaterial = m_BaseMaterial;
+            MaterialPropertyBlock topPB = new MaterialPropertyBlock();
+            topPB.SetColor("_Color", Color.white);
+            topPB.SetFloat("_Alpha", 0.1f);
+            topSphere.GetComponent<MeshRenderer>().SetPropertyBlock(topPB);
+            m_AllRenderers.Add(topSphere.GetComponent<MeshRenderer>());
+
 
             GameObject botSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             botSphere.transform.SetParent(this.transform, false);
             botSphere.transform.localPosition = m_Radius * -Vector3.up;
             botSphere.transform.localScale = m_ColoredPointsRadius * Vector3.one;
-            Material botMat = botSphere.GetComponent<MeshRenderer>().material;
-            botMat.color = Color.black;
-            botSphere.GetComponent<MeshRenderer>().sharedMaterial = botMat;
-
-            //Material lineMat = new Material(Shader.Find("Unlit/Color"));
-            Material lineMat = topMat;
+            botSphere.GetComponent<MeshRenderer>().sharedMaterial = m_BaseMaterial;
+            MaterialPropertyBlock botPB = new MaterialPropertyBlock();
+            botPB.SetColor("_Color", Color.black);
+            botSphere.GetComponent<MeshRenderer>().SetPropertyBlock(botPB);
+            m_AllRenderers.Add(botSphere.GetComponent<MeshRenderer>());
 
 
             float aInc = 360.0f / (float)m_NumPointsOnColorWheel;
@@ -68,14 +83,22 @@ namespace IVLab.MinVR3
                 colSphere.transform.SetParent(this.transform, false);
                 colSphere.transform.localPosition = p;
                 colSphere.transform.localScale = m_ColoredPointsRadius * Vector3.one;
-                Material colMat = colSphere.GetComponent<MeshRenderer>().material;
-                colMat.color = PointToColor(p);
-                colSphere.GetComponent<MeshRenderer>().sharedMaterial = colMat;
+                colSphere.GetComponent<MeshRenderer>().sharedMaterial = m_BaseMaterial;
+                MaterialPropertyBlock colSpherePB = new MaterialPropertyBlock();
+                colSpherePB.SetColor("_Color", PointToColor(p));
+                colSphere.GetComponent<MeshRenderer>().SetPropertyBlock(colSpherePB);
+                m_AllRenderers.Add(colSphere.GetComponent<MeshRenderer>());
 
                 GameObject colLine = new GameObject("Line", typeof(LineRenderer));
                 colLine.transform.SetParent(this.transform, false);
                 LineRenderer l = colLine.GetComponent<LineRenderer>();
-                l.sharedMaterial = lineMat;
+                l.sharedMaterial = m_BaseMaterial;
+                MaterialPropertyBlock linePB = new MaterialPropertyBlock();
+                linePB.SetColor("_Color", Color.gray);
+                l.GetComponent<LineRenderer>().SetPropertyBlock(linePB);
+                m_AllRenderers.Add(l.GetComponent<LineRenderer>());
+
+
                 List<Vector3> points = new List<Vector3>();
                 points.Add(m_Radius * Vector3.up);
                 points.Add(p);
@@ -91,19 +114,27 @@ namespace IVLab.MinVR3
             m_CursorSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             m_CursorSphere.transform.SetParent(this.transform, false);
             m_CursorSphere.transform.localScale = m_CursorRadius * Vector3.one;
-            m_CursorSphereMat = m_CursorSphere.GetComponent<MeshRenderer>().material;
-            m_CursorSphere.GetComponent<MeshRenderer>().sharedMaterial = m_CursorSphereMat;
+            m_CursorSphere.GetComponent<MeshRenderer>().sharedMaterial = m_BaseMaterial;
+            m_CursorPB = new MaterialPropertyBlock();
+            m_CursorPB.SetColor("_Color", Color.white);
+            m_CursorSphere.GetComponent<MeshRenderer>().SetPropertyBlock(m_CursorPB);
+            m_AllRenderers.Add(m_CursorSphere.GetComponent<MeshRenderer>());
 
             // turn all of the child geometry off until the widget is activated
             for (int i = 0; i < transform.childCount; i++) {
                 transform.GetChild(i).gameObject.SetActive(false);
             }
+
+            m_Active = false;
+            m_InCancelState = false;
         }
 
         void OnCursorDown()
         {
-            if ((m_RequireToken == null) || (m_RequireToken.RequestToken(this))) {
+            if (((m_RequireCondition == null) || (m_RequireCondition.isTrue)) &&
+                ((m_RequireToken == null) || (m_RequireToken.RequestToken(this)))) {
                 m_Active = true;
+                m_InCancelState = false;
 
                 // reset (zero out) colorpicker transform and get the cursor pos in the local space
                 transform.localPosition = Vector3.zero;
@@ -114,11 +145,11 @@ namespace IVLab.MinVR3
                 transform.localPosition = cursorPosLocal - ColorToPoint(m_InitialColor);
 
                 m_CursorSphere.transform.localPosition = ColorToPoint(m_InitialColor);
-                m_CursorSphereMat.color = m_InitialColor;
+                m_CurrentColor = m_InitialColor;
+                m_CursorPB.SetColor("_Color", m_InitialColor);
+                m_CursorSphere.GetComponent<MeshRenderer>().SetPropertyBlock(m_CursorPB);
 
-                for (int i = 0; i < transform.childCount; i++) {
-                    transform.GetChild(i).gameObject.SetActive(true);
-                }
+                StartCoroutine(FadeIn(m_FadeDuration));
             }
         }
 
@@ -130,14 +161,24 @@ namespace IVLab.MinVR3
                 m_CursorSphere.transform.localPosition = cursorPosLocal;
                 Vector4 data;
                 if (IsOutsideCancelSphere()) {
+                    if (!m_InCancelState) {
+                        m_InCancelState = true;
+                        SetColorPickerAlpha(m_CancelModeAlpha);
+                    }
                     data = new Vector4(m_InitialColor[0], m_InitialColor[1], m_InitialColor[2], m_InitialColor[3]);
-                    m_CursorSphereMat.color = m_InitialColor;
+                    m_CurrentColor = m_InitialColor;
                 } else {
+                    if (m_InCancelState) {
+                        m_InCancelState = false;
+                        SetColorPickerAlpha(1.0f);
+                    }
                     Color col = PointToColor(cursorPosLocal);
                     data = new Vector4(col[0], col[1], col[2], col[3]);
-                    m_CursorSphereMat.color = col;
+                    m_CurrentColor = col;
                 }
-                VREngine.instance.eventManager.InsertInQueue(new VREventVector4("ColorPicker/ColorModified", data));   
+                m_CursorPB.SetColor("_Color", m_CurrentColor);
+                m_CursorSphere.GetComponent<MeshRenderer>().SetPropertyBlock(m_CursorPB);
+                VREngine.instance.eventManager.InsertInQueue(new VREventVector4(m_ColorModifiedEventName, data));   
             }
         }
 
@@ -147,20 +188,19 @@ namespace IVLab.MinVR3
                 Vector3 cursorPosLocal = transform.RoomPointToLocalSpace(m_CursorPosRoom);
 
                 Vector4 data;
-                if (IsOutsideCancelSphere()) {
+                if (m_InCancelState) {
                     data = new Vector4(m_InitialColor[0], m_InitialColor[1], m_InitialColor[2], m_InitialColor[3]);
-                    VREngine.instance.eventManager.InsertInQueue(new VREventVector4("ColorPicker/ColorCancelled", data));
+                    VREngine.instance.eventManager.InsertInQueue(new VREventVector4(m_ColorCancelledEventName, data));
                 } else {
-                    Color col = PointToColor(cursorPosLocal);
+                    Color col = m_CurrentColor;
                     data = new Vector4(col[0], col[1], col[2], col[3]);
-                    VREngine.instance.eventManager.InsertInQueue(new VREventVector4("ColorPicker/ColorSelected", data));
+                    VREngine.instance.eventManager.InsertInQueue(new VREventVector4(m_ColorSelectedEventName, data));
                     m_InitialColor = col;
                 }
                 m_RequireToken?.ReleaseToken(this);
                 m_Active = false;
-                for (int i = 0; i < transform.childCount; i++) {
-                    transform.GetChild(i).gameObject.SetActive(false);
-                }
+
+                StartCoroutine(FadeOut(m_FadeDuration));
             }
         }
 
@@ -293,7 +333,6 @@ namespace IVLab.MinVR3
                 OnCursorUp();
             } else if (vrEvent.Matches(m_CursorPosEvent)) {
                 m_CursorPosRoom = (vrEvent as VREventVector3).GetData();
-                m_CursorPosWorld = VREngine.instance.roomSpaceOrigin.RoomPointToWorldSpace(m_CursorPosRoom);
                 OnCursorMove();
             }
         }
@@ -321,34 +360,111 @@ namespace IVLab.MinVR3
         public List<IVREventPrototype> GetEventPrototypes()
         {
             List<IVREventPrototype> eventPrototypes = new List<IVREventPrototype>();
-            eventPrototypes.Add(VREventPrototypeVector4.Create("ColorPicker/ColorModified"));
-            eventPrototypes.Add(VREventPrototypeVector4.Create("ColorPicker/ColorSelected"));
-            eventPrototypes.Add(VREventPrototypeVector4.Create("ColorPicker/ColorCancelled"));
+            eventPrototypes.Add(VREventPrototypeVector4.Create(m_ColorModifiedEventName));
+            eventPrototypes.Add(VREventPrototypeVector4.Create(m_ColorSelectedEventName));
+            eventPrototypes.Add(VREventPrototypeVector4.Create(m_ColorCancelledEventName));
             return eventPrototypes;
         }
 
+        private IEnumerator FadeIn(float duration)
+        {
+            float elapsedTime = 0f;
+
+            // activate children
+            for (int i = 0; i < transform.childCount; i++) {
+                transform.GetChild(i).gameObject.SetActive(true);
+            }
+
+            while (elapsedTime < duration) {
+                float elapsedFrac = elapsedTime / duration;
+                float alpha = Mathf.Clamp(elapsedFrac, 0.0f, 1.0f);
+                SetColorPickerAlpha(alpha);
+                yield return null;
+                elapsedTime += Time.deltaTime;
+            }
+
+            // fade-in complete, make double-sure that the last call sets alpha = 1 and rendering mode to opaque
+            SetColorPickerAlpha(1.0f);
+        }
+
+
+        private IEnumerator FadeOut(float duration)
+        {
+            float elapsedTime = 0f;
+
+            // special case: if in cancel state, the widget is already partially transparent, treat this as if
+            // the fade out is already partially complete.
+            if (m_InCancelState) {
+                elapsedTime += (1.0f - m_CancelModeAlpha) * duration;
+            }
+
+            while (elapsedTime < duration) {
+                float elapsedFrac = elapsedTime / duration;
+                float alpha = Mathf.Clamp(1.0f - elapsedFrac, 0.0f, 1.0f);
+                SetColorPickerAlpha(alpha);
+                yield return null;
+                elapsedTime += Time.deltaTime;
+            }
+
+            // fade-out complete, deactivate children
+            for (int i = 0; i < transform.childCount; i++) {
+                transform.GetChild(i).gameObject.SetActive(false);
+            }
+        }
+
+
+        private void SetColorPickerAlpha(float alpha)
+        {
+            // Unity render modes: 0 = opaque, 1 = cutout, 2 = fade, 3 = transparent
+            // use opaque mode when alpha = 1, fade mode otherwise
+            float renderMode = alpha >= 1.0 ? 0 : 2;
+
+            MaterialPropertyBlock mpb = new MaterialPropertyBlock();
+            for (int i = 0; i < m_AllRenderers.Count; i++) {
+                m_AllRenderers[i].GetPropertyBlock(mpb);
+                Color c = mpb.GetColor("_Color");
+                c.a = alpha;
+                mpb.SetColor("_Color", c);
+                mpb.SetFloat("_Mode", renderMode);
+                m_AllRenderers[i].SetPropertyBlock(mpb);
+            }
+        }
+
+
+        [Header("Input Events")]
         [SerializeField] private VREventPrototype m_CursorDownEvent;
         [SerializeField] private VREventPrototypeVector3 m_CursorPosEvent;
         [SerializeField] private VREventPrototype m_CursorUpEvent;
-
         [SerializeField] private SharedToken m_RequireToken;
+        [SerializeField] private Condition m_RequireCondition;
 
+        [Header("Output Events")]
+        [SerializeField] private string m_ColorModifiedEventName;
+        [SerializeField] private string m_ColorSelectedEventName;
+        [SerializeField] private string m_ColorCancelledEventName;
+
+        [Header("Appearance")]
+        [SerializeField] private Material m_BaseMaterial;
         [SerializeField] private float m_Radius;
         [SerializeField] private float m_CancelRadius;
+        [SerializeField] private float m_CancelModeAlpha;
         [SerializeField] private float m_CursorRadius;
         [SerializeField] private float m_ColoredPointsRadius;
         [SerializeField] private float m_LineWidth;
         [SerializeField] private int m_NumPointsOnColorWheel;
+        [SerializeField] private float m_FadeDuration;
+
 
 
         // runtime
         bool m_Active;
+        bool m_InCancelState;
         Color m_InitialColor;
+        Color m_CurrentColor;
         Vector3 m_CursorPosRoom;
-        Vector3 m_CursorPosWorld;
-        Vector3 m_WidgetCenter;
         GameObject m_CursorSphere;
-        Material m_CursorSphereMat;
+        MaterialPropertyBlock m_CursorPB;
+        List<Renderer> m_AllRenderers;
     }
 
 }
