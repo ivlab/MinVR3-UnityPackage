@@ -380,7 +380,7 @@ namespace IVLab.MinVR3
         // rotated, and scaled to create a rectangular box, like a 3D button
         bool InsideTransformedCube(Vector3 p, GameObject boxObj)
         {
-            Vector3 pBoxSpace = boxObj.transform.InverseTransformPoint(p);
+            Vector3 pBoxSpace = boxObj.transform.RoomPointToLocalSpace(p);
             return (Mathf.Abs(pBoxSpace[0]) <= 0.5) &&
                 (Mathf.Abs(pBoxSpace[1]) <= 0.5) &&
                 (Mathf.Abs(pBoxSpace[2]) <= 0.5);
