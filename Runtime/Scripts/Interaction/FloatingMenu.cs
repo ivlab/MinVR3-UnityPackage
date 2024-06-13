@@ -29,6 +29,15 @@ namespace IVLab.MinVR3
             set => m_MenuItems = value;
         }
 
+        /// <summary>
+        /// If set, the menu will only respond to input when the token is available 
+        /// (i.e., not already held by someone else).
+        /// </summary>
+        public SharedToken inputFocusToken {
+            get => m_InputFocusToken;
+            set => m_InputFocusToken = value;
+        }
+
 
         /// <summary>
         /// Restores default values, called whenever the component is added to a GameObject in the editor
@@ -97,7 +106,11 @@ namespace IVLab.MinVR3
 
             // wipe out any previously created geometry
             if (m_GeometryParent != null) {
+                Debug.Log("Destroying Menu geometry");
                 DestroyImmediate(m_GeometryParent);
+            }
+            else{
+                Debug.LogError("menu geometry parent is null");
             }
 
             Material tmpMat;
@@ -203,15 +216,15 @@ namespace IVLab.MinVR3
 
         void HandleUserInput()
         {
-            // Convert the tracker's position and rotation to a Matrix4x4 format.
+            // Convert the tracker's position and rotation to a Matrix4x4 format (assumes data is coming in roomspace).            
             Matrix4x4 trackerMat = Matrix4x4.TRS(m_TrackerPos, m_TrackerRot, Vector3.one);
 
             if ((m_ButtonPressed) && (m_Selected == 0)) {
                 // Dragging while holding onto the menu title bar, 
                 // move the menu based on motion of the tracker
 
-                // Get the menu's Transform in Matrix4x4 format            
-                Matrix4x4 origMenuMat = transform.localToWorldMatrix;
+                // Get the menu's Transform in Matrix4x4 format in roomspace       
+                Matrix4x4 origMenuMat = IVLab.MinVR3.VREngine.instance.roomSpaceOrigin.transform.worldToLocalMatrix * transform.localToWorldMatrix;
 
                 // Calc change in tracker pos and rot from the last frame until now
                 Matrix4x4 deltaTracker = trackerMat * m_LastTrackerMat.inverse;
