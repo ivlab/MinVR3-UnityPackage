@@ -106,11 +106,7 @@ namespace IVLab.MinVR3
 
             // wipe out any previously created geometry
             if (m_GeometryParent != null) {
-                Debug.Log("Destroying Menu geometry");
                 DestroyImmediate(m_GeometryParent);
-            }
-            else{
-                Debug.LogError("menu geometry parent is null");
             }
 
             Material tmpMat;
