@@ -214,16 +214,17 @@ namespace IVLab.MinVR3
         {
             // Convert the tracker's position and rotation to a Matrix4x4 format (assumes data is coming in roomspace).            
             Matrix4x4 trackerMat = Matrix4x4.TRS(m_TrackerPos, m_TrackerRot, Vector3.one);
+            Matrix4x4 trackerMatInWorld = IVLab.MinVR3.VREngine.instance.roomSpaceOrigin.transform.localToWorldMatrix * trackerMat;
 
             if ((m_ButtonPressed) && (m_Selected == 0)) {
                 // Dragging while holding onto the menu title bar, 
                 // move the menu based on motion of the tracker
 
-                // Get the menu's Transform in Matrix4x4 format in roomspace       
-                Matrix4x4 origMenuMat = IVLab.MinVR3.VREngine.instance.roomSpaceOrigin.transform.worldToLocalMatrix * transform.localToWorldMatrix;
+                // Get the menu's Transform in Matrix4x4 format in worldspace      
+                Matrix4x4 origMenuMat = transform.localToWorldMatrix;
 
                 // Calc change in tracker pos and rot from the last frame until now
-                Matrix4x4 deltaTracker = trackerMat * m_LastTrackerMat.inverse;
+                Matrix4x4 deltaTracker = trackerMatInWorld * m_LastTrackerMat.inverse;
 
                 // Apply this change to the menu's current transformation to find its new transform
                 Matrix4x4 newMenuMat = deltaTracker * origMenuMat;
@@ -268,7 +269,7 @@ namespace IVLab.MinVR3
                 }
             }
 
-            m_LastTrackerMat = trackerMat;
+            m_LastTrackerMat = trackerMatInWorld;
         }
 
 
