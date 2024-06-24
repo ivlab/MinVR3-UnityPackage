@@ -175,6 +175,9 @@ namespace IVLab.MinVR3
                 //Debug.Log(string.Format("UnityXR Head Device '{0}' has characteristics '{1}'", headDev.name, headDev.characteristics.ToString()));
                 CheckVector3(headDev, UnityEngine.XR.CommonUsages.centerEyePosition, m_DeviceIdString + "Head/Position", ref m_LastHeadPosition, ref eventQueue);
                 CheckQuaternion(headDev, UnityEngine.XR.CommonUsages.centerEyeRotation, m_DeviceIdString + "Head/Rotation", ref m_LastHeadRotation, ref eventQueue);
+            
+                CheckVector3(headDev, UnityEngine.XR.CommonUsages.rightEyePosition, m_DeviceIdString + "RightEye/Position", ref m_LastRightEyePosition, ref eventQueue);
+                CheckVector3(headDev, UnityEngine.XR.CommonUsages.leftEyePosition, m_DeviceIdString + "LeftEye/Position", ref m_LastLeftEyePosition, ref eventQueue);
             }
         }
 
@@ -218,6 +221,8 @@ namespace IVLab.MinVR3
 
             eventsProduced.Add(VREventPrototypeVector3.Create(m_DeviceIdString + "Head/Position"));
             eventsProduced.Add(VREventPrototypeQuaternion.Create(m_DeviceIdString + "Head/Rotation"));
+            eventsProduced.Add(VREventPrototypeVector3.Create(m_DeviceIdString + "LeftEye/Position"));
+            eventsProduced.Add(VREventPrototypeVector3.Create(m_DeviceIdString + "RightEye/Position"));
 
             return eventsProduced;
         }
@@ -261,6 +266,8 @@ namespace IVLab.MinVR3
 
         private Vector3 m_LastHeadPosition;
         private Quaternion m_LastHeadRotation;
+        private Vector3 m_LastLeftEyePosition;
+        private Vector3 m_LastRightEyePosition;
 
     }
 
