@@ -2,6 +2,10 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
 #
+
+# MinVR3 builds
+**/MinVR3.cpp~/build
+
 /[Ll]ibrary/
 /[Tt]emp/
 /[Oo]bj/
