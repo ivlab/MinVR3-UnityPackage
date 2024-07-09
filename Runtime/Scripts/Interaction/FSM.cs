@@ -237,6 +237,7 @@ namespace IVLab.MinVR3
                                 }
                                 m_StateEnterCBs[m_CurrentState].Invoke();
                             }
+                            break; // Only allow one state transition per event
                         }
                     }
                 }
