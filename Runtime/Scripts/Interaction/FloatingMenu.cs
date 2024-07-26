@@ -47,6 +47,7 @@ namespace IVLab.MinVR3
             m_Title = "My Menu";
             m_MenuItems = new List<string>() { "Item 1", "Item 2" };
 
+            m_ActivationDepth = 0f;
             m_CursorPositionEvent = new VREventPrototypeVector3();
             m_CursorRotationEvent = new VREventPrototypeQuaternion();
             m_ButtonDownEvent = new VREventPrototype();
@@ -104,9 +105,10 @@ namespace IVLab.MinVR3
             m_TitleBoxObj = null;
             m_BgBox = null;
 
-            // wipe out any previously created geometry
-            if (m_GeometryParent != null) {
-                DestroyImmediate(m_GeometryParent);
+            // wipe out any previously created menu geometry
+            GameObject generatedContent = GameObject.Find(k_GeometryParentName);
+            if (generatedContent != null){
+                DestroyImmediate(generatedContent);
             }
 
             Material tmpMat;
@@ -204,6 +206,14 @@ namespace IVLab.MinVR3
             m_BgBox.transform.localPosition = new Vector3(m_ZEpsilon, 0f, 0.5f * m_ItemSep + m_ZEpsilon);
             m_BgBox.transform.localScale = new Vector3(menu_box_dims[0] - m_ZEpsilon, height - 2.0f * m_ZEpsilon, menu_box_dims[2] - m_ItemSep);
 
+            m_InteractionZoneBox = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            m_InteractionZoneBox.name = "Interaction Zone";
+            m_InteractionZoneBox.transform.SetParent(m_GeometryParent.transform, false);
+            m_InteractionZoneBox.GetComponent<Renderer>().enabled = false;
+            m_InteractionZoneBox.transform.localPosition = new Vector3(-0.5f * menu_box_dims[1], 0f, -0.5f * m_ActivationDepth);
+            m_InteractionZoneBox.transform.localScale = new Vector3(menu_box_dims[0] + menu_box_dims[1], height, menu_box_dims[2]+ m_ActivationDepth);
+
+
             // add geometry to the hierarchy under the Menu object
             m_GeometryParent.transform.SetParent(this.transform, false);
             m_Dirty = false;
@@ -233,36 +243,40 @@ namespace IVLab.MinVR3
                 transform.position = Matrix4x4Extensions.GetTranslationFast(newMenuMat);
                 transform.rotation = Matrix4x4Extensions.GetRotationFast(newMenuMat);
             } else if (!m_ButtonPressed) {
-                // Clear selection and highlighting
-                if ((m_InputFocusToken != null) && (m_Selected >= 0)) {
-                    m_InputFocusToken.ReleaseToken(this);
+                if (m_inActivationZone && !InsideTransformedCube(m_TrackerPos, m_InteractionZoneBox)) {
+                    // moved outside the activation zone
+                    if ((m_InputFocusToken != null)) {
+                        m_InputFocusToken.ReleaseToken(this);
+                    }
+                    m_inActivationZone = false;
+                    ClearSelection();
+                    VREngine.instance.eventManager.InsertInQueue(new VREvent(gameObject.name + k_ExitActivationEventName));
                 }
-                m_Selected = -1;
-                Material tmpMat = m_TitleBoxObj.GetComponent<Renderer>().sharedMaterial;
-                tmpMat.color = m_TitleBGColor;
-                m_TitleBoxObj.GetComponent<Renderer>().sharedMaterial = tmpMat;
-                for (int i = 0; i < m_LabelBoxes.Count; i++) {
-                    tmpMat = m_LabelBoxes[i].GetComponent<Renderer>().sharedMaterial;
-                    tmpMat.color = m_ItemBGColor;
-                    m_LabelBoxes[i].GetComponent<Renderer>().sharedMaterial = tmpMat;
-                }
-
-                // Update selection
-                if (InsideTransformedCube(m_TrackerPos, m_TitleBoxObj)) {
+                else if (!m_inActivationZone && InsideTransformedCube(m_TrackerPos, m_InteractionZoneBox)){
                     if ((m_InputFocusToken == null) || (m_InputFocusToken.RequestToken(this))) {
+                        m_inActivationZone = true;
+                        VREngine.instance.eventManager.InsertInQueue(new VREvent(gameObject.name + k_EnterActivationEventName));
+                    }
+                }                    
+                
+                if (m_inActivationZone) {
+                    ClearSelection();
+                
+                    Material tmpMat = m_TitleBoxObj.GetComponent<Renderer>().sharedMaterial;
+                    // Update selection
+                    if (InsideTransformedCube(m_TrackerPos, m_TitleBoxObj)) {
                         m_Selected = 0;
                         tmpMat = m_TitleBoxObj.GetComponent<Renderer>().sharedMaterial;
                         tmpMat.color = m_TitleHighColor;
                         m_TitleBoxObj.GetComponent<Renderer>().sharedMaterial = tmpMat;
-                    }
-                } else {
-                    for (int i = 0; i < m_LabelBoxes.Count; i++) {
-                        if (InsideTransformedCube(m_TrackerPos, m_LabelBoxes[i])) {
-                            if ((m_InputFocusToken == null) || (m_InputFocusToken.RequestToken(this))) {
+                    } else {
+                        for (int i = 0; i < m_LabelBoxes.Count; i++) {
+                            if (InsideTransformedCube(m_TrackerPos, m_LabelBoxes[i])) {
                                 m_Selected = i + 1;
                                 tmpMat = m_LabelBoxes[i].GetComponent<Renderer>().sharedMaterial;
                                 tmpMat.color = m_ItemHighColor;
                                 m_LabelBoxes[i].GetComponent<Renderer>().sharedMaterial = tmpMat;
+                                break;                                
                             }
                         }
                     }
@@ -270,6 +284,18 @@ namespace IVLab.MinVR3
             }
 
             m_LastTrackerMat = trackerMatInWorld;
+        }
+
+        private void ClearSelection(){
+            m_Selected = -1;
+            Material tmpMat = m_TitleBoxObj.GetComponent<Renderer>().sharedMaterial;
+            tmpMat.color = m_TitleBGColor;
+            m_TitleBoxObj.GetComponent<Renderer>().sharedMaterial = tmpMat;
+            for (int i = 0; i < m_LabelBoxes.Count; i++) {
+                tmpMat = m_LabelBoxes[i].GetComponent<Renderer>().sharedMaterial;
+                tmpMat.color = m_ItemBGColor;
+                m_LabelBoxes[i].GetComponent<Renderer>().sharedMaterial = tmpMat;
+            }
         }
 
 
@@ -303,6 +329,7 @@ namespace IVLab.MinVR3
         {
             return gameObject.name + "/Select Item " + itemId;
         }
+
 
         public void OnButtonDown()
         {
@@ -363,6 +390,8 @@ namespace IVLab.MinVR3
             for (int i = 0; i < m_MenuItems.Count; i++) {
                 eventPrototypes.Add(VREventPrototype.Create(GetEventNameForMenuItem(i)));
             }
+            eventPrototypes.Add(VREventPrototype.Create(gameObject.name + k_EnterActivationEventName));
+            eventPrototypes.Add(VREventPrototype.Create(gameObject.name + k_ExitActivationEventName));
             return eventPrototypes;
         }
 
@@ -409,6 +438,11 @@ namespace IVLab.MinVR3
             "(i.e., not already held by someone else).")]
         [SerializeField] private SharedToken m_InputFocusToken;
 
+        [Tooltip("Specifies the activation zone depth in front of the menu. " +
+            "moving the cursor into this zone will cause the menu to try to acquire the token "+
+            "and spawn enter/exit events that can be used to change the cursor.")]
+        [SerializeField] private float m_ActivationDepth;
+
         [Tooltip("The cursor position event.")]
         [SerializeField] private VREventPrototypeVector3 m_CursorPositionEvent;
 
@@ -448,10 +482,12 @@ namespace IVLab.MinVR3
         [SerializeField] private float m_Depth;
         [SerializeField] private float m_ZEpsilon;
 
-        [SerializeField, HideInInspector] private GameObject m_GeometryParent;
+        
+
 
 
         // dynamically created geometry
+        private GameObject m_GeometryParent;
         private const string k_GeometryParentName = "Menu Geometry [Generated]";
 
         private bool m_Dirty = true;
@@ -459,6 +495,7 @@ namespace IVLab.MinVR3
         private List<GameObject> m_LabelBoxes;
         private GameObject m_TitleBoxObj;
         private GameObject m_BgBox;
+        private GameObject m_InteractionZoneBox;
 
         // runtime UI management
         private Matrix4x4 m_LastTrackerMat;
@@ -467,6 +504,9 @@ namespace IVLab.MinVR3
         // -1 = nothing, 0 = titlebar, 1..items.Count = menu items
         private int m_Selected = -1;
         private bool m_ButtonPressed = false;
+        private bool m_inActivationZone = false;
+        private const string k_EnterActivationEventName = "/Enter Activation Zone";
+        private const string k_ExitActivationEventName = "/Exit Activation Zone";
     }
 
 } // namespace
