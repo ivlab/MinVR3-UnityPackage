@@ -311,6 +311,14 @@ namespace IVLab.MinVR3
         {
             if (Application.isPlaying) {
                 StopListening();
+                if (m_InputFocusToken != null && m_InputFocusToken.currentOwner == this){
+                    m_InputFocusToken.ReleaseToken(this);
+                }
+                if (m_inActivationZone){
+                    m_inActivationZone = false;
+                    ClearSelection();
+                    VREngine.instance.eventManager.InsertInQueue(new VREvent(gameObject.name + k_ExitActivationEventName));
+                }
             }
         }
 
