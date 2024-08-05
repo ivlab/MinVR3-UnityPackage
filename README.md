@@ -7,9 +7,9 @@ This is the main MinVR3 library for Unity distributed as a Unity package.
 ## Use Unity's package manager to add MinVR3 to your project
 1. Open your Unity project.
 2. Go to Window -> Package Manager.
-3. Click the ```+``` button
+3. Click the ```+``` button on the top left
 4. Select ```Add package from git URL```
-5. Paste ```[https://github.com/ivlab/MinVR3-UnityPackage.git](https://github.com/ivlab/MinVR3-UnityPackage.git)``` for the latest package
+5. Paste ```https://github.com/ivlab/MinVR3-UnityPackage.git``` for the latest package
 6. Repeat steps 2-4 for any MinVR3 Plugins IF you would like to use the functionality they provide.
 
 ## Additional functionality from plugins
