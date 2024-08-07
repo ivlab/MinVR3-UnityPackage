@@ -13,7 +13,7 @@ namespace IVLab.MinVR3
     /// to do anything. See https://github.umn.edu/ivlab-cs/sound_server for
     /// details on the sound server.
     /// </summary>
-    [AddComponentMenu("MinVR3/Audio/Spatial Audio Client")]
+    [AddComponentMenu("MinVR/Audio/Spatial Audio Client")]
     [DefaultExecutionOrder(ScriptPriority)]
     public class SpatialAudioClient : MonoBehaviour
     {
