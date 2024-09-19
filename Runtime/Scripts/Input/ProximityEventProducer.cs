@@ -51,11 +51,20 @@ namespace IVLab.MinVR3
             if (m_HaveData1 && m_HaveData2) {
                 if (!m_InProximity) {
                     if ((m_Pos2 - m_Pos1).magnitude < m_ProximityThreshold) {
+                        if (m_RequireToken != null) {
+                            bool canGetToken = m_RequireToken.RequestToken(this);
+                            if (!canGetToken) {
+                                return;
+                            }
+                        }
                         VREngine.Instance.eventManager.InsertInQueue(new VREvent(m_BaseEventName + "/Close"));
                         m_InProximity = true;
                     }
                 } else {
                     if ((m_Pos2 - m_Pos1).magnitude > m_ProximityThreshold) {
+                        if ((m_RequireToken != null) && m_RequireToken.HasToken(this)) {
+                            m_RequireToken.ReleaseToken(this);
+                        }
                         VREngine.Instance.eventManager.InsertInQueue(new VREvent(m_BaseEventName + "/Far"));
                         m_InProximity = false;
                     }
@@ -85,6 +94,7 @@ namespace IVLab.MinVR3
         [SerializeField] private VREventPrototypeVector3 m_PositionEvent2;
         [SerializeField] private float m_ProximityThreshold;
         [SerializeField] private string m_BaseEventName;
+        [SerializeField] private SharedToken m_RequireToken;
 
         private Vector3 m_Pos1;
         private bool m_HaveData1;
