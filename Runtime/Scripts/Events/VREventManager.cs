@@ -179,12 +179,14 @@ namespace IVLab.MinVR3
         public void ProcessEventQueue()
         {
             lock (m_Queue) {
-                foreach (VREvent e in m_Queue) {
+                for (int i = 0; i < m_Queue.Count; i++) {
+                    VREvent e = m_Queue[i];
                     ProcessEvent(e);
 
                     // if processing caused any derived events to be inserted
                     // in the queue process them right away
-                    foreach (VREvent eDerived in m_DerivedQueue) {
+                    for (int j = 0; j < m_DerivedQueue.Count; j++) {
+                        VREvent eDerived = m_DerivedQueue[j];
                         ProcessEvent(eDerived);
                     }
                     m_DerivedQueue.Clear();                    
