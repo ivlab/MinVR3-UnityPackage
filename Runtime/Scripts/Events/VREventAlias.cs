@@ -33,7 +33,7 @@ namespace IVLab.MinVR3
 
         void OnEnable()
         {
-            VREngine.Instance.eventManager.AddEventFilter(this);
+            VREngine.Instance.eventManager.AddEventFilter(this, VREventManager.EventAliasFilterPriority);
         }
 
         void OnDisable()

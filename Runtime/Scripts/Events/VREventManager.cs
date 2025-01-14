@@ -19,6 +19,9 @@ namespace IVLab.MinVR3
 
         public const int DefaultListenerPriority = 10;
 
+        public const int EventAliasFilterPriority = 10;
+        public const int DefaultFilterPriority = 20;
+
 
         private void Reset()
         {
@@ -53,41 +56,23 @@ namespace IVLab.MinVR3
             m_EventListeners.RemoveAt(index);
         }
 
-        public void AddEventFilter(IVREventFilter filter)
-        {
-            if (!m_EventFilters.Contains(filter)) {
-                m_EventFilters.Add(filter);
-                int maxPriority = 0;
-                try { maxPriority = m_EventFilterPriorities.Max(); }
-                catch (InvalidOperationException) { }
-                m_EventFilterPriorities.Add(maxPriority + 1);
-            }
-        }
-
         /// <summary>
         /// Add an event filter and specify the priority (index) with which it
         /// should be run relative to other event filters.
         /// </summary>
-        public void AddEventFilter(IVREventFilter filter, int priority)
+        public void AddEventFilter(IVREventFilter filter, int priority = DefaultFilterPriority)
         {
-            int insertPriority = m_EventFilterPriorities.FindIndex(p => p >= priority);
-            if (!m_EventFilters.Contains(filter)) {
-                if (insertPriority >= 0)
-                {
-                    m_EventFilters.Insert(insertPriority, filter);
-                    m_EventFilterPriorities.Insert(insertPriority, priority);
-                }
-                else
-                {
-                    m_EventFilters.Add(filter);
-                    m_EventFilterPriorities.Add(priority);
-                }
+            int index = m_EventFilters.FindIndex(entry => entry.Item2 == filter);
+            if (index == -1) {
+                m_EventFilters.Add(new Tuple<int, IVREventFilter>(priority, filter));
+                m_EventFilters.Sort((a, b) => a.Item1.CompareTo(b.Item1));
             }
         }
 
         public void RemoveEventFilter(IVREventFilter filter)
         {
-            m_EventFilters.Remove(filter);
+            int index = m_EventFilters.FindIndex(entry => entry.Item2 == filter);
+            m_EventFilters.RemoveAt(index);
         }
 
         public void QueueEvent(VREvent e)
@@ -132,25 +117,58 @@ namespace IVLab.MinVR3
             }
         }
 
+        List<VREvent> RunEventFilters(List<VREvent> inList)
+        {
+            List<VREvent> outList = new List<VREvent>();
+            foreach (Tuple<int, IVREventFilter> priorityAndFilter in m_EventFilters) {
+                IVREventFilter filter = priorityAndFilter.Item2;
+                foreach (VREvent e in inList) {
+                    List<VREvent> filterResult = new List<VREvent>();
+                    if (filter.FilterEvent(e, ref filterResult)) {
+                        // replace the event at eIndex with result
+                        outList.AddRange(filterResult);
+                    } else {
+                        outList.Add(e);
+                    }
+                }
+                inList = outList;
+                outList = new List<VREvent>();
+            }
+            return outList;
+        }
+
         List<VREvent> RunEventFilters(VREvent e)
         {
-            List<VREvent> resultAll = new List<VREvent>();
-            bool caught = false;
-            foreach (IVREventFilter filter in m_EventFilters) {
-                // if a filter does catch the event, then it decides what to return as a result.
-                // it could return the same event but with a new name, or the same event plus an
-                // additional new event or it could consume the event and return nothing, etc.
-                List<VREvent> result = new List<VREvent>();
-                if (filter.FilterEvent(e, ref result)) {
-                    caught = true;
-                    resultAll.AddRange(result);
+            // put the input in a list because filtering a single event can result in 0 or more events
+            List<VREvent> inList = new List<VREvent>();
+            inList.Add(e);
+
+            if (m_EventFilters.Count == 0) {
+                return inList;
+            } else {
+                // loop through each filter in order, note filters are already sorted by priority
+                List<VREvent> outList = new List<VREvent>();
+                foreach (Tuple<int, IVREventFilter> priorityAndFilter in m_EventFilters) {
+                    IVREventFilter filter = priorityAndFilter.Item2;
+
+                    // run the filter on each event in inList, saving the results in outList
+                    outList = new List<VREvent>();
+                    foreach (VREvent eInList in inList) {
+                        List<VREvent> filterResult = new List<VREvent>();
+                        if (filter.FilterEvent(eInList, ref filterResult)) {
+                            // replace the event at eIndex with result
+                            outList.AddRange(filterResult);
+                        } else {
+                            // filter did not change the event, just copy over the result
+                            outList.Add(eInList);
+                        }
+                    }
+
+                    // use the output of this filter as the input to the next
+                    inList = outList;
                 }
+                return outList;
             }
-            if (!caught) {
-                // if no filters caught the event, then pass it through unmodified
-                resultAll.Add(e);
-            }
-            return resultAll;
         }
 
         public void ProcessEvent(VREvent e)
@@ -289,8 +307,7 @@ namespace IVLab.MinVR3
         // These lists are populated at runtime as other objects register with the manager
         [NonSerialized] private List<IPolledInputDevice> m_PolledInputDevices = new List<IPolledInputDevice>();
         [NonSerialized] private List<Tuple<int, IVREventListener>> m_EventListeners = new List<Tuple<int, IVREventListener>>();
-        [NonSerialized] private List<IVREventFilter> m_EventFilters = new List<IVREventFilter>();
-        [NonSerialized] private List<int> m_EventFilterPriorities = new List<int>();
+        [NonSerialized] private List<Tuple<int, IVREventFilter>> m_EventFilters = new List<Tuple<int, IVREventFilter>>();
         [NonSerialized] private List<VREvent> m_Queue = new List<VREvent>();
         [NonSerialized] private List<VREvent> m_DerivedQueue = new List<VREvent>();
 
