@@ -41,10 +41,10 @@ namespace IVLab.MinVR3
                 } else if (m_ButtonDownThreshold > m_ButtonUpThreshold) {
                     // float values increase when the button is down
                     float curValue = e.GetData<float>();
-                    if ((lastValue < m_ButtonDownThreshold) && (curValue > m_ButtonDownThreshold)) {
+                    if ((lastValue < m_ButtonDownThreshold) && (curValue >= m_ButtonDownThreshold)) {
                         // got a button down
                         VREngine.Instance.eventManager.InsertInQueue(new VREvent(m_ButtonDownEventName));
-                    } else if ((lastValue > m_ButtonUpThreshold) && (curValue < m_ButtonUpThreshold)) {
+                    } else if ((lastValue > m_ButtonUpThreshold) && (curValue <= m_ButtonUpThreshold)) {
                         // got a button up
                         VREngine.Instance.eventManager.InsertInQueue(new VREvent(m_ButtonUpEventName));
                     }
@@ -52,10 +52,10 @@ namespace IVLab.MinVR3
                 } else if (m_ButtonDownThreshold < m_ButtonUpThreshold) {
                     // reverse the logic, float values decrease when the button is down
                     float curValue = e.GetData<float>();
-                    if ((lastValue > m_ButtonDownThreshold) && (curValue < m_ButtonDownThreshold)) {
+                    if ((lastValue > m_ButtonDownThreshold) && (curValue <= m_ButtonDownThreshold)) {
                         // got a button down
                         VREngine.Instance.eventManager.InsertInQueue(new VREvent(m_ButtonDownEventName));
-                    } else if ((lastValue < m_ButtonUpThreshold) && (curValue > m_ButtonUpThreshold)) {
+                    } else if ((lastValue < m_ButtonUpThreshold) && (curValue >= m_ButtonUpThreshold)) {
                         // got a button up
                         VREngine.Instance.eventManager.InsertInQueue(new VREvent(m_ButtonUpEventName));
                     }
