@@ -15,6 +15,8 @@ namespace IVLab.MinVR3
             m_ButtonUpEventName = "MyButton/Up";
             m_ButtonDownThreshold = 1.0f;
             m_ButtonUpThreshold = 0.0f;
+            m_GenerateNormalizedFloatEvent = true;
+            m_NormalizedFloatEventName = "MyNormalizedFloatValue";
         }
 
         void Start()
@@ -35,10 +37,12 @@ namespace IVLab.MinVR3
         public void OnVREvent(VREvent e)
         {
             if (e.Matches(m_FloatEvent)) {
+                bool floatIncreasesWhenDown = m_ButtonDownThreshold >= m_ButtonUpThreshold;
+
                 if (lastValue == float.NaN) {
                     // initialization
                     lastValue = e.GetData<float>();
-                } else if (m_ButtonDownThreshold > m_ButtonUpThreshold) {
+                } else if (floatIncreasesWhenDown) {
                     // float values increase when the button is down
                     float curValue = e.GetData<float>();
                     if ((lastValue < m_ButtonDownThreshold) && (curValue >= m_ButtonDownThreshold)) {
@@ -49,7 +53,7 @@ namespace IVLab.MinVR3
                         VREngine.Instance.eventManager.InsertInQueue(new VREvent(m_ButtonUpEventName));
                     }
                     lastValue = curValue;
-                } else if (m_ButtonDownThreshold < m_ButtonUpThreshold) {
+                } else {
                     // reverse the logic, float values decrease when the button is down
                     float curValue = e.GetData<float>();
                     if ((lastValue > m_ButtonDownThreshold) && (curValue <= m_ButtonDownThreshold)) {
@@ -61,6 +65,16 @@ namespace IVLab.MinVR3
                     }
                     lastValue = curValue;
                 }
+
+                if (m_GenerateNormalizedFloatEvent)
+                {
+                    float min = floatIncreasesWhenDown ? m_ButtonUpThreshold : m_ButtonDownThreshold;
+                    float max = floatIncreasesWhenDown ? m_ButtonDownThreshold : m_ButtonUpThreshold;
+                    float normalizedValue = Mathf.Clamp((e.GetData<float>() - min) / (max - min), 0, 1);
+                    VREngine.Instance.eventManager.InsertInQueue(
+                        new VREventFloat(m_NormalizedFloatEventName, normalizedValue)
+                    );
+                }
             }
         }
 
@@ -69,6 +83,10 @@ namespace IVLab.MinVR3
             List<IVREventPrototype> eventPrototypes = new List<IVREventPrototype>();
             eventPrototypes.Add(VREventPrototype.Create(m_ButtonDownEventName));
             eventPrototypes.Add(VREventPrototype.Create(m_ButtonUpEventName));
+            if (m_GenerateNormalizedFloatEvent)
+            {
+                eventPrototypes.Add(VREventPrototypeFloat.Create(m_NormalizedFloatEventName));
+            }
             return eventPrototypes;
         }
 
@@ -96,6 +114,14 @@ namespace IVLab.MinVR3
 
         [Tooltip("The threshold that must be passed for the button up event to be generated.")]
         [SerializeField] private float m_ButtonUpThreshold;
+
+
+        [Tooltip("If true, generates a new VREvent whenever the float event being listened for is" +
+			"received but normalizes the original float data value to a new range 0..1 based on" +
+			"the buttonDown and buttonUp thresholds.")]
+        [SerializeField] private bool m_GenerateNormalizedFloatEvent;
+        [Tooltip("The name of the new VREvent to generate when Generate Normalized Float Event is true.")]
+        [SerializeField] private string m_NormalizedFloatEventName;
 
         private float lastValue = float.NaN;
     }
