@@ -94,6 +94,12 @@ namespace IVLab.MinVR3
 
         // LOCAL TO WORLD
 
+        public static float LocalLengthToWorldSpace(this Transform t, float localLength)
+        {
+            // assumes uniform scale between t and world
+            return t.LocalVectorToWorldSpace(new Vector3(localLength, 0, 0)).magnitude;
+        }
+
         public static Vector3 LocalPointToWorldSpace(this Transform t, Vector3 localPoint)
         {
             return t.TransformPoint(localPoint);
@@ -109,8 +115,26 @@ namespace IVLab.MinVR3
             return t.TransformDirection(localDirection);
         }
 
+        public static Quaternion LocalRotationToWorldSpace(this Transform t, Quaternion localRotation)
+        {
+            // TODO: Test this
+            Quaternion R = localRotation;
+            Transform p = t;
+            while (p) {
+                R = p.localRotation * R;
+                p = p.parent;
+            }
+            return R;
+        }
+
 
         // WORLD TO LOCAL
+
+        public static float WorldLengthToLocalSpace(this Transform t, float worldLength)
+        {
+            // assumes uniform scale between t and world
+            return t.WorldVectorToLocalSpace(new Vector3(worldLength, 0, 0)).magnitude;
+        }
 
         public static Vector3 WorldPointToLocalSpace(this Transform t, Vector3 worldPoint)
         {
@@ -127,8 +151,21 @@ namespace IVLab.MinVR3
             return t.InverseTransformDirection(worldDirection);
         }
 
+        public static Quaternion WorldRotationToLocalSpace(this Transform t, Quaternion worldRotation)
+        {
+            // TODO: Test this
+            return Quaternion.Inverse(t.rotation) * worldRotation;
+        }
+
 
         // LOCAL TO PARENT
+
+        public static float LocalLengthToParentSpace(this Transform t, float localLength)
+        {
+            // assumes uniform scale between t and parent
+            Debug.Assert(t.parent != null, "The transform must have a parent");
+            return t.LocalVectorToParentSpace(new Vector3(localLength, 0, 0)).magnitude;
+        }
 
         public static Vector3 LocalPointToParentSpace(this Transform t, Vector3 localPoint)
         {
@@ -148,8 +185,24 @@ namespace IVLab.MinVR3
             return t.parent.InverseTransformDirection(t.TransformDirection(localDirection));
         }
 
+        public static Quaternion LocalRotationToParentSpace(this Transform t, Quaternion localRotation)
+        {
+            // TODO: Test this
+            Quaternion R = t.localRotation * localRotation;
+            if (t.parent) {
+                R = t.parent.localRotation * R;
+            }
+            return R;
+        }
+
 
         // PARENT TO LOCAL
+
+        public static float ParentLengthToLocalSpace(this Transform t, float parentLength)
+        {
+            // assumes uniform scale between t and world
+            return t.ParentVectorToLocalSpace(new Vector3(parentLength, 0, 0)).magnitude;
+        }
 
         public static Vector3 ParentPointToLocalSpace(this Transform t, Vector3 parentPoint)
         {
@@ -169,6 +222,13 @@ namespace IVLab.MinVR3
             return t.InverseTransformDirection(t.parent.TransformDirection(parentDirection));
         }
 
+        public static Quaternion ParentRotationToLocalSpace(this Transform t, Quaternion parentRotation)
+        {
+            // TODO: Test this
+            Debug.Assert(t.parent != null, "The transform must have a parent");
+            return Quaternion.Inverse(t.localRotation) * parentRotation;
+        }
+
 
 
         // Note: The functions above are useful in any Unity program.  Below this point, they are
@@ -176,6 +236,12 @@ namespace IVLab.MinVR3
         // is marked as the root of Room Space by attaching a RoomSpaceOrigin component.
 
         // LOCAL TO ROOM (MINVR SPECIFIC)
+
+        public static float LocalLengthToRoomSpace(this Transform t, float localLength)
+        {
+            IVLab.MinVR3.RoomSpaceOrigin roomSpaceOrigin = IVLab.MinVR3.VREngine.instance.roomSpaceOrigin;
+            return roomSpaceOrigin.WorldLengthToRoomSpace(t.LocalLengthToWorldSpace(localLength));
+        }
 
         public static Vector3 LocalPointToRoomSpace(this Transform t, Vector3 localPoint)
         {
@@ -195,8 +261,20 @@ namespace IVLab.MinVR3
             return roomSpaceOrigin.WorldDirectionToRoomSpace(t.TransformDirection(localDirection));
         }
 
+        public static Quaternion LocalRotationToRoomSpace(this Transform t, Quaternion localRotation)
+        {
+            IVLab.MinVR3.RoomSpaceOrigin roomSpaceOrigin = IVLab.MinVR3.VREngine.instance.roomSpaceOrigin;
+            return roomSpaceOrigin.WorldRotationToRoomSpace(t.LocalRotationToWorldSpace(localRotation));
+        }
+
 
         // ROOM TO LOCAL (MINVR SPECIFIC)
+
+        public static float RoomLengthToLocalSpace(this Transform t, float roomLength)
+        {
+            IVLab.MinVR3.RoomSpaceOrigin roomSpaceOrigin = IVLab.MinVR3.VREngine.instance.roomSpaceOrigin;
+            return t.WorldLengthToLocalSpace(roomSpaceOrigin.RoomLengthToWorldSpace(roomLength));
+        }
 
         public static Vector3 RoomPointToLocalSpace(this Transform t, Vector3 roomPoint)
         {
@@ -215,6 +293,13 @@ namespace IVLab.MinVR3
             IVLab.MinVR3.RoomSpaceOrigin roomSpaceOrigin = IVLab.MinVR3.VREngine.instance.roomSpaceOrigin;
             return t.InverseTransformDirection(roomSpaceOrigin.RoomDirectionToWorldSpace(roomDirection));
         }
+
+        public static Quaternion RoomRotationToLocalSpace(this Transform t, Quaternion roomRotation)
+        {
+            IVLab.MinVR3.RoomSpaceOrigin roomSpaceOrigin = IVLab.MinVR3.VREngine.instance.roomSpaceOrigin;
+            return t.WorldRotationToLocalSpace(roomSpaceOrigin.RoomRotationToWorldSpace(roomRotation));
+        }
+
     }
 
 }

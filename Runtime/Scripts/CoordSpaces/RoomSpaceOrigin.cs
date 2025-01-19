@@ -8,6 +8,12 @@ namespace IVLab.MinVR3
     public class RoomSpaceOrigin : MonoBehaviour
     {
 
+        public float RoomLengthToWorldSpace(float roomLength)
+        {
+            // assumes uniform scale between room and world, which is probably always true
+            return transform.LocalLengthToWorldSpace(roomLength);
+        }
+
         public Vector3 RoomPointToWorldSpace(Vector3 roomPoint)
         {
             return transform.LocalPointToWorldSpace(roomPoint);
@@ -23,6 +29,17 @@ namespace IVLab.MinVR3
             return transform.LocalDirectionToWorldSpace(roomDirection);
         }
 
+        public Quaternion RoomRotationToWorldSpace(Quaternion roomRotation)
+        {
+            return transform.LocalRotationToWorldSpace(roomRotation);
+        }
+
+
+        public float WorldLengthToRoomSpace(float worldLength)
+        {
+            // assumes uniform scale between room and world, which is probably always true
+            return transform.WorldLengthToLocalSpace(worldLength);
+        }
 
         public Vector3 WorldPointToRoomSpace(Vector3 worldPoint)
         {
@@ -37,6 +54,11 @@ namespace IVLab.MinVR3
         public Vector3 WorldDirectionToRoomSpace(Vector3 worldDirection)
         {
             return transform.WorldDirectionToLocalSpace(worldDirection);
+        }
+
+        public Quaternion WorldRotationToRoomSpace(Quaternion worldRotation)
+        {
+            return transform.WorldRotationToLocalSpace(worldRotation);
         }
 
     }
