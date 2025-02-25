@@ -14,6 +14,7 @@ namespace IVLab.MinVR3
             m_StateMachine = (FSM)target;
 
             m_StartStateProp = serializedObject.FindProperty("m_StartState");
+            m_EventListenerPriorityProp = serializedObject.FindProperty("m_EventListenerPriority");
             m_DebugProp = serializedObject.FindProperty("m_Debug");
 
             m_StateNamesProp = serializedObject.FindProperty("m_StateNames");
@@ -42,6 +43,9 @@ namespace IVLab.MinVR3
             // GENERAL 
 
             m_StartStateProp.intValue = EditorGUILayout.IntPopup(new GUIContent("Start State", "One state must be identified as the default/initial state"), m_StartStateProp.intValue, stateDisplayNames, stateIDs);
+
+            EditorGUILayout.PropertyField(m_EventListenerPriorityProp, new GUIContent("FSM EventListener Priority",
+                "The FSM is registered with the VREventManager using this priority value (default = 10)."));
 
             EditorGUILayout.PropertyField(m_DebugProp, new GUIContent("Debug Log", "Logs state transitions and OnEnter(), OnTrigger(), and OnExit() functions called"));
 
@@ -175,6 +179,7 @@ namespace IVLab.MinVR3
         private SerializedProperty m_ArcReleaseTokensProp;
         private SerializedProperty m_ArcGuardsProp;
 
+        private SerializedProperty m_EventListenerPriorityProp;
         private SerializedProperty m_DebugProp;
 
         private List<bool> m_StateExpanded = new List<bool>();

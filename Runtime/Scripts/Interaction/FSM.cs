@@ -26,7 +26,13 @@ namespace IVLab.MinVR3
 
             AddState("START");
             m_StartState = 0;
+            m_EventListenerPriority = VREventManager.DefaultListenerPriority;
             m_Debug = false;
+        }
+
+        private void Start()
+        {
+            m_Listening = false;
         }
 
         private void OnEnable()
@@ -261,12 +267,14 @@ namespace IVLab.MinVR3
 
         public void StartListening()
         {
-            VREngine.Instance.eventManager.AddEventListener(this);
+            VREngine.Instance.eventManager.AddEventListener(this, m_EventListenerPriority);
+            m_Listening = true;
         }
 
         public void StopListening()
         {
             VREngine.Instance?.eventManager?.RemoveEventListener(this);
+            m_Listening = false;
         }
 
 
@@ -293,9 +301,21 @@ namespace IVLab.MinVR3
         [SerializeField] private bool m_Debug = false;
         public bool DebugMode { get => m_Debug; set => m_Debug = value; }
 
+        [SerializeField] private int m_EventListenerPriority = VREventManager.DefaultListenerPriority;
+        public int eventListenerPriority {
+            get => m_EventListenerPriority;
+            set {
+                m_EventListenerPriority = value;
+                if (m_Listening) {
+                    StopListening();
+                    StartListening();
+                }
+            }
+        }
 
         // RUNTIME ONLY
         private int m_CurrentState;
+        private bool m_Listening;
     }
 
 } // end namespace

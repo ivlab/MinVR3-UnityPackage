@@ -61,7 +61,14 @@ namespace IVLab.MinVR3
             }
 
             foreach (var cfg in availableConfigs) {
-                cfg.gameObject.SetActive(cfg == m_StartupVRConfig);
+                // dfk 2/19/25: this check seems to not always work--i'm seeing it fail with
+                // VRConfig_VRSimulator and VRConfig_Quest where VRConfig_Quest is a prefab.  Perhaps
+                // the problem is that one is a prefab. Regardless, for command-line selection of
+                // VRConfigs to work, they must have a unique name.  So, it seems ok to change the
+                // check to use the name instead, and that seems to work fine.
+                //cfg.gameObject.SetActive(cfg == m_StartupVRConfig);
+
+                cfg.gameObject.SetActive(cfg.name == m_StartupVRConfig.name);
             }
 
             VRConfigMask[] objectsWithConfigMask = Resources.FindObjectsOfTypeAll<VRConfigMask>();
