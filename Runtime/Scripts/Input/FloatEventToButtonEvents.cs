@@ -13,8 +13,8 @@ namespace IVLab.MinVR3
             m_FloatEvent = new VREventPrototypeFloat();
             m_ButtonDownEventName = "MyButton/Down";
             m_ButtonUpEventName = "MyButton/Up";
-            m_ButtonDownThreshold = 1.0f;
-            m_ButtonUpThreshold = 0.0f;
+            m_ButtonDownThreshold = 1.0f;  // maximum value reported by the float event used to normalize the pressure to 0..1 range
+            m_ButtonUpThreshold = 0.0f; // threshold for down/up events (0 unless the trigger is a little skicky and doesn't report 0 exactly when it's off)
             m_GenerateNormalizedFloatEvent = true;
             m_NormalizedFloatEventName = "MyNormalizedFloatValue";
         }
