@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Codice.Client.Common;
 using UnityEngine;
 
 namespace IVLab.MinVR3
@@ -11,12 +12,13 @@ namespace IVLab.MinVR3
         void Reset()
         {
             m_FloatEvent = new VREventPrototypeFloat();
-            m_ButtonDownEventName = "MyButton/Down";
-            m_ButtonUpEventName = "MyButton/Up";
-            m_ButtonDownThreshold = 1.0f;  // maximum value reported by the float event used to normalize the pressure to 0..1 range
-            m_ButtonUpThreshold = 0.0f; // threshold for down/up events (0 unless the trigger is a little skicky and doesn't report 0 exactly when it's off)
+            m_ButtonDownEventName = "_Tool/FirstBtn/Down";
+            m_ButtonUpEventName = "_Tool/FirstBtn/Up";
+            m_MinFloatValue = 0.0f;
+            m_MaxFloatValue = 1.0f;
+            m_ThresholdValue = 0.1f;
             m_GenerateNormalizedFloatEvent = true;
-            m_NormalizedFloatEventName = "MyNormalizedFloatValue";
+            m_NormalizedFloatEventName = "_Tool/FirstBtn/NormalizedValue";
         }
 
         void Start()
@@ -25,7 +27,7 @@ namespace IVLab.MinVR3
 
         void OnEnable()
         {
-            Debug.Assert(m_ButtonDownThreshold != m_ButtonUpThreshold);
+            Debug.Assert(m_MaxFloatValue != m_ThresholdValue);
             StartListening();
         }
 
@@ -37,29 +39,15 @@ namespace IVLab.MinVR3
         public void OnVREvent(VREvent e)
         {
             if (e.Matches(m_FloatEvent)) {
-                bool floatIncreasesWhenDown = m_ButtonDownThreshold >= m_ButtonUpThreshold;
-
                 if (lastValue == float.NaN) {
                     // initialization
                     lastValue = e.GetData<float>();
-                } else if (floatIncreasesWhenDown) {
-                    // float values increase when the button is down
-                    float curValue = e.GetData<float>();
-                    if ((lastValue < m_ButtonDownThreshold) && (curValue >= m_ButtonDownThreshold)) {
-                        // got a button down
-                        VREngine.Instance.eventManager.InsertInQueue(new VREvent(m_ButtonDownEventName));
-                    } else if ((lastValue > m_ButtonUpThreshold) && (curValue <= m_ButtonUpThreshold)) {
-                        // got a button up
-                        VREngine.Instance.eventManager.InsertInQueue(new VREvent(m_ButtonUpEventName));
-                    }
-                    lastValue = curValue;
                 } else {
-                    // reverse the logic, float values decrease when the button is down
                     float curValue = e.GetData<float>();
-                    if ((lastValue > m_ButtonDownThreshold) && (curValue <= m_ButtonDownThreshold)) {
+                    if ((lastValue < m_ThresholdValue) && (curValue >= m_ThresholdValue)) {
                         // got a button down
                         VREngine.Instance.eventManager.InsertInQueue(new VREvent(m_ButtonDownEventName));
-                    } else if ((lastValue < m_ButtonUpThreshold) && (curValue >= m_ButtonUpThreshold)) {
+                    } else if ((lastValue > m_ThresholdValue) && (curValue <= m_ThresholdValue)) {
                         // got a button up
                         VREngine.Instance.eventManager.InsertInQueue(new VREvent(m_ButtonUpEventName));
                     }
@@ -68,13 +56,14 @@ namespace IVLab.MinVR3
 
                 if (m_GenerateNormalizedFloatEvent)
                 {
-                    float min = floatIncreasesWhenDown ? m_ButtonUpThreshold : m_ButtonDownThreshold;
-                    float max = floatIncreasesWhenDown ? m_ButtonDownThreshold : m_ButtonUpThreshold;
+                    float min = m_MinFloatValue;
+                    float max = m_MaxFloatValue;
                     float normalizedValue = Mathf.Clamp((e.GetData<float>() - min) / (max - min), 0, 1);
                     VREngine.Instance.eventManager.InsertInQueue(
                         new VREventFloat(m_NormalizedFloatEventName, normalizedValue)
                     );
                 }
+            
             }
         }
 
@@ -103,17 +92,25 @@ namespace IVLab.MinVR3
         [Tooltip("The VREventFloat to listen for.")]
         [SerializeField] private VREventPrototypeFloat m_FloatEvent;
 
-        [Tooltip("The name of the button down event to generate when the VREventFloat passes the button down threshold.")]
+        [Tooltip("The name of the button down event to generate when the VREventFloat first becomes greater than the threshold")]
         [SerializeField] private string m_ButtonDownEventName;
 
-        [Tooltip("The threshold that must be passed for the button down event to be generated.")]
-        [SerializeField] private float m_ButtonDownThreshold;
 
-        [Tooltip("The name of the button up event to generate when the VREventFloat passes the button up threshold.")]
+        [Tooltip("The name of the button up event to generate when the VREventFloat first becomes less than the threshold.")]
         [SerializeField] private string m_ButtonUpEventName;
 
-        [Tooltip("The threshold that must be passed for the button up event to be generated.")]
-        [SerializeField] private float m_ButtonUpThreshold;
+
+        [Tooltip("The min value of the float event for normalizing the value, i.e., when the float value equals this number the " +
+        "normalized version of the event will be 0.0.")]
+        [SerializeField] private float m_MinFloatValue;
+
+        [Tooltip("The max value of the float event for normalizing the value, i.e., when the float value equals this number the " +
+        "normalized version of the event will be 1.0.")]
+        [SerializeField] private float m_MaxFloatValue;
+
+
+        [Tooltip("The threshold that must be passed for the button up event to be generated. This should be as close to the min value as possible or even equal to the min value if the sensor doesn't have any noise.")]
+        [SerializeField] private float m_ThresholdValue;
 
 
         [Tooltip("If true, generates a new VREvent whenever the float event being listened for is" +
