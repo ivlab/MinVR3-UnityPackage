@@ -10,7 +10,7 @@ namespace IVLab.MinVR3
     {
         void Reset()
         {
-            m_FloatEvent = new VREventPrototypeFloat();
+            m_FloatEvent = new VREventPrototypeAny();
             m_ButtonDownEventName = "_Tool/FirstBtn/Down";
             m_ButtonUpEventName = "_Tool/FirstBtn/Up";
             m_MinFloatValue = 0.0f;
@@ -20,8 +20,16 @@ namespace IVLab.MinVR3
             m_NormalizedFloatEventName = "_Tool/FirstBtn/NormalizedValue";
         }
 
-        void Start()
+        public void Init(string floatEventName, string buttonDownEventName, string buttonUpEventName, float minFloatValue, float maxFloatValue, float thresholdValue, bool generateNormalizedFloatEvent, string normalizedFloatEventName)
         {
+            m_FloatEvent = VREventPrototypeAny.Create(floatEventName);
+            m_ButtonDownEventName = buttonDownEventName;
+            m_ButtonUpEventName = buttonUpEventName;
+            m_MinFloatValue = minFloatValue;
+            m_MaxFloatValue = maxFloatValue;
+            m_ThresholdValue = thresholdValue;
+            m_GenerateNormalizedFloatEvent = generateNormalizedFloatEvent;
+            m_NormalizedFloatEventName = normalizedFloatEventName;
         }
 
         void OnEnable()
@@ -89,7 +97,7 @@ namespace IVLab.MinVR3
         }
 
         [Tooltip("The VREventFloat to listen for.")]
-        [SerializeField] private VREventPrototypeFloat m_FloatEvent;
+        [SerializeField] private VREventPrototypeAny m_FloatEvent;
 
         [Tooltip("The name of the button down event to generate when the VREventFloat first becomes greater than the threshold")]
         [SerializeField] private string m_ButtonDownEventName;

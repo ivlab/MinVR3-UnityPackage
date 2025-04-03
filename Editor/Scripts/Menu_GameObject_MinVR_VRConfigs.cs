@@ -73,6 +73,7 @@ namespace IVLab.MinVR3
 
             Camera c = displayDevicesChild.AddComponent<Camera>();
             c.transform.position = defaultCameraPosition;
+            c.stereoTargetEye = StereoTargetEyeMask.None;  // Need to be "None" to display tracker's position correctly on MacOS computers
             c.tag = "MainCamera";
             TrackedDesktopCamera trackedDesktopCamera = displayDevicesChild.AddComponent<TrackedDesktopCamera>();
             trackedDesktopCamera.positionEvent = VREventPrototypeVector3.Create("FakeTrackers/Head/Position");
@@ -114,6 +115,57 @@ namespace IVLab.MinVR3
             MenuHelpers.AddButtonAliases(eventAliasesChild, "DH", "UnityXR/RightHand/Trigger");
             MenuHelpers.AddTrackingAliases(eventAliasesChild, "NDH", "UnityXR/LeftHand");
             MenuHelpers.AddButtonAliases(eventAliasesChild, "NDH", "UnityXR/LeftHand/Trigger");
+        }
+        
+        // This functionality is only available in projects using Unity's New Input System
+        [MenuItem("GameObject/MinVR/VRConfig/VRConfig_Quest (Meta Quest 1, 2, or 3)", false, MenuHelpers.vrConfigSec2Priority)]
+        public static void CreateVRConfigQuest(MenuCommand command)
+        {
+            MenuHelpers.CreateVREngineIfNeeded();
+            MenuHelpers.CreateRoomSpaceOriginIfNeeded();
+
+            GameObject inputDevicesChild = null;
+            GameObject displayDevicesChild = null;
+            GameObject eventAliasesChild = null;
+            GameObject vrConfigObj = MenuHelpers.CreateVRConfigTemplate(command, "Quest", ref inputDevicesChild, ref displayDevicesChild, ref eventAliasesChild);
+
+            inputDevicesChild.AddComponent<UnityXR>();
+
+            Camera c = displayDevicesChild.AddComponent<Camera>();
+            c.transform.position = defaultCameraPosition;
+            c.stereoTargetEye = StereoTargetEyeMask.Both;
+            c.tag = "MainCamera";
+            TrackedPoseDriver poseDriver = displayDevicesChild.AddComponent<TrackedPoseDriver>();
+            poseDriver.positionEvent = VREventPrototypeVector3.Create("UnityXR/Head/Position");
+            poseDriver.rotationEvent = VREventPrototypeQuaternion.Create("UnityXR/Head/Rotation");
+
+            GameObject eventAliasesHead = new GameObject("Head");
+            GameObject eventAliasesDH = new GameObject("DH");
+            GameObject eventAliasesNDH = new GameObject("NDH");
+            eventAliasesHead.transform.SetParent(eventAliasesChild.transform);
+            eventAliasesDH.transform.SetParent(eventAliasesChild.transform);
+            eventAliasesNDH.transform.SetParent(eventAliasesChild.transform);
+
+            MenuHelpers.AddTrackingAliases(eventAliasesHead, "Head", "UnityXR/Head");
+
+            CreateQuestHandAliases(eventAliasesDH, "DH", "UnityXR/RightHand");
+            CreateQuestHandAliases(eventAliasesNDH, "NDH", "UnityXR/LeftHand");
+        }
+
+        static void CreateQuestHandAliases(GameObject aliasGO, string handAliasBaseName="DH", string origEventBaseName="UnityXR/RightHand")
+        {
+            MenuHelpers.AddQuestTrackingAliases(aliasGO, handAliasBaseName, origEventBaseName);
+
+            VREventAlias button1Alias = MenuHelpers.AddButtonAlias(aliasGO, handAliasBaseName + "/Button1/Value", origEventBaseName + "/Trigger/Value");
+            FloatEventToButtonEvents handButton1FloatEvent = aliasGO.AddComponent<FloatEventToButtonEvents>();
+            handButton1FloatEvent.Init(button1Alias.aliasEventName, handAliasBaseName + "/Button1/Down", handAliasBaseName + "/Button1/Up", 0.0f, 1.0f, 0.1f, true, handAliasBaseName + "/Button1/NormalizedValue");
+            
+            VREventAlias button2Alias = MenuHelpers.AddButtonAlias(aliasGO, handAliasBaseName + "/Button2/Value", origEventBaseName + "/Grip/Value");
+            FloatEventToButtonEvents handButton2FloatEvent = aliasGO.AddComponent<FloatEventToButtonEvents>();
+            handButton2FloatEvent.Init(button2Alias.aliasEventName, handAliasBaseName + "/Button2/Down", handAliasBaseName + "/Button2/Up", 0.0f, 1.0f, 0.1f, true, handAliasBaseName + "/Button2/NormalizedValue");
+            
+            MenuHelpers.AddButtonAliases(aliasGO, handAliasBaseName + "/Button3", origEventBaseName + "/PrimaryButton");
+            MenuHelpers.AddButtonAliases(aliasGO, handAliasBaseName + "/Button4", origEventBaseName + "/SecondaryButton");
         }
 #endif
 

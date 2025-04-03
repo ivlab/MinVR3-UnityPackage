@@ -83,6 +83,28 @@ namespace IVLab.MinVR3
             rotAlias.originalEvents = new List<VREventPrototypeAny>()
                 { VREventPrototypeAny.Create<Quaternion>(origEventBaseName + "/Rotation") };
         }
+        
+        /// <summary>
+        /// (For the Meta Quest devices) Adds two EventAlias components to the game object, one for a Position event, one for a Rotation event.
+        /// </summary>
+        /// <param name="go">Game Object to add the components to.</param>
+        /// <param name="aliasBaseName">Name for the alias event without /Position or /Rotation</param>
+        /// <param name="origEventBaseName">Name for the existing event that should be renamed with the alias,
+        /// without the trailing /Position or /Rotation.</param>
+        public static void AddQuestTrackingAliases(GameObject go, string aliasBaseName, string origEventBaseName)
+        {
+            VREventAlias posAlias = go.AddComponent<VREventAlias>();
+            posAlias.aliasStrategy = VREventAlias.AliasStrategy.RenameClone;
+            posAlias.aliasEventName = aliasBaseName + "/Position";
+            posAlias.originalEvents = new List<VREventPrototypeAny>()
+                { VREventPrototypeAny.Create<Vector3>(origEventBaseName + "/Pointer/Position") };
+
+            VREventAlias rotAlias = go.AddComponent<VREventAlias>();
+            rotAlias.aliasStrategy = VREventAlias.AliasStrategy.RenameClone;
+            rotAlias.aliasEventName = aliasBaseName + "/Rotation";
+            rotAlias.originalEvents = new List<VREventPrototypeAny>()
+                { VREventPrototypeAny.Create<Quaternion>(origEventBaseName + "/Pointer/Rotation") };
+        }
 
         /// <summary>
         /// Adds two EventAlias components to the game object, one for a Down event, one for an Up event.
@@ -104,6 +126,21 @@ namespace IVLab.MinVR3
             upAlias.aliasEventName = aliasBaseName + "/Up";
             upAlias.originalEvents = new List<VREventPrototypeAny>()
                 { VREventPrototypeAny.Create(origEventBaseName + "/Up") };
+        }
+        
+        /// <summary>
+        /// Adds one EventAlias components to the game object
+        /// </summary>
+        /// <param name="go">Game Object to add the components to.</param>
+        /// <param name="aliasBaseName">Name for the alias event</param>
+        /// <param name="origEventBaseName">Name for the existing event that should be renamed with the alias</param>
+        public static VREventAlias AddButtonAlias(GameObject go, string aliasBaseName, string origEventBaseName)
+        {
+            VREventAlias buttonAlias = go.AddComponent<VREventAlias>();
+            buttonAlias.aliasStrategy = VREventAlias.AliasStrategy.RenameClone;
+            buttonAlias.aliasEventName = aliasBaseName;
+            buttonAlias.originalEvents = new List<VREventPrototypeAny>() { VREventPrototypeAny.Create(origEventBaseName) };
+            return buttonAlias;
         }
 
         /// <summary>
