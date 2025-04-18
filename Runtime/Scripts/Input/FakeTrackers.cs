@@ -30,10 +30,19 @@ namespace IVLab.MinVR3 {
         [SerializeField] private KeyCode moveHeadBackKey;
         [SerializeField] private KeyCode turnHeadLeftKey;
         [SerializeField] private KeyCode turnHeadRightKey;
+        
+        [Header("Head Tracker - Alternative Movements")]
+        [SerializeField] private KeyCode moveHeadForwardKey2;
+        [SerializeField] private KeyCode moveHeadBackKey2;
+        [SerializeField] private KeyCode moveHeadLeftKey;
+        [SerializeField] private KeyCode moveHeadRightKey;
+        [SerializeField] private KeyCode moveHeadUpKey;
+        [SerializeField] private KeyCode moveHeadDownKey;
+
         [Range(0.0f, 10.0f)]
         [SerializeField] private float forwardBackSensitivity = 1.0f;
         [Range(0.0f, 10.0f)]
-        [SerializeField] private float turningSensitivity = 1.0f;
+        [SerializeField] private float turningSensitivity = 0.5f;
 
         [Tooltip("Fake head tracking with arrow keys. 'up' moves forward, 'down' moves backward, 'left' rotates left, 'right' rotates right.")]
         public string headTrackerBaseName;
@@ -79,6 +88,11 @@ namespace IVLab.MinVR3 {
         private float lasty;
         private bool initialPoll;
 
+        // Rotate camera with right mouse click
+        private float headRotationX = 0.0f;
+        private Vector2 prevMousePos;
+
+
         private void OnEnable()
         {
             VREngine.Instance.eventManager.AddPolledInputDevice(this);
@@ -93,7 +107,7 @@ namespace IVLab.MinVR3 {
         {
             m_DeviceIdString = "FakeTrackers/";
             headTrackerBaseName = "Head";
-            initialHeadPos = new Vector3(0, 1, -2.5f);
+            initialHeadPos = new Vector3(0, 0.5f, -1.5f);
             initialHeadRot = new Vector3();
             
             tracker1BaseName = "Tracker 1";
@@ -108,12 +122,21 @@ namespace IVLab.MinVR3 {
             moveHeadBackKey = KeyCode.DownArrow;
             turnHeadLeftKey = KeyCode.LeftArrow;
             turnHeadRightKey = KeyCode.RightArrow;
+            moveHeadUpKey = KeyCode.E;
+            moveHeadDownKey = KeyCode.Q;
+            moveHeadForwardKey2 = KeyCode.W;
+            moveHeadBackKey2 = KeyCode.S;
+            moveHeadLeftKey = KeyCode.A;
+            moveHeadRightKey = KeyCode.D;
             toggleTracker1Key = KeyCode.Alpha1;
             toggleTracker2Key = KeyCode.Alpha2;
             rotateXKey = KeyCode.X;
             rotateYKey = KeyCode.Y;
             rotateZKey = KeyCode.Z;
             dollyKey = KeyCode.LeftShift;
+
+            forwardBackSensitivity = 1.0f;
+            turningSensitivity = 0.5f;
 
             sceneCam = null;
         }
@@ -145,13 +168,29 @@ namespace IVLab.MinVR3 {
         private void QueueHeadTrackerEvents(ref List<VREvent> eventQueue) {
             bool sendEvent = false;
 
-            if (KeyboardState.KeyIsPressed(moveHeadForwardKey)) {
+            if (KeyboardState.KeyIsPressed(moveHeadForwardKey) || KeyboardState.KeyIsPressed(moveHeadForwardKey2)) {
                 sendEvent = true;
                 headTrackerPos += forwardBackSensitivity * 0.005f * sceneCam.transform.forward;
             }
-            else if (KeyboardState.KeyIsPressed(moveHeadBackKey)) {
+            else if (KeyboardState.KeyIsPressed(moveHeadBackKey) || KeyboardState.KeyIsPressed(moveHeadBackKey2)) {
                 sendEvent = true;
                 headTrackerPos -= forwardBackSensitivity * 0.005f * sceneCam.transform.forward;
+            }
+            else if (KeyboardState.KeyIsPressed(moveHeadUpKey)) {
+                sendEvent = true;
+                headTrackerPos += forwardBackSensitivity * 0.005f * sceneCam.transform.up;
+            }
+            else if (KeyboardState.KeyIsPressed(moveHeadDownKey)) {
+                sendEvent = true;
+                headTrackerPos -= forwardBackSensitivity * 0.005f * sceneCam.transform.up;
+            }
+            else if (KeyboardState.KeyIsPressed(moveHeadRightKey)) {
+                sendEvent = true;
+                headTrackerPos += forwardBackSensitivity * 0.005f * sceneCam.transform.right;
+            }
+            else if (KeyboardState.KeyIsPressed(moveHeadLeftKey)) {
+                sendEvent = true;
+                headTrackerPos -= forwardBackSensitivity * 0.005f * sceneCam.transform.right;
             }
             else if (KeyboardState.KeyIsPressed(turnHeadLeftKey)) {
                 sendEvent = true;
@@ -161,6 +200,22 @@ namespace IVLab.MinVR3 {
                 sendEvent = true;
                 headTrackerRot *= Quaternion.AngleAxis(turningSensitivity * 0.3f, new Vector3(0f, 1f, 0f));
             }
+
+            // Hold right-mouse button to rotate
+            if (prevMousePos == Vector2.zero)
+            {
+                prevMousePos = MouseState.Position();
+            }
+            if (MouseState.RightButtonIsPressed()) {
+                sendEvent = true;
+                Vector2 deltaMousePos = MouseState.Position() - prevMousePos; 
+                float headRotationY = headTrackerRot.eulerAngles.y + deltaMousePos.x * turningSensitivity;        
+                headRotationX += deltaMousePos.y * turningSensitivity;
+                headRotationX = Mathf.Clamp(headRotationX, -90f, 90f);
+                headTrackerRot.eulerAngles = new Vector3(-headRotationX, headRotationY, 0.0f);
+
+            }
+            prevMousePos = MouseState.Position();
 
             if ((sendEvent) || (initialPoll)) {
                 eventQueue.Add(new VREventVector3(m_DeviceIdString + headTrackerBaseName + "/Position", headTrackerPos));
