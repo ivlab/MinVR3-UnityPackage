@@ -18,7 +18,12 @@ namespace IVLab.MinVR3
 		static public bool KeyWasPressedThisFrame(KeyCode key)
 		{
 #if ENABLE_INPUT_SYSTEM
-			return Keyboard.current[KeyCodeToKey(key)].wasPressedThisFrame;
+			Key k = KeyCodeToKey(key);
+			if (k != Key.None) {
+				return Keyboard.current[k].wasPressedThisFrame;
+			} else {
+				return false;
+			}
 #else
             return Input.GetKeyDown(key);
 #endif
@@ -27,16 +32,26 @@ namespace IVLab.MinVR3
 		static public bool KeyWasReleasedThisFrame(KeyCode key)
 		{
 #if ENABLE_INPUT_SYSTEM
-			return Keyboard.current[KeyCodeToKey(key)].wasReleasedThisFrame;
+			Key k = KeyCodeToKey(key);
+			if (k != Key.None) {
+				return Keyboard.current[k].wasReleasedThisFrame;
+			} else {
+				return false;
+			}
 #else
-            return Input.GetKeyUp(key);
+			return Input.GetKeyUp(key);
 #endif
 		}
 
 		static public bool KeyIsPressed(KeyCode key)
 		{
 #if ENABLE_INPUT_SYSTEM
-			return Keyboard.current[KeyCodeToKey(key)].isPressed;
+			Key k = KeyCodeToKey(key);
+			if (k != Key.None) {
+				return Keyboard.current[k].isPressed;
+			} else {
+				return false;
+			}
 #else
             return Input.GetKey(key);
 #endif
