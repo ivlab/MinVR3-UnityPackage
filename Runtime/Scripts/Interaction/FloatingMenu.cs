@@ -106,9 +106,9 @@ namespace IVLab.MinVR3
             m_BgBox = null;
 
             // wipe out any previously created menu geometry
-            GameObject generatedContent = GameObject.Find(k_GeometryParentName);
-            if (generatedContent != null){
-                DestroyImmediate(generatedContent);
+            Transform t = transform.Find(k_GeometryParentName);
+            if (t != null) {
+                DestroyImmediate(t.gameObject);
             }
 
             Material tmpMat;
