@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace IVLab.MinVR3
 {
@@ -9,8 +10,8 @@ namespace IVLab.MinVR3
     /// inside the titlebar or box that holds each menu item and then clicking.
     /// </summary>
     [ExecuteAlways]
-    [AddComponentMenu("MinVR Interaction/Widgets/Menus/Floating Menu")]
-    public class FloatingMenu : MonoBehaviour, IVREventListener, IVREventProducer
+    [AddComponentMenu("MinVR Interaction/Widgets/Menus/Floating Toggle Buttons")]
+    public class FloatingToggleButtons : MonoBehaviour, IVREventListener, IVREventProducer
     {
         /// <summary>
         /// Title displayed in all caps on the left side of the menu
@@ -24,7 +25,7 @@ namespace IVLab.MinVR3
         /// Ordered list of strings for the choices that can be selected from the menu,
         /// displayed top to bottom. 
         /// </summary>
-        public List<string> menuItems {
+        public List<MenuItem> menuItems {
             get => m_MenuItems;
             set => m_MenuItems = value;
         }
@@ -45,7 +46,10 @@ namespace IVLab.MinVR3
         public void Reset()
         {
             m_Title = "My Menu";
-            m_MenuItems = new List<string>() { "Item 1", "Item 2" };
+            m_TreatAsToggleGroup = false;
+            m_MenuItems = new List<MenuItem>();
+            m_MenuItems.Add(new MenuItem("Item 1", false));
+            m_MenuItems.Add(new MenuItem("Item 2", false));
 
             m_ActivationDepth = 0f;
             m_CursorPositionEvent = new VREventPrototypeVector3();
@@ -97,13 +101,13 @@ namespace IVLab.MinVR3
             }
         }
 
+
         void OverrideMaterialColor(GameObject go, Color c)
         {
             MaterialPropertyBlock propertyBlock = new MaterialPropertyBlock();
             propertyBlock.SetColor("_Color", c);
             MeshRenderer mr = go.GetComponent<MeshRenderer>();
-            if (mr != null)
-            {
+            if (mr != null) {
                 mr.SetPropertyBlock(propertyBlock);
             }
         }
@@ -141,7 +145,7 @@ namespace IVLab.MinVR3
             m_TitleBoxObj.name = title + " Box";
             m_TitleBoxObj.transform.SetParent(m_GeometryParent.transform, false);
             OverrideMaterialColor(m_TitleBoxObj, m_TitleBGColor);
-
+            
             // Create a box and label for each item
             for (int i = 0; i < menuItems.Count; i++) {
                 GameObject textObj = new GameObject(menuItems[i] + " Label");
@@ -149,16 +153,31 @@ namespace IVLab.MinVR3
                 TextMesh textMesh = textObj.AddComponent<TextMesh>();
                 textMesh.font = m_Font;
                 textMesh.GetComponent<MeshRenderer>().sharedMaterial = new Material(m_FontMaterial);
-                textMesh.text = menuItems[i];
+                textMesh.text = menuItems[i].name;
                 textMesh.color = m_ItemColor;
                 textMesh.anchor = TextAnchor.MiddleLeft;
                 textMesh.fontSize = 100;
                 textMesh.characterSize = m_TextSizeInWorldUnits * 10.0f / textMesh.fontSize;
 
                 GameObject boxObj = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                boxObj.name = menuItems[i] + " Box";
+                boxObj.name = menuItems[i].name + " Box";
                 boxObj.transform.SetParent(m_GeometryParent.transform, false);
-                OverrideMaterialColor(boxObj, m_ItemBGColor);
+                if (menuItems[i].pressed) {
+                    OverrideMaterialColor(boxObj, m_PressColor);
+                }
+                else {
+                    OverrideMaterialColor(boxObj, m_ItemBGColor);
+                }
+                //tmpMat = new Material(boxObj.GetComponent<Renderer>().sharedMaterial);
+                //if (menuItems[i].pressed)
+                //{
+                //    tmpMat.color = m_PressColor;
+                //}
+                //else
+                //{
+                //    tmpMat.color = m_ItemBGColor;
+                //}
+                //boxObj.GetComponent<Renderer>().sharedMaterial = tmpMat;
 
                 m_LabelMeshes.Add(textMesh);
                 m_LabelBoxes.Add(boxObj);
@@ -208,6 +227,9 @@ namespace IVLab.MinVR3
             m_BgBox.name = "Background Box";
             m_BgBox.transform.SetParent(m_GeometryParent.transform, false);
             OverrideMaterialColor(m_BgBox, m_ItemBGColor);
+            //tmpMat = new Material(m_BgBox.GetComponent<Renderer>().sharedMaterial);
+            //tmpMat.color = m_ItemBGColor;
+            //m_BgBox.GetComponent<Renderer>().sharedMaterial = tmpMat;
             m_BgBox.transform.localPosition = new Vector3(m_ZEpsilon, 0f, 0.5f * m_ItemSep + m_ZEpsilon);
             m_BgBox.transform.localScale = new Vector3(menu_box_dims[0] - m_ZEpsilon, height - 2.0f * m_ZEpsilon, menu_box_dims[2] - m_ItemSep);
 
@@ -231,9 +253,9 @@ namespace IVLab.MinVR3
             Matrix4x4 trackerMat = Matrix4x4.TRS(m_TrackerPos, m_TrackerRot, Vector3.one);
             Matrix4x4 trackerMatInWorld = IVLab.MinVR3.VREngine.instance.roomSpaceOrigin.transform.localToWorldMatrix * trackerMat;
 
-            if ((m_ButtonPressed) && (m_Selected == 0)) {
-                // Dragging while holding onto the menu title bar, 
-                // move the menu based on motion of the tracker
+            if ((m_ButtonPressed) && (m_Highlighted == 0))
+            {
+                // CASE 1: In the middle of a drag operation
 
                 // Get the menu's Transform in Matrix4x4 format in worldspace      
                 Matrix4x4 origMenuMat = transform.localToWorldMatrix;
@@ -247,55 +269,80 @@ namespace IVLab.MinVR3
                 // Save the result, converting from Matrix4x4 back to unity's Transform class.
                 transform.position = Matrix4x4Extensions.GetTranslationFast(newMenuMat);
                 transform.rotation = Matrix4x4Extensions.GetRotationFast(newMenuMat);
-            } else if (!m_ButtonPressed) {
-                if (m_inActivationZone && !InsideTransformedCube(m_TrackerPos, m_InteractionZoneBox)) {
-                    // moved outside the activation zone
-                    if ((m_InputFocusToken != null)) {
-                        m_InputFocusToken.ReleaseToken(this);
-                    }
-                    m_inActivationZone = false;
-                    ClearSelection();
-                    VREngine.instance.eventManager.InsertInQueue(new VREvent(gameObject.name + k_ExitActivationEventName));
-                }
-                else if (!m_inActivationZone && InsideTransformedCube(m_TrackerPos, m_InteractionZoneBox)){
-                    if ((m_InputFocusToken == null) || (m_InputFocusToken.RequestToken(this))) {
-                        m_inActivationZone = true;
+            }
+            else
+            {
+                // CASE 2: Normal operation
+
+                if ((!m_InteractingWithMenu) && (InsideTransformedCube(m_TrackerPos, m_InteractionZoneBox)))
+                {
+                    // Cursor just moved INTO the interaction zone, try to aquire token
+                    if ((m_InputFocusToken == null) || (m_InputFocusToken.RequestToken(this)))
+                    {
+                        m_InteractingWithMenu = true;
                         VREngine.instance.eventManager.InsertInQueue(new VREvent(gameObject.name + k_EnterActivationEventName));
                     }
-                }                    
-                
-                if (m_inActivationZone) {
-                    ClearSelection();
-                
-                    // Update selection
-                    if (InsideTransformedCube(m_TrackerPos, m_TitleBoxObj)) {
-                        m_Selected = 0;
-                        OverrideMaterialColor(m_TitleBoxObj, m_TitleHighColor);
-                    } else {
-                        OverrideMaterialColor(m_TitleBoxObj, m_TitleBGColor);
-                        for (int i = 0; i < m_LabelBoxes.Count; i++) {
-                            if (InsideTransformedCube(m_TrackerPos, m_LabelBoxes[i]))
-                            {
-                                m_Selected = i + 1;
-                                OverrideMaterialColor(m_LabelBoxes[i], m_ItemHighColor);
-                            }
-                            else
-                            {
-                                OverrideMaterialColor(m_LabelBoxes[i], m_ItemBGColor);
-                            }
-                        }
-                    }
                 }
-            }
 
+                if (m_InteractingWithMenu)
+                {
+                    if (!InsideTransformedCube(m_TrackerPos, m_InteractionZoneBox))
+                    {
+                        // Cursor just moved OUT OF the activation zone, release token
+                        if ((m_InputFocusToken != null))
+                        {
+                            m_InputFocusToken.ReleaseToken(this);
+                        }
+                        m_InteractingWithMenu = false;
+                        VREngine.instance.eventManager.InsertInQueue(new VREvent(gameObject.name + k_ExitActivationEventName));
+                    }
+
+                    // Major task while interacting with the menu is to update highlighting the title or menu item
+					// currently under the cursor
+                    UpdateHighlightAndColors();
+                } 
+            }
+            
             m_LastTrackerMat = trackerMatInWorld;
         }
 
-        private void ClearSelection(){
-            m_Selected = -1;
-            OverrideMaterialColor(m_TitleBoxObj, m_TitleBGColor);
+        private void UpdateHighlightAndColors() {
+
+            // reset to nothing highlighted
+            m_Highlighted = -1;
+
+            if ((m_InteractingWithMenu) && (InsideTransformedCube(m_TrackerPos, m_TitleBoxObj)))
+            {
+                // cursor interacting with title box
+                m_Highlighted = 0;
+                if (m_ButtonPressed)
+                {
+                    OverrideMaterialColor(m_TitleBoxObj, m_PressColor);
+                }
+                else
+                {
+                    OverrideMaterialColor(m_TitleBoxObj, m_TitleHighColor);
+                }
+            }
+            else
+            {
+                // cursor not interacting with title box
+                OverrideMaterialColor(m_TitleBoxObj, m_TitleBGColor);
+            }
+
             for (int i = 0; i < m_LabelBoxes.Count; i++) {
-                OverrideMaterialColor(m_LabelBoxes[i], m_ItemBGColor);
+                if ((m_InteractingWithMenu) && (InsideTransformedCube(m_TrackerPos, m_LabelBoxes[i]))) {
+                    // cursor interacting with menu item
+                    m_Highlighted = i + 1;
+                    OverrideMaterialColor(m_LabelBoxes[i], m_ItemHighColor);
+                } else {
+                    // cursor not interacting with menu item
+                    if (m_MenuItems[i].pressed) {
+                        OverrideMaterialColor(m_LabelBoxes[i], m_PressColor);
+                    } else {
+                        OverrideMaterialColor(m_LabelBoxes[i], m_ItemBGColor);
+                    }
+                }
             }
         }
 
@@ -303,7 +350,7 @@ namespace IVLab.MinVR3
         private void OnEnable()
         {
             if (Application.isPlaying) {
-                m_Selected = -1;
+                m_Highlighted = -1;
                 StartListening();
             }
         }
@@ -315,11 +362,11 @@ namespace IVLab.MinVR3
                 if (m_InputFocusToken != null && m_InputFocusToken.currentOwner == this){
                     m_InputFocusToken.ReleaseToken(this);
                 }
-                if (m_inActivationZone){
-                    m_inActivationZone = false;
-                    ClearSelection();
+                if (m_InteractingWithMenu) {
+                    m_InteractingWithMenu = false;
                     VREngine.instance.eventManager.InsertInQueue(new VREvent(gameObject.name + k_ExitActivationEventName));
                 }
+                UpdateHighlightAndColors();
             }
         }
 
@@ -334,36 +381,77 @@ namespace IVLab.MinVR3
         }
 
 
-        public string GetEventNameForMenuItem(int itemId)
+        public string GetEventNameForMenuItem(int itemId, bool selected)
         {
-            return gameObject.name + "/Select Item " + itemId;
+            if (selected)
+            {
+                return gameObject.name + "/Select Item " + itemId;
+            }
+            else
+            {
+                return gameObject.name + "/Deselect Item " + itemId;
+            }
         }
 
 
         public void OnButtonDown()
         {
             m_ButtonPressed = true;
-            if (m_Selected == 0) {
-                OverrideMaterialColor(m_TitleBoxObj, m_PressColor);
-            } else if (m_Selected > 0) {
-                OverrideMaterialColor(m_LabelBoxes[m_Selected - 1], m_PressColor);
+            UpdateHighlightAndColors();
 
-                Debug.Log("Selected menu item " + (m_Selected - 1));
+            if (m_Highlighted > 0) {
+                int selectedMenuItem = m_Highlighted - 1;
 
                 // There are multiple ways developer's code can respond to a menu selection:
-
                 // 1: In the editor, subscribe to the OnMenuItemSelected UnityEvent
-                m_OnMenuItemSelected.Invoke(m_Selected - 1);
-
                 // 2. With a VREventListener that listens for a new MinVR3 event, named based on the name
-				// of the GameObject this script is attached to.
-                VREngine.instance.eventManager.InsertInQueue(new VREvent(GetEventNameForMenuItem(m_Selected - 1)));
+                // of the GameObject this script is attached to.
+
+                if (m_TreatAsToggleGroup)
+                {
+                    // Toggling one button on turns off all others; trying to toggle a button that is already on
+                    // does nothing
+                    if (!m_MenuItems[selectedMenuItem].pressed)
+                    {
+                        int oldPressed = GetFirstPressed();
+                        if (oldPressed != -1)
+                        {
+                            m_MenuItems[oldPressed].pressed = false;
+                            Debug.Log("Deselected menu item " + selectedMenuItem);
+                            m_OnMenuItemDeselected.Invoke(selectedMenuItem);
+                            VREngine.instance.eventManager.InsertInQueue(new VREvent(GetEventNameForMenuItem(selectedMenuItem, false)));
+                        }
+                        
+                        m_MenuItems[selectedMenuItem].pressed = true;
+                        Debug.Log("Selected menu item " + selectedMenuItem);
+                        m_OnMenuItemSelected.Invoke(selectedMenuItem);
+                        VREngine.instance.eventManager.InsertInQueue(new VREvent(GetEventNameForMenuItem(selectedMenuItem, true)));
+                    }
+                }
+                else
+                {
+                    // Each button can be toggled individually
+                    m_MenuItems[selectedMenuItem].pressed = !m_MenuItems[selectedMenuItem].pressed;
+                    if (m_MenuItems[selectedMenuItem].pressed)
+                    {
+                        Debug.Log("Selected menu item " + selectedMenuItem);
+                        m_OnMenuItemSelected.Invoke(selectedMenuItem);
+                        VREngine.instance.eventManager.InsertInQueue(new VREvent(GetEventNameForMenuItem(selectedMenuItem, true)));
+                    }
+                    else
+                    {
+                        Debug.Log("Deselected menu item " + selectedMenuItem);
+                        m_OnMenuItemDeselected.Invoke(selectedMenuItem);
+                        VREngine.instance.eventManager.InsertInQueue(new VREvent(GetEventNameForMenuItem(selectedMenuItem, false)));
+                    }
+                }
             }
         }
 
         public void OnButtonUp()
         {
             m_ButtonPressed = false;
+            UpdateHighlightAndColors();
         }
 
         public void OnVREvent(VREvent vrEvent)
@@ -385,6 +473,10 @@ namespace IVLab.MinVR3
         public void StartListening()
         {
             VREngine.Instance.eventManager.AddEventListener(this);
+            if (m_TreatAsToggleGroup)
+            {
+                CheckSingleButtonPressed();
+            }
         }
 
         public void StopListening()
@@ -392,12 +484,63 @@ namespace IVLab.MinVR3
             VREngine.Instance?.eventManager?.RemoveEventListener(this);
         }
 
+        // returns index of first button that is pressed or -1 if there are no buttons or none are pressed
+        public int GetFirstPressed()
+        {
+            for (int i = 0; i < m_MenuItems.Count; i++)
+            {
+                if (m_MenuItems[i].pressed)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        public void CheckSingleButtonPressed()
+        {
+            if (m_MenuItems.Count > 0)
+            {
+                int nPressed = 0;
+                foreach (MenuItem m in m_MenuItems)
+                {
+                    if (m.pressed)
+                    {
+                        nPressed++;
+                    }
+                }
+                if (nPressed == 0)
+                {
+                    m_MenuItems[0].pressed = true;
+                }
+                else if (nPressed > 1)
+                {
+                    bool firstOne = true;
+                    foreach (MenuItem m in m_MenuItems)
+                    {
+                        if (m.pressed)
+                        {
+                            if (firstOne)
+                            {
+                                firstOne = false;
+                            }
+                            else
+                            {
+                                m.pressed = false;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
 
         public List<IVREventPrototype> GetEventPrototypes()
         {
             List<IVREventPrototype> eventPrototypes = new List<IVREventPrototype>();
             for (int i = 0; i < m_MenuItems.Count; i++) {
-                eventPrototypes.Add(VREventPrototype.Create(GetEventNameForMenuItem(i)));
+                eventPrototypes.Add(VREventPrototype.Create(GetEventNameForMenuItem(i, true)));
+                eventPrototypes.Add(VREventPrototype.Create(GetEventNameForMenuItem(i, false)));
             }
             eventPrototypes.Add(VREventPrototype.Create(gameObject.name + k_EnterActivationEventName));
             eventPrototypes.Add(VREventPrototype.Create(gameObject.name + k_ExitActivationEventName));
@@ -436,11 +579,22 @@ namespace IVLab.MinVR3
 
 
         [Header("Content")]
+
         [Tooltip("Title displayed in all caps on the left side of the menu.")]
         [SerializeField] private string m_Title;
-        [Tooltip("Ordered list of strings for the choices that can be selected from the menu, " +
-            "displayed top to bottom.")]
-        [SerializeField] private List<string> m_MenuItems;
+
+        [Tooltip("If true, one item must always be selected.")]
+        [SerializeField] private bool m_TreatAsToggleGroup;
+
+        [Serializable]
+        public class MenuItem
+        {
+            public MenuItem(string n, bool p) { name = n; pressed = p; }
+            public string name;
+            public bool pressed;
+        }
+        [Tooltip("Ordered list of button names and initial states")]
+        [SerializeField] private List<MenuItem> m_MenuItems;
 
         [Header("Input")]
         [Tooltip("[Optional] If set, the menu will only respond to input when the token is available " +
@@ -469,6 +623,7 @@ namespace IVLab.MinVR3
         [Tooltip("Register a function with this event to receive a callback when a selection is made, " +
             "the int argument is the index of the menu item that was selected.")]
         [SerializeField] private VRCallbackInt m_OnMenuItemSelected;
+        [SerializeField] private VRCallbackInt m_OnMenuItemDeselected;
 
 
         [Header("Appearance")]
@@ -511,9 +666,9 @@ namespace IVLab.MinVR3
         private Vector3 m_TrackerPos;
         private Quaternion m_TrackerRot = Quaternion.identity;
         // -1 = nothing, 0 = titlebar, 1..items.Count = menu items
-        private int m_Selected = -1;
+        private int m_Highlighted = -1;
         private bool m_ButtonPressed = false;
-        private bool m_inActivationZone = false;
+        private bool m_InteractingWithMenu = false;
         private const string k_EnterActivationEventName = "/Enter Activation Zone";
         private const string k_ExitActivationEventName = "/Exit Activation Zone";
     }
