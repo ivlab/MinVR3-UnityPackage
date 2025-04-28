@@ -112,7 +112,7 @@ namespace IVLab.MinVR3
             }
         }
 
-        void RebuildMenu()
+        public void RebuildMenu()
         {
             m_LabelMeshes = new List<TextMesh>();
             m_LabelBoxes = new List<GameObject>();
