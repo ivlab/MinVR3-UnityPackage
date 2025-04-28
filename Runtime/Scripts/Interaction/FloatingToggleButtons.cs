@@ -125,7 +125,6 @@ namespace IVLab.MinVR3
                 DestroyImmediate(t.gameObject);
             }
 
-            Material tmpMat;
             m_GeometryParent = new GameObject(k_GeometryParentName);
 
             // Create a title box and label
@@ -409,24 +408,21 @@ namespace IVLab.MinVR3
 
                 if (m_TreatAsToggleGroup)
                 {
-                    // Toggling one button on turns off all others; trying to toggle a button that is already on
-                    // does nothing
-                    if (!m_MenuItems[selectedMenuItem].pressed)
+                    // Toggling one button on turns off all others
+
+                    int oldPressed = GetFirstPressed();
+                    if (oldPressed != -1)
                     {
-                        int oldPressed = GetFirstPressed();
-                        if (oldPressed != -1)
-                        {
-                            m_MenuItems[oldPressed].pressed = false;
-                            Debug.Log("Deselected menu item " + selectedMenuItem);
-                            m_OnMenuItemDeselected.Invoke(selectedMenuItem);
-                            VREngine.instance.eventManager.InsertInQueue(new VREvent(GetEventNameForMenuItem(selectedMenuItem, false)));
-                        }
-                        
-                        m_MenuItems[selectedMenuItem].pressed = true;
-                        Debug.Log("Selected menu item " + selectedMenuItem);
-                        m_OnMenuItemSelected.Invoke(selectedMenuItem);
-                        VREngine.instance.eventManager.InsertInQueue(new VREvent(GetEventNameForMenuItem(selectedMenuItem, true)));
+                        m_MenuItems[oldPressed].pressed = false;
+                        Debug.Log("Deselected menu item " + selectedMenuItem);
+                        m_OnMenuItemDeselected.Invoke(selectedMenuItem);
+                        VREngine.instance.eventManager.InsertInQueue(new VREvent(GetEventNameForMenuItem(selectedMenuItem, false)));
                     }
+
+                    m_MenuItems[selectedMenuItem].pressed = true;
+                    Debug.Log("Selected menu item " + selectedMenuItem);
+                    m_OnMenuItemSelected.Invoke(selectedMenuItem);
+                    VREngine.instance.eventManager.InsertInQueue(new VREvent(GetEventNameForMenuItem(selectedMenuItem, true)));
                 }
                 else
                 {

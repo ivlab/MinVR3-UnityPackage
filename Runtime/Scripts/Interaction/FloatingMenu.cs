@@ -108,7 +108,7 @@ namespace IVLab.MinVR3
             }
         }
 
-        void RebuildMenu()
+        public void RebuildMenu()
         {
             m_LabelMeshes = new List<TextMesh>();
             m_LabelBoxes = new List<GameObject>();
@@ -121,7 +121,6 @@ namespace IVLab.MinVR3
                 DestroyImmediate(t.gameObject);
             }
 
-            Material tmpMat;
             m_GeometryParent = new GameObject(k_GeometryParentName);
 
             // Create a title box and label
