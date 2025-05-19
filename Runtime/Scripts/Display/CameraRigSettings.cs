@@ -22,6 +22,8 @@ namespace IVLab.MinVR3
         [SerializeField] private Color _leftEyeClearColor = Color.black;
         [SerializeField] private Color _rightEyeClearColor = Color.black;
 
+        [SerializeField] private bool _forceMonoMode = false;
+
 
         public float nearClip {
             get => _nearClip;
@@ -70,6 +72,16 @@ namespace IVLab.MinVR3
             }
         }
 
+        public bool forceMonoMode
+        {
+            get => _forceMonoMode;
+            set
+            {
+                _forceMonoMode = value;
+                UpdateChildCameras();
+            }
+        }
+
 
         private void UpdateChildCameras()
         {
@@ -79,6 +91,10 @@ namespace IVLab.MinVR3
                 cam.farClipPlane = _farClip;
 
                 ObliqueProjectionToQuad oproj = cam.gameObject.GetComponent<ObliqueProjectionToQuad>();
+                if (oproj != null)
+                {
+                    oproj.applyStereoEyeOffset = !_forceMonoMode;
+                }
                 if ((oproj != null) && (oproj.whichEye == ObliqueProjectionToQuad.Eye.RightEye))
                 {
                     cam.backgroundColor = _rightEyeClearColor;
