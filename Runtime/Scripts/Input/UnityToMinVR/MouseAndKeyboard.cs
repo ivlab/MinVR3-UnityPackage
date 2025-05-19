@@ -111,8 +111,9 @@ namespace IVLab.MinVR3
             m_KeysToVREventNames.Add(new KeyToVREventName(KeyCode.RightControl, "Keyboard/RightControl"));
             m_KeysToVREventNames.Add(new KeyToVREventName(KeyCode.LeftCommand, "Keyboard/LeftCommand"));
             m_KeysToVREventNames.Add(new KeyToVREventName(KeyCode.RightCommand, "Keyboard/RightCommand"));
-            m_KeysToVREventNames.Add(new KeyToVREventName(KeyCode.LeftMeta, "Keyboard/LeftMeta"));
-            m_KeysToVREventNames.Add(new KeyToVREventName(KeyCode.RightMeta, "Keyboard/RightMeta"));
+            // not available on Unity 2020 apparently:
+            //m_KeysToVREventNames.Add(new KeyToVREventName(KeyCode.LeftMeta, "Keyboard/LeftMeta"));
+            //m_KeysToVREventNames.Add(new KeyToVREventName(KeyCode.RightMeta, "Keyboard/RightMeta"));
         }
 
         public List<IVREventPrototype> GetEventPrototypes()
