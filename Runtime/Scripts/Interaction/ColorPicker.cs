@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 #if UNITY_EDITOR
     using UnityEditor;
 #endif
@@ -10,12 +11,14 @@ namespace IVLab.MinVR3
     [AddComponentMenu("MinVR Interaction/Widgets/Color Picker (CavePainting Style)")]
     public class ColorPicker : MonoBehaviour, IVREventListener, IVREventProducer
     {
-        public Color initialColor {
+        public Color initialColor
+        {
             get { return m_InitialColor; }
             set { m_InitialColor = value; }
         }
 
-        public Color currentColor {
+        public Color currentColor
+        {
             get { return m_CurrentColor; }
         }
 
@@ -32,7 +35,13 @@ namespace IVLab.MinVR3
             m_ColorCancelledEventName = "ColorPicker/ColorCancelled";
 
 #if UNITY_EDITOR
-            m_BaseMaterial = AssetDatabase.GetBuiltinExtraResource<Material>("Default-Diffuse.mat");
+            if (GraphicsSettings.defaultRenderPipeline == null){
+                // Using built-in pipeline
+                m_BaseMaterial = AssetDatabase.GetBuiltinExtraResource<Material>("Default-Diffuse.mat");
+            }
+            else{
+                m_BaseMaterial = UnityEngine.Rendering.GraphicsSettings.defaultRenderPipeline.defaultMaterial;
+            }
 #endif
             m_Radius = 0.4f;
             m_CancelRadius = 0.5f;
@@ -47,6 +56,14 @@ namespace IVLab.MinVR3
 
         void Start()
         {
+            if (GraphicsSettings.defaultRenderPipeline == null){
+                // Using built-in pipeline
+                m_ColorPropertyName = "_Color";
+            }
+            else{
+                m_ColorPropertyName = "_BaseColor";
+            }
+
             m_InitialColor = new Color(0.75f, 0.75f, 0.75f);
             m_CurrentColor = new Color(0.75f, 0.75f, 0.75f);
 
@@ -56,11 +73,9 @@ namespace IVLab.MinVR3
             topSphere.transform.SetParent(this.transform, false);
             topSphere.transform.localPosition = m_Radius * Vector3.up;
             topSphere.transform.localScale = m_ColoredPointsRadius * Vector3.one;
-            topSphere.GetComponent<MeshRenderer>().sharedMaterial = m_BaseMaterial;
-            MaterialPropertyBlock topPB = new MaterialPropertyBlock();
-            topPB.SetColor("_Color", Color.white);
-            topPB.SetFloat("_Alpha", 0.1f);
-            topSphere.GetComponent<MeshRenderer>().SetPropertyBlock(topPB);
+            Material topMaterial = new Material(m_BaseMaterial); // Creating new materials is better in URP than using material property blocks because the SRP Batcher works at the shader level
+            topMaterial.SetColor(m_ColorPropertyName, Color.white);
+            topSphere.GetComponent<MeshRenderer>().sharedMaterial = topMaterial;
             m_AllRenderers.Add(topSphere.GetComponent<MeshRenderer>());
 
 
@@ -68,34 +83,33 @@ namespace IVLab.MinVR3
             botSphere.transform.SetParent(this.transform, false);
             botSphere.transform.localPosition = m_Radius * -Vector3.up;
             botSphere.transform.localScale = m_ColoredPointsRadius * Vector3.one;
-            botSphere.GetComponent<MeshRenderer>().sharedMaterial = m_BaseMaterial;
-            MaterialPropertyBlock botPB = new MaterialPropertyBlock();
-            botPB.SetColor("_Color", Color.black);
-            botSphere.GetComponent<MeshRenderer>().SetPropertyBlock(botPB);
+            Material botMaterial = new Material(m_BaseMaterial);
+            botMaterial.SetColor(m_ColorPropertyName, Color.black);
+            botSphere.GetComponent<MeshRenderer>().material = botMaterial;
             m_AllRenderers.Add(botSphere.GetComponent<MeshRenderer>());
 
 
+            Material lineMaterial = new Material(m_BaseMaterial);
+            lineMaterial.SetColor(m_ColorPropertyName, Color.gray);
+
             float aInc = 360.0f / (float)m_NumPointsOnColorWheel;
-            for (float a = 0; a < 360; a += aInc) {
+            for (float a = 0; a < 360; a += aInc)
+            {
                 Vector3 p = new Vector3(m_Radius * Mathf.Cos(Mathf.Deg2Rad * a), 0, m_Radius * Mathf.Sin(Mathf.Deg2Rad * a));
 
                 GameObject colSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                 colSphere.transform.SetParent(this.transform, false);
                 colSphere.transform.localPosition = p;
                 colSphere.transform.localScale = m_ColoredPointsRadius * Vector3.one;
-                colSphere.GetComponent<MeshRenderer>().sharedMaterial = m_BaseMaterial;
-                MaterialPropertyBlock colSpherePB = new MaterialPropertyBlock();
-                colSpherePB.SetColor("_Color", PointToColor(p));
-                colSphere.GetComponent<MeshRenderer>().SetPropertyBlock(colSpherePB);
+                Material colMaterial = new Material(m_BaseMaterial);
+                colMaterial.SetColor(m_ColorPropertyName, PointToColor(p));
+                colSphere.GetComponent<MeshRenderer>().sharedMaterial = colMaterial;
                 m_AllRenderers.Add(colSphere.GetComponent<MeshRenderer>());
 
                 GameObject colLine = new GameObject("Line", typeof(LineRenderer));
                 colLine.transform.SetParent(this.transform, false);
                 LineRenderer l = colLine.GetComponent<LineRenderer>();
-                l.sharedMaterial = m_BaseMaterial;
-                MaterialPropertyBlock linePB = new MaterialPropertyBlock();
-                linePB.SetColor("_Color", Color.gray);
-                l.GetComponent<LineRenderer>().SetPropertyBlock(linePB);
+                l.sharedMaterial = lineMaterial;
                 m_AllRenderers.Add(l.GetComponent<LineRenderer>());
 
 
@@ -108,20 +122,20 @@ namespace IVLab.MinVR3
                 l.positionCount = points.Count;
                 l.SetPositions(points.ToArray());
                 l.useWorldSpace = false;
-                
+
             }
 
             m_CursorSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
             m_CursorSphere.transform.SetParent(this.transform, false);
             m_CursorSphere.transform.localScale = m_CursorRadius * Vector3.one;
-            m_CursorSphere.GetComponent<MeshRenderer>().sharedMaterial = m_BaseMaterial;
-            m_CursorPB = new MaterialPropertyBlock();
-            m_CursorPB.SetColor("_Color", Color.white);
-            m_CursorSphere.GetComponent<MeshRenderer>().SetPropertyBlock(m_CursorPB);
+            m_CursorMaterial = new Material(m_BaseMaterial);
+            m_CursorMaterial.SetColor(m_ColorPropertyName, Color.white);
+            m_CursorSphere.GetComponent<MeshRenderer>().sharedMaterial = m_CursorMaterial;
             m_AllRenderers.Add(m_CursorSphere.GetComponent<MeshRenderer>());
 
             // turn all of the child geometry off until the widget is activated
-            for (int i = 0; i < transform.childCount; i++) {
+            for (int i = 0; i < transform.childCount; i++)
+            {
                 transform.GetChild(i).gameObject.SetActive(false);
             }
 
@@ -132,7 +146,8 @@ namespace IVLab.MinVR3
         void OnCursorDown()
         {
             if (((m_RequireCondition == null) || (m_RequireCondition.isTrue)) &&
-                ((m_RequireToken == null) || (m_RequireToken.RequestToken(this)))) {
+                ((m_RequireToken == null) || (m_RequireToken.RequestToken(this))))
+            {
                 m_Active = true;
                 m_InCancelState = false;
 
@@ -146,8 +161,7 @@ namespace IVLab.MinVR3
 
                 m_CursorSphere.transform.localPosition = ColorToPoint(m_InitialColor);
                 m_CurrentColor = m_InitialColor;
-                m_CursorPB.SetColor("_Color", m_InitialColor);
-                m_CursorSphere.GetComponent<MeshRenderer>().SetPropertyBlock(m_CursorPB);
+                m_CursorMaterial.SetColor(m_ColorPropertyName, m_InitialColor);
 
                 StartCoroutine(FadeIn(m_FadeDuration));
             }
@@ -155,20 +169,26 @@ namespace IVLab.MinVR3
 
         void OnCursorMove()
         {
-            if (m_Active) {
+            if (m_Active)
+            {
                 Vector3 cursorPosLocal = transform.RoomPointToLocalSpace(m_CursorPosRoom);
 
                 m_CursorSphere.transform.localPosition = cursorPosLocal;
                 Vector4 data;
-                if (IsOutsideCancelSphere()) {
-                    if (!m_InCancelState) {
+                if (IsOutsideCancelSphere())
+                {
+                    if (!m_InCancelState)
+                    {
                         m_InCancelState = true;
                         SetColorPickerAlpha(m_CancelModeAlpha);
                     }
                     data = new Vector4(m_InitialColor[0], m_InitialColor[1], m_InitialColor[2], m_InitialColor[3]);
                     m_CurrentColor = m_InitialColor;
-                } else {
-                    if (m_InCancelState) {
+                }
+                else
+                {
+                    if (m_InCancelState)
+                    {
                         m_InCancelState = false;
                         SetColorPickerAlpha(1.0f);
                     }
@@ -176,22 +196,25 @@ namespace IVLab.MinVR3
                     data = new Vector4(col[0], col[1], col[2], col[3]);
                     m_CurrentColor = col;
                 }
-                m_CursorPB.SetColor("_Color", m_CurrentColor);
-                m_CursorSphere.GetComponent<MeshRenderer>().SetPropertyBlock(m_CursorPB);
-                VREngine.instance.eventManager.InsertInQueue(new VREventVector4(m_ColorModifiedEventName, data));   
+                m_CursorMaterial.SetColor(m_ColorPropertyName, m_CurrentColor);
+                VREngine.instance.eventManager.InsertInQueue(new VREventVector4(m_ColorModifiedEventName, data));
             }
         }
 
         void OnCursorUp()
         {
-            if (m_Active) {
+            if (m_Active)
+            {
                 Vector3 cursorPosLocal = transform.RoomPointToLocalSpace(m_CursorPosRoom);
 
                 Vector4 data;
-                if (m_InCancelState) {
+                if (m_InCancelState)
+                {
                     data = new Vector4(m_InitialColor[0], m_InitialColor[1], m_InitialColor[2], m_InitialColor[3]);
                     VREngine.instance.eventManager.InsertInQueue(new VREventVector4(m_ColorCancelledEventName, data));
-                } else {
+                }
+                else
+                {
                     Color col = m_CurrentColor;
                     data = new Vector4(col[0], col[1], col[2], col[3]);
                     VREngine.instance.eventManager.InsertInQueue(new VREventVector4(m_ColorSelectedEventName, data));
@@ -215,7 +238,8 @@ namespace IVLab.MinVR3
             float a = Mathf.Atan2(l1, l2);
             float b = 2.3561945f - a;
             float d = m_Radius * 0.70710678f / Mathf.Sin(b);
-            if (offset.magnitude > d) {
+            if (offset.magnitude > d)
+            {
                 offset = offset.normalized * d;
                 p = offset;
             }
@@ -248,7 +272,8 @@ namespace IVLab.MinVR3
             Color color;
             if (s == 0)
                 color = new Color((float)l, (float)l, (float)l);
-            else {
+            else
+            {
                 color = new Color((float)FindValue(m1, m2, h + 120.0),
                                   (float)FindValue(m1, m2, h),
                                   (float)FindValue(m1, m2, h - 120.0f));
@@ -264,10 +289,13 @@ namespace IVLab.MinVR3
             float maximum = Mathf.Max(Mathf.Max(c[0], c[1]), c[2]);
             float minimum = Mathf.Min(Mathf.Min(c[0], c[1]), c[2]);
             l = (maximum + minimum) / 2;
-            if (maximum == minimum) {
+            if (maximum == minimum)
+            {
                 s = 0;
                 h = 0;
-            } else {
+            }
+            else
+            {
                 if (l <= 0.5)
                     s = (maximum - minimum) / (maximum + minimum);
                 else
@@ -327,11 +355,16 @@ namespace IVLab.MinVR3
 
         public void OnVREvent(VREvent vrEvent)
         {
-            if (vrEvent.Matches(m_CursorDownEvent)) {
+            if (vrEvent.Matches(m_CursorDownEvent))
+            {
                 OnCursorDown();
-            } else if (vrEvent.Matches(m_CursorUpEvent)) {
+            }
+            else if (vrEvent.Matches(m_CursorUpEvent))
+            {
                 OnCursorUp();
-            } else if (vrEvent.Matches(m_CursorPosEvent)) {
+            }
+            else if (vrEvent.Matches(m_CursorPosEvent))
+            {
                 m_CursorPosRoom = (vrEvent as VREventVector3).GetData();
                 OnCursorMove();
             }
@@ -371,11 +404,13 @@ namespace IVLab.MinVR3
             float elapsedTime = 0f;
 
             // activate children
-            for (int i = 0; i < transform.childCount; i++) {
+            for (int i = 0; i < transform.childCount; i++)
+            {
                 transform.GetChild(i).gameObject.SetActive(true);
             }
 
-            while (elapsedTime < duration) {
+            while (elapsedTime < duration)
+            {
                 float elapsedFrac = elapsedTime / duration;
                 float alpha = Mathf.Clamp(elapsedFrac, 0.0f, 1.0f);
                 SetColorPickerAlpha(alpha);
@@ -394,11 +429,13 @@ namespace IVLab.MinVR3
 
             // special case: if in cancel state, the widget is already partially transparent, treat this as if
             // the fade out is already partially complete.
-            if (m_InCancelState) {
+            if (m_InCancelState)
+            {
                 elapsedTime += (1.0f - m_CancelModeAlpha) * duration;
             }
 
-            while (elapsedTime < duration) {
+            while (elapsedTime < duration)
+            {
                 float elapsedFrac = elapsedTime / duration;
                 float alpha = Mathf.Clamp(1.0f - elapsedFrac, 0.0f, 1.0f);
                 SetColorPickerAlpha(alpha);
@@ -407,7 +444,8 @@ namespace IVLab.MinVR3
             }
 
             // fade-out complete, deactivate children
-            for (int i = 0; i < transform.childCount; i++) {
+            for (int i = 0; i < transform.childCount; i++)
+            {
                 transform.GetChild(i).gameObject.SetActive(false);
             }
         }
@@ -419,14 +457,20 @@ namespace IVLab.MinVR3
             // use opaque mode when alpha = 1, fade mode otherwise
             float renderMode = alpha >= 1.0 ? 0 : 2;
 
-            MaterialPropertyBlock mpb = new MaterialPropertyBlock();
-            for (int i = 0; i < m_AllRenderers.Count; i++) {
-                m_AllRenderers[i].GetPropertyBlock(mpb);
-                Color c = mpb.GetColor("_Color");
+            for (int i = 0; i < m_AllRenderers.Count; i++)
+            {
+                Material mat = m_AllRenderers[i].sharedMaterial;
+                Color c = mat.GetColor(m_ColorPropertyName);
                 c.a = alpha;
-                mpb.SetColor("_Color", c);
-                mpb.SetFloat("_Mode", renderMode);
-                m_AllRenderers[i].SetPropertyBlock(mpb);
+                mat.SetColor(m_ColorPropertyName, c);
+                if (GraphicsSettings.defaultRenderPipeline == null)
+                {
+                    mat.SetFloat("_Mode", renderMode); // built-in pipeline
+                }
+                else
+                {
+                    mat.SetFloat("_Blend", renderMode);
+                }
             }
         }
 
@@ -463,8 +507,9 @@ namespace IVLab.MinVR3
         Color m_CurrentColor;
         Vector3 m_CursorPosRoom;
         GameObject m_CursorSphere;
-        MaterialPropertyBlock m_CursorPB;
+        Material m_CursorMaterial;
         List<Renderer> m_AllRenderers;
+        string m_ColorPropertyName;
     }
 
 }
