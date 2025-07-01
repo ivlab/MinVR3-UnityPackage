@@ -54,7 +54,7 @@ namespace IVLab.MinVR3
 
                     // Search for existing instance.
                     try {
-                        m_Instance = (T)FindObjectOfType(typeof(T));
+                        m_Instance = (T)FindFirstObjectByType(typeof(T));
                         if (m_Instance) {
                             // Case 1: Found in the scene, so we do not need to create it, but we do need to make sure
                             // the object the singleton is attached to persists across scene loads/unloads so that it

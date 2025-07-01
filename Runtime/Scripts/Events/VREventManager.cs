@@ -243,7 +243,7 @@ namespace IVLab.MinVR3
             if (includeInactive) {
                 eventProducers = Resources.FindObjectsOfTypeAll<MonoBehaviour>().OfType<IVREventProducer>().ToArray();
             } else {
-                eventProducers = FindObjectsOfType<MonoBehaviour>().OfType<IVREventProducer>().ToArray();
+                eventProducers = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None).OfType<IVREventProducer>().ToArray();
             }
             HashSet<IVREventProducer> eventProducersUnique = new HashSet<IVREventProducer>(eventProducers);
 

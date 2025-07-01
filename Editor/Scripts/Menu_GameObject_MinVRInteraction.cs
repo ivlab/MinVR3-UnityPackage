@@ -64,7 +64,7 @@ namespace IVLab.MinVR3
             GameObject parent = command.context as GameObject;
             if (parent == null) {
                 // find RoomSpaceOrigin should never fail here since we create it if needed above
-                parent = FindObjectOfType<RoomSpaceOrigin>().gameObject;
+                parent = FindFirstObjectByType<RoomSpaceOrigin>().gameObject;
             }
 
             GameObject cursorRoot = MenuHelpers.CreateAndPlaceGameObject("CavePainting Brush Cursor (Dominant Hand)", parent, typeof(TrackedPoseDriver));
@@ -88,7 +88,7 @@ namespace IVLab.MinVR3
             GameObject parent = command.context as GameObject;
             if (parent == null) {
                 // find RoomSpaceOrigin should never fail here since we create it if needed above
-                parent = FindObjectOfType<RoomSpaceOrigin>().gameObject;
+                parent = FindFirstObjectByType<RoomSpaceOrigin>().gameObject;
             }
 
             GameObject cursorRoot = MenuHelpers.CreateAndPlaceGameObject("Small Cone Cursor (Dominant Hand)", parent, typeof(TrackedPoseDriver));
@@ -116,7 +116,7 @@ namespace IVLab.MinVR3
             GameObject parent = command.context as GameObject;
             if (parent == null) {
                 // find RoomSpaceOrigin should never fail here since we create it if needed above
-                parent = FindObjectOfType<RoomSpaceOrigin>().gameObject;
+                parent = FindFirstObjectByType<RoomSpaceOrigin>().gameObject;
             }
 
             GameObject cursorRoot = MenuHelpers.CreateAndPlaceGameObject("Small Cube Cursor (Non-Dominant Hand)", parent, typeof(TrackedPoseDriver));

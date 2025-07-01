@@ -90,7 +90,7 @@ namespace IVLab.MinVR3 {
         public RoomSpaceOrigin roomSpaceOrigin {
             get {
                 if (m_RoomSpaceOrigin == null) {
-                    m_RoomSpaceOrigin = FindObjectOfType<RoomSpaceOrigin>();
+                    m_RoomSpaceOrigin = FindFirstObjectByType<RoomSpaceOrigin>();
                 }
                 return m_RoomSpaceOrigin;
             }
@@ -198,7 +198,7 @@ namespace IVLab.MinVR3 {
 
             // Find the Room Space object and cache a reference to it.  Throw an exception if there
             // is more than one.
-            RoomSpaceOrigin[] rso = FindObjectsOfType<RoomSpaceOrigin>();
+            RoomSpaceOrigin[] rso = FindObjectsByType<RoomSpaceOrigin>(FindObjectsSortMode.None);
             if (rso.Length == 0) {
                 throw new Exception("The scene must include one object with a RoomSpaceOrigin component " +
                     "attached for MinVR to function properly.");
@@ -210,7 +210,7 @@ namespace IVLab.MinVR3 {
             }
 
             // check to see if the app should run as a node of a cluster, either a client or a server
-            ClusterClient[] clientObjs = GameObject.FindObjectsOfType<ClusterClient>();
+            ClusterClient[] clientObjs = GameObject.FindObjectsByType<ClusterClient>(FindObjectsSortMode.None);
             if (clientObjs.Length > 1) {
                 throw new Exception("Only one ClusterClient object can be active in the Application.");
             } else if (clientObjs.Length > 0) {
@@ -218,7 +218,7 @@ namespace IVLab.MinVR3 {
                 m_ClusterNode = clientObjs[0];
             }
 
-            ClusterServer[] serverObjs = GameObject.FindObjectsOfType<ClusterServer>();
+            ClusterServer[] serverObjs = GameObject.FindObjectsByType<ClusterServer>(FindObjectsSortMode.None);
             if (serverObjs.Length > 1) {
                 throw new Exception("Only one ClusterServer object can be active in the Application.");
             } else if (serverObjs.Length > 0) {

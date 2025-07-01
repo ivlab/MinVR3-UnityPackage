@@ -21,7 +21,7 @@ namespace IVLab.MinVR3
 
             if (cameraToFace == null)
             {
-                cameraToFace = GameObject.FindObjectOfType<Camera>();
+                cameraToFace = GameObject.FindFirstObjectByType<Camera>();
             }
         }
 

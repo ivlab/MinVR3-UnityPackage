@@ -158,7 +158,7 @@ namespace IVLab.MinVR3
         /// <returns>The found or newly created GameObject with RoomSpaceOrigin attached.</returns>
         public static GameObject CreateRoomSpaceOriginIfNeeded()
         {
-            RoomSpaceOrigin rso = FindObjectOfType<RoomSpaceOrigin>();
+            RoomSpaceOrigin rso = FindFirstObjectByType<RoomSpaceOrigin>();
             if (rso != null) {
                 return rso.gameObject;
             } else {
@@ -174,7 +174,7 @@ namespace IVLab.MinVR3
         /// <returns>The found or newly created GameObject with VREngine attached.</returns>
         public static GameObject CreateVREngineIfNeeded()
         {
-            VREngine engine = FindObjectOfType<VREngine>();
+            VREngine engine = FindFirstObjectByType<VREngine>();
             if (engine != null) {
                 return engine.gameObject;
             } else {
@@ -231,7 +231,7 @@ namespace IVLab.MinVR3
             GameObject parent = command.context as GameObject;
             if (parent == null) {
                 // find RoomSpaceOrigin should never fail here since we create it if needed above
-                parent = FindObjectOfType<RoomSpaceOrigin>().gameObject;
+                parent = FindFirstObjectByType<RoomSpaceOrigin>().gameObject;
             }
 
             GameObject vrConfigObj = CreateAndPlaceGameObject("VRConfig_" + name, parent, typeof(VRConfig));

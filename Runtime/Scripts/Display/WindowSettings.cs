@@ -35,7 +35,7 @@ namespace IVLab.MinVR3
         [SerializeField, Tooltip("Control the fullscreen mode of the application")]
         public FullScreenMode fullScreenMode;
         [SerializeField, Tooltip("Control the desired refresh rate of the application (0 = default / max)")]
-        public int refreshRate = 0;
+        public uint refreshRate = 0;
 
         [Header("When to Apply Window Configuration")]
         [SerializeField, Tooltip("When in the MonoBehaviour lifecycle to apply the configuration specified above")]
@@ -96,7 +96,7 @@ namespace IVLab.MinVR3
 #if UNITY_STANDALONE_WIN || UNITY_EDITOR
             if (setFullscreenMode)
             {
-                Screen.SetResolution(width, height, fullScreenMode, refreshRate);
+                Screen.SetResolution(width, height, fullScreenMode, new RefreshRate() { numerator = refreshRate, denominator = 1 });
             }
 
             if (setWindowPositionAndSize)

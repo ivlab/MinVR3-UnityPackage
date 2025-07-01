@@ -359,7 +359,7 @@ namespace IVLab.MinVR3
         private void Start()
         {
             m_DebugLinesDirty = true;
-            m_RoomSpaceOrigin = FindObjectOfType<RoomSpaceOrigin>();
+            m_RoomSpaceOrigin = FindFirstObjectByType<RoomSpaceOrigin>();
             Debug.Assert(m_RoomSpaceOrigin != null, "MinVR requires that there is one GameObject in the scene marked as the Room Space Origin by attaching a RoomSpaceOrigin component.");
         }
 
