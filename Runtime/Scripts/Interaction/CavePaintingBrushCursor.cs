@@ -127,7 +127,15 @@ namespace IVLab.MinVR3
             m_Mesh.triangles = indices;
             m_Mesh.RecalculateNormals();
             GetComponent<MeshFilter>().sharedMesh = m_Mesh;
-            GetComponent<MeshRenderer>().material = new Material(Shader.Find("Diffuse"));
+            if (GraphicsSettings.defaultRenderPipeline == null)
+            {
+                // Using built-in pipeline
+                GetComponent<MeshRenderer>().material = new Material(Shader.Find("Diffuse"));
+            }
+            else
+            {
+                GetComponent<MeshRenderer>().material = GraphicsSettings.defaultRenderPipeline.defaultMaterial;
+            }
         }
 
         public Vector3[] vertices;
