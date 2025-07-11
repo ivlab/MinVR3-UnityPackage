@@ -13,6 +13,9 @@ namespace IVLab.MinVR3
     [AddComponentMenu("MinVR Interaction/Cursors/CavePainting Brush")]
     public class CavePaintingBrushCursor : MonoBehaviour
     {
+
+        [SerializeField] private Material material;
+
         // Vertices that make up the brush geometry
         public static Vector3[] origVertices = new[] {
         new Vector3( 0.5f,   0.0f,   -0.0f),  // 0
@@ -128,14 +131,21 @@ namespace IVLab.MinVR3
             m_Mesh.triangles = indices;
             m_Mesh.RecalculateNormals();
             GetComponent<MeshFilter>().sharedMesh = m_Mesh;
-            if (GraphicsSettings.defaultRenderPipeline == null)
+            if (material == null)
             {
-                // Using built-in pipeline
-                GetComponent<MeshRenderer>().material = new Material(Shader.Find("Diffuse"));
+                if (GraphicsSettings.defaultRenderPipeline == null)
+                {
+                    // Using built-in pipeline
+                    GetComponent<MeshRenderer>().material = new Material(Shader.Find("Diffuse"));
+                }
+                else
+                {
+                    GetComponent<MeshRenderer>().material = GraphicsSettings.defaultRenderPipeline.defaultMaterial;
+                }
             }
             else
             {
-                GetComponent<MeshRenderer>().material = GraphicsSettings.defaultRenderPipeline.defaultMaterial;
+                GetComponent<MeshRenderer>().material = material;
             }
         }
 
